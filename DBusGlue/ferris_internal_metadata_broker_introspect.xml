@@ -1,0 +1,70 @@
+<?xml version="1.0" ?>
+<node name="/com/libferris/Metadata">
+  <interface name="com.libferris.Metadata.Broker">
+    <method name="Random">
+      <arg type="i" name="version" direction="out"/>
+    </method>
+<!--     <method name="get"> -->
+<!--       <arg type="s" name="earl" direction="in"/> -->
+<!--       <arg type="s" name="name" direction="in"/> -->
+<!--       <arg type="s" name="metadata" direction="out"/> -->
+<!--     </method> -->
+
+<!--     <method name="set"> -->
+<!--       <arg type="s" name="earl" direction="in"/> -->
+<!--       <arg type="s" name="name" direction="in"/> -->
+<!--       <arg type="s" name="value" direction="in"/> -->
+<!--     </method> -->
+
+
+
+
+
+
+    <method name="asyncGet">
+      <arg type="s" name="earl" direction="in"/>
+      <arg type="s" name="name" direction="in"/>
+      <arg type="i" name="reqid" direction="out"/>
+    </method>
+
+    <signal name="asyncGetResult">
+      <arg type="i" name="reqid" />
+      <arg type="s" name="earl"  />
+      <arg type="s" name="name"  />
+      <arg type="ay" name="value" />
+    </signal>
+
+    <signal name="asyncGetFailed">
+      <arg type="i" name="reqid" />
+      <arg type="s" name="earl"  />
+      <arg type="i" name="eno" />
+      <arg type="s" name="ename"  />
+      <arg type="s" name="edesc"  />
+    </signal>
+
+
+
+    <method name="asyncPut">
+      <arg type="s" name="earl" direction="in"/>
+      <arg type="s" name="name" direction="in"/>
+      <arg type="ay" name="value" direction="in"/>
+      <arg type="i" name="reqid" direction="out"/>
+    </method>
+
+    <signal name="asyncPutCommitted">
+      <arg type="i" name="reqid" />
+      <arg type="s" name="earl"  />
+      <arg type="s" name="name"  />
+    </signal>
+
+    <signal name="asyncPutFailed">
+      <arg type="i" name="reqid" />
+      <arg type="s" name="earl"  />
+      <arg type="i" name="eno" />
+      <arg type="s" name="ename"  />
+      <arg type="s" name="edesc"  />
+    </signal>
+
+  </interface>
+
+</node>

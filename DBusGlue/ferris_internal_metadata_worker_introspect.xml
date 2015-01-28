@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<node name="/com/libferris/Metadata">
+
+  <interface name="com.libferris.Metadata.Worker">
+
+    <method name="get">
+      <arg type="s" name="earl" direction="in"/>
+      <arg type="s" name="name" direction="in"/>
+      <arg type="ay" name="metadata" direction="out"/>
+    </method>
+
+    <method name="set">
+      <arg type="s" name="earl" direction="in"/>
+      <arg type="s" name="name" direction="in"/>
+      <arg type="ay" name="value" direction="in"/>
+    </method>
+
+    <method name="ping">
+      <arg type="i" name="tt" direction="out"/>
+    </method>
+
+  </interface>
+</node>

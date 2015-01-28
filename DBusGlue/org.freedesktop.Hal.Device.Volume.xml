@@ -1,0 +1,20 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.freedesktop.Hal.Device.Volume">
+    <method name="Mount">
+      <arg name="mount_point" direction="in" type="s"/>
+      <arg name="fstype" direction="in" type="s"/>
+      <arg name="extra_options" direction="in" type="as"/>
+      <arg name="return_code" direction="out" type="i"/>
+    </method>
+    <method name="Unmount">
+      <arg name="extra_options" direction="in" type="as"/>
+      <arg name="return_code" direction="out" type="i"/>
+    </method>
+    <method name="Eject">
+      <arg name="extra_options" direction="in" type="as"/>
+      <arg name="return_code" direction="out" type="i"/>
+    </method>
+  </interface>
+</node>

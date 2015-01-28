@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<node name="/com/libferris/Volume/Manager">
+  <interface name="com.libferris.Volume.Manager">
+
+    <method name="Random">
+      <arg type="i" name="version" direction="out"/>
+    </method>
+
+    <method name="isEjectable">
+      <arg type="i" name="devid" direction="in"/>
+      <arg type="b" name="ret"   direction="out"/>
+    </method>
+
+    <method name="Eject">
+      <arg type="i" name="devid" direction="in"/>
+      <arg type="s" name="ret"   direction="out"/>
+    </method>
+
+    <method name="Unmount">
+      <arg type="i" name="devid" direction="in"/>
+      <arg type="s" name="ret"   direction="out"/>
+    </method>
+
+    <method name="Mount">
+      <arg type="i" name="devid" direction="in"/>
+      <arg type="s" name="mp"   direction="in"/>
+      <arg type="s" name="ret"   direction="out"/>
+    </method>
+
+    <method name="DevicePlugged">
+      <arg type="s" name="haldev"   direction="in"/>
+      <arg type="s" name="ret"      direction="out"/>
+    </method>
+
+    <method name="setIgnorePlugEvents">
+      <arg type="b" name="v" direction="in"/>
+    </method>
+
+  </interface>
+</node>
