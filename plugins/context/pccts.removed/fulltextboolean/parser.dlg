@@ -1,0 +1,73 @@
+<<
+/* parser.dlg -- DLG Description of scanner
+ *
+ * Generated from: fulltextboolean.g
+ *
+ * Terence Parr, Will Cohen, and Hank Dietz: 1989-2001
+ * Purdue University Electrical Engineering
+ * With AHPCRC, University of Minnesota
+ * ANTLR Version 1.33MR33
+ */
+
+#define ANTLR_VERSION	13333
+#include "tokens.h"
+#include "AToken.h"
+#include "ASTBase.h"
+>>
+
+<<%%parserclass FulltextbooleanParser>>
+
+<<%%lexmember
+
+protected:
+int          isWS;
+int          begline;
+virtual void tabAdjust() {}
+>>
+
+
+%%START
+
+@
+	<<
+		return Eof;
+	>>
+
+\&
+	<<
+		return AND;
+	>>
+
+\|
+	<<
+		return OR;
+	>>
+
+\!
+	<<
+		return NOT;
+	>>
+
+\-
+	<<
+		return MINUS;
+	>>
+
+[\ \t]+
+	<<
+    skip();  
+		return WS;
+	>>
+
+\n
+	<<
+    skip(); newline();  
+		return (ANTLRTokenType)7;
+	>>
+
+[a-zA-Z0-9]+
+	<<
+		return OCTETSTR;
+	>>
+
+%%

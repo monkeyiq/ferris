@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="http://witme.sf.net/rdf/base">
+    <ns0:topleveldir xmlns:ns0="http://witme.sf.net/rdf/" rdf:resource="http://witme.sf.net/rdf/childA"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://witme.sf.net/rdf/base">
+    <ns0:baseEA1 xmlns:ns0="http://witme.sf.net/rdf/">frodo</ns0:baseEA1>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://witme.sf.net/rdf/base">
+    <ns0:baseEA2 xmlns:ns0="http://witme.sf.net/rdf/">gandalf</ns0:baseEA2>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://witme.sf.net/rdf/base">
+    <ns0:topleveldir xmlns:ns0="http://witme.sf.net/rdf/" rdf:resource="http://witme.sf.net/rdf/childB"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://witme.sf.net/rdf/childA">
+    <ns0:subleveldir xmlns:ns0="http://witme.sf.net/rdf/" rdf:resource="http://witme.sf.net/rdf/childAch1"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://witme.sf.net/rdf/childA">
+    <ns0:subleveldir xmlns:ns0="http://witme.sf.net/rdf/" rdf:resource="http://witme.sf.net/rdf/childAch2"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://witme.sf.net/rdf/childAch2">
+    <ns0:subsubleveldir xmlns:ns0="http://witme.sf.net/rdf/" rdf:resource="http://witme.sf.net/rdf/base"/>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://witme.sf.net/rdf/childAch2">
+    <ns0:subEA1 xmlns:ns0="http://witme.sf.net/rdf/">the grey</ns0:subEA1>
+  </rdf:Description>
+
+  <rdf:Description rdf:about="http://witme.sf.net/rdf/childA">
+    <ns0:ferris-type xmlns:ns0="">queryview</ns0:ferris-type>
+  </rdf:Description>
+
+</rdf:RDF>

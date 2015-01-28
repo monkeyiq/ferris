@@ -1,0 +1,3 @@
+NULL=
+SUBDIRS = testMakeDOM
+

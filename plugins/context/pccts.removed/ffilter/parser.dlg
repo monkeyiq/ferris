@@ -1,0 +1,142 @@
+<<
+/* parser.dlg -- DLG Description of scanner
+ *
+ * Generated from: ffilter.g
+ *
+ * Terence Parr, Will Cohen, and Hank Dietz: 1989-2001
+ * Purdue University Electrical Engineering
+ * With AHPCRC, University of Minnesota
+ * ANTLR Version 1.33MR33
+ */
+
+#define ANTLR_VERSION	13333
+#include "tokens.h"
+#include "AToken.h"
+#include "ASTBase.h"
+>>
+
+<<%%parserclass FFilterParser>>
+
+<<%%lexmember
+
+protected:
+int          isWS;
+int          begline;
+virtual void tabAdjust() {}
+>>
+
+
+%%START
+
+@
+	<<
+		return Eof;
+	>>
+
+[\ \t]+
+	<<
+    skip();  
+		return (ANTLRTokenType)2;
+	>>
+
+\n
+	<<
+    skip(); newline();  
+		return (ANTLRTokenType)3;
+	>>
+
+[\ a-z\.A-Z0-9\-\_\*\$\^\]\[\\\/\~\:]+
+	<<
+		return KOCTETSTR;
+	>>
+
+\=\~
+	<<
+    mode(EAVALUECLASS);   
+		return EQREGEX;
+	>>
+
+<=
+	<<
+    mode(EAVALUECLASS);   
+		return EQLT;
+	>>
+
+>=
+	<<
+    mode(EAVALUECLASS);   
+		return EQGT;
+	>>
+
+==
+	<<
+    mode(EAVALUECLASS);   
+		return EQ;
+	>>
+
+<\?=
+	<<
+    mode(EAVALUECLASS);   
+		return EQLTSC;
+	>>
+
+>\?=
+	<<
+    mode(EAVALUECLASS);   
+		return EQGTSC;
+	>>
+
+=\?=
+	<<
+    mode(EAVALUECLASS);   
+		return EQSC;
+	>>
+
+\(
+	<<
+		return (ANTLRTokenType)17;
+	>>
+
+\!
+	<<
+		return (ANTLRTokenType)18;
+	>>
+
+\)
+	<<
+		return (ANTLRTokenType)19;
+	>>
+
+\|
+	<<
+		return (ANTLRTokenType)20;
+	>>
+
+\&
+	<<
+		return (ANTLRTokenType)21;
+	>>
+
+
+%%EAVALUECLASS
+
+@
+	<<
+		return Eof;
+	>>
+
+\)
+	<<
+    
+    replchar('\0');
+    mode(START);
+		return EAVALUETERMINATOR;
+	>>
+
+~[]
+	<<
+    more();  
+		return (ANTLRTokenType)15;
+	>>
+
+%%

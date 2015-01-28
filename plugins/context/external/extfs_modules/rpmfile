@@ -1,0 +1,200 @@
+#!/usr/bin/perl
+
+# /******************************************************************************
+# *******************************************************************************
+# *******************************************************************************
+
+#     libferris
+#     Copyright (C) 2001 Ben Martin
+
+#     This program is free software; you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation; either version 2 of the License, or
+#     (at your option) any later version.
+
+#     This program is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+
+#     You should have received a copy of the GNU General Public License
+#     along with this program; if not, write to the Free Software
+#     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+#     For more details see the COPYING file in the root directory of this
+#     distribution.
+
+#     $Id: rpmfile,v 1.1 2005/07/12 04:10:14 ben Exp $
+
+# *******************************************************************************
+# *******************************************************************************
+# ******************************************************************************/
+
+#
+# FIXME: should use \0 to delimit each part of the --qf string
+#
+
+#use File::Basename;
+
+use lib '/usr/local/ferris/extfs_modules/';
+use FerrisExtMod;
+
+#
+# Return codes
+#
+$forkFailed = 1;
+$subprocFailed = 2;
+
+sub init {
+  my ($exe, $cmd, $ar, $rest) = @_;
+}
+
+sub list {
+	($filename) = @_;
+
+	startListing( $filename );
+
+	#
+	# Get all the names of the EA that this rpm file contains.
+	#
+	@tags = `rpm --querytags | sort`;
+	$queryformat = "";
+	for $tag (@tags) {
+	  chomp($tag);
+	  $queryformat="${queryformat}FERRIS_${tag}_FERRIS:%{$tag}\n";
+	}
+
+	
+	#
+	# build a EA for each rpm --qf field
+	#
+	$queryformat = "\'" . $queryformat . "\'";
+	#printf("queryformat:$queryformat\n");
+
+  	open(RPMLIST, "rpm -qp --qf $queryformat $filename|") or exit($forkFailed);
+	startEA;
+	printEA "name", "meta-data";
+
+ 	while(<RPMLIST>)
+ 	    {
+	      if( /FERRIS_.*_FERRIS/ )
+		{
+		  if( $tag ne "" )
+		    {
+		      printEA $tag, $li;
+		    }
+
+		  ($bigtag, $li)        = split /_FERRIS:/;
+		  ($prefx, $tag, $junk) = split /FERRIS_/, $bigtag;
+
+		  chomp( $tag );
+		  chomp( $li );
+		
+		}
+	      else
+		{
+		  # multi line attribute
+#		  $li = "$li$_";
+		}
+ 	    }
+	endEA;
+ 	close(RPMLIST);
+	exit($subprocFailed) if $?;
+
+	#
+	# list the contents of the rpm file
+	#
+	open(LSLIST, "rpm -qlvp --dump $filename|") or exit($forkFailed);
+	while(<LSLIST>)
+	    {
+		($name, $size, $mtime, $md5sum, $protection, $owner, $group,
+		 $isconfig, $isdoc, $rdev, $symlink, $junk) = split;
+
+# 		printf("p:%s sz:$size mtime:$mtime md5:$md5sum protection:$protection\n",$name);
+# 		printf("o:$owner g:$group cfg:$isconfig doc:$isdoc dev:$rdev l:$symlink\n");
+
+		startEA;
+		printEA "name",             $name;
+		printEA "size",             $size;
+		printEA "mtime",            $mtime;
+		printEA "md5",              $md5sum;
+		printEA "protection",       $protection;
+		printEA "user-owner-name",  $owner;
+		printEA "group-owner-name", $group;
+		printEA "is-config",        $isconfig;
+		printEA "is-doc",           $isdoc;
+		printEA "rdev",             $rdev;
+		printEA "rpm-symlink",      $symlink;
+		endEA;
+	    }
+	close(LSLIST);
+	exit($subprocFailed) if $?;
+
+	endListing;
+
+	exit(0);
+}
+
+sub trycopyout {
+  my ($archive, $stored) = @_;
+
+  $rc = "1";
+  open(X, "rpm2cpio \"$archive\" | cpio -iumdV --no-absolute-filenames --quiet \"$stored\" 2>&1 |");
+  while(<X>)
+    {
+      if( /\./ )
+	{
+	  $rc = "0";
+	}
+    }
+  close(X);
+
+  if( $rc eq "0" )
+    {
+      open(F, "$stored");
+      while(<F>)
+	{
+	  print;
+	}
+      close(F);
+    }
+}
+
+sub copyout {
+ 	($archive, $stored) = @_;
+
+	$rc = "1";
+	chdir((getpwuid($<))[7]);
+	chdir "./.ferris/";
+	$dirname = "tmp";
+	mkdir $dirname;
+
+#	printf("arc:$archive stored:$stored\n");
+
+	$rc = system("mount $dirname");
+	$mountc = `cat /etc/mtab | grep .ferris | wc -l`;
+	if( $rc eq "0" )
+	  {
+	    chdir "$dirname";
+
+	    trycopyout( $archive, $stored );
+	    if( $rc ne "0" )
+	      {
+		$xstored = ".$stored";
+		trycopyout( $archive, $xstored );
+	      }
+	    if( $rc ne "0" )
+	      {
+		$xstored = "./$stored";
+		trycopyout( $archive, $xstored );
+	      }
+	    chdir "$ENV{HOME}/.ferris/";
+	    $rc = system("umount $dirname");
+	  }
+#	rmdir $dirname;
+ 	exit $rc / 256;
+}
+
+
+
+FerrisExtModMain;

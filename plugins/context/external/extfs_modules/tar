@@ -1,0 +1,115 @@
+#!/usr/bin/perl
+
+# /******************************************************************************
+# *******************************************************************************
+# *******************************************************************************
+
+#     libferris
+#     Copyright (C) 2001 Ben Martin
+
+#     This program is free software; you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation; either version 2 of the License, or
+#     (at your option) any later version.
+
+#     This program is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+
+#     You should have received a copy of the GNU General Public License
+#     along with this program; if not, write to the Free Software
+#     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+#     For more details see the COPYING file in the root directory of this
+#     distribution.
+
+#     $Id: tar,v 1.1 2005/07/12 04:10:14 ben Exp $
+
+# *******************************************************************************
+# *******************************************************************************
+# ******************************************************************************/
+
+use lib '/usr/local/ferris/extfs_modules/';
+use FerrisExtMod;
+
+#
+# Return codes
+#
+$forkFailed = 1;
+$subprocFailed = 2;
+$badInputFileFormat = 10;
+
+
+$tarCompressSwitch = "";
+
+sub updateTarCompressSwitch {
+  my ($filename) = @_;
+
+  $tarCompressSwitch = "";
+
+  my $fileline = `file -b $filename 2>/dev/null`;
+  ($first,$second,$rest) = split / /, $fileline;
+
+  if( $first eq "GNU" and $second eq "tar")
+    {
+      $tarCompressSwitch = "";
+    }
+  elsif( $first eq "gzip" )
+    {
+      $tarCompressSwitch = "z";
+    }
+  elsif( $first eq "bzip2" )
+    {
+      $tarCompressSwitch = "j";
+    }
+  elsif( $first eq "empty\n" )
+    {
+      $tarCompressSwitch = "";
+    }
+  else
+    {
+      exit $badInputFileFormat;
+    }
+}
+
+sub list {
+	($filename) = @_;
+
+	startListing( $filename );
+	$pid = open(TARLIST, "tar t${tarCompressSwitch}vf $filename|") or exit($forkFailed);
+	while(<TARLIST>)
+	    {
+		($protectionls, $usergroup, $size, $date, $time, $name) = split;
+		($owner, $group) = split /\//, $usergroup;
+
+		startEA;
+		printEA "name",             $name;
+		printEA "size",             $size;
+		printEA "user-owner-name",  $owner;
+		printEA "group-owner-name", $group;
+		printEA "date",             $date;
+		printEA "time",             $time;
+		printEA "protection-ls",    $protectionls;
+		endEA;
+	    }
+	close(TARLIST);
+	endListing;
+
+	exit($subprocFailed) if $?;
+	exit 0;
+}
+
+sub copyout {
+	($archive, $stored) = @_;
+	$result = system("tar x${tarCompressSwitch}Of $archive $stored");
+	exit $result / 256;
+}
+
+sub init {
+  my ($exe, $cmd, $ar, $rest) = @_;
+  updateTarCompressSwitch( $ar );
+}
+
+
+FerrisExtModMain;

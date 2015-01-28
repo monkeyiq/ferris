@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+	<Description about="urn:mozilla:install-manifest">
+
+		<em:id>{c4701296-8309-42c9-9461-2d974e6519c5}</em:id>
+		<em:name>Glue to allow libferris to mount firefox</em:name>
+		<em:version>0.4</em:version>
+		<em:description>Glue to allow libferris to mount firefox.</em:description>
+		<em:creator>Ben Martin</em:creator>
+		<em:homepageURL>http://witme.sf.net/libferris.web/</em:homepageURL>
+                <em:iconURL>chrome://libferrismount/skin/libferris.png</em:iconURL>
+		<em:aboutURL>chrome://libferrismount/content/about.xul</em:aboutURL>
+		<em:updateURL>http://witme.sf.net/libferris.web/update-plugin.rdf</em:updateURL>
+		<em:file>
+			<Description about="urn:mozilla:extension:file:libferrismount.jar">
+				<em:package>content/libferrismount/</em:package>
+				<em:skin>skin/classic/libferrismount/</em:skin>
+			</Description>
+		</em:file>
+
+		<em:targetApplication>
+			<Description>
+				<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+				<em:minVersion>0.8</em:minVersion>
+				<em:maxVersion>2.1</em:maxVersion>
+			</Description>
+		</em:targetApplication>
+
+	</Description>
+
+</RDF>

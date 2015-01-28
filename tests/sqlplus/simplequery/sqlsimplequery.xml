@@ -1,0 +1,6 @@
+<sdatequery>
+	<queryview>
+	    <name>stocks-query</name>
+	    <sql>select item,num,weight,price,sdate from stock where price = 1.75</sql>
+	</queryview>
+</sdatequery>

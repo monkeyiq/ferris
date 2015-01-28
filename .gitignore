@@ -27,5 +27,6 @@ config.sub
 configure
 TAGS
 libtool
+.libs
 
 

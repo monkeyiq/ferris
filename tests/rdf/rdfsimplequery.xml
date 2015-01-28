@@ -1,0 +1,6 @@
+<splice>
+	<queryview>
+	    <name>my-custom-triple-splice</name>
+	    <subject>http://witme.sf.net/rdf/childA</subject>
+	</queryview>
+</splice>

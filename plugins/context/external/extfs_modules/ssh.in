@@ -1,0 +1,160 @@
+#!/usr/bin/perl
+
+# WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!
+#
+# WARNING! ssh is generated from ssh.in!
+#
+# WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!
+
+# /******************************************************************************
+# *******************************************************************************
+# *******************************************************************************
+
+#     libferris
+#     Copyright (C) 2001 Ben Martin
+
+#     This program is free software; you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation; either version 2 of the License, or
+#     (at your option) any later version.
+
+#     This program is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+
+#     You should have received a copy of the GNU General Public License
+#     along with this program; if not, write to the Free Software
+#     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+#     For more details see the COPYING file in the root directory of this
+#     distribution.
+
+#     $Id: ssh.in,v 1.1 2005/07/12 04:10:14 ben Exp $
+
+# *******************************************************************************
+# *******************************************************************************
+# ******************************************************************************/
+
+use lib '/usr/local/ferris/extfs_modules/';
+use FerrisExtMod;
+
+#
+# Return codes
+#
+$forkFailed = 1;
+$subprocFailed = 2;
+$e_fileexists = 3;
+
+$debug = 0;
+
+$sshcmd = "@SSHCMD@";
+
+sub list {
+  ($filename) = @_;
+  $filename =~ s/^[\/]+//;
+
+  ($userhost,$path) = split /[\:\/]/, $filename, 2;
+  ($user,$host) = split /\@/, $userhost, 2;
+  if( $path =~ "mysql:.*" or $path =~ "\~.*" ) {
+    }
+  else {
+    $path = "/" . $path;
+  }
+  if( $host eq "" ) {
+    $host=$user;
+    $user="";
+  }
+
+  $cmd = "$sshcmd $userhost ferrisls --xml --show-columns=\"name,protection,protection-ls,mtime,mtime-display,size,user-owner-name,user-owner-number,group-owner-name,group-owner-number,hard-link-count\" $path";
+
+  if( $debug ) {
+    print "user: $user\n";
+    print "host: $host\n";
+    print "path: $path\n";
+    print "fn: $filename \n";
+    print "\n\nCommand would have been:\n";
+    print "$cmd\n";
+  }
+  else {
+    $ret = system( $cmd );
+  }
+  exit $ret / 256;
+
+
+# 	exit($subprocFailed) if $?;
+# 	exit 0;
+}
+
+sub copyout {
+ 	($filename, $rest) = @_;
+
+	$filename =~ s/^[\/]+//;
+	($userhost,$path) = split /\//, $filename, 2;
+	$path = "/" . $path;
+
+	$cmd = "$sshcmd $userhost cat $path";
+	$result = 0;
+
+	if( $debug ) {
+	  print $cmd;
+	} else {
+	  $result = system( $cmd );
+	}
+ 	exit $result / 256;
+}
+
+sub copyin {
+ 	($filename, $rest) = @_;
+
+	$filename =~ s/^[\/]+//;
+	($userhost,$path) = split /\//, $filename, 2;
+	$path = "/" . $path;
+
+#
+# Testing the file size is on crack! we need to support writing new data to 
+# an existing file!!!
+#
+	#
+	# Check if the file exists and is not size==0
+	#
+# 	$cmd = "$sshcmd $userhost stat $path | grep Size |";
+# 	print $cmd;
+# 	open( FH, $cmd );
+# 	while( <FH> ) {
+# 	  my ($sol,$sizestr,$size,$rest) = split / +/, $_, 4;
+# 	  print $size;
+
+# 	  if( $size != 0 ) {
+# 	    exit( $e_fileexists );
+# 	  }
+# 	}
+# 	# a failed stat is assumed to mean that the file doesn't exist.
+# 	close( FH );
+
+	$cmd = "| $sshcmd $userhost 'cat - >|$path' ";
+	$result = 0;
+
+	if( $debug ) {
+	  print $cmd;
+	} else {
+
+	  print "\n$cmd\n";
+
+	  open( FH, $cmd );
+	  while( <STDIN> ) {
+	    print "..." . $_;
+	    print FH;
+	  }
+	  close( FH ) or exit($subprocFailed);
+	}
+	print "done rc: " . ($result / 256) . "\n";
+ 	exit $result / 256;
+}
+
+sub init {
+  my ($exe, $cmd, $ar, $rest) = @_;
+}
+
+
+FerrisExtModMain;

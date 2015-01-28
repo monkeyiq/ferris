@@ -1,0 +1,97 @@
+#!/usr/bin/perl
+
+# /******************************************************************************
+# *******************************************************************************
+# *******************************************************************************
+
+#     libferris
+#     Copyright (C) 2005 Ben Martin
+
+#     This program is free software; you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation; either version 2 of the License, or
+#     (at your option) any later version.
+
+#     This program is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+
+#     You should have received a copy of the GNU General Public License
+#     along with this program; if not, write to the Free Software
+#     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+#     For more details see the COPYING file in the root directory of this
+#     distribution.
+
+#     $Id: zip,v 1.1 2005/12/20 11:37:58 ben Exp $
+
+# *******************************************************************************
+# *******************************************************************************
+# ******************************************************************************/
+
+use lib '/usr/local/ferris/extfs_modules/';
+use FerrisExtMod;
+
+#
+# Return codes
+#
+$forkFailed = 1;
+$subprocFailed = 2;
+$badInputFileFormat = 10;
+
+
+sub list {
+	($filename) = @_;
+
+	startListing( $filename );
+	$pid = open(TARLIST, "unzip -lv $filename|") or exit($forkFailed);
+	while(<TARLIST>)
+	    {
+	        ($size,$method,$compressedsz,$compratio,$date,$time,$crc32,$name) = split;
+
+		if( $crc32 eq "CRC-32" 
+		    || $size eq "--------" || $size eq "Archive:"  
+		    || $name eq "" )
+		  {}
+		else
+		  {
+		    startEA;
+		    printEA "name",             $name;
+		    printEA "size",             $size;
+		    printEA "date",             $date;
+		    printEA "time",             $time;
+		    printEA "method",           $method;
+		    printEA "compressedsz",     $compressedsz;
+		    printEA "compratio",        $compratio;
+		    printEA "crc32",            $crc32;
+
+		    $protls = "-rwx------";
+		    if( substr($name,length($name)-1) eq "/" )
+		      {
+			$protls = "drwx------";
+		      }
+		    printEA "protection-ls",            $protls;
+
+		    endEA;
+		  }
+	    }
+	close(TARLIST);
+	endListing;
+
+	exit($subprocFailed) if $?;
+	exit 0;
+}
+
+sub copyout {
+	($archive, $stored) = @_;
+	$result = system("unzip -p $archive $stored");
+	exit $result / 256;
+}
+
+sub init {
+  my ($exe, $cmd, $ar, $rest) = @_;
+}
+
+
+FerrisExtModMain;

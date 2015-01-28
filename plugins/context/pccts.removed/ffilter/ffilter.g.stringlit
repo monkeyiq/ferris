@@ -1,0 +1,246 @@
+/******************************************************************************
+*******************************************************************************
+*******************************************************************************
+
+    libferris
+    Copyright (C) 2001 Ben Martin
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    For more details see the COPYING file in the root directory of this
+    distribution.
+
+    $Id: ffilter.g.stringlit,v 1.1 2005/07/12 04:13:11 ben Exp $
+
+*******************************************************************************
+*******************************************************************************
+******************************************************************************/
+
+#lexmember <<
+  protected:
+    int          isWS;
+    int          begline;
+    virtual void tabAdjust() {}
+>>
+
+<<
+
+#include "Common.hh"
+#include "ferrisPcctsContext.hh"
+
+//#include "wsDLG.h"
+//#include "wsToken.h"
+#include "ATokenBuffer.h"
+//#include "wsAST.h"
+#include <AToken.h>
+
+using namespace std;
+using namespace Ferris;
+
+
+void dump( AST* node, const string& s )
+{
+	if( !node )
+		return;
+
+	cout << "1... s:" << s << "   " << node->getName() << endl;
+
+	dump( (AST*)node->down(), s + node->getName());
+
+	for( AST* n = node;  n = (AST*)n->right(); )
+	{
+		cout << "2... s:" << s << "   " << n->getName() << endl;
+		dump( (AST*)n->down(), s + n->getName());
+	}
+
+
+}
+
+int main()
+{
+//#define UNDERFINEDSHIT
+#ifdef UNDERFINEDSHIT
+  ASTBase *     root(0);
+  AST *         rootCopy;
+
+  {
+    DLGFileInput    in(stdin);
+    MyDLG       lexer(&in,2000);
+    ANTLRTokenBuffer    pipe(&lexer,1);
+    ::ANTLRToken      aToken( (ANTLRTokenType)0 );
+    FFilterParser           parser(&pipe);
+
+    lexer.setToken(&aToken);
+
+//#if DEBUG_LEXER
+//    lexer.debugLexer(1);
+//#endif
+
+    AST::clearList();       // remove statically constructed ASTs
+    AST::clearCounter();
+
+    parser.init();
+    parser.interp(&root);
+  };
+
+  rootCopy=(AST *) root;
+  dump( rootCopy, "" );
+
+  if (rootCopy != 0) {
+////    rootCopy->preorder();
+////    rootCopy->dumpTree();
+    rootCopy->destroy();
+  };
+
+  printf("AST elements on NoLeak List\n");
+  AST::dumpList();
+  AST::destroyList();
+
+  fclose(stdin);
+  fclose(stdout);
+  return 0;
+#endif
+
+//#define MODOLD
+#ifdef MODOLD
+
+	fh_ifstream ss("input");
+//    DLGFileInput    in(stdin);
+    DLGInputIStream in( ss );
+
+
+#ifdef NOZZ
+typedef MyDLG Lexer;
+typedef FFilterParser Parser;
+typedef ::ANTLRToken Token;
+
+ 	Lexer *scan;
+ 	ANTLRTokenBuffer* pipe;
+ 	_ANTLRTokenPtr tok;
+	Parser* _parser;
+
+
+            scan = new Lexer( &in, 2000 );
+            pipe = new ANTLRTokenBuffer(scan,1);
+            tok = new Token( (ANTLRTokenType)0 );
+            scan->setToken(tok);
+            _parser = new Parser(pipe);
+            _parser->init();
+#endif
+
+	MyParserBlackBox<MyDLG, FFilterParser, ::ANTLRToken> p(ss);
+	ASTBase* root = NULL;
+	p.parser()->interp( &root );
+//_parser->interp( &root );
+
+
+	cout << root << endl;
+
+	AST* node = (AST*)root;
+	string s = node->getName();
+
+	dump( node, "" );
+#endif
+
+#define USING_ORIGINAL
+#ifdef USING_ORIGINAL
+	fh_ifstream ss("input");
+
+	MyParserBlackBox<DLGLexer, FFilterParser, ::ANTLRToken> p(ss);
+	ASTBase* root = NULL;
+	p.parser()->interp( &root );
+
+
+	cout << root << endl;
+
+	AST* node = (AST*)root;
+	string s = node->getName();
+
+	dump( node, "" );
+#endif
+
+
+	return 0;
+}
+
+>>
+
+#lexclass START
+#token Eof       "@"
+#token "\n"		<<skip(); newline();>>
+#token  WS  "[\ \t]+"   <<isWS=0;tabAdjust();>>
+
+#token KOCTETSTR          "[a-zA-Z0-9\-\_\*\$\^\]\[\\\/\~\.]+"
+#token           "\""    <<skip(); mode(STRING);>>
+
+#lexclass STRING
+#token           "\"\""  <<more(); replchar('\"');>>
+#token BADSTRING "\n"    <<
+                             replchar('\0'); 
+                             newline(); 
+                             mode(START);
+                             /* error message */ 
+                         >>
+#token STRINGLIT "\""    <<
+                             // truncate quote
+                             replchar('\0');
+                             mode(START);
+                         >>
+#token           "~[]" <<more();>>
+#tokclass STRING_LITERAL {STRINGLIT BADSTRING}
+
+class FFilterParser 
+{
+
+
+interp
+	:	a:testing Eof!
+	;
+
+testing :
+		STRING_LITERAL WS STRING_LITERAL
+	;
+
+filter
+	:	eamatch   <<{ /*#0->preorder(); printf("\n"); */ }>>
+	;
+
+
+eaterm
+	:
+		"\("! 
+		 (
+			eamatch
+		   | ( "\!"^ eaterm )
+		   | ( "\|"^ (eaterm)+ )
+		   | ( "\&"^ (eaterm)+ )
+		 )
+		"\)"!
+	;
+
+
+eamatch :
+		      KOCTETSTR (   "\=\~"^ 
+                        | "<="^   | ">="^   | "=="^ 
+                        | "<\?="^ | ">\?="^ | "\=\?\="^ ) KOCTETSTR 
+;
+
+
+}
+
+
+
+
+

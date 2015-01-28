@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<overlay id="libferrismountOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<!-- // This imports our javascript. -->
+
+<!-- jslib sources used for executing beagle -->
+<script type="application/x-javascript" src="chrome://jslib/content/jslib.js" />
+<script type="application/x-javascript" src="chrome://libferrismount/content/libferrismountOverlay.js">
+
+</script>
+
+
+<!-- // This is for the Tools menu. -->
+
+<menupopup id="menu_ToolsPopup">
+	<menuitem insertafter="devToolsSeparator" label="Update libferris metadata"
+	oncommand="mountWithFerrisWriteData();" />	
+</menupopup>
+
+<menupopup id="menu_ToolsPopup">
+	<menuitem insertafter="devToolsSeparator" label="Write images to /tmp/firefox-dump"
+	oncommand="mountWithFerrisWriteImages('/tmp/firefox-dump/');" />	
+</menupopup>
+
+
+<!-- This is for the right click menu. -->
+
+<popup id="contentAreaContextMenu">
+	<menuitem id="ferrisupdate" insertafter="devToolsSeparator" label="Update libferris metadata"
+	oncommand="mountWithFerrisWriteData();" />	
+</popup>
+
+
+
+
+</overlay>
+

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="file:///tmp/df.txt">
+    <ns0:name xmlns:ns0="http://witme.sf.net/libferris.web/rdf/ferris-attr/">df.txt</ns0:name>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///tmp/df.txt">
+    <ns0:size xmlns:ns0="http://witme.sf.net/libferris.web/rdf/ferris-attr/">29</ns0:size>
+  </rdf:Description>
+  <rdf:Description rdf:about="file:///tmp/df.txt">
+    <ns0:mtime-display xmlns:ns0="http://witme.sf.net/libferris.web/rdf/ferris-attr/">09 Jun 22 14:29</ns0:mtime-display>
+  </rdf:Description>
+</rdf:RDF>
