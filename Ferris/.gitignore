@@ -1,0 +1,5 @@
+*#
+libferrisocaml.ml
+libferrisocaml.mli
+libferrisocaml_wrap.c
+libferrisperl.pm
