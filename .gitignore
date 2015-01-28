@@ -1,0 +1,13 @@
+CVS
+*.lo
+*.o
+Makefile
+Makefile.in
+*~
+*.la
+.deps
+.cvsignore
+libferris*tar*bz2
+libferris*tar*xz
+*.flc
+
