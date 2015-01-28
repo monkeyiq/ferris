@@ -25,3 +25,5 @@ com.libferris.Metadata.Worker.magick.service
 com.libferris.Metadata.Worker.png.service
 com.libferris.Metadata.Worker.xine.service
 com.Libferris.Volume.Manager.service
+force-header-generation
+

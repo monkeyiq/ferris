@@ -1,0 +1,52 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.freedesktop.MediaPlayer" >
+    <method name="Pause" />
+    <method name="Stop" />
+    <method name="Play" />
+    <method name="Prev" />
+    <method name="Next" />
+    <method name="Repeat" >
+      <arg direction="in" type="b" />
+    </method>
+    <method name="GetStatus" >
+      <arg direction="out" type="(iiii)" />
+      <annotation value="DBusStatus" name="com.trolltech.QtDBus.QtTypeName.Out0" />
+    </method>
+    <method name="VolumeSet" >
+      <arg direction="in" type="i" />
+    </method>
+    <method name="VolumeGet" >
+      <arg direction="out" type="i" />
+    </method>
+    <method name="PositionSet" >
+      <arg direction="in" type="i" />
+    </method>
+    <method name="PositionGet" >
+      <arg direction="out" type="i" />
+    </method>
+    <method name="GetMetadata" >
+      <arg direction="out" type="a{sv}" />
+      <annotation value="QVariantMap" name="com.trolltech.QtDBus.QtTypeName.Out0" />
+    </method>
+    <method name="GetCaps" >
+      <arg direction="out" type="i" />
+    </method>
+    <signal name="TrackChange" >
+      <arg type="a{sv}" />
+      <annotation value="QVariantMap" name="com.trolltech.QtDBus.QtTypeName.In0" />
+    </signal>
+    <signal name="CapsChange" >
+      <arg type="i" />
+    </signal>
+    <!-- NB: Amarok extensions to the mpris spec -->
+    <method name="VolumeUp" >
+      <arg type="i" drection="in" />
+    </method>
+    <method name="VolumeDown" >
+      <arg type="i" drection="in" />
+    </method>
+    <method name="Mute" />
+  </interface>
+</node>

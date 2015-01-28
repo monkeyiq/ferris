@@ -1,0 +1,19 @@
+if HAVE_PDFTOTEXT
+
+plugindir = @FERRIS_AS_TEXT_PLUGIN_DIR@
+
+INCLUDES =						\
+	@STLPORT_CFLAGS@                                \
+	-I..                                            \
+	-I$(top_srcdir)/src 				\
+	-I$(includedir)					\
+	@LIBDJVULIBRE_CFLAGS@ @IMLIB_CFLAGS@            \
+	@CFLAGS@
+
+plugin_LTLIBRARIES = libastextpdf.la 
+libastextpdf_la_SOURCES = libastextpdf.cpp
+libastextpdf_la_LDFLAGS = @GLIB_LIBS@    \
+	@LIBDJVULIBRE_LIBS@ @IMLIB_LIBS@ \
+	@LIBFERRIS_ASTEXTPLUGIN_LT_LINE@
+
+endif

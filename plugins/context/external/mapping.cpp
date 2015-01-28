@@ -1,0 +1,127 @@
+/******************************************************************************
+*******************************************************************************
+*******************************************************************************
+
+    libferris
+	WARNING: .cpp file is generated from .cpp.in file! 
+
+    Copyright (C) 2001 Ben Martin
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    For more details see the COPYING file in the root directory of this
+    distribution.
+
+    $Id: mapping.cpp.in,v 1.3 2005/12/20 11:36:04 ben Exp $
+
+*******************************************************************************
+*******************************************************************************
+******************************************************************************/
+
+#include <mapping.hh>
+#include <vector>
+#include <string>
+
+using namespace std;
+namespace Ferris
+{
+
+//typedef pair< string, string > mapping_t;
+//typedef vector< mapping_t > mappings_t;
+//mappings_t mappings;
+
+    struct mapping_t
+    {
+        char* first;
+        char* second;
+    };
+    
+    struct mapping_t mappings[] = {
+        {".tar.bz2","tar"},
+        {".tar.gz","tar"},
+        {".tar","tar"},
+        {".tgz","tar"},
+        {".tbz","tar"},
+        {".rpm","rpmfile"},
+        {".odt","zip"},
+        {".ods","zip"},
+        {".zip","zip"},
+        {".kwd","zip"},
+        {".ksp","zip"},
+        {0,0},
+        0,
+    };
+
+void
+init_mapping()
+{
+	bool virgin = true;
+	if( virgin )
+	{
+		virgin = false;
+//		mappings.push_back(make_pair("tar.bz2","tar"));
+//        	mappings.push_back(make_pair("tar.gz","tar"));
+//	        mappings.push_back(make_pair("tar","tar"));
+//        	mappings.push_back(make_pair("tgz","tar"));
+//	        mappings.push_back(make_pair("tbz","tar"));
+
+//        	mappings.push_back(make_pair("rpm","rpmfile"));
+	}
+}
+
+string
+emap::getScriptName( fh_context c )
+{
+	init_mapping();
+	string s = Ferris::getStrAttr( c, "rdn", "" );
+
+//	for( mappings_t::iterator iter = mappings.begin();
+//		iter != mappings.end(); ++iter )
+
+	for( mapping_t* iter = &mappings[0]; iter->first; ++iter )
+	{
+        fh_matcher m = Factory::MakeEndsWithMatcher("name", iter->first );
+        
+// 		OverMountContextMatcher<f_endswithmatcher> m( 
+//                     Factory::MakeEndsWithMatcher("name", iter->first )
+//                     );
+
+		if( m( GetImpl(c) ) )
+		{
+			return iter->second;
+		}
+	}
+	return "";
+}
+
+
+vector<string> 
+emap::getEndsWithStrings()
+{
+	init_mapping();
+	vector<string> ret;
+
+//	for( mappings_t::iterator iter = mappings.begin();
+//		iter != mappings.end(); ++iter )
+	for( mapping_t* iter = &mappings[0]; iter->first; ++iter )
+	{
+		ret.push_back( iter->first );
+	}
+
+	return ret;
+}
+
+
+};
