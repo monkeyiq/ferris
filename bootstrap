@@ -1,0 +1,8 @@
+#!/bin/bash
+
+mkdir -p macros
+libtoolize --force
+aclocal -I macros 
+automake --gnu --add-missing 
+autoconf 
+
