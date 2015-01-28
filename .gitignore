@@ -26,5 +26,6 @@ config.lt
 config.sub
 configure
 TAGS
+libtool
 
 
