@@ -1,0 +1,147 @@
+Make sure you have run the following
+$ ferris-first-time-user  --setup-defaults
+to setup each user who is going to use libferris. 
+Files installed into /etc/skel should setup new users created 
+after libferris was installed. The ferris-first-time-user also
+updates skel files with sane values from the user environment.
+
+When you are installing libferris don't forget to run
+cc/capplets/logging/ferris-capplet-logging and make sure your debug
+levels are set to None or Emergency using the ``all'' slider. Running
+ferris-first-time-user should do that automatically for you. Though
+when you update to a new libferris, new functionality might be
+included with default logging levels higher than you might like.
+
+
+C++ Virtual file system
+
+As of version 1.1.61 the test suite has been moved out of the main
+distro tarball to save space and because the testing needs the machine
+to be setup in a given way. Testing should now be performed in a
+virtual machine.
+
+This is a Virtual file system implementation that relies quite a lot
+on the Extended Attributes (EA) paradigm. With EA, key-value pairs are
+associated with files and directories to offer create, read, write and
+update access to metadata about files. This metadata and the file
+contents can also be indexed with libferris to provide powerful search
+capabilities. Access to file content is done using std::iostreams.
+
+The design is also flexable enough to allow internet protocols to
+integrate providing C++ IOStreams and EA about each object.
+
+There is an 'ls' client for the VFS.
+
+Requirements:
+
+	gcc 3.1+
+	ferrisloki              see the witme sourceforge site
+	libferrisstreams        see the witme sourceforge site
+	stldb4                  see the witme sourceforge site
+	fam++2                  see the fampp sourceforge site
+	openssl			
+	glib/gtk2
+	Qt                      4.5+
+	Soprano                 (Installed with KDE4 by default)
+	libsigc++		1.2+
+	xerces-c                3.x
+	xalan-c                 1.10+ (optional but recommended)
+	a MIME engine           either gnome, KDE, or libfile.
+
+Optional but very highly recommended (only needed at build time):
+	pccts			1.33mr22
+
+Optional but very highly recommended:
+	gimp 			1.2.1
+	Imlib2			1.0.2
+	libjpeg			6b
+	libpng 			1.0.9
+	ImageMagick-c++ 	5.2.7
+	libattr (xfs)           1.1.3 (http://oss.sgi.com/projects/xfs/)
+	xqilla
+	
+Optional recommended:
+	 See configure.ac, plugins/context and plugins/eagenerators
+	 and see if something looks like it is interesting.
+
+There is optional support for building against STLPort
+
+Note that many of the icons in media/icons are by jimmac
+http://jimmac.musichall.cz/
+Thanks for the nice icons jimmac :)
+
+
+--------------------------------------------------------------------------------
+
+SORTING:
+  A sort filter is made up of
+  :!#:attrName
+  Where the :!#: part is optional extra information about the sort. 
+
+The attribute name is the name of the attribute
+to sort on. The default action is a case sensitive sort, so for example to sort 
+a dir by filename you can use
+./ls . --sort=name
+And to reverse that sort
+./ls . --sort=':!:name'
+
+The # in the above example means to perform comparisons numerically instead of
+as a string. so
+$ ./ls . --sort=':!#:size'
+Will sort a directory by size with the largest file first.
+
+The other option at this point in time is CIS
+./ls . --sort=':CIS:name'
+Which sorts using a case insensitive scheme. There is really no 
+gain to using CIS as it is slower to use and looses information.
+
+--------------------------------------------------------------------------------
+
+Some assumptions that are worth knowing:
+* For subclasses of ChainedViewContext it is assumed that a context will wrap 
+  a chainedContext of its own type around the underlying child for a read()
+* Reference counting has some querks for the root of a ChainedViewContext, one 
+  must call setIsChainedViewContextRoot() for the root of a chained tree.
+
+--------------------------------------------------------------------------------
+
+Setting up apps://
+
+use the scripts and apps in apps/importdesktop/
+
+
+--------------------------------------------------------------------------------
+
+The directory mg/ contains code that was nicked from the mg system
+most files are left intact as were and a wrapper created in
+FerrisMG.hh to be more C++ friendly. I have tried to limit changes to
+the other files, except where global variables needed to be changed or 
+other such library friendly changes are needed.
+http://www.cs.mu.oz.au/mg/
+
+For some custom coded indexing stuff check out 
+Ferris/Indexing/ # contains custom lexicon/inverted file storage classes
+Ferris/FullTextIndexer.hh
+Ferris/FullTextIndexer.cpp
+Ferris/FullTextQuery.hh
+Ferris/FullTextQuery.cpp
+--------------------------------------------------------------------------------
+
+Some internal headers from xerces-c are included verbatim from the xerces-c
+codebase because it seems most public interfaces are pure in xerces-c and
+I don't really feel like reimplmeneting treeWalker etc to do the same thing as
+the code already in the xerces-c library.
+
+This creates a maintainance problem in libferris but perhaps the xerces-c guys
+will decide at some point to offer the "defualt" implementations of some things
+in the public API.
+
+--------------------------------------------------------------------------------
+
+
+ACLOCAL="aclocal -I macros"  autoreconf -vfi
+
+To create a blank RDF database using redland
+mkdir -p ~/.ferris/rdfdb
+cd ~/.ferris/rdfdb
+rdfproc myrdf -c  add a b c

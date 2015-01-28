@@ -1,0 +1,15 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: ferrisui
+Description: GTK+2 GUI helper code for ferris Virtual filesystem
+Version: @VERSION@
+Requires: @REQUIREMENTSUI@
+
+Libs: @CLIENTUI_APP_LIBS@
+Cflags: @CLIENTUI_APP_CFLAGS@
+
+
+

@@ -1,0 +1,336 @@
+/* config.h.in.  Generated from configure.ac by autoheader.  */
+/* config.h.in.  Generated automatically from configure.in by autoheader.  */
+
+/* Define if you need to in order for stat and other things to work.  */
+#undef _POSIX_SOURCE
+
+/* Define if you have the ANSI C header files.  */
+#undef STDC_HEADERS
+#undef MIMETYPE_DIRECTORY
+
+#undef HAVE_LIBRPM
+
+#undef FERRIS_AS_TEXT_PLUGIN_DIR
+#undef FERRIS_CREATION_PLUGIN_DIR
+#undef LIBASTEXT_PLUGIN_FACTORY_PREFIX
+#undef FERRIS_HAVE_LIBZ
+#undef FERRIS_HAVE_BZIP2
+#undef FERRIS_HAVE_DB4
+#undef FERRIS_HAVE_GDBM
+#undef FERRIS_HAVE_TDB
+#undef FERRIS_HAVE_EET
+#undef HAVE_EDB
+#undef HAVE_LIBJPEG
+#undef HAVE_LIBPNG
+#undef HAVE_MAGICK
+#undef HAVE_LIBPQXX
+
+#undef FERRIS_USER_NAME_NOBODY
+#undef FERRIS_DEBUG_VM 
+#undef FERRIS_DEBUG_RESOLVE
+
+
+#undef FERRIS_HAVE_ATTR
+#undef FERRIS_HAVE_LIBCAP
+#undef HAVE_DVDREAD
+#undef HAVE_XALAN
+#undef HAVE_XML4C
+#undef HAVE_PATHAN
+
+#undef PREFIX
+#undef AUTOTOOLS_CONFIG_PREFIX
+#undef AUTOTOOLS_CONFIG_DATADIR
+#undef AUTOTOOLS_CONFIG_LIBDIR
+#undef AUTOTOOLS_CONFIG_DATADIRTEST
+
+#undef FERRIS_HAVE_XFSPROGS
+
+#undef FERRIS_HAVE_IPC_CONTEXT
+
+#undef HAVE_GNOMEVFS
+#undef HAVE_LIBFILE
+#undef HAVE_EFSD
+#undef QT_THREAD_SUPPORT
+#undef HAVE_KDE3
+#undef HAVE_KDE
+
+/* Define if you have the <dlfcn.h> header file.  */
+#undef HAVE_DLFCN_H
+
+/* Define if you have the crypto library (-lcrypto).  */
+#undef HAVE_LIBCRYPTO
+
+/* Define if you have the fam library (-lfam).  */
+#undef HAVE_LIBFAM
+
+/* Define if you have the file library (-lfile).  */
+#undef HAVE_LIBFILE
+
+/* Name of package */
+#undef PACKAGE
+
+/* Version number of package */
+#undef VERSION
+#undef FERRIS_VERSION
+
+
+#undef HAVE_BOGOFILTER
+#undef HAVE_LIBTEXTCAT
+#undef HAVE_SVMLIGHT
+
+#undef HAVE_DBXML
+
+#undef HAVE_REDLAND
+#undef FERRIS_HAVE_GPGME
+
+#undef HAVE_EPEG
+#undef HAVE_LIBEXIF
+
+#define XFS_SUPER_MAGIC 0x58465342
+
+#undef HAVE_GCJLUCENE
+#undef FERRIS_HAVE_GCJ
+
+
+#undef HAVE_DTL
+#undef HAVE_SQLPLUS
+
+
+#undef HAVE_FCA
+#undef BUILD_FCA
+
+#undef HAVE_LIBSELINUX
+
+#undef HAVE_LIBMAGIC
+#undef BUILD_PGTSEARCH_FTXIDX
+
+
+#undef CURL_LEAVES_SIG_ALARM_ON
+#undef FERRIS_DEBUG_RESOLVE
+#undef FERRIS_DEBUG_VM
+#undef FERRIS_HAVE_GCJ
+#undef FERRIS_HAVE_GPGME
+#undef FERRIS_HAVE_SQLPLUS
+#undef FERRIS_HAVE_XFS
+#undef GCC_HASCLASSVISIBILITY
+#undef HAVE_BOGOFILTER
+#undef HAVE_BONOBO
+#undef HAVE_BOOST
+#undef HAVE_DTL
+#undef HAVE_EET
+#undef HAVE_FAMPP2
+#undef HAVE_GDBM
+#undef HAVE_GPGME
+#undef HAVE_IMLIB2
+#undef HAVE_LDAP
+#undef HAVE_LIBDJVULIBRE
+#undef HAVE_LIBJASPER
+#undef HAVE_LIBPQXX
+#undef HAVE_LOKI
+#undef HAVE_OPENSSL
+#undef HAVE_PATHAN
+#undef HAVE_SIGC
+#undef HAVE_SOCKETPP
+#undef HAVE_STLPORT
+#undef HAVE_STREAMS
+#undef HAVE_TDB
+#undef HAVE_XALAN
+#undef HAVE_XAPIAN
+#undef HAVE_XERCESC
+#undef HAVE_XML4C
+#undef SIGCXX_HAS_LESS_THAN_FIVE_SIGNAL_ARGS_AS_MAX
+#undef STLPORT_IOSIZE
+
+
+#undef FERRIS_DEBUG_RESOLVE
+#undef FERRIS_DEBUG_VM
+#undef FERRIS_HAVE_GCJ
+#undef FERRIS_HAVE_GPGME
+#undef HAVE_BOGOFILTER
+#undef HAVE_BOOST
+#undef HAVE_DTL
+#undef HAVE_FAMPP2
+#undef HAVE_GPGME
+#undef HAVE_LIBPQXX
+#undef HAVE_LOKI
+#undef HAVE_PATHAN
+#undef HAVE_SIGC
+#undef HAVE_SOCKETPP
+#undef HAVE_STLPORT
+#undef HAVE_STREAMS
+#undef HAVE_XALAN
+#undef HAVE_XERCESC
+#undef HAVE_XML4C
+#undef STLPORT_IOSIZE
+ 
+
+/* Debuging resolve() method */
+#undef FERRIS_DEBUG_RESOLVE
+
+/* Extra debug information on VM system */
+#undef FERRIS_DEBUG_VM
+
+/* using gcj for some java code */
+#undef FERRIS_HAVE_GCJ
+
+/* Using gpgme for some crypto stuff */
+#undef FERRIS_HAVE_GPGME
+
+/* Bogofilter for machine learning */
+#undef HAVE_BOGOFILTER
+
+/* is the boost library installed */
+#undef HAVE_BOOST
+
+/* Define to 1 if you have the <dlfcn.h> header file. */
+#undef HAVE_DLFCN_H
+
+/* Is DTL installed */
+#undef HAVE_DTL
+
+/* libextractor keyword-library found */
+#undef HAVE_EXTRACTOR
+
+/* Is fampp2 installed */
+#undef HAVE_FAMPP2
+
+/* Using gpgme for some crypto stuff */
+#undef HAVE_GPGME
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the `fam' library (-lfam). */
+#undef HAVE_LIBFAM
+
+/* Is libpqxx installed */
+#undef HAVE_LIBPQXX
+
+/* is the libferrisloki library installed */
+#undef HAVE_LOKI
+
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
+
+/* is libpathan installed */
+#undef HAVE_PATHAN
+
+/* Is sigc++ installed */
+#undef HAVE_SIGC
+
+/* Is socket++ installed */
+#undef HAVE_SOCKETPP
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Is STLPort 4.5+ installed */
+#undef HAVE_STLPORT
+
+/* Is libferrisstreams installed */
+#undef HAVE_STREAMS
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Is Xalan-C installed */
+#undef HAVE_XALAN
+
+/* Is Xerces-C installed */
+#undef HAVE_XERCESC
+
+/* Is Xerces-C installed */
+#undef HAVE_XML4C
+
+/* Name of package */
+#undef PACKAGE
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* Width of seekable units in iostreams */
+#undef STLPORT_IOSIZE
+
+
+/* Defined if on Win32 platform */
+#undef WIN32
+
+/* Number of bits in a file offset, on hosts where this is settable. */
+#undef _FILE_OFFSET_BITS
+
+/* Define for large files, on AIX-style hosts. */
+#undef _LARGE_FILES
+
+#undef FERRIS_HAVE_ECORE
+#undef FERRIS_BUILD_DCOP_FILESYSTEMS
+
+#undef HAVE_UNRTF
+#undef HAVE_HEVEA
+#undef HAVE_PS2ASCII
+
+#undef EVOLUTION_BUG__EXTRA_HEADERS_TO_PREINCLUDE
+
+#undef HAVE_OBBY
+#undef HAVE_BEAGLE
+
+
+#undef MIMETYPE_ENGINE_DESC
+
+#undef HAVE_DBUS
+
+#undef FERRIS_HAVE_READLINKAT
+#undef HAVE_XQILLA
+
+#undef HAVE_WEBPHOTOS_API
+
+#undef HAVE_SQLITE3
+#undef HAVE_FSPOT
+#undef HAVE_DBUSCXX
+#undef BUILD_DBUS_MOUNTING
+#undef FERRIS_HAVE_SQRTL
+
+
+
+#undef TAGLIB_FOR_OGG
+#undef TAGLIB_FOR_MP3
+#undef TAGLIB_FOR_FLAC
+#undef LIBOGGZ_FOR_OGG
+#undef LIBFLAC_FOR_FLAC
+#undef ID3LIB_FOR_MP3
+#undef ID3LIB_FOR_OGG
+#undef ID3LIB_FOR_FLAC
+
+#undef HAVE_NEPOMUK
+
+#undef HAVE_MEDIAINFO
+#undef HAVE_QTGUI

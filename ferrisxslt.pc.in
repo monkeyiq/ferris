@@ -1,0 +1,15 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: ferrisxslt
+Description: XSLT functions for processing XML with ferris
+Version: @VERSION@
+Requires: @REQUIREMENTSXSLT@
+
+Libs: @CLIENTXSLT_APP_LIBS@
+Cflags: @CLIENTXSLT_APP_CFLAGS@
+
+
+
