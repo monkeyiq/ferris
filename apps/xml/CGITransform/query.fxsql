@@ -1,0 +1,10 @@
+<queryview>
+    <name>resultingtable</name>
+    <sql>
+select fname, description, addr
+from holdings, items, actors 
+where holdings.iid    = items.iid
+and   holdings.custid = actors.custid 
+and   addr     = '<xsl:value-of select="@address" />'  
+    </sql>
+</queryview>

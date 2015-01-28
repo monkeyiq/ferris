@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Locale
+Comment=Region settins
+Exec=ferris-capplet-locale
+Icon=/usr/share/control-center-plus/icons/ferris-locale.png
+Terminal=0
+Type=Application

@@ -1,0 +1,6 @@
+<queryview>
+    <name>resultingtable</name>
+    <sql>
+select * from actors
+    </sql>
+</queryview>

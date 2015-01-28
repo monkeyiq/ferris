@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Logging
+Comment=How much debugging information to display
+Exec=ferris-capplet-logging
+Icon=/usr/share/control-center-plus/icons/ferris-logging.png
+Terminal=0
+Type=Application

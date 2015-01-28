@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=MPlayer
+Comment=Play any animation known to man
+Exec=mplayer -pp 8 
+Icon=icons://mplayer.png
+Terminal=0
+Type=Application
+

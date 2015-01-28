@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Agents
+Comment=Supervised machine learning
+Exec=ferris-capplet-agents
+Icon=/usr/share/control-center-plus/icons/ferris-agents.png
+Terminal=0
+Type=Application

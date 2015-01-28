@@ -28,5 +28,11 @@ configure
 TAGS
 libtool
 .libs
+m4
 
 
+depcomp
+compile
+aclocal.m4
+acconfig.h
+autom4te.cache

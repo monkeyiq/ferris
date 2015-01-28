@@ -1,0 +1,18 @@
+
+#
+# This should go in /etc/profile.d so that it is sourced by bash
+# and is executed in the shell that invokes it rather than a subshell
+# 
+ferriscd() {
+
+	extarg=""
+	shopt -q cdable_vars
+	if [ x$? = x0 ]; then 
+		extarg="$extarg --try-cdable-vars";
+	fi
+
+	extarg="$extarg --cdpath=$CDPATH "
+	echo $CDPATH
+	echo "ferriscdexe $extarg $@"
+	eval `ferriscdexe $extarg $@`
+}

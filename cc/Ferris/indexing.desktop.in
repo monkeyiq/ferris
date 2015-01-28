@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Indexing
+Comment=Indexing of full text and attributes
+Exec=ferris-capplet-index
+Icon=/usr/share/control-center-plus/icons/ferris-index.png
+Terminal=0
+Type=Application

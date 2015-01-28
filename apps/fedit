@@ -1,0 +1,21 @@
+#!/bin/bash
+
+EDITOR=vi
+
+if [ $1 == "-a" ]; then
+    ea=$2
+    url=$3
+    $EDITOR $( ferris-file-to-fifo --ea $ea $url );
+else
+
+    if [ -z $2 ]; then
+	url=$1
+	$EDITOR $( ferris-file-to-fifo $url );
+    else
+	url=$1
+	ea=$2
+	$EDITOR $( ferris-file-to-fifo --ea $ea $url );
+    fi
+
+fi
+

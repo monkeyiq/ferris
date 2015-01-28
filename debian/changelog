@@ -1,0 +1,25 @@
+libferris (1.5.16) unstable; urgency=low
+
+  * odroid u2 build
+
+ -- root <monkeyiq@users.sf.net>  Sat, 25 Feb 2012 16:12:36 +1000
+
+libferris (1.5.13) unstable; urgency=low
+
+  * automated release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+  * freedombox / n9 build
+
+ -- root <monkeyiq@users.sf.net>  Sat, 25 Feb 2012 16:12:36 +1000
+
+libferris (1.2.5) unstable; urgency=low
+
+  * automated release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- root <monkeyiq@users.sf.net>  Mon, 31 Dec 2007 17:42:44 +1000
+
+libferris (1.2.1-1) unstable; urgency=low
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- root <monkeyiq@users.sf.net>  Tue, 27 Nov 2007 04:15:15 +1000
+

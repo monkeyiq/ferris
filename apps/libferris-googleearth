@@ -1,0 +1,11 @@
+#!/bin/bash
+
+export LIBFERRISBROWSER="$BROWSER"
+export BROWSER=~/bin/libferris-googleearth-bouncer.pl
+if [ ! -f $BROWSER ]; then
+    export BROWSER=/usr/local/bin/libferris-googleearth-bouncer.pl
+fi
+
+#echo $BROWSER
+googleearth "$@"
+

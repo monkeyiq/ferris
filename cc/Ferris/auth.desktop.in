@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Auth
+Comment=Manage authentication data for server connections
+Exec=ferris-capplet-auth
+Icon=/usr/share/control-center-plus/icons/ferris-auth.png
+Terminal=0
+Type=Application

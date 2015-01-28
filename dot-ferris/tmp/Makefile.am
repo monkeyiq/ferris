@@ -1,0 +1,11 @@
+
+MAINTAINERCLEANFILES = Makefile.in
+
+STUB_FILES = STUB
+EXTRA_DIST = $(STUB_FILES)
+STUB_INSTALL_DIR = @DOTFILE_ETC@/skel/.ferris/tmp
+
+stubdir = $(STUB_INSTALL_DIR)
+stub_DATA = $(STUB_FILES)
+
+

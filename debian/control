@@ -1,0 +1,78 @@
+Source: libferris
+Priority: extra
+Maintainer: root <monkeyiq@users.sf.net>
+Build-Depends: debhelper (>= 5), autotools-dev, libboost-serialization-dev, libboost-regex-dev, libsoprano-dev, libqoauth-dev, libcurl4-openssl-dev, libqjson-dev, libqt4-dev, libgtk2.0-dev
+Standards-Version: 3.7.2
+Section: libs
+
+Package: libferris-dev
+Section: libdevel
+Architecture: any
+Depends: pkg-config, libglib2.0-dev, libpopt-dev, stldb4-dev, libxalan110-dev, fampp2-dev, uuid-dev, libsoprano-dev, libgamin-dev, ferrisstreams-dev, libferrisui1, libqt4-dev
+Description: High level C++ Virtual filesystem with advanced index and search
+ In non technical terms, libferris makes the file system and other
+ hierarchical storage systems easier to use.
+ For the geeks out there, libferris is a virtual file system (VFS) that
+ runs in the user address space. At the moment libferris is a shared
+ object that each application can dynamically link to in order to see
+ the file system through a nicer abstraction.
+ Ferris presents a C++ interface that makes heavy use of the STL and
+ IOStreams. Currently ferris has two main internal abstractions:
+ Context and Attribute. A context is much like a traditional file or
+ directory in a file system, the major differences being that a context
+ can have both byte content (like a file) and subcontexts (like a
+ directory). An attribute is a chunk of metadata about a
+ context. Contexts can have many attributes. Some attributes may be
+ large, for example a base 64 encoded version of the context's content
+ (133% context size). On the other hand an attribute can be small, for
+ example the file size is exposed as an attribute.
+ Access to all contexts and attributes is performed by first requesting
+ either an IStream or IOStream for that context or attribute. In this
+ way the same context/attribute can be open many times at the same
+ time, just like normal kernel based IO.
+
+Package: ferris
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Command line tools that ship with libferris
+ Command line tools that ship with libferris
+
+Package: libferris1
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, stldb41, fampp21, ferrisstreams1, libqt4-network
+Description: High level C++ Virtual filesystem with advanced index and search
+ In non technical terms, libferris makes the file system and other
+ hierarchical storage systems easier to use.
+ For the geeks out there, libferris is a virtual file system (VFS) that
+ runs in the user address space. At the moment libferris is a shared
+ object that each application can dynamically link to in order to see
+ the file system through a nicer abstraction.
+ Ferris presents a C++ interface that makes heavy use of the STL and
+ IOStreams. Currently ferris has two main internal abstractions:
+ Context and Attribute. A context is much like a traditional file or
+ directory in a file system, the major differences being that a context
+ can have both byte content (like a file) and subcontexts (like a
+ directory). An attribute is a chunk of metadata about a
+ context. Contexts can have many attributes. Some attributes may be
+ large, for example a base 64 encoded version of the context's content
+ (133% context size). On the other hand an attribute can be small, for
+ example the file size is exposed as an attribute.
+ Access to all contexts and attributes is performed by first requesting
+ either an IStream or IOStream for that context or attribute. In this
+ way the same context/attribute can be open many times at the same
+ time, just like normal kernel based IO.
+
+Package: libferrisui1
+Section: libs
+Depends: libferris1 (= ${Source-Version}) ${shlibs:Depends}, ${misc:Depends}
+Architecture: any
+Description: High level C++ Virtual filesystem with advanced index and search
+ High level C++ Virtual filesystem with advanced index and search
+
+Package: libferrisxslt1
+Depends: libferris1 (= ${Source-Version}) ${shlibs:Depends}, ${misc:Depends}
+Section: libs
+Architecture: any
+Description: High level C++ Virtual filesystem with advanced index and search
+ High level C++ Virtual filesystem with advanced index and search

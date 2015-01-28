@@ -1,0 +1,15 @@
+#!/bin/bash
+
+PREFERED_EMACS=${PREFERED_EMACS:-emacs}
+ED=$PREFERED_EMACS
+
+
+# look for xemacs first, as its gnu emacs binary is a prefix.
+instanceCount=$(ps aux | grep xemacs | grep -v 'grep xemacs' | grep `whoami` | wc -l );
+
+# xemacs is running, use it!
+if [ "$instanceCount" -ne "0" ]; then
+    gnuclient -batch -f "$@"
+else
+    emacsclient -e "$@"
+fi

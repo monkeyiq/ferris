@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# Dispatch to emacs or xeamcs or vi or gedit or whatever.
+#
+
+NEWFRAME=${USER_EMACS_CLIENT_OPTIONS}
+ED=${EDITOR:-emacs}
+PREFERED_EMACS=${PREFERED_EMACS:-emacs}
+ED=$PREFERED_EMACS
+
+# look for xemacs first, as its gnu emacs binary is a prefix.
+instanceCount=$(ps aux | grep xemacs | grep -v 'grep xemacs' | grep `whoami` | wc -l );
+
+# xemacs is running, use it!
+if [ "$instanceCount" -ne "0" ]; then
+    gnuclient -q $NEWFRAME "$@";
+else
+
+    # look for gnu emacs
+    instanceCount=$(ps aux | grep emacs | grep -v 'grep emacs' | grep `whoami` | wc -l );
+
+    # gnu emacs is running, use it
+    if [ "$instanceCount" -ne "0" ]; then
+	emacsclient $NEWFRAME "$@"
+    else
+	# fall back to $EDITOR
+	$ED "$@" &
+    fi
+fi

@@ -1,0 +1,13 @@
+if HAVE_SQLITE3
+SQLITEDIR = sqlitevtab
+endif
+
+if FERRIS_HAVE_PLASMA
+PLASMADIR = plasma
+endif
+
+if FERRIS_HAVE_KDE
+KIODIR = kio
+endif
+
+SUBDIRS = $(SQLITEDIR) $(PLASMADIR) perl $(KIODIR)

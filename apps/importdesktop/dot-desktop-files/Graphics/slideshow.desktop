@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=slideshow
+Comment=slideshow using feh
+Exec=feh -FZ 
+Icon=icons://feh.png
+Terminal=0
+Type=Application
+

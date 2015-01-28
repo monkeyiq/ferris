@@ -1,0 +1,23 @@
+<gstreamer>
+  <capture>
+    <file name="test.jpg">
+      <source>
+	filesrc location=/tmp/medium-test-image.jpg
+	! appsink name=sink
+      </source>
+    </file>
+    <file name="n810.jpg">
+      <source>
+	tcpclientsrc host=n810 port=5434 
+	! appsink name=sink
+      </source>
+    </file>
+    <file name="n810.mpeg">
+      <source>
+	tcpclientsrc host=n810 port=5434 
+	! queue ! jpegdec ! ffenc_mpeg2video ! ffmux_mpeg
+	! appsink name=sink
+      </source>
+    </file>
+  </capture>
+</gstreamer>

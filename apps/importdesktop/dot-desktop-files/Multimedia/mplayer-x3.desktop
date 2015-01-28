@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=MPlayer x3
+Comment=3 fold scaled play
+Exec=mplayer -xy 3 -pp 8 
+Icon=icons://mplayer.png
+Terminal=0
+Type=Application
+

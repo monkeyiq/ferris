@@ -1,0 +1,656 @@
+<xsd author="Primary: Ben Martin.  Also: some of the description attributes have been swiped wholesale from the XSD specifications."
+     >
+
+<!--                   pattern="\(^$\|^$\|^$\|^$\|^$\|^$\|^$\|^$\|       \)" -->
+
+  <attributes
+	      gtk-cell-renderer-name="GtkCellRendererText"
+	      default-display-width="20"
+	      justification="left"
+	      >
+    <attributedomain description="This shows part of the schema for the schema. Possible values for some of hte attributes in the below document are shown here. ie. The possiblesort attribute contains all the possible values for the attribute possiblesort in the schema below."
+		     possiblesort="cis,string,int,double,binary" 
+		     defaultsort="cis,string,int,double,binary" 
+		     >
+    </attributedomain>
+    <boolean uname="xsd:boolean" uuid="2341f009-dc54-4e08-9855-579df8397af4" 
+	     ferrisenum="@XSD_BASIC_BOOL@" ferrisname="XSD_BASIC_BOOL"
+	     gtk-cell-renderer-name="GtkCellRendererToggle"
+	     pattern="\(^[01]$\|^false$\|^true$\)" 
+	     possiblesort="int,cis" defaultsort="int" 
+	     default-display-width="2"
+	     defaultvalue="0" examplevalues="0,1,true,false" 
+	     description="a pass/fail or yes/no condition"
+	     >
+    </boolean>
+    <double uname="xsd:double" uuid="5bf4f5ce-515e-4a21-9bab-2b8b6e1d2498" 
+	    ferrisenum="@XSD_BASIC_DOUBLE@" ferrisname="XSD_BASIC_DOUBLE"
+	    gtk-cell-renderer-name="GtkCellRendererText"
+	    pattern="[+]*[0-9]+[e0-9]*" 
+	    possiblesort="double" defaultsort="double" 
+	    default-display-width="10"
+	    justification="right"
+	    defaultvalue="0.0" examplevalues="5.0,3.8" 
+	    description="The double datatype corresponds to IEEE double-precision 64-bit floating point type [IEEE 754-1985]. The basic value space of double consists of the values m x 2^e, where m is an integer whose absolute value is less than 2^53, and e is an integer between -1075 and 970, inclusive. In addition to the basic value space described above, the value space of double also contains the following special values: positive and negative zero, positive and negative infinity and not-a-number. The order-relation on double is: x &lt; y iff y - x is positive. Positive zero is greater than negative zero. Not-a-number equals itself and is greater than all double values including positive infinity."
+	    >
+        <query uname="xsd:doublequery" uuid="5b1406d4-1837-4a49-98d4-88830efb03a9" 
+	       possiblesort="double" defaultsort="double" 
+	       defaultvalue="0.0" examplevalues="5.0,3.8" 
+	       description=""
+	       >
+            <rank uname="xsd:doublequeryrank" uuid="9a4076e9-40d5-4eb9-85cf-ca3d293b3582" 
+		  ferrisenum="@FXD_FTX_RANK@" ferrisname="FXD_FTX_RANK"
+		  possiblesort="double" defaultsort="double" 
+		  defaultvalue="0.0" examplevalues="5.0,3.8" 
+		  description="Ranking order of query results"
+		  >
+            </rank>
+        </query>
+      <latlong uname="xsd:latlong" uuid="f140c8b2-14fa-4e6c-aa8d-5099e060d5b3" 
+	ferrisenum="@FXD_LATLONG@" ferrisname="FXD_LATLONG"
+	possiblesort="double" defaultsort="double" 
+	defaultvalue="0.0" examplevalues="-180.0,180.0" 
+	description="Longitude or Latitude of the context"
+	default-display-precision="9"
+	>
+	<latitude uname="xsd:latitude" uuid="abf45a3b-abdb-49d0-9b00-912ed32a551a" 
+	  ferrisenum="@FXD_LATITUDE@" ferrisname="FXD_LATITUDE"
+	  possiblesort="double" defaultsort="double" 
+	  defaultvalue="0.0" examplevalues="-90.0,90.0" 
+	  description="Latitude of the feature in plus or minus decimal degree: no sign (+) = North; negative sign (-) = South. number -90.0000 to 90.0000 "
+	  ></latitude>
+	<longitude uname="xsd:longitude" uuid="c4bdebfe-790e-40aa-ab7d-b33837a175d4" 
+	  ferrisenum="@FXD_LONGITUDE@" ferrisname="FXD_LONGITUDE"
+	  possiblesort="double" defaultsort="double" 
+	  defaultvalue="0.0" examplevalues="-179.99999,180.0000" 
+	  description="LONG Longitude of the feature in plus or minus decimal degree: no sign (+) = East; negative sign (-) = West. number -179.9999 to 180.0000"
+	  ></longitude>
+      </latlong>
+    </double>
+    <float uname="xsd:float" uuid="8b107374-2686-4f71-998e-892abbf6e68d" 
+	   ferrisenum="@XSD_BASIC_FLOAT@" ferrisname="XSD_BASIC_FLOAT"
+	   pattern="[+]*[0-9]+[e0-9]*" 
+	   possiblesort="double" defaultsort="double" 
+	   justification="right"
+	   default-display-width="10"
+	   defaultvalue="0.0" examplevalues="5.0,3.8" 
+	   description="The float datatype corresponds to IEEE single-precision 32-bit floating point type [IEEE 754-1985]. The basic value space of float consists of the values m x 2^e, where m is an integer whose absolute value is less than 2^24, and e is an integer between -149 and 104, inclusive. In addition to the basic value space described above, the value space of float also contains the following special values: positive and negative zero, positive and negative infinity and not-a-number. The order-relation on float is: x &lt; y iff y - x is positive. Positive zero is greater than negative zero. Not-a-number equals itself and is greater than all float values including positive infinity."
+	   >
+    </float>
+    <binary uname="raw:binary" uuid="ab83f378-284c-4e32-825b-c8b4a3219869"
+	    ferrisenum="@FXD_BINARY@" ferrisname="FXD_BINARY"
+	    possiblesort="binary" defaultsort="binary" 
+	    default-display-width="0"
+	    defaultvalue=""
+	    description="raw binary data. a series of octets that nothing else is known about"
+	    >
+        <rgba32bpp uname="raw:rgba32bpp" uuid="51a50ff7-c1ab-408d-928d-023cbfb12951"
+		   ferrisenum="@FXD_BINARY_RGBA32@" ferrisname="FXD_BINARY_RGBA32"
+		   possiblesort="binary" defaultsort="binary" 
+		   defaultvalue=""
+		   description="binary image data in RGBA format with 8 bits per component."
+		   >
+        </rgba32bpp>
+        <nativeea uname="raw:nativeea" uuid="5a09472c-a1d5-4e3d-a00f-9f8b0151ef78"
+		  ferrisenum="@FXD_BINARY_NATIVE_EA@" ferrisname="FXD_BINARY_NATIVE_EA"
+		  possiblesort="binary" defaultsort="binary" 
+		  defaultvalue=""
+		  description="binary data saved as ea though the kernel ea interface."
+		  >
+        </nativeea>
+        <pgmpipe uname="raw:pgmpipe" uuid="7cb2bde2-93ad-498f-9f6d-e59fcd3127f6"
+		 ferrisenum="@FXD_BINARY_PGMPIPE@" ferrisname="FXD_BINARY_PGMPIPE"
+		 possiblesort="binary" defaultsort="binary" 
+		 defaultvalue=""
+		 description="a series of images in pgm format."
+		 >
+        </pgmpipe>
+        <a52pipe uname="raw:a52pipe" uuid="e6e1b376-546a-4cf0-b398-51e25e976027"
+		 ferrisenum="@FXD_BINARY_A52PIPE@" ferrisname="FXD_BINARY_A52PIPE"
+		 possiblesort="binary" defaultsort="binary" 
+		 defaultvalue=""
+		 description="an audio track in dolby ac3 format."
+		 >
+        </a52pipe>
+    </binary>
+    <unknown uname="fxd:unknown" uuid="35134f49-657f-4d81-a7f0-c12b2c9564a4"
+	     ferrisenum="@XSD_UNKNOWN@" ferrisname="XSD_UNKNOWN"
+	     possiblesort="binary" defaultsort="binary" 
+	     defaultvalue=""
+	     description="no schema is given for this item"
+	     >
+    </unknown>
+    <schema uname="fxd:schema" uuid="d7985296-1d01-48ee-9475-2d76d7db7eb8"
+	    ferrisenum="@XSD_SCHEMA@" ferrisname="XSD_SCHEMA"
+	    possiblesort="cis,string" defaultsort="cis"
+	    defaultvalue=""
+	    description="The schema for an object in libferris"
+	    >
+    </schema>
+    <string uname="xsd:string" uuid="59efa9da-d2e7-451d-aaba-b6b074f5121e"
+	    ferrisenum="@XSD_BASIC_STRING@" ferrisname="XSD_BASIC_STRING"
+	    possiblesort="cis,string" defaultsort="string"
+	    default-display-width="50"
+	    defaultvalue=""
+	    description="The value space of string is the set of finite-length sequences of characters (as defined in [XML 1.0 (Second Edition)]) that match the Char production from [XML 1.0 (Second Edition)]. A character is an atomic unit of communication; it is not further specified except to note that every character has a corresponding Universal Character Set code point, which is an integer."
+	    >
+
+
+                <modestring uname="fxd:modestring" uuid="667cc1a9-4ea3-4831-bdfa-2a88a9e5ae61"
+		      ferrisenum="@FXD_MODE_STRING_T@" ferrisname="FXD_MODE_STRING_T"
+		      possiblesort="string" defaultsort="string" 
+		      defaultvalue="-r--------" examplevalues="-rwxrwxrwx" 
+		      description="String representation of a file's protection mask on a UNIX machine."
+		      >
+                </modestring>
+
+        <ffilter uname="fxd:ffilter" uuid="4b8d1951-2034-476e-bd0d-a59121001d61"
+	     ferrisenum="@FXD_FFILTER@" ferrisname="FXD_FFILTER"
+	     possiblesort="cis,string" defaultsort="cis"
+	     defaultvalue=""
+	     description="A predicate much like an LDAP search string."
+	     >
+        </ffilter>
+        <url uname="fxd:url" uuid="b8a7849f-92e7-465e-bcb6-58900e66b88a"
+	     ferrisenum="@FXD_URL@" ferrisname="FXD_URL"
+	     possiblesort="cis,string" defaultsort="string"
+	     default-display-width="50"
+	     defaultvalue=""
+	     description="A URL that can be resolved in either the version of libferris or a later version than that which created the URL. Note that the same URL may generate an error on another machine due to network changes or a differently configured libferris."
+	     >
+            <implicitresolve uname="fxd:url-implicit-resolve" 
+			     ferrisenum="@FXD_URL_IMPLICIT_RESOLVE@"
+			     ferrisname="FXD_URL_IMPLICIT_RESOLVE"
+			     uuid="cf9c7c91-4227-4f63-921f-788db6ade2df"
+			     possiblesort="cis,string" defaultsort="string"
+			     defaultvalue=""
+			     description="A URL that should be resolved and have the data at its target shown to the user rather than the URL itself. This facility allows a soft link style by using EA and having a little support in the application to implicitly getStrAttr( Resolve(), context ) the url"
+			     >
+            </implicitresolve>
+            <implicitresolvefs uname="fxd:url-implicit-resolve-filesystem" 
+			     ferrisenum="@FXD_URL_IMPLICIT_RESOLVE_FILESYSTEM@"
+			     ferrisname="FXD_URL_IMPLICIT_RESOLVE_FILESYSTEM"
+			     uuid="8bcab3ed-c9c0-4a14-beeb-411819a088ae"
+			     possiblesort="cis,string" defaultsort="string"
+			     defaultvalue=""
+			     description="A URL that should be resolved and have the filesystem at its target shown to the user rather than the URL itself. This facility allows a soft link style by using EA and having a little support in the application to implicitly getStrAttr( Resolve(), context ) the url of the filesystem to show"
+			     >
+            </implicitresolvefs>
+
+        </url>
+        <ipv4address uname="fxd:stripv4address" uuid="bec804a9-9965-4b1a-b26d-484b73ceb728"
+		     ferrisenum="@FXD_STR_IP4ADDR@" ferrisname="FXD_STR_IP4ADDR"
+		     possiblesort="cis,string" defaultsort="string"
+		     justification="right"
+		     default-display-width="16"
+		     defaultvalue=""
+		     description="an ip version 4 dot address in string form. eg. 127.0.0.1"
+		     >
+        </ipv4address>
+        <distinguishedperson uname="fxd:distinguishedperson" 
+			     ferrisenum="@FXD_DISTINGUISHED_PERSON@" 
+			     ferrisname="FXD_DISTINGUISHED_PERSON"
+			     uuid="bc8a6203-c44d-49e9-8501-acde8633ce28"
+			     possiblesort="cis,string" defaultsort="string"
+			     defaultvalue=""
+			     description="an entity that plays a role in a crypto system"
+	    >
+        </distinguishedperson>
+        <ciphername uname="fxd:ciphername" 
+		    ferrisenum="@FXD_CIPHER_NAME@" ferrisname="FXD_CIPHER_NAME"
+		    uuid="284bd7a9-84ea-4d56-b9b8-2fb6279385b9"
+		    possiblesort="cis,string" defaultsort="string"
+		    default-display-width="10"
+		    defaultvalue=""
+		    description="name of a cryptographic cipher"
+		    >
+        </ciphername>
+        <cipherversion uname="fxd:cipherversion" 
+		       ferrisenum="@FXD_CIPHER_VERSION@" ferrisname="FXD_CIPHER_VERSION"
+		       uuid="e7ab1759-4ac0-45f7-ae6c-144b8d95892b"
+		       possiblesort="cis,string" defaultsort="string"
+		       default-display-width="5"
+		       defaultvalue=""
+		       description="version of a cryptographic cipher"
+		       >
+        </cipherversion>
+        <mimetype uname="fxd:mimetype" uuid="b3368a9a-db00-4f78-a2b5-cabfb0b8458c"
+		  ferrisenum="@FXD_MIMETYPE@" ferrisname="FXD_MIMETYPE"
+		  possiblesort="cis,string" defaultsort="string"
+		  default-display-width="20"
+		  defaultvalue=""
+		  description="A mimetype as defined in the 822 RFC"
+		  >
+        </mimetype>
+        <machinename uname="fxd:machinename" uuid="3a819a73-4abd-406c-b67d-ffc3d5be1b11"
+		     ferrisenum="@FXD_MACHINE_NAME@" ferrisname="FXD_MACHINE_NAME"
+		     possiblesort="cis,string" defaultsort="string"
+		     default-display-width="15"
+		     defaultvalue=""
+		     description="The name of a computer in relative DNS"
+		     >
+        </machinename>
+        <primarykey uname="fxd:primarykey" 
+		    ferrisenum="@FXD_PRIMARY_KEY@" ferrisname="FXD_PRIMARY_KEY"
+		    uuid="a91511b5-7658-4840-b41a-6a6045379ec4"
+		    possiblesort="cis,string" defaultsort="string"
+		    defaultvalue=""
+		    description="primary key in a database or some grouping that is being used as the primary key would be"
+		    >
+        <real uname="fxd:primarykeyreal" 
+	      ferrisenum="@FXD_PRIMARY_KEY_REAL@" ferrisname="FXD_PRIMARY_KEY_REAL"
+	      uuid="bbe69e55-c359-456d-94ea-5e85d3bc65cb"
+	      possiblesort="cis,string" defaultsort="string"
+	      defaultvalue=""
+	      description="real primary key from a relational database"
+	      >
+        </real>
+        <virtual uname="fxd:primarykeyvirtual"
+		 ferrisenum="@FXD_PRIMARY_KEY_VIRTUAL@" ferrisname="FXD_PRIMARY_KEY_VIRTUAL"
+		 uuid="d5268dac-5258-4b7a-8824-e9dd251a3815"
+		 possiblesort="cis,string" defaultsort="string"
+		 defaultvalue=""
+		 description="a grouping of columns that is being treated as a primary key for this context (eg. synthetic key made for a query)"
+		 >
+        </virtual>
+        </primarykey>
+
+        <digest uname="fxd:digest" uuid="fe07b762-f8c3-4799-b346-08558346cbf2"
+		ferrisenum="@FXD_DIGEST@" ferrisname="FXD_DIGEST"
+		possiblesort="cis,string" defaultsort="string"
+		default-display-width="20"
+		defaultvalue=""
+		description="A cryptographic message digest"
+		>
+        </digest>
+        <xmldoc uname="fxd:xmldoc" uuid="1a74a329-07a7-43e5-9d26-1320c17b13f2"
+		ferrisenum="@FXD_XMLDOCSTRING@" ferrisname="FXD_XMLDOCSTRING"
+		possiblesort="cis,string" defaultsort="string"
+		defaultvalue=""
+		description="A parsable fragment of XML"
+		>
+        </xmldoc>
+        <username uname="fxd:username" uuid="43bd89d3-ae15-49df-bd97-709fe3487859"
+		  ferrisenum="@FXD_USERNAME@" ferrisname="FXD_USERNAME"
+		  possiblesort="cis,string" defaultsort="string"
+		  default-display-width="7"
+		  defaultvalue=""
+		  description="User name on a UNIX compatible machine"
+		  >
+        </username>
+        <groupname uname="fxd:groupname" uuid="9c4b5423-e872-40dc-bb6b-0cd7ac0f8f26"
+		   ferrisenum="@FXD_GROUPNAME@" ferrisname="FXD_GROUPNAME"
+		   possiblesort="cis,string" defaultsort="string"
+		   default-display-width="7"
+		   defaultvalue=""
+		   description="group name on a UNIX compatible machine"
+		   >
+        </groupname>
+        <unixepoch uname="fxd:unixepochstring" uuid="8aea3c0e-5a6d-4c2e-9d23-66f4ccd05ca3"
+		   ferrisenum="@FXD_UNIXEPOCH_STRING@" ferrisname="FXD_UNIXEPOCH_STRING"
+		   possiblesort="cis,string" defaultsort="string"
+		   default-display-width="7"
+		   defaultvalue=""
+		   description="A unix time value shown as a human readable string. Note that information may be lost from the standard time_t value if the display doesn't include enough granularity."
+		   >
+        </unixepoch>
+        <exifversion uname="fxd:exifversion" uuid="76786a1b-e6be-4720-b606-17609ed76530"
+		   ferrisenum="@FXD_EXIF_VERSION@" ferrisname="FXD_EXIF_VERSION"
+		   possiblesort="cis,string" defaultsort="string"
+		   default-display-width="12"
+		   defaultvalue=""
+		   description="Specially formatted string showing which exif version is in use"
+		   >
+        </exifversion>
+        <exifusercomment uname="fxd:exifusercomment" uuid="73d43beb-4c57-4150-81c7-3322d7f1f397"
+		   ferrisenum="@FXD_EXIF_USER_COMMENT@" ferrisname="FXD_EXIF_USER_COMMENT"
+		   possiblesort="cis,string" defaultsort="string"
+		   default-display-width="40"
+		   defaultvalue=""
+		   description="Specially formatted string which contains an 8 byte character encoding number before the string itself"
+		   >
+        </exifusercomment>
+        <exifcopyright uname="fxd:exifcopyright" uuid="efcf6e46-ca0a-4fc0-ab22-55f88ecca68e"
+		   ferrisenum="@FXD_EXIF_COPYRIGHT@" ferrisname="FXD_EXIF_COPYRIGHT"
+		   possiblesort="cis,string" defaultsort="string"
+		   default-display-width="30"
+		   defaultvalue=""
+		   description="Specially formatted string which shows the photo copyrights"
+		   >
+        </exifcopyright>
+        <exifflash uname="fxd:exifflash" uuid="e4860cf3-3cdf-470d-8093-e2e2afb8ea48"
+		   ferrisenum="@FXD_EXIF_FLASH@" ferrisname="FXD_EXIF_FLASH"
+		   possiblesort="cis,string" defaultsort="string"
+		   default-display-width="30"
+		   defaultvalue=""
+		   description="Information about if the flash went off and was ment to"
+		   >
+        </exifflash>
+        <exifexposureprogram uname="fxd:exifexposureprogram" 
+                   uuid="ed6ee871-5987-42a6-9dd4-16e25bbe21c1"
+		   ferrisenum="@FXD_EXIF_EXPOSURE_PROGRAM@" ferrisname="FXD_EXIF_EXPOSURE_PROGRAM"
+		   possiblesort="cis,string" defaultsort="string"
+		   default-display-width="30"
+		   defaultvalue=""
+		   description="FIXME"
+		   >
+        </exifexposureprogram>
+        <unitnamelength uname="fxd:unitnamelength" 
+                   uuid="fc4574b1-3d29-42b9-bd6b-b9f6a11fc213"
+		   ferrisenum="@FXD_UNIT_NAME_LENGTH@" ferrisname="FXD_UNIT_NAME_LENGTH"
+		   possiblesort="cis,string" defaultsort="string"
+		   default-display-width="30"
+		   defaultvalue=""
+		   description="Name of a unit describing a length. eg. Centimeter"
+		   >
+        </unitnamelength>
+        <exifdatetimestring uname="fxd:exifdatetimestring" 
+                   uuid="0e220fcf-1918-4792-99f8-7c9e10352a4c"
+		   ferrisenum="@FXD_EXIF_DATETIME_STRING@" ferrisname="FXD_EXIF_DATETIME_STRING"
+		   possiblesort="cis,string" defaultsort="string"
+		   default-display-width="30"
+		   defaultvalue=""
+		   description="Date and time in strftime(3) %Y:%m:%d %H:%M:%S format "
+		   >
+        </exifdatetimestring>
+
+
+        <enumeratedstring uname="fxd:enumeratedstring" 
+                   uuid="76cd21df-2322-48ec-8a1b-4ca432f80dfe"
+		   ferrisenum="@FXD_ENUMERATED_STRING@" ferrisname="FXD_ENUMERATED_STRING"
+		   possiblesort="cis,string" defaultsort="string"
+		   defaultvalue=""
+		   description="A string value which can only take one of a handful of values"
+		   >
+
+            <exifsensingmethod uname="fxd:exifsensingmethod" 
+                   uuid="0bd9ce96-b1a2-4c04-9b65-bcca1c22a298"
+		   ferrisenum="@FXD_EXIF_SENSING_METHOD@" ferrisname="FXD_EXIF_SENSING_METHOD"
+	           pattern="\(^Not defined$\|^One-chip color area sensor$\|^Two-chip color area sensor$\|^Three-chip color area sensor$\|^Color sequential area sensor$\|^Trilinear sensor$\|^Color sequential linear sensor$\)" 
+		   description="Indicates the image sensor type on the camera or input"
+		   >
+            </exifsensingmethod>
+
+            <exiforientation uname="fxd:exiforientation" 
+                   uuid="89c224e5-398d-47e8-8cd1-8a2045f19e4b"
+		   ferrisenum="@FXD_EXIF_ORIENTATION@" ferrisname="FXD_EXIF_ORIENTATION"
+                   pattern="\(^top - left$\|^top - right$\|^bottom - right$\|^bottom - left$\|^left - top$\|^right - top$\|^right - bottom$\|^left - bottom$\)"
+		   description="The image orientation viewed in terms of rows and colums"
+		   >
+            </exiforientation>
+
+            <exifmeteringmode uname="fxd:exifmeteringmode" 
+                   uuid="581a7135-9437-413a-92e0-c30f75963b72"
+		   ferrisenum="@FXD_EXIF_METERING_MODE@" ferrisname="FXD_EXIF_METERING_MODE"
+                   pattern="\(^Unknown$\|^Average$\|^Center-Weighted Average$\|^Spot$\|^Multi Spot$\|^Pattern$\|^Partial$\|^Other$\)"
+		   description="The metering mode"
+		   >
+            </exifmeteringmode>
+
+            <exifycbcrpositioning uname="fxd:exifycbcrpositioning" 
+                   uuid="a9d040cc-5cdf-40d3-a7fa-8d4d59d7bfb8"
+		   ferrisenum="@FXD_EXIF_YCBCR_POSITIONING@" 
+                   ferrisname="FXD_EXIF_YCBCR_POSITIONING"
+                   pattern="\(^centered$\|^co-sited$\)"
+		   description="The position of chrominance components in relation to the luminance component. This field is designated only for compressed data or uncompressed YCbCr data. The TIFF default is 1 (centered); but when Y:Cb:Cr = 4:2:2 it is recommended in this standard that 2 (co-sited) be used to record data, in order to improve the image quality when viewed on TV systems. When this field does not exist, the reader shall assume the TIFF default. In the case of Y:Cb:Cr = 4:2:0, the TIFF default (centered) is recommended. If the reader does not have the capability of supporting both kinds of YCbCrPositioning, it shall follow the TIFF default regardless of the value in this field. It is preferable that readers be able to support both centered and co-sited positioning."
+		   >
+            </exifycbcrpositioning>
+
+            <exifcompression uname="fxd:exifcompression" 
+                   uuid="b25f34e9-c52e-44d8-bd63-4964ffc2bcdc"
+		   ferrisenum="@FXD_EXIF_COMPRESSION@" 
+                   ferrisname="FXD_EXIF_COMPRESSION"
+                   pattern="\(^Uncompressed$\|^JPEG compression$\)"
+		   description="The compression scheme used for the image data. When a primary image is JPEG compressed, this designation is not necessary and is omitted. When thumbnails use JPEG compression, this tag value is set to 6."
+		   >
+            </exifcompression>
+
+            <exiflightsource uname="fxd:exiflightsource" 
+                   uuid="83155f4d-4f52-4b9f-8b35-4e46001ac164"
+		   ferrisenum="@FXD_EXIF_LIGHT_SOURCE@" 
+                   ferrisname="FXD_EXIF_LIGHT_SOURCE"
+                   pattern="\(^Unknown$\|^Daylight$\|^Fluorescent$\|^Tungsten$\|^Standard light A$\|^Standard light B$\|^Standard light C$\|^D55$\|^D65$\|^D75$\|^Other$\)"
+                   description="The kind of light source"
+		   >
+            </exiflightsource>
+
+
+<!--                   pattern="\(^$\|^$\|^$\|^$\|^$\|^$\|^$\|^$\|       \)" -->
+
+
+        </enumeratedstring>
+
+
+
+    </string>
+
+    <stringlist uname="xsd:stringlist" uuid="5238940e-ac76-47d0-b963-74b809f47802"
+		ferrisenum="@FXD_STRINGLIST@" ferrisname="FXD_STRINGLIST"
+		possiblesort="cis,string" defaultsort="string"
+		defaultvalue=""
+		description="a list of string objects seperated by a comma"
+		>
+        <eanames uname="fxd:eanames" uuid="e81cef5b-8a8b-4200-abe4-bb470db5a070"
+		 ferrisenum="@FXD_EANAMES@" ferrisname="FXD_EANAMES"
+		 pattern="[a-Z0-9\-,]+" 
+		 possiblesort="cis,string" defaultsort="cis"
+		 defaultvalue="name"
+		 description="a list of ea names each seperated by a single ','"
+		 >
+        </eanames>
+        <ciphername uname="fxd:ciphernamelist" uuid="26d7daf4-b178-4c7e-97b9-fc39abbbe796"
+		    ferrisenum="@FXD_CIPHER_NAME_LIST@" ferrisname="FXD_CIPHER_NAME_LIST"
+		    possiblesort="cis,string" defaultsort="cis"
+		    defaultvalue="name"
+		    description="a list of ciphers seperated by a single ','"
+		    >
+        </ciphername>
+        <urllist uname="fxd:urllist" uuid="39f0340b-35f4-4f4f-8772-a6396fec5d87"
+		    ferrisenum="@FXD_URLLIST@" ferrisname="FXD_URLLIST"
+		    possiblesort="cis,string" defaultsort="cis"
+		    defaultvalue="name"
+		    description="a list of urls seperated by a single ','"
+		    >
+        </urllist>
+    </stringlist>
+
+
+    <intlist uname="xsd:stringlist" uuid="965c39ef-4c3b-4172-9c2f-2332c0b8036d"
+		ferrisenum="@FXD_INTLIST@" ferrisname="FXD_INTLIST"
+		possiblesort="int,cis" defaultsort="int"
+		defaultvalue=""
+		description="a list of integers seperated by a comma"
+		>
+    </intlist>
+
+    <xlist uname="xsd:xlist" uuid="b8ec3b8c-69f3-41e0-bb7a-9b2b771a946b"
+		ferrisenum="@FXD_XLIST@" ferrisname="FXD_XLIST"
+		possiblesort="cis" defaultsort="cis"
+		defaultvalue=""
+		description="a list of anything seperated by a comma"
+		>
+    </xlist>
+
+
+    <decimal uname="xsd:decimal" uuid="8fbda890-909e-4407-ad3b-1da7e5d06000" 
+	     pattern="[0-9.]+" 
+	     possiblesort="double" defaultsort="double" 
+	     justification="right"
+	     default-display-width="9"
+	     defaultvalue="0" examplevalues="5,3.8" 
+	     description="decimal represents arbitrary precision decimal numbers. The value space of decimal is the set of the values i x 10^-n, where i and n are integers such that n >= 0.. The order-relation on decimal is: x &lt; y iff y - x is positive."
+	     >
+       <integer uname="xsd:integer" uuid="13a44d7b-fc70-4509-97fe-3b501a925bb0" 
+		ferrisenum="@XSD_BASIC_INTEGER@" ferrisname="XSD_BASIC_INTEGER"
+		pattern="[0-9.]+" 
+		possiblesort="int" defaultsort="int" 
+		defaultvalue="0" examplevalues="5,3,234342" 
+		description="integer is derived from decimal by fixing the value of fractionDigits to be 0. This results in the standard mathematical concept of the integer numbers. The value space of integer is the infinite set {...,-2,-1,0,1,2,...}."
+		>
+          <pixelcount uname="fxd:pixelcount" uuid="4fc0e8ee-db58-4259-91d4-7b838aec1586"
+		      ferrisenum="@FXD_PIXELCOUNT@" ferrisname="FXD_PIXELCOUNT"
+		      pattern="[0-9]+" 
+		      possiblesort="int" defaultsort="int" 
+		      default-display-width="5"
+		      defaultvalue="0" examplevalues="5,3,234342" 
+		      description="Number of screen pixels"
+		      >
+              <width uname="fxd:pixelwidth" uuid="534d075b-d7a2-4efd-9de3-8e6a3233d7b1"
+		     ferrisenum="@FXD_WIDTH_PIXELS@" ferrisname="FXD_WIDTH_PIXELS"
+		     pattern="[0-9]+" 
+		     possiblesort="int" defaultsort="int" 
+		     defaultvalue="0" examplevalues="5,3,234342" 
+		     description="Width in pixels"
+		     >
+              </width>
+              <height uname="fxd:pixelheight" uuid="e9b6aa87-21c0-406e-990e-dbf83d225bea"
+		      ferrisenum="@FXD_HEIGHT_PIXELS@" ferrisname="FXD_HEIGHT_PIXELS"
+		      pattern="[0-9]+" 
+		      possiblesort="int" defaultsort="int" 
+		      defaultvalue="0" examplevalues="5,3,234342" 
+		      description="Height in pixels"
+		      >
+              </height>
+          </pixelcount>
+          <width64 uname="fxd:width64" uuid="d9573ec7-a002-480a-9d9d-ddd1edfb0c66"
+		   ferrisenum="@FXD_INT64@" ferrisname="FXD_INT64"
+		   pattern="[0-9.]+" 
+		   possiblesort="int" defaultsort="int" 
+		   defaultvalue="0" examplevalues="5,3,234342" 
+		   description="A integer with a fixed with of 64 bits"
+		   >
+              <filesize uname="fxd:filesize" uuid="e5398891-5572-4f28-b3c7-4c9712ee3f0c"
+			ferrisenum="@FXD_FILESIZE@" ferrisname="FXD_FILESIZE"
+			pattern="[0-9.]+" 
+			possiblesort="int" defaultsort="int" 
+			defaultvalue="0" examplevalues="5,3,234342" 
+			description="The size of an object on disk"
+			>
+              </filesize>
+          </width64>
+          <width32 uname="fxd:width32" uuid="a09ac775-aceb-4862-9824-2824d0bc7b1d"
+		   ferrisenum="@FXD_INT32@" ferrisname="FXD_INT32"
+		   pattern="[0-9.]+" 
+		   possiblesort="int" defaultsort="int" 
+		   defaultvalue="0" examplevalues="5,3,234342" 
+		   description="A integer with a fixed with of 32 bits"
+		   >
+          </width32>
+
+          <unsigned uname="fxd:unsigned" uuid="4ef2a535-b84d-46b3-b874-8828b2ab5345"
+		   pattern="[0-9.]+" 
+		   possiblesort="int" defaultsort="int" 
+		   defaultvalue="0" examplevalues="5,3,234342" 
+		   description="A positive integer"
+		   >
+              <width32 uname="fxd:uwidth32" uuid="6d6d51a6-d8d0-46f6-ac3d-2ad9884e2992"
+		       ferrisenum="@FXD_UINT32@" ferrisname="FXD_UINT32"
+		       pattern="[0-9.]+" 
+		       possiblesort="int" defaultsort="int" 
+		       defaultvalue="0" examplevalues="5,3,234342" 
+		       description="A positive integer with a fixed with of 32 bits"
+		       >
+              </width32>
+              <width64 uname="fxd:uwidth64" uuid="c6da66e8-3f40-4a49-a699-3fb57fd84108"
+		       ferrisenum="@FXD_UINT64@" ferrisname="FXD_UINT64"
+		       pattern="[0-9.]+" 
+		       possiblesort="int" defaultsort="int" 
+		       defaultvalue="0" examplevalues="5,3,234342" 
+		       description="A positive integer with a fixed with of 64 bits"
+		       >
+              </width64>
+              <width16 uname="fxd:uwidth16" uuid="a62dc2e6-12bb-41cc-b1d6-b9c7d785d1f3"
+		       pattern="[0-9.]+" 
+		       possiblesort="int" defaultsort="int" 
+		       defaultvalue="0" examplevalues="5,3,234342" 
+		       description="A positive integer with a fixed with of 16 bits"
+		       >
+                  <ipv4port uname="fxd:ipv4port" uuid="740d4a67-c3fb-4d0f-86c4-b181f7a595a3"
+			    ferrisenum="@FXD_IP4PORT@" ferrisname="FXD_IP4PORT"
+			    description="an ip version 4 port number"
+			    >
+                  </ipv4port>
+                  <cipherbits uname="fxd:cipherbits" 
+			      ferrisenum="@FXD_CIPHER_BITS@" ferrisname="FXD_CIPHER_BITS"
+			      uuid="432e6ffc-9ff9-48f3-96c0-fcfe3edf3380"
+			      description="number of bits in use in the cipher or available for use in the cipher"
+			   >
+                  </cipherbits>
+              </width16>
+          </unsigned>
+
+          <long uname="xsd:long" uuid="7ebd96fa-276a-447e-9539-adc227e8e3a1"
+		ferrisenum="@FXD_LONG@" ferrisname="FXD_LONG"
+		pattern="[0-9.]+" 
+		possiblesort="int" defaultsort="int" 
+		defaultvalue="0" examplevalues="5,3,234342" 
+		description="Derived from integer by setting the value of maxInclusive to be 9223372036854775807 and minInclusive to be -9223372036854775808. The base type of long is integer."
+		>
+             <int uname="xsd:int" uuid="2d034ed7-3054-4064-98cc-d2f1daa7a6d5"
+		  ferrisenum="@XSD_BASIC_INT@" ferrisname="XSD_BASIC_INT"
+		  pattern="[0-9.]+" 
+		  possiblesort="int" defaultsort="int" 
+		  defaultvalue="0" examplevalues="5,3,234342" 
+		  description="Derived from long by setting the value of maxInclusive to be 2147483647 and minInclusive to be -2147483648. The base type of int is long."
+		  >
+             </int>
+             <fs uname="fxd:fs" uuid="66a755f0-3705-4ab8-bd17-09feb26540be"
+		 description="File system machine specific values"
+		 >
+                <mode uname="fxd:mode" uuid="e6f4aa35-1c42-4170-afe9-3b1578cb40bc"
+		      ferrisenum="@FXD_MODE_T@" ferrisname="FXD_MODE_T"
+		      pattern="[0-9]+" 
+		      possiblesort="int" defaultsort="int" 
+		      defaultvalue="0" examplevalues="5,3,234342" 
+		      description="The integer value for a mode_t. This is the -rwxrwxrwx protection mask on a UNIX machine."
+		      >
+                </mode>
+                <time uname="fxd:time" uuid="10cbcf26-9200-490c-b065-12ece8833f61"
+		      ferrisenum="@FXD_UNIXEPOCH_T@" ferrisname="FXD_UNIXEPOCH_T"
+		      pattern="[0-9]+" 
+		      possiblesort="int" defaultsort="int" 
+		      defaultvalue="0" examplevalues="5,3,234342" 
+		      description="The integer value for a time_t."
+		      >
+                </time>
+                <inode uname="fxd:inode" uuid="2af9f17d-6cf0-4994-8dc1-2dba3f60f1c4"
+		       ferrisenum="@FXD_INODE_T@" ferrisname="FXD_INODE_T"
+		       pattern="[0-9]+" 
+		       possiblesort="int" defaultsort="int" 
+		       defaultvalue="0" examplevalues="5,3,234342" 
+		       description="an inode number."
+		       >
+                </inode>
+                <gid uname="fxd:gid" uuid="c7a58eb7-27af-48e7-b462-46cdc2483524"
+		     ferrisenum="@FXD_GID_T@" ferrisname="FXD_GID_T"
+		     pattern="[0-9]+" 
+		     possiblesort="int" defaultsort="int" 
+		     defaultvalue="0" examplevalues="5,3,234342" 
+		     description="UNIX group number."
+		     >
+                </gid>
+                <uid uname="fxd:uid" uuid="f88d0149-a97e-4217-910a-e0bafef2053d"
+		     ferrisenum="@FXD_UID_T@" ferrisname="FXD_UID_T"
+		     pattern="[0-9]+" 
+		     possiblesort="int" defaultsort="int" 
+		     defaultvalue="0" examplevalues="5,3,234342" 
+		     description="UNIX user number."
+		     >
+                </uid>
+                <pid uname="fxd:pid" uuid="e50a5c16-4423-4d8e-85ca-99338fa38a23"
+		     ferrisenum="@FXD_PID_T@" ferrisname="FXD_PID_T"
+		     pattern="[0-9]+" 
+		     possiblesort="int" defaultsort="int" 
+		     defaultvalue="0" examplevalues="5,3,234342" 
+		     description="UNIX proccess ID number."
+		     >
+                </pid>
+             </fs>
+
+          </long>
+         
+       </integer>
+    </decimal>
+    
+  </attributes>
+</xsd>

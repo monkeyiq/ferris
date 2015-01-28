@@ -1,0 +1,23 @@
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+ {
+  for $log in ferris-doc( "/home/ben/example-data/apache/fuuko.libferris.com/head20.access.log" )
+    for $res in $log/*
+	let $ip := $res/@ip
+	let $ipinfo := ferris-doc( concat( "pg://localhost/ipinfodb/ipgeo('", $ip, "')" ) )/*
+	where compare($ipinfo/@city,"") != 0
+       return
+    <Placemark> 
+	<name>{ data($res/@name) }</name>
+	<description>
+		A hit from {data($ipinfo/@city)}
+		<br/>
+		{ data($ip) }
+	</description>
+	<Point>
+	      <coordinates>{concat(data($ipinfo/@long),",",data($ipinfo/@lat))}</coordinates>
+	</Point>
+    </Placemark>
+ }
+</Document>
+</kml> 

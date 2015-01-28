@@ -1,0 +1,5 @@
+<customers>
+ <customer3   id="3"   givenname="Foo"   familyname="Bar"/>
+ <customer15  id="15"  givenname="Bobby" familyname="McGee"/>
+ <customer131 id="131" givenname="Ziggy" familyname="Stardust" />
+</customers>

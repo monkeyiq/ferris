@@ -1,0 +1,9 @@
+#!/bin/bash
+
+dbname=`cat ~/.ferris/rdfdb/ferris-db-name`;
+dbops=`cat ~/.ferris/rdfdb/ferris-db-options`;
+dbstorage=`cat ~/.ferris/rdfdb/ferris-storage-name`;
+rdfproccmd="rdfproc -s $dbstorage -t \"$dbops\"  $dbname ";
+echo "Base command: $rdfproccmd";
+exec $rdfproccmd "$@";
+

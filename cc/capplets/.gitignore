@@ -1,0 +1,12 @@
+agents/ferris-capplet-agents
+auth/ferris-capplet-auth
+curl-ftp/ferris-capplet-curl-ftp
+general/ferris-capplet-general
+index/ferris-capplet-index
+locale/ferris-capplet-locale
+logging/ferris-capplet-logging
+medallion/ferris-capplet-medallion
+rdf/ferris-capplet-rdf
+thumbnails/ferris-capplet-thumbnails
+version/ferris-capplet-version
+version/ferris-capplet-version.hh

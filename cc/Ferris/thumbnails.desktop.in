@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Thumbnails
+Comment=Thumbnail creation and maintainence
+Exec=ferris-capplet-thumbnails
+Icon=/usr/share/control-center-plus/icons/ferris-thumbnails.png
+Terminal=0
+Type=Application

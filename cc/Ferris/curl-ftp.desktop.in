@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Ftp
+Comment=how to get files via ftp
+Exec=ferris-capplet-curl-ftp
+Icon=/usr/share/control-center-plus/icons/ferris-curl-ftp.png
+Terminal=0
+Type=Application

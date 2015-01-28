@@ -1,0 +1,16 @@
+ferris-find
+ferris-index-remove
+ferris-search
+findexadd
+findexcompact
+findexquery
+findexremove
+findex-remove-old-instances
+feaindex-attach-fulltext-index
+feaindexcompact
+feaindex-federation-add-index
+feaindex-federation-add-url-substitution-regex-for-index
+feaindexquery
+feaindexremove
+feaindex-remove-old-instances
+feaindexadd

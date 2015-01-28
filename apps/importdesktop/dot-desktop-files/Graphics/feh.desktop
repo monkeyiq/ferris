@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=feh
+Comment=feh
+Exec=feh
+Icon=icons://feh.png
+Terminal=0
+Type=Application
+

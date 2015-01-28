@@ -1,0 +1,11 @@
+This directory contains some patches to third party tools which are
+either in the process of being included into those other projects or
+are not yet at that level but which might still be useful to libferris
+users.
+
+You should check with the project that the patch is for to see if
+it has already been included.
+
+The TRAMP patch is against tramp-2.1.17 and needs to be reworked to
+use defvar and other customizations so it does not clobber the
+existing commands in TRAMP to force libferris usage.

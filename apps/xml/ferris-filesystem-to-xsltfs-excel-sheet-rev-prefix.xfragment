@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsl:stylesheet
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  version="1.0"
+  xmlns:ferris="http://libferris.org"
+  xmlns:c="urn:schemas-microsoft-com:office:component:spreadsheet" 
+  xmlns:html="http://www.w3.org/TR/REC-html40" 
+  xmlns:o="urn:schemas-microsoft-com:office:office" 
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" 
+  xmlns:x="urn:schemas-microsoft-com:office:excel" 
+  xmlns:x2="http://schemas.microsoft.com/office/excel/2003/xml" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  exclude-result-prefixes="ferris"
+  >
+  <xsl:output method="xml"/>
+  
+
+
+  <xsl:template match="/">
+    <relative-updates>
+      <xsl:apply-templates select=".//ss:Worksheet[@ss:Name='Sheet1']" />
+    </relative-updates>
+    
+  </xsl:template>
+
+  <xsl:template match="ss:Worksheet">
+      <xsl:apply-templates select="./ss:Table/ss:Row[position()>1]" />
+  </xsl:template>
+
+  <xsl:variable name="name-cell-offset">1</xsl:variable>

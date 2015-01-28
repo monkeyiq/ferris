@@ -1,0 +1,26 @@
+<user-overlay-links>
+  <link-by-regex>
+    <vlink name="test">
+        <match>^file:[/]+tmp/empty</match>
+        <target>df1</target>
+        <link-name>vlink</link-name>
+    </vlink>
+    <vlink>
+        <match>^file:[/]+tmp/empty</match>
+        <target>file:///tmp/testing</target>
+        <link-name>vlink-dir</link-name>
+    </vlink>
+    <vlink>
+        <match>^gphoto:[/]+$</match>
+        <target>Canon PowerShot G7 (PTP mode)</target>
+        <link-name>G7</link-name>
+    </vlink>
+    <!-- if the subdir on the memory card is stable, make a link
+         right into the latest directry -->
+    <vlink>
+        <match>^gphoto:[/]+$</match>
+        <target>gphoto://G7/store_00010001/DCIM/102CANON</target>
+        <link-name>latest</link-name>
+    </vlink>
+  </link-by-regex>
+</user-overlay-links>

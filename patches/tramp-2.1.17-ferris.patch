@@ -1,0 +1,203 @@
+--- lisp/tramp.el	2010-02-28 10:52:50.014080159 +1000
++++ /tmp/tramp-2.1.17/lisp/tramp.el	2009-11-08 08:11:29.000000000 +1000
+@@ -3232,57 +3232,46 @@
+            ;; ignored.
+            (tramp-send-command
+             v
+-            ;; (if (tramp-get-remote-perl v)
+-            ;;     (progn
+-            ;;       (tramp-maybe-send-script
+-            ;;        v tramp-perl-file-name-all-completions
+-            ;;        "tramp_perl_file_name_all_completions")
+-            ;;       (format "tramp_perl_file_name_all_completions %s %s %d"
+-            ;;               (tramp-shell-quote-argument localname)
+-            ;;               (tramp-shell-quote-argument filename)
+-            ;;               (if (symbol-value
+-	    ;; 		       'read-file-name-completion-ignore-case)
+-	    ;; 		      1 0)))
++            (if (tramp-get-remote-perl v)
++                (progn
++                  (tramp-maybe-send-script
++                   v tramp-perl-file-name-all-completions
++                   "tramp_perl_file_name_all_completions")
++                  (format "tramp_perl_file_name_all_completions %s %s %d"
++                          (tramp-shell-quote-argument localname)
++                          (tramp-shell-quote-argument filename)
++                          (if (symbol-value
++			       'read-file-name-completion-ignore-case)
++			      1 0)))
+ 
+               (format (concat
+-	      	       "%s -1 --classify-directories %s/%s"
+-	      	       " && echo ok")
+-                      (tramp-get-ls-command v)
++                       "(\\cd %s 2>&1 && (%s %s -a 2>/dev/null"
++                       ;; `ls' with wildcard might fail with `Argument
++                       ;; list too long' error in some corner cases; if
++                       ;; `ls' fails after `cd' succeeded, chances are
++                       ;; that's the case, so let's retry without
++                       ;; wildcard.  This will return "too many" entries
++                       ;; but that isn't harmful.
++                       " || %s -a 2>/dev/null)"
++                       " | while read f; do"
++                       " if %s -d \"$f\" 2>/dev/null;"
++                       " then \\echo \"$f/\"; else \\echo \"$f\"; fi; done"
++                       " && \\echo ok) || \\echo fail")
+                       (tramp-shell-quote-argument localname)
++                      (tramp-get-ls-command v)
++                      ;; When `filename' is empty, just `ls' without
++                      ;; filename argument is more efficient than `ls *'
++                      ;; for very large directories and might avoid the
++                      ;; `Argument list too long' error.
++                      ;;
++                      ;; With and only with wildcard, we need to add
++                      ;; `-d' to prevent `ls' from descending into
++                      ;; sub-directories.
+                       (if (zerop (length filename))
+                           "."
+                         (concat (tramp-shell-quote-argument filename) "* -d"))
+-	      	      )
+-              ;; (format (concat
+-              ;;          "(\\cd %s 2>&1 && (%s %s -a 2>/dev/null"
+-              ;;          ;; `ls' with wildcard might fail with `Argument
+-              ;;          ;; list too long' error in some corner cases; if
+-              ;;          ;; `ls' fails after `cd' succeeded, chances are
+-              ;;          ;; that's the case, so let's retry without
+-              ;;          ;; wildcard.  This will return "too many" entries
+-              ;;          ;; but that isn't harmful.
+-              ;;          " || %s -a 2>/dev/null)"
+-              ;;          " | while read f; do"
+-              ;;          " if %s -d \"$f\" 2>/dev/null;"
+-              ;;          " then \\echo \"$f/\"; else \\echo \"$f\"; fi; done"
+-              ;;          " && \\echo ok) || \\echo fail")
+-              ;;         (tramp-shell-quote-argument localname)
+-              ;;         (tramp-get-ls-command v)
+-              ;;         ;; When `filename' is empty, just `ls' without
+-              ;;         ;; filename argument is more efficient than `ls *'
+-              ;;         ;; for very large directories and might avoid the
+-              ;;         ;; `Argument list too long' error.
+-              ;;         ;;
+-              ;;         ;; With and only with wildcard, we need to add
+-              ;;         ;; `-d' to prevent `ls' from descending into
+-              ;;         ;; sub-directories.
+-              ;;         (if (zerop (length filename))
+-              ;;             "."
+-              ;;           (concat (tramp-shell-quote-argument filename) "* -d"))
+-              ;;         (tramp-get-ls-command v)
+-              ;;         (tramp-get-test-command v))
+-; )
+-)
++                      (tramp-get-ls-command v)
++                      (tramp-get-test-command v))))
+ 
+            ;; Now grab the output.
+            (with-current-buffer (tramp-get-buffer v)
+@@ -3588,8 +3577,8 @@
+ 	(file-times (nth 5 (file-attributes filename)))
+ 	(file-modes (tramp-default-file-modes filename)))
+     (with-parsed-tramp-file-name (if t1 filename newname) nil
+-      (let* ((cmd (cond ((and (eq op 'copy) preserve-uid-gid) "ferriscp -f -p")
+-			((eq op 'copy) "ferriscp -f")
++      (let* ((cmd (cond ((and (eq op 'copy) preserve-uid-gid) "cp -f -p")
++			((eq op 'copy) "cp -f")
+ 			((eq op 'rename) "mv -f")
+ 			(t (tramp-error
+ 			    v 'file-error
+@@ -3708,7 +3697,7 @@
+ 		       (zerop
+ 			(tramp-send-command-and-check
+ 			 v (format
+-			    "ferriscp -f -p %s %s"
++			    "cp -f -p %s %s"
+ 			    (tramp-shell-quote-argument tmpfile)
+ 			    (tramp-shell-quote-argument localname2))))
+ 		       (tramp-error-with-buffer
+@@ -4408,16 +4397,6 @@
+ 	(apply 'call-process program infile destination display args)
+       1)))
+ 
+-;; http://lists.gnu.org/archive/html/tramp-devel/2010-02/msg00028.html
+-;; (defadvice call-process-region
+-;;   (around tramp-advice-call-process-region activate)
+-;;   "Invoke `tramp-handle-call-process-region' for Tramp files."
+-;;   (if (file-remote-p default-directory)
+-;;       (setq ad-return-value
+-;;             (apply 'tramp-handle-call-process-region (ad-get-args 0)))
+-;;     ad-do-it))
+-
+-
+ (defun tramp-handle-call-process-region
+   (start end program &optional delete buffer display &rest args)
+   "Like `call-process-region' for Tramp files."
+@@ -4425,8 +4404,7 @@
+     (write-region start end tmpfile)
+     (when delete (delete-region start end))
+     (unwind-protect
+-;	(apply 'call-process program tmpfile buffer display args)
+-	(apply 'process-file program tmpfile buffer display args)
++	(apply 'call-process program tmpfile buffer display args)
+       (delete-file tmpfile))))
+ 
+ (defun tramp-handle-shell-command
+@@ -4540,10 +4518,7 @@
+ 	      (tramp-message v 5 "Encoding remote file %s..." filename)
+ 	      (tramp-barf-unless-okay
+ 	       v
+-	       (format "fcat %s | %s" 
+-		       (tramp-shell-quote-argument localname)
+-		       rem-enc 
+-		       )
++	       (format "%s < %s" rem-enc (tramp-shell-quote-argument localname))
+ 	       "Encoding remote file failed")
+ 	      (tramp-message v 5 "Encoding remote file %s...done" filename)
+ 
+@@ -5015,8 +4990,7 @@
+ 		  (tramp-send-command
+ 		   v
+ 		   (format
+-;		    "%s > %s <<'EOF'\n%sEOF"
+-		    "shovetofile() { cat - | %s | ferris-redirect --trunc %s; }\n shovetofile <<'EOF'\n%sEOF"
++		    "%s >%s <<'EOF'\n%sEOF"
+ 		    rem-dec
+ 		    (tramp-shell-quote-argument localname)
+ 		    (buffer-string)))
+@@ -7930,7 +7904,7 @@
+     (tramp-message vec 5 "Finding a suitable `ls' command")
+     (or
+      (catch 'ls-found
+-       (dolist (cmd '("ferrisls" "ls" "gnuls" "gls"))
++       (dolist (cmd '("ls" "gnuls" "gls"))
+ 	 (let ((dl (tramp-get-remote-path vec))
+ 	       result)
+ 	   (while (and dl (setq result (tramp-find-executable vec cmd dl t t)))
+@@ -7951,9 +7925,9 @@
+ (defun tramp-get-test-command (vec)
+   (with-connection-property vec "test"
+     (tramp-message vec 5 "Finding a suitable `test' command")
+-    (if (zerop (tramp-send-command-and-check vec "ftest 0"))
+-	"ftest"
+-      (tramp-find-executable vec "ftest" (tramp-get-remote-path vec)))))
++    (if (zerop (tramp-send-command-and-check vec "test 0"))
++	"test"
++      (tramp-find-executable vec "test" (tramp-get-remote-path vec)))))
+ 
+ (defun tramp-get-test-nt-command (vec)
+   ;; Does `test A -nt B' work?  Use abominable `find' construct if it
+@@ -8009,7 +7983,7 @@
+   (with-connection-property vec "stat"
+     (tramp-message vec 5 "Finding a suitable `stat' command")
+     (let ((result (tramp-find-executable
+-		   vec "fstat" (tramp-get-remote-path vec)))
++		   vec "stat" (tramp-get-remote-path vec)))
+ 	  tmp)
+       ;; Check whether stat(1) returns usable syntax.  %s does not
+       ;; work on older AIX systems.
+@@ -8025,7 +7999,7 @@
+ 		     (string-match "^./.$" (car tmp))
+ 		     (integerp (cadr tmp)))
+ 	  (setq result nil)))
+-      (concat result " --fuzz"))))
++      result)))
+ 
+ (defun tramp-get-remote-readlink (vec)
+   (with-connection-property vec "readlink"

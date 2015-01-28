@@ -1,0 +1,6 @@
+<query>
+	<queryview>
+	    <name>mount-sql-as-xml</name>
+	    <sql>select * from ferrisxsl where userid=5</sql>
+	</queryview>
+</query>

@@ -1,0 +1,89 @@
+#!/usr/bin/perl
+
+use IO::All;
+use File::Temp qw/ tempfile tempdir /;
+use String::ShellQuote;
+
+$i=0;
+$lang=$ARGV[$i++];
+$fmt=$ARGV[$i++];
+$url=$ARGV[$i++];
+
+$url =~ s/^file://g;
+$url = shell_quote $url;
+io("=") << "cmd:$cmd\n";
+#io("/tmp/f.log") << " script... $lang $fmt $url\n";
+
+if( $url eq "" )
+{
+   print "Usage:\n";
+   print " $0 language format url\n";
+   print " \n";
+   print " language is in {en,ja,default,...}\n";
+   print " format   is in {txt,ssa}\n";
+   print " url      is what file to find the subtitles for\n";
+   print " \n";
+   print " language/format are ignored for now, always english in txt format\n";
+   exit 10;
+}
+
+#
+# Output the subtitles at $1 converting into the format
+# $fmt if needed.
+#
+sub outputSubtitles {
+    my $subtitles = shift(@_);
+    my $oss = shift(@_);
+    my $line;
+
+    # raw copy
+    # $subtitles > $oss;
+    
+    while( $line = $subtitles->getline )
+    {
+
+	# SSA -> TXT
+	if( $line =~ /^Dialog/ )
+	{
+	    # remove leading start, end times et al
+	    $line =~ s/^([^,]*,){8},//g;
+	    
+	    # remove extra comments {inside these}
+	    $line =~ s/{.*}//g;
+
+	    # cleanup
+	    $line =~ s/\\/ /g;
+
+	    # show the line
+	    $oss->print($line);
+	}
+    }
+    $oss->close;
+
+    exit 0;
+}
+
+$mimetype = io("file -iLb $url |")->getline;
+$mimetype =~ s/^([^;]*);.*/\1/g;
+if( $mimetype =~ "matroska" )
+{
+    $tmpfile="/tmp/ferris-tmp-sub.ssa";
+    #($tmpfileh,$tmpfile)=tempfile( DIR => "/tmp" );
+    io("=") << "tmpfile:$tmpfile\n";
+
+    $subtrack = io("mkvmerge -i $url | grep subt | sed -r 's/^[^0-9]*([0-9]+).*/\\1/g' |")->getline;
+    chomp($subtrack);
+    $cmd="mkvextract tracks $url -r /dev/null ${subtrack}:${tmpfile}";
+    io("=") << "subtitle track:$subtrack url:$url\n";
+    io("=") << "cmd:$cmd\n";
+    system($cmd);
+
+    outputSubtitles( io($tmpfile), io("-") );
+}
+else
+{
+    io("=") << "unsuppored format:" << $mimetype;
+    exit 1;
+}
+
+

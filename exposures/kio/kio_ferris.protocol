@@ -1,0 +1,12 @@
+[Protocol]
+DocPath=kioslave/kio_ferris.html
+exec=libkio_ferris
+input=none
+output=filesystem
+protocol=ferris
+reading=true
+writing=true
+opening=true
+source=true
+listing=Name,Type,Size,Date,AccessDate,Access,Owner,Group,Link,Comment,MimeType,
+

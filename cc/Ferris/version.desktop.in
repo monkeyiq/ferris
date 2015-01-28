@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Version
+Comment=Version information about your ferris
+Exec=ferris-capplet-version
+Icon=/usr/share/control-center-plus/icons/ferris-version.png
+Terminal=0
+Type=Application

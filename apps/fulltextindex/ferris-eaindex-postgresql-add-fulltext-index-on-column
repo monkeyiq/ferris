@@ -1,0 +1,23 @@
+#!/bin/bash
+
+indexLocation="~/.ferris/eaindex"
+colspec=$1
+if [ x$1 = x-P ]; then
+   indexLocation=$2
+   colspec=$3
+fi
+
+if [ x$colspec = x ]; then
+   echo ""
+   echo "Usage $0 [ -P index-path ] colspec"
+   echo ""
+   echo "where colspec is like subtitles,col2,"
+   exit 1
+fi
+
+echo "index  : $indexLocation"
+echo "colspec: $colspec"
+
+export LIBFERRIS_ADD_FULLTEXT_INDEX_FOR_COLUMNS_INLINE="$colspec"
+feaindexcompact -v -P $indexLocation
+
