@@ -19,7 +19,6 @@ ltmain.sh
 *.pc
 ferris-config
 install-sh
-flymake.mk
 config.guess
 config.h
 config.lt
