@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=com.libferris.Metadata.Worker.magick
+Exec=@PREFIX@/bin/ferris-internal-metadata-worker --plugin-names=magick --dbus-server-name=com.libferris.Metadata.Worker.magick
