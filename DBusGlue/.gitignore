@@ -5,7 +5,6 @@ com_libferris_Volume_Manager_adaptor.cpp
 com_libferris_Volume_Manager_adaptor.h
 com_libferris_Volume_Manager.cpp
 com_libferris_Volume_Manager.h
-force-header-generation.cpp
 org_freedesktop_DBus.cpp
 org_freedesktop_DBus.h
 org_freedesktop_DBus_Introspectable.cpp
@@ -19,3 +18,10 @@ org_freedesktop_Hal_Manager.h
 worker_adaptor.cpp
 worker_adaptor.h
 worker_interface.cpp
+com.libferris.Metadata.Broker.service
+com.libferris.Metadata.Worker.imlib2.service
+com.libferris.Metadata.Worker.jpg.service
+com.libferris.Metadata.Worker.magick.service
+com.libferris.Metadata.Worker.png.service
+com.libferris.Metadata.Worker.xine.service
+com.Libferris.Volume.Manager.service

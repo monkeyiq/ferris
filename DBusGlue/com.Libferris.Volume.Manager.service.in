@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=com.Libferris.Volume.Manager
+Exec=@PREFIX@/bin/ferris-volume-manager
