@@ -9,5 +9,20 @@ Makefile.in
 .cvsignore
 libferris*tar*bz2
 libferris*tar*xz
+libferris*tar*gz
 *.flc
+stamp-h1
+mkinstalldirs
+missing
+ltmain.sh
+*.log
+*.pc
+ferris-config
+install-sh
+flymake.mk
+config.guess
+config.h
+config.lt
+config.sub
+configure
 

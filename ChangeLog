@@ -1,0 +1,31 @@
+*******************************************************************************
+1.1.50
+*******************************************************************************
+2005-06-22  monkeyiq  <monkeyiq@users.sourceforge.net>
+
+	Ability to mount evolution email and contacts,
+	Native PostgreSQL mounting support,
+	Improvements to Shell::acquireContext(),
+	better whitespace handling in parseSeperatedList(),
+	as-text filter for Word files,
+	New is-dir-try-automounting EA which will attempt
+	to automount a file before reporting that it is not
+	a directory,
+	New size EA fallback which generates its value by
+	reading the byte contents of a file,
+	fca:// formal concepts now export their object-id as EA,
+	various speed improvements to FCA engine.
+
+*******************************************************************************
+1.1.46 is below.
+*******************************************************************************
+ChangeLog
+	Adding files to PostgreSQL EA index is now significantly faster.
+	PostgreSQL EA indexer no longer does an analyse after adding files.
+	Memory leak fix in RPM EA generators.
+	Some fd leaks fixed in the as-text EA generators.
+	Bug that caused a segv in the jpeg EA generator for some jpeg files fixed.
+	language-human EA now uses as-text EA to dig into pdf files.
+	Better relative path resolution.
+	Added another optional MIME sniffing engine using libmagic.
+-------------------------------------------------------------------------------

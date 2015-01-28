@@ -1,0 +1,9 @@
+echo "This is the monkeyiq config invoker. please don't use it."
+./configure \
+--enable-debug  \
+--with-gnome-vfs-mime \
+--enable-vmdebug
+
+#--with-libmpeg3=/usr/local/src/libmpeg3-1.3 \
+#--disable-fast-install
+# --with-xml4c=/store/Lindev/xerces-c-src1_5_0 
