@@ -25,4 +25,6 @@ config.h
 config.lt
 config.sub
 configure
+TAGS
+
 
