@@ -51,7 +51,9 @@ git.branch      master
 
 
 depends_lib \
-    port:libstldb4 port:boost port:xerces port:soprano port:fampp2 port:qjson
+    port:libstldb4 port:boost port:xerces port:soprano port:fampp2 \
+    port:qjson port:qoauth
+
 
 
 depends_build \
