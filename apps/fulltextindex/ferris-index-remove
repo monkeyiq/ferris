@@ -1,0 +1,6 @@
+#!/bin/bash
+
+regex=${1:?give a regex for documents as arg1};
+
+feaindexremove -r "$1";
+findexremove -r "$1";
