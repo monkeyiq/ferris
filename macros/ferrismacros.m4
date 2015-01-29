@@ -1542,6 +1542,14 @@ if test x"$have_boost" = xno; then
 	fi
 fi
 
+if test x"$have_boost" = xno; then
+	if test "x$HAVE_STLPORT"="xy"; then
+		BOOST_CFLAGS=" $STLPORT_CFLAGS "
+		BOOST_LIBS=" $STLPORT_LIBS -lboost_wserialization-mt  -lboost_serialization-mt "
+		AM_FERRIS_BOOST_INTERNAL_TRYLINK
+	fi
+fi
+
 if test x"$have_boost" = xyes; then
 
 	have_boost=yes

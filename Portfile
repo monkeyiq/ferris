@@ -1,0 +1,78 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:filetype=tcl:et:sw=4:ts=4:sts=4
+# $Id$
+
+### leave the MIQ tags here so that the same portfile can be 
+### shared in the main github repo and modified to enable
+### this local git cache to be used by a local build.
+###
+### Lines starting with triple # and ending in hash MIQ will be
+### uncommented by the mac build system.
+
+PortSystem      1.0
+
+name            ferris
+version         1.5.19
+set docversion  ${version}
+revision        20150128
+categories      devel
+platforms       darwin
+maintainers     Ben Martin
+license         Open Source
+description     Libferris: virtual filesystems galore!
+
+long_description \
+   Mount the web (flickr, youtube, spreadsheets et al) \
+   and local databases, files, physical things like printers \
+   webcams, scanners, etc. If it might be handy as a filesystem then \
+   it should be in libferris. (good) Patches accepted.
+
+homepage        https://github.com/monkeyiq/${name}
+distname        ${name}-${version}
+dist_subdir     ${name}/${version}
+worksrcdir      ${name}-${version}
+use_parallel_build  yes
+
+#
+# To save on bandwidth, it is assumed that you have a git clone of
+# https://github.com/monkeyiq/libferrisloki which has been pull/merged
+# to the level that you want from the main github repo.
+# 
+# otherwise, use one of the above url/branch combinations to directly
+# fetch.
+#
+# If you are tracking pull requests then you can set the branch to
+# build a bundle from an unmerged PR.
+#
+fetch.type      git       
+git.url         /Users/ben/macports-personal/local-github-clones/${name}
+git.branch      master    
+##git.branch      pr/1814
+
+
+
+depends_lib \
+    port:libstldb4 port:boost
+
+
+depends_build \
+    port:pkgconfig port:autoconf port:automake
+
+post-extract {
+    system "cd ${worksrcpath} && ./bootstrap  "
+}
+
+
+configure.args \
+ --enable-debug                        \
+ --with-pdftotext                      \
+ --disable-stlport                     \
+ --with-sigcxx-2x=yes                  \
+ --disable-fastinstall                 \
+ --disable-strigi                      \
+ --enable-quickerlinking
+
+
+configure.cflags-append    -g -mmacosx-version-min=10.7 -DMAC
+configure.cxxflags-append  -g -mmacosx-version-min=10.7 -DMAC
+configure.ldflags-append   -lintl -mmacosx-version-min=10.7
+
