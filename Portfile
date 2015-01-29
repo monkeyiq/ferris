@@ -51,7 +51,7 @@ git.branch      master
 
 
 depends_lib \
-    port:libstldb4 port:boost
+    port:libstldb4 port:boost port:xerces port:soprano port:fampp2
 
 
 depends_build \
