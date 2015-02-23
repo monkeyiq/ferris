@@ -39,9 +39,6 @@
 #include <boost/regex.hpp>
 
 #include <numeric>
-#ifndef STLPORT
-#include <ext/numeric>
-#endif
 
 using namespace std;
 

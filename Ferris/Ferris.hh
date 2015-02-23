@@ -298,7 +298,13 @@ namespace Ferris
         int cleanUp_only_CreateMetaDataContext( bool force = false );
     };
 
-    
+    FERRISEXP_API fh_display_aggdata getCachedContextAggregateData( fh_context c, int m=0 );
+#ifndef LIBFERRIS_INTERNAL_COMPILING_SWIG_WRAPPER
+        FERRISEXP_DLLLOCAL void DepthFirstDelete( CacheManager::freelist_t& fl, Context* cc, bool callReclaimContextObject = true );
+        typedef std::list< Context* > cptrlist_t;
+        FERRISEXP_DLLLOCAL void DepthFirstDelete( CacheManager::freelist_t& fl, Context* cc, cptrlist_t& l, bool callReclaimContextObject = true );
+#endif
+
     FERRISEXP_API CacheManager* getCacheManager();
 
     namespace Private
@@ -1463,7 +1469,7 @@ namespace Ferris
         
     private:
 #ifndef LIBFERRIS_INTERNAL_COMPILING_SWIG_WRAPPER
-        friend FERRISEXP_API fh_display_aggdata getCachedContextAggregateData( fh_context c, int m=0 );
+        friend FERRISEXP_API fh_display_aggdata getCachedContextAggregateData( fh_context c, int m );
 #endif
         
         /************************************************************/
@@ -1713,7 +1719,7 @@ namespace Ferris
                 {
                     ChildContextClass* c = dynamic_cast<ChildContextClass*>(
                         this->getOverMountContext());
-                    return c->getBaseContext<ChildContextClass>();
+                    return c->template getBaseContext<ChildContextClass>();
                 }
 
                 
@@ -2693,9 +2699,9 @@ namespace Ferris
         bool isReClaimable();
         bool reclaimContextObject( Context* a );
 #ifndef LIBFERRIS_INTERNAL_COMPILING_SWIG_WRAPPER
-        friend FERRISEXP_DLLLOCAL void DepthFirstDelete( CacheManager::freelist_t& fl, Context* cc, bool callReclaimContextObject = true );
+        friend FERRISEXP_DLLLOCAL void DepthFirstDelete( CacheManager::freelist_t& fl, Context* cc, bool callReclaimContextObject );
         typedef std::list< Context* > cptrlist_t;
-        friend FERRISEXP_DLLLOCAL void DepthFirstDelete( CacheManager::freelist_t& fl, Context* cc, cptrlist_t& l, bool callReclaimContextObject = true );
+        friend FERRISEXP_DLLLOCAL void DepthFirstDelete( CacheManager::freelist_t& fl, Context* cc, cptrlist_t& l, bool callReclaimContextObject );
 #endif
         
     public: // FIXME: only for testing

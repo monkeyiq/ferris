@@ -53,7 +53,7 @@
 #include "libeaidxcustomferrisdb4tree.hh"
 
 #include <numeric>
-#ifndef STLPORT
+#ifndef OSX
 #include <ext/numeric>
 #endif
 

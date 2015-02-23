@@ -54,7 +54,7 @@
 #include "libeaidxcustomferris.hh"
 
 #include <numeric>
-#ifndef STLPORT
+#ifndef OSX
 #include <ext/numeric>
 #endif
 

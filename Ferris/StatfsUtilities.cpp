@@ -31,6 +31,9 @@
 #include <StatfsUtilities.hh>
 #include <SignalStreams.hh>
 
+#include <sys/param.h>
+#include <sys/mount.h>
+
 #define SYSV_MAGIC_BASE         0x012FF7B3
 FERRISEXP_DLLLOCAL enum {
     FSTYPE_NONE = 0,

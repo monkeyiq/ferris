@@ -45,6 +45,7 @@
 #include <uuid/uuid.h>
 
 #include <config.h>
+#include <sys/time.h>
 
 #ifdef HAVE_BOOST
 #define BOOST_UTF8_BEGIN_NAMESPACE namespace Ferris {

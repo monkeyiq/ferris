@@ -60,6 +60,17 @@
 // #include <fcntl.h>
 // #include <sys/sendfile.h>
 
+#ifndef O_LARGEFILE
+#define O_LARGEFILE 0
+#endif
+#ifndef POSIX_FADV_SEQUENTIAL
+#define POSIX_FADV_SEQUENTIAL 0
+#endif
+#ifndef POSIX_FADV_DONTNEED
+#define POSIX_FADV_DONTNEED 0
+#endif
+
+
 
 using namespace std;
 
@@ -1479,6 +1490,9 @@ namespace Ferris
                         }
                         if( fd > 0 )
                         {
+#ifdef OSX
+                            cerr << "WARNING: preallocation not implemented on osx." << endl;
+#else
                             if( preallocate_with_fallocate )
                             {
                                 cerr << "have fd, tring to fallocate()" << endl;
@@ -1512,6 +1526,7 @@ namespace Ferris
                             posix_fadvise( fd, 0, inputsz, POSIX_FADV_SEQUENTIAL | POSIX_FADV_DONTNEED);
                             // closed via
 //                            m_DestinationFDCache = fd;
+#endif // not osx
                             close( fd );
                         }
                     }

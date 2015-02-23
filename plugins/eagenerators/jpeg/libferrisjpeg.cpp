@@ -38,6 +38,22 @@
 
 #include <iomanip>
 
+#ifdef OSX
+namespace std
+{
+template<typename _Tp>
+inline void
+_Destroy(_Tp* __pointer)
+{ __pointer->~_Tp(); }
+
+  template<typename _T1, typename... _Args>
+    inline void
+    _Construct(_T1* __p, _Args&&... __args)
+    { ::new(static_cast<void*>(__p)) _T1(std::forward<_Args>(__args)...); }
+
+};
+#endif
+
 using namespace std;
 namespace Ferris
 {

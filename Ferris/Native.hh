@@ -68,6 +68,8 @@
 
 namespace Ferris
 {
+    fh_stringstream SL_getPreallocationAtTailStream( NativeContext* c, const std::string& rdn, EA_Atom* atom, int m = 0 );
+
 #ifdef HAVE_LIBRPM
     struct rpmState;
     FERRIS_SMARTPTR( rpmState, fh_rpmState );
@@ -84,7 +86,7 @@ namespace Ferris
 
         friend class Ferrisls_aggregate_data;
 
-        friend fh_stringstream SL_getPreallocationAtTailStream( NativeContext* c, const std::string& rdn, EA_Atom* atom, int m = 0 );
+        friend fh_stringstream SL_getPreallocationAtTailStream( NativeContext* c, const std::string& rdn, EA_Atom* atom, int m );
         friend void
         SL_updatePreallocationAtTail( NativeContext* c, const std::string& rdn, EA_Atom* atom, fh_istream ss );
 

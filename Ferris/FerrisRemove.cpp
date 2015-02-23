@@ -28,6 +28,7 @@
 ******************************************************************************/
 #include <config.h>
 
+#include <boost/regex.hpp>
 #include <FerrisRemove_private.hh>
 #include <config.h>
 

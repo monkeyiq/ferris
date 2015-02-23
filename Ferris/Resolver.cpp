@@ -48,6 +48,12 @@
 
 #include "config.h"
 
+#ifdef OSX
+const std::string LIBRARY_EXTENSION = ".dylib";
+#else
+const std::string LIBRARY_EXTENSION = ".so";
+#endif
+
 using namespace std;
 
 #define CERR cerr
@@ -144,9 +150,9 @@ namespace Ferris
                 if( !ghandle )
                 {
                     string implname = ModuleName;
-                    string ending   = "_factory.so";
+                    string ending   = "_factory" + LIBRARY_EXTENSION;
 
-                    implname.replace( implname.find(ending), ending.length(), ".so" );
+                    implname.replace( implname.find(ending), ending.length(), LIBRARY_EXTENSION );
                     LG_PLUGIN_I << "Linking in implementaion of:" << implname << endl;
 
                     ghandle = g_module_open ( implname.c_str(), G_MODULE_BIND_LAZY);
@@ -1180,7 +1186,7 @@ namespace Ferris
 //              cerr << "fn:" << fn << endl;
 //              LG_PLUGIN_I << "Found:" << fn << endl;
 
-                const string factory_tail = "factory.so";
+                const string factory_tail = "factory" + LIBRARY_EXTENSION;
                 if( ends_with( fn, factory_tail ) )
                 {
                     try

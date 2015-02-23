@@ -50,8 +50,12 @@
 #include "DBusGlue/com_libferris_Volume_Manager_adaptor.h"
 #include "DBusGlue/com_libferris_Volume_Manager_adaptor.cpp"
 
+#ifdef OSX
+#define MAJOR(x) x 
+#define MINOR(x) x
+#else
 #include <linux/kdev_t.h>
-
+#endif
 
 using namespace std;
 using namespace Ferris;

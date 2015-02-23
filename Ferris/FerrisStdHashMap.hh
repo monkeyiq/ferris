@@ -43,6 +43,8 @@
 #include <string>
 //#include <ext/hash_fun.h>
 #include <ext/hash_map>
+
+#ifndef OSX
 namespace __gnu_cxx
 {
     template<>
@@ -54,6 +56,7 @@ namespace __gnu_cxx
             { return __stl_hash_string(__s.c_str()); }
     };
 };
+#endif
 namespace std
 {
     using __gnu_cxx::hash;

@@ -53,6 +53,8 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
+#include <boost/regex.hpp>
+
 using namespace std;
 using namespace Ferris;
 using namespace FerrisUI;

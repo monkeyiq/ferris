@@ -34,7 +34,6 @@
 #endif
 #include <sys/stat.h>
 #include <sys/ioctl.h>
-#include <sys/vfs.h>
 #include <Ferris.hh>
 #include <Resolver_private.hh>
 

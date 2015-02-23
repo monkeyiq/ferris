@@ -28,6 +28,7 @@
 ******************************************************************************/
 #include <config.h>
 
+
 /*
  * return 0 for success
  * return 1 for generic error
@@ -40,6 +41,7 @@
 #include <Ferris/EAIndexer_private.hh>
 #include <popt.h>
 #include <unistd.h>
+#include <boost/regex.hpp>
 
 using namespace std;
 using namespace Ferris;

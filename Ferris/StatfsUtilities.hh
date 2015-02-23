@@ -32,7 +32,12 @@
 #define _ALREADY_INCLUDED_FERRIS_STATFS_UTILS_H_
 
 #include <Ferris/HiddenSymbolSupport.hh>
+#ifndef OSX
 #include <sys/statfs.h>
+#endif
+#include <sys/param.h>
+#include <sys/mount.h>
+
 #include <string>
 
 namespace Ferris

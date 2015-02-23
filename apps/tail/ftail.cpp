@@ -26,6 +26,7 @@
 *******************************************************************************
 *******************************************************************************
 ******************************************************************************/
+#include <config.h>
 
 /*
  * return 0 for success
@@ -46,12 +47,7 @@
 #include <signal.h>
 #include <errno.h>
 
-#ifdef STLPORT
-#else
-#include <ext/algorithm>
 using namespace __gnu_cxx;
-#endif
-
 using namespace std;
 using namespace Ferris;
 
