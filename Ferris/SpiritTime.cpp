@@ -632,7 +632,14 @@ namespace Ferris
             /********/
             /********/
             /********/
-    
+
+#ifdef OSX
+            time_t operator()( const std::string& s, time_t relv  )
+                {
+                    cerr << "WARN: SpiritTime is not working on osx yet" << endl;
+                    return 0;
+                }
+#else  
             time_t operator()( const std::string& s, time_t relv  )
                 {
 #ifdef GCC_HAS_BUGS_WITH_SPIRIT
@@ -973,6 +980,7 @@ namespace Ferris
                     return m_ret;
 #endif
                 }
+#endif
             
         };
 
