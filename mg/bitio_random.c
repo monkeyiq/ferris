@@ -50,6 +50,37 @@ static char *RCSID = "$Id: bitio_random.c,v 1.1 2005/07/04 08:47:40 ben Exp $";
 #include "bitio_m_random.h"
 #include "bitio_m.h"
 
+#ifdef OSX
+void BIO_Random_Start (FILE * f, unsigned long len, random_bitio_state * bs) {}
+void BIO_Random_Done (random_bitio_state * bs) {}
+void BIO_Random_Encode_Bit (int bit, random_bitio_state * bs) {}
+int  BIO_Random_Decode_Bit (random_bitio_state * bs) { return 0; }
+void BIO_Random_Unary_Encode (unsigned long val, random_bitio_state * bs, unsigned long *bits) {}
+unsigned long BIO_Random_Unary_Decode (random_bitio_state * bs, unsigned long *bits) { return 0; }
+void BIO_Random_Binary_Encode (unsigned long val, unsigned long b,
+                               random_bitio_state * bs, unsigned long *bits) {}
+unsigned long BIO_Random_Binary_Decode (unsigned long b, random_bitio_state * bs,
+                                        unsigned long *bits ) {}
+void BIO_Random_Gamma_Encode (unsigned long val, random_bitio_state * bs, unsigned long *bits) {}
+unsigned long BIO_Random_Gamma_Decode (random_bitio_state * bs, unsigned long *bits) {}
+void BIO_Random_Delta_Encode (unsigned long val, random_bitio_state * bs, unsigned long *bits) {}
+unsigned long BIO_Random_Delta_Decode (random_bitio_state * bs, unsigned long *bits) { return 0; }
+void BIO_Random_Elias_Encode (unsigned long val, unsigned long b, double s,
+                              random_bitio_state * bs, unsigned long *bits) {}
+unsigned long BIO_Random_Elias_Decode (unsigned long b, double s,
+                                       random_bitio_state * bs,
+                                       unsigned long *bits) { return 0; }
+void BIO_Random_Bblock_Encode (unsigned long val, unsigned long b,
+                               random_bitio_state * bs, unsigned long *bits) {}
+unsigned long BIO_Random_Bblock_Decode (unsigned long b, random_bitio_state * bs,
+                                        unsigned long *bits) { return 0; }
+void BIO_Random_Seek (unsigned long pos, random_bitio_state * bs) {}
+void BIO_Random_Flush (random_bitio_state * bs) {}
+unsigned long BIO_Random_Tell (random_bitio_state * bs) { return 0; }
+void  BIO_Random_Seek_LL (mg_ullong pos, random_bitio_state * bs) {}
+mg_ullong BIO_Random_Tell_LL (random_bitio_state * bs) {}
+
+#else
 
 void 
 BIO_Random_Start (FILE * f, unsigned long len,
@@ -326,3 +357,4 @@ BIO_Random_Tell_LL (random_bitio_state * bs)
 }
 
 #endif /* USE_LONG_LONG */
+#endif // osx or other.

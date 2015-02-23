@@ -42,9 +42,9 @@
 #include <grp.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/statfs.h>
-#include <sys/vfs.h>
 #include <sys/types.h>
+#include <sys/param.h>
+#include <sys/mount.h>
 #include <utime.h>
 #include <fcntl.h>
 #include <time.h>
@@ -88,7 +88,16 @@ extern "C" {
 
 #include "FSParser_private.hh"
 
-#include <linux/kdev_t.h>
+#ifdef OSX
+  #ifndef MAJOR
+    #define MAJOR(x) x
+  #endif
+  #ifndef MINOR
+    #define MINOR(x) x
+  #endif
+#else
+  #include <linux/kdev_t.h>
+#endif
 
 // #undef LG_NATIVE_D
 // #define LG_NATIVE_D cerr
@@ -101,8 +110,9 @@ using namespace std;
 #include "DBusGlue/com_libferris_Volume_Manager.h"
 #include "DBusGlue/com_libferris_Volume_Manager.cpp"
 
-
-#define PERMIT_FAM
+#ifndef OSX
+  #define PERMIT_FAM
+#endif
 
 namespace Ferris
 {
@@ -110,8 +120,16 @@ namespace Ferris
     basic_ostream<charT, Traits>&
     operator<< (basic_ostream<charT, Traits>& os, const fsid_t& s )
     {
-        guint64 p   = s.__val[0];
-        guint64 sec = s.__val[1];
+        guint64 p = 0, sec = 0;
+
+#ifdef OSX        
+        p   = s.val[0];
+        sec = s.val[1];
+#else
+        p   = s.__val[0];
+        sec = s.__val[1];
+#endif
+        
         sec <<= 32;
         p |= sec;
 
@@ -1573,6 +1591,7 @@ NativeContext::priv_getIStream( ferris_ios::openmode m )
                 << " fs:" << fs
                 << endl;
 
+#ifndef OSX
     if( m & ferris_ios::o_mmap )
     {
         LG_NATIVE_D << "About to create a memory mapped file for:" << getURL()
@@ -1583,6 +1602,7 @@ NativeContext::priv_getIStream( ferris_ios::openmode m )
         LG_NATIVE_D << "made memory mapped stream for fd:" << fs->rdbuf()->fd() << endl;
         return ret;
     }
+#endif
     
     return fs;
 }
@@ -2938,7 +2958,11 @@ SL_getFSMaxNameLength( NativeContext* c, const std::string& rdn, EA_Atom* atom )
     struct statfs s = c->getStatFS();
     
     fh_stringstream ss;
+#ifdef OSX
+    ss << MAXPATHLEN;
+#else
     ss << s.f_namelen;
+#endif
     return ss;
 }
 
