@@ -5,7 +5,7 @@ plugin_LTLIBRARIES = libftxidxstrigi.la libftxidxstrigi_factory.la
 libftxidxstrigi_la_SOURCES = libftxidxstrigi.cpp
 libftxidxstrigi_factory_la_SOURCES = libftxidxstrigi_factory.cpp
 
-INCLUDES =						\
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
 	@STLPORT_CFLAGS@                                \
 	-I..                                            \
 	-I$(top_srcdir)/src 				\

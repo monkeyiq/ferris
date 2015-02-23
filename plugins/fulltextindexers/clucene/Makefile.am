@@ -5,7 +5,7 @@ plugin_LTLIBRARIES = libftxidxclucene.la libftxidxclucene_factory.la
 libftxidxclucene_la_SOURCES = libftxidxclucene.cpp 
 libftxidxclucene_factory_la_SOURCES = libftxidxclucene_factory.cpp 
 
-INCLUDES =						\
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
 	@STLPORT_CFLAGS@                                \
 	-I..                                            \
 	-I$(top_srcdir)/src 				\

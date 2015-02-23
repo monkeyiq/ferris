@@ -26,7 +26,7 @@ libferrisxwin_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
 libferrisxwin_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
 libferrisxwin_la_SOURCES         = libferrisxwin.cpp $(ECORE_SOURCES) $(KLIPPER_SOURCES)
 
-INCLUDES =						\
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
 	@STLPORT_CFLAGS@                                \
 	-I$(srcdir)/..                                  \
 	-I$(top_srcdir)/src 				\

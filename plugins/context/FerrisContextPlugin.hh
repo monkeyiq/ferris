@@ -30,6 +30,8 @@
 #ifndef _ALREADY_INCLUDED_FERRIS_CONTEXT_PLUGIN_H_
 #define _ALREADY_INCLUDED_FERRIS_CONTEXT_PLUGIN_H_
 
+#include <config.h>
+
 #include <Ferris/HiddenSymbolSupport.hh>
 
 #include <Ferris.hh>

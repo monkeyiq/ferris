@@ -82,7 +82,7 @@ libffilter_la_SOURCES         = libffilter.cpp                \
 	AParser.cpp DLexerBase.cpp ASTBase.cpp PCCTSAST.cpp ATokenBuffer.cpp  \
 	ffilter.cpp
 
-INCLUDES = 						\
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib  						\
 	@STLPORT_CFLAGS@                                \
 	-I$(srcdir)/..                                  \
 	-I$(srcdir)/../..                               \

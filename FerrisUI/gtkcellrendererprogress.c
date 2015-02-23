@@ -1,3 +1,4 @@
+#include <config.h>
 /**
  * Changed a little from the code in gaim 0.68 to handle natively
  * the -100 to +100 range I throw at it.

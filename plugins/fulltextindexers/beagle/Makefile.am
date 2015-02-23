@@ -6,7 +6,7 @@ plugin_LTLIBRARIES = libftxidxbeagle.la libftxidxbeagle_factory.la
 libftxidxbeagle_la_SOURCES = libftxidxbeagle.cpp
 libftxidxbeagle_factory_la_SOURCES = libftxidxbeagle_factory.cpp
 
-INCLUDES =						\
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
 	@STLPORT_CFLAGS@                                \
 	-I..                                            \
 	-I$(top_srcdir)/src 				\

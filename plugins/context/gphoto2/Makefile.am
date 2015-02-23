@@ -7,7 +7,7 @@ libferrisgphoto2_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
 libferrisgphoto2_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
 libferrisgphoto2_la_SOURCES         = libferrisgphoto2.cpp
 
-INCLUDES =						\
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
 	@STLPORT_CFLAGS@                                \
 	-I$(srcdir)/..                                  \
 	-I$(top_srcdir)/src 				\

@@ -4,7 +4,7 @@ MAINTAINERCLEANFILES = Makefile.in
 
 bin_PROGRAMS = ferris-file-action ferris-set-file-action-for-type
 
-INCLUDES =                                              \
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib                                               \
 	@STLPORT_CFLAGS@                                \
 	-I. 						\
 	-I$(srcdir) -I$(top_srcdir) -I$(top_srcdir)/src	\

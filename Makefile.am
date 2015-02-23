@@ -1,4 +1,5 @@
 AUTOMAKE_OPTIONS = dist-bzip2 dist-xz subdir-objects 
+ACLOCAL_AMFLAGS = -I m4
 
 NULL=
 
@@ -22,7 +23,7 @@ if HAVE_QTGUI
 FERRISQTDIR = FerrisQtGui
 endif
 
-SUBDIRS = ThirdParty $(CUSTOMALLOCDIR)                  \
+SUBDIRS = lib ThirdParty $(CUSTOMALLOCDIR)              \
 	DBusGlue                                        \
 	$(GCJDIR) mg Indexing                           \
 	factories                                       \
@@ -44,7 +45,8 @@ ferris.pc               \
 ferrisui.pc.in          \
 ferrisui.pc             \
 ferrisxslt.pc.in        \
-ferrisxslt.pc               
+ferrisxslt.pc           \
+m4/gnulib-cache.m4
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = ferris.pc ferrisui.pc ferrisxslt.pc

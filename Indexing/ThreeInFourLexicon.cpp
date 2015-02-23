@@ -78,6 +78,8 @@
  * 
  */
 
+#include <config.h>
+
 #include "FullTextIndexer.hh"
 #include "FullTextIndexer_private.hh"
 #include "IndexPrivate.hh"

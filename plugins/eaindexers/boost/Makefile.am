@@ -7,7 +7,7 @@ plugin_LTLIBRARIES = libeaindexboostmmap.la libeaindexboostmmap_factory.la
 libeaindexboostmmap_la_SOURCES         = libeaindexboostmmap.cpp mmap_dynamic_bitset.hpp
 libeaindexboostmmap_factory_la_SOURCES = libeaindexboostmmap_factory.cpp
 
-INCLUDES =						\
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
 	-fpermissive                                    \
 	@STLPORT_CFLAGS@                                \
 	-I..                                            \

@@ -22,7 +22,7 @@ ferris-internal-metadata-broker-direct-client.moc: ferris-internal-metadata-brok
 metadata-clients-common.moc: metadata-clients-common.cpp
 	$(MOC) $(srcdir)/metadata-clients-common.hh -o metadata-clients-common.moc
 
-INCLUDES =                                              \
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib                                               \
 	@STLPORT_CFLAGS@                                \
 	-I. 						\
 	-I$(srcdir) -I$(top_srcdir) 			\

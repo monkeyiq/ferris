@@ -33,6 +33,7 @@
  * Should be the simplest codepath and maybe the fastest for very fast disks
  * with large in memory caches.
  */
+#include <config.h>
 
 #include "FullTextIndexer.hh"
 #include "FullTextIndexer_private.hh"

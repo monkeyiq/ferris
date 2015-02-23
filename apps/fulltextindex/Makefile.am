@@ -18,7 +18,7 @@ bin_PROGRAMS =  findexadd feaindexadd     \
 		feaindex-federation-add-url-substitution-regex-for-index \
 		feaindex-federation-add-index
 
-INCLUDES =                                              \
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib                                               \
 	@STLPORT_CFLAGS@                                \
 	@SIGC_CFLAGS@                                   \
 	-I. 						\

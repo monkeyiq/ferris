@@ -10,7 +10,7 @@ bin_SCRIPTS = $(srcdir)/*.sh
 EXTRA_DIST = $(srcdir)/*.sh
 
 
-INCLUDES =                                              \
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib                                               \
 	@STLPORT_CFLAGS@                                \
 	@SIGC_CFLAGS@                                   \
 	-I. 						\

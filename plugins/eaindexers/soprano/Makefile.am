@@ -5,7 +5,7 @@ plugin_LTLIBRARIES = libeaindexsoprano.la libeaindexsoprano_factory.la
 libeaindexsoprano_la_SOURCES = libeaindexsoprano.cpp
 libeaindexsoprano_factory_la_SOURCES = libeaindexsoprano_factory.cpp
 
-INCLUDES =						\
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
 	@STLPORT_CFLAGS@                                \
 	-I..                                            \
 	-I$(top_srcdir)/src 				\

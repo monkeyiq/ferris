@@ -16,7 +16,7 @@ bin_PROGRAMS = ferris-create-fca-tree ferris-lattice-from-cfi        \
 	ferris-export-formal-context-to-burmeister
 
 
-INCLUDES =                                              \
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib                                               \
 	@STLPORT_CFLAGS@                                \
 	@SIGC_CFLAGS@                                   \
 	-I. 						\

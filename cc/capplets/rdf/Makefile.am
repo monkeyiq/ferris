@@ -2,7 +2,7 @@
 # A list of all the files in the current directory which can be regenerated
 MAINTAINERCLEANFILES = Makefile.in
 
-INCLUDES =                                              \
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib                                               \
 	@STLPORT_CFLAGS@                                \
 	@SOPRANO_CFLAGS@                                \
 	-I. 						\

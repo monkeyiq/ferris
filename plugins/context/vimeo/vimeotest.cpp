@@ -1,3 +1,4 @@
+#include <config.h>
 
 #include "libferrisvimeo_shared.hh"
 #include <Ferris/Ferris.hh>

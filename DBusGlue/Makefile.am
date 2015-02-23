@@ -65,7 +65,7 @@ com_libferris_Volume_Manager.h com_libferris_Volume_Manager.cpp com_libferris_Vo
 METADATA_COMMANDS = force-header-generation
 noinst_PROGRAMS = $(METADATA_COMMANDS) 
 
-INCLUDES =                                              \
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib                                               \
 	@STLPORT_CFLAGS@                                \
 	-I. 						\
 	-I$(srcdir) -I$(top_srcdir) 			\

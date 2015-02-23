@@ -42,6 +42,7 @@ bash -c '/ferris/apps/cat/fcat Makefile 2>/dev/null | wc -l'
 
 
 */
+#include <config.h>
 
 
 #include <Ferris.hh>

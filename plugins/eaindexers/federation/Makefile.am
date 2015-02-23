@@ -5,7 +5,7 @@ plugin_LTLIBRARIES = libeaindexfederation.la libeaindexfederation_factory.la
 libeaindexfederation_la_SOURCES         = libeaindexfederation.cpp
 libeaindexfederation_factory_la_SOURCES = libeaindexfederation_factory.cpp
 
-INCLUDES =						\
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
 	@STLPORT_CFLAGS@                                \
 	-I..                                            \
 	-I$(top_srcdir)/src 				\

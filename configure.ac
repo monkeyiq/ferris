@@ -1,8 +1,12 @@
 PACKAGE=libferris
-AC_INIT(libferris, 1.5.19)
-LIBFERRIS_BETA=19
+AC_INIT(libferris, 1.5.30)
+LIBFERRIS_BETA=30
 LIBFERRIS_MINOR=5
 LIBFERRIS_MAJOR=1
+
+dnl
+dnl  /usr/local/src/git/gnulib/gnulib-tool --import strverscmp readlinkat extern-inline
+dnl 
 
 AC_SUBST(LIBFERRIS_MAJOR)
 AC_SUBST(LIBFERRIS_MINOR)
@@ -12,11 +16,12 @@ FERRIS_VERSION=$LIBFERRIS_MAJOR.$LIBFERRIS_MINOR.$LIBFERRIS_BETA
 LIBFERRIS_FULLV=$FERRIS_VERSION
 AC_SUBST(LIBFERRIS_FULLV)
 AC_SUBST(FERRIS_VERSION)
-AC_DEFINE_UNQUOTED(FERRIS_VERSION, "$FERRIS_VERSION" )
+AC_DEFINE_UNQUOTED(FERRIS_VERSION, "$FERRIS_VERSION", [] )
 
 VERSION=$FERRIS_VERSION
-AC_DEFINE_UNQUOTED(VERSION, "$VERSION" )
+AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [] )
 
+AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_SRCDIR(Ferris/Ferris.cpp)
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE([1.9 tar-ustar])
@@ -93,6 +98,8 @@ AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_CXX
 AM_PROG_GCJ
+gl_EARLY
+
 
 AC_STDC_HEADERS
 AC_SYS_LARGEFILE
@@ -203,7 +210,7 @@ if test x$enable_hiddensymbols = xyes; then
 	echo setting hidden symbol support...;
 #	FERRIS_CF=" $FERRIS_CF -DGCC_HASCLASSVISIBILITY -fvisibility=default -fvisibility-inlines-hidden ";
 	FERRIS_CF=" $FERRIS_CF -DGCC_HASCLASSVISIBILITY -DBUILDING_LIBFERRIS -fvisibility=hidden  -fvisibility-inlines-hidden ";
-	AC_DEFINE(GCC_HASCLASSVISIBILITY)
+	AC_DEFINE(GCC_HASCLASSVISIBILITY,1, [] )
 	COMPILE_SYMBOLS_AS_PUBLIC=" -DGCC_HASCLASSVISIBILITY -DBUILDING_LIBFERRIS -fvisibility=default "
 	CONTEXT_PLUGIN_CFLAGS=" -DBUILDING_LIBFERRIS "
 fi
@@ -216,6 +223,10 @@ AC_ARG_ENABLE(hiddensymbolstests,
   [AS_HELP_STRING([--enable-hiddensymbolstests], [compile some test programs using hidden symbols for private APIs (default=no)])],
 [],[])
 AM_CONDITIONAL(BUILD_HIDDENSYMBOL_TEST, test x$enable_hiddensymbolstests = xyes)
+
+gl_INIT
+gl_EXTERN_INLINE
+LDADD += lib/libgnu.a
 
 dnl ###############################################################################
 dnl ###############################################################################
@@ -264,7 +275,7 @@ AC_TRY_LINK([ #include <unistd.h> ],
 	    int rc = readlinkat( dirfd, path, buf, bufsiz);
 	],
        	[
-		AC_DEFINE(FERRIS_HAVE_READLINKAT)
+		AC_DEFINE(FERRIS_HAVE_READLINKAT, 1, [] )
 		have_readlinkat=yes;
 	],
 	[
@@ -284,7 +295,7 @@ AC_TRY_LINK([ #include <math.h> ],
 		long double x = sqrtl( v );
 	],
        	[
-		AC_DEFINE(FERRIS_HAVE_SQRTL)
+		AC_DEFINE(FERRIS_HAVE_SQRTL, 1, [] )
 		have_sqrtl=yes;
 	],
 	[
@@ -309,7 +320,7 @@ AM_FERRIS_XERCESC3( 3.0.0 )
 
 AM_FERRIS_XALAN( 1.10.0, [], [echo "not building Xalan-C support..."] )
 
-AM_CONDITIONAL(FERRIS_HAVE_XSLTFS_MOUNT_ABILITY, test x"$have_xalan" = xyes)
+AM_CONDITIONAL(FERRIS_HAVE_XSLTFS_MOUNT_ABILITY, test x"$have_xalan" = xyes, [] )
 XSLTFS_MOUNT_CFLAGS=
 XSLTFS_MOUNT_LIBS=
 AC_SUBST(XSLTFS_MOUNT_CFLAGS)
@@ -404,7 +415,7 @@ AM_FERRIS_FAMPP2(3.5.0)
 
 AC_CHECK_LIB("cap_FIXME_XFS_CONFLICT", cap_clear,
   [
-AC_DEFINE(FERRIS_HAVE_LIBCAP)
+AC_DEFINE(FERRIS_HAVE_LIBCAP, 1, [] )
 LIBCAP_CFLAGS=" "
 LIBCAP_LIBS=" -lcap"
 AC_SUBST(LIBCAP_CFLAGS)
@@ -420,8 +431,8 @@ if test x$enable_libz != xno; then
 
 	AC_CHECK_LIB("z", zlibVersion,
 	  [
-		AM_CONDITIONAL(FERRIS_HAVE_LIBZ, test "yes" = yes)
-		AC_DEFINE(FERRIS_HAVE_LIBZ)
+		AM_CONDITIONAL(FERRIS_HAVE_LIBZ, test "yes" = yes )
+		AC_DEFINE(FERRIS_HAVE_LIBZ, 1, [] )
 		LIBZ_CFLAGS=" "
 		LIBZ_LIBS=" -lz "
 		AC_SUBST(LIBZ_CFLAGS)
@@ -441,7 +452,7 @@ if test x$enable_libbz2 != xno; then
 	AC_CHECK_LIB("bz2", BZ2_bzCompress,
 	[
 		AM_CONDITIONAL(FERRIS_HAVE_BZIP2, test x"yes" = xyes)
-		AC_DEFINE(FERRIS_HAVE_BZIP2)
+		AC_DEFINE(FERRIS_HAVE_BZIP2, 1, [] )
 		BZIP2_CFLAGS=" "
 		BZIP2_LIBS=" -lbz2 "
 		AC_SUBST(BZIP2_CFLAGS)
@@ -516,7 +527,7 @@ if test x"$have_libtextcat" = xno; then
   echo " not found... no text language guessing for you."
 else
   echo "Found libtextcat 2.1, text language guessing support being built..."
-  AC_DEFINE(HAVE_LIBTEXTCAT)
+  AC_DEFINE(HAVE_LIBTEXTCAT, 1, [] )
 fi;
 
 AM_CONDITIONAL(HAVE_LIBTEXTCAT, test x"$have_libtextcat" = xyes)
@@ -540,7 +551,7 @@ if test x$enable_svmlight != xno; then
 	PKG_CHECK_MODULES(SVMLIGHT, $package >= $version, 
 	[
 		have_svmlight=yes
-		AC_DEFINE(HAVE_SVMLIGHT)
+		AC_DEFINE(HAVE_SVMLIGHT,1, [] )
 		echo "building agent using detected svmlight..."
 	],
 	[
@@ -571,7 +582,7 @@ if test x$enable_gstreamer != xno; then
    	PKG_CHECK_MODULES(GSTREAMER, [$package >= $version gstreamer-app-0.10], 
 	[
 		have_gstreamer=yes
-		AC_DEFINE(HAVE_GSTREAMER)
+		AC_DEFINE(HAVE_GSTREAMER,1, [] )
 		echo "building gstreamer stuff..."
 	],
 	[
@@ -600,7 +611,7 @@ if test x$enable_libexif != xno; then
 	PKG_CHECK_MODULES(LIBEXIF, $package >= $version, 
 	[
 		have_libexif=yes
-		AC_DEFINE(HAVE_LIBEXIF)
+		AC_DEFINE(HAVE_LIBEXIF,1, [] )
 		echo "building image metadata and thumbnail support using detected libexif..."
 	],
 	[
@@ -629,7 +640,7 @@ fi
 if test "$have_epeg" = yes; then
 	EPEG_LIBS=" `epeg-config --libs` "
 	EPEG_CFLAGS=" `epeg-config --cflags` "
-	AC_DEFINE(HAVE_EPEG)
+	AC_DEFINE(HAVE_EPEG,1, [] )
 fi
 AM_CONDITIONAL(HAVE_EPEG, test "$have_epeg" = yes)
 AC_SUBST(EPEG_LIBS)
@@ -686,7 +697,7 @@ fi;
 AM_CONDITIONAL(HAVE_OPENSSL, test "$have_openssl" = yes)
 AC_SUBST(OPENSSL_CFLAGS)
 AC_SUBST(OPENSSL_LIBS) 
-AC_DEFINE(HAVE_OPENSSL)
+AC_DEFINE(HAVE_OPENSSL,1, [] )
 
 ###############################################################################
 ###############################################################################
@@ -718,7 +729,7 @@ if test x"$try_libfile_mime" != xno; then
 		MIMETYPE_ENGINE_DESC="libfile"
 		MIMETYPE_ENGINE_CHOSEN=yes
 		FERRIS_HAVE_LIBFILE=yes
-		AC_DEFINE(HAVE_LIBFILE)
+		AC_DEFINE(HAVE_LIBFILE,1, [] )
 		LIBFILE_LIBS="-lfile" 
 	] , )
 fi
@@ -748,7 +759,7 @@ if test x"$try_gnome_vfs_mime" != xno; then
 		MIMETYPE_ENGINE_DESC="gnome-vfs"
 		MIMETYPE_ENGINE_CHOSEN=yes
 		FERRIS_HAVE_GNOMEVFS=yes
-		AC_DEFINE(HAVE_GNOMEVFS)
+		AC_DEFINE(HAVE_GNOMEVFS, 1, [] )
 		GNOMEVFS_CFLAGS=" `pkg-config --cflags  gnome-vfs-2.0 gnome-vfs-module-2.0` "
 		GNOMEVFS_LIBS="   `pkg-config --libs    gnome-vfs-2.0 gnome-vfs-module-2.0` "
 	fi
@@ -801,7 +812,7 @@ if test x"$try_efsd_mime" != xno; then
 		MIMETYPE_ENGINE_DESC="efsd"
 		MIMETYPE_ENGINE_CHOSEN=yes
 		FERRIS_HAVE_EFSD=yes
-		AC_DEFINE(HAVE_EFSD)
+		AC_DEFINE(HAVE_EFSD, 1, [] )
 		EFSD_CFLAGS=" `efsd-config --cflags` "
 		EFSD_LIBS="   `efsd-config --libs  ` "
 	fi
@@ -842,7 +853,7 @@ if test x"$MIMETYPE_ENGINE_CHOSEN" = x; then
 		MIMETYPE_ENGINE_DESC="libmagic"
 		MIMETYPE_ENGINE_CHOSEN=yes
 		HAVE_LIBMAGIC=yes
-		AC_DEFINE(HAVE_LIBMAGIC)
+		AC_DEFINE(HAVE_LIBMAGIC,1, [] )
 	else
 		LIBMAGIC_CFLAGS="  "
 		LIBMAGIC_LIBS=" "
@@ -863,7 +874,7 @@ fi
 
 echo "chosen engine for mime: $MIMETYPE_ENGINE_DESC..."
 AC_LANG_C
-AC_DEFINE_UNQUOTED(MIMETYPE_ENGINE_DESC, "$MIMETYPE_ENGINE_DESC" )
+AC_DEFINE_UNQUOTED(MIMETYPE_ENGINE_DESC, "$MIMETYPE_ENGINE_DESC", [] )
 
 #
 # because the mimetype names for some types may vary depending on
@@ -872,7 +883,7 @@ AC_DEFINE_UNQUOTED(MIMETYPE_ENGINE_DESC, "$MIMETYPE_ENGINE_DESC" )
 #
 MIMETYPE_DIRECTORY="x-directory/normal";
 AC_SUBST(MIMETYPE_DIRECTORY)
-AC_DEFINE_UNQUOTED(MIMETYPE_DIRECTORY, "$MIMETYPE_DIRECTORY" )
+AC_DEFINE_UNQUOTED(MIMETYPE_DIRECTORY, "$MIMETYPE_DIRECTORY", [] )
 ###############################################################################
 ###############################################################################
 ###############################################################################
@@ -889,7 +900,7 @@ AM_FERRIS_SIGC2( 2.0.0 )
 # sigc++ 1.2 doesn't have it
 ###############################################################################
 
-AC_DEFINE(SIGCXX_HAS_LESS_THAN_FIVE_SIGNAL_ARGS_AS_MAX)
+AC_DEFINE(SIGCXX_HAS_LESS_THAN_FIVE_SIGNAL_ARGS_AS_MAX,1, [] )
 
 ###############################################################################
 ###############################################################################
@@ -939,8 +950,8 @@ fi
 
 if test x"$have_sqlplus" = xyes; then
 	have_sqlplus=yes
-	AC_DEFINE(HAVE_SQLPLUS)
-	AC_DEFINE(FERRIS_HAVE_SQLPLUS)
+	AC_DEFINE(HAVE_SQLPLUS, 1, [] )
+	AC_DEFINE(FERRIS_HAVE_SQLPLUS, 1, [] )
 	echo "$package library detected and used..."
 else
 	have_sqlplus=no
@@ -997,7 +1008,7 @@ fi
 if test x$enable_postgresql_tsearch2_indexing = xyes; then
 	echo "Building support for fulltext indexes with PostgreSQL/TSearch2..."
 	build_tsearch2=yes
-	AC_DEFINE(BUILD_PGTSEARCH_FTXIDX)
+	AC_DEFINE(BUILD_PGTSEARCH_FTXIDX,1, [] )
 	TSEARCH2_CFLAGS=" $LIBPQXX_CFLAGS "
 	TSEARCH2_LIBS=" $LIBPQXX_LIBS "
 else
@@ -1058,7 +1069,7 @@ fi
 
 if test x$have_xapian = xyes; then
  	echo "building fulltext index module using xapian..."
-	AC_DEFINE(HAVE_XAPIAN)
+	AC_DEFINE(HAVE_XAPIAN,1, [] )
 else
  	echo "NOT building fulltext index module using xapian..."
 
@@ -1115,7 +1126,7 @@ fi
 AM_CONDITIONAL(HAVE_CURL, test "$have_curl" = yes)
 AC_SUBST(CURL_LIBS)
 AC_SUBST(CURL_CFLAGS)
-AC_DEFINE(CURL_LEAVES_SIG_ALARM_ON,1)
+AC_DEFINE(CURL_LEAVES_SIG_ALARM_ON,1,[])
 
 ###############################################################################
 ###############################################################################
@@ -1132,7 +1143,7 @@ if test x$enable_imlib2 != xno; then
 	if test "$have_imlib2" = yes; then
 		IMLIB_LIBS=" `imlib2-config --libs` "
 		IMLIB_CFLAGS=" `imlib2-config --cflags` "
-		AC_DEFINE(HAVE_IMLIB2)
+		AC_DEFINE(HAVE_IMLIB2,1, [] )
 	fi
 fi
 
@@ -1152,7 +1163,7 @@ have_db4=yes
 DB4_CFLAGS=""
 DB4_LIBS=""
 AM_CONDITIONAL(HAVE_DB4, test x"$have_db4" = xyes)
-AC_DEFINE(FERRIS_HAVE_DB4)
+AC_DEFINE(FERRIS_HAVE_DB4,1, [] )
 dnl PFX="$LIBCREATION_PLUGIN_FACTORY_PREFIX"
 dnl LIBCREATION_PLUGIN_FACTORIES_LA="$LIBCREATION_PLUGIN_FACTORIES_LA $PFX/db4/libcreationdb4_factory.la "
 AC_SUBST(DB4_CFLAGS)
@@ -1230,7 +1241,7 @@ fi
 if test x"$have_edb" = xyes; then
 	EDB_LIBS=" `edb-config --libs` "
 	EDB_CFLAGS=" `edb-config --cflags` "
-	AC_DEFINE(HAVE_EDB)
+	AC_DEFINE(HAVE_EDB,1, [] )
 fi
 AM_CONDITIONAL(HAVE_EDB, test "$have_edb" = yes)
 AC_SUBST(EDB_LIBS)
@@ -1322,7 +1333,7 @@ if test x$enable_eet != xno; then
 	AC_CHECK_PROG( have_eet, eet-config --cflags, yes, no )
 	if test x"$have_eet" = xyes; then
 		echo Building eet support functions
-		AC_DEFINE(HAVE_EET)
+		AC_DEFINE(HAVE_EET,1, [] )
 		EET_CFLAGS=" `eet-config --cflags` "
 		EET_LIBS="   `eet-config --libs  ` "
 	fi
@@ -1345,7 +1356,7 @@ if test x$enable_eet != xno; then
 fi
 
 if test x"$have_eet" = xyes; then
-	AC_DEFINE(FERRIS_HAVE_EET)
+	AC_DEFINE(FERRIS_HAVE_EET,1, [] )
 fi
 AM_CONDITIONAL(HAVE_EET, test x"$have_eet" = xyes)
 AC_SUBST(EET_CFLAGS)
@@ -1385,8 +1396,8 @@ if test x$enable_gdbm != xno; then
 fi
 
 if test x"$have_gdbm" = xyes; then
-	AC_DEFINE(HAVE_GDBM)
-	AC_DEFINE(FERRIS_HAVE_GDBM)
+	AC_DEFINE(HAVE_GDBM,1, [] )
+	AC_DEFINE(FERRIS_HAVE_GDBM,1, [] )
 dnl 	PFX="$LIBCREATION_PLUGIN_FACTORY_PREFIX"
 dnl 	LIBCREATION_PLUGIN_FACTORIES_LA="$LIBCREATION_PLUGIN_FACTORIES_LA $PFX/gdbm/libcreationgdbm_factory.la "
 fi
@@ -1429,8 +1440,8 @@ if test x$enable_tdb != xno; then
 fi
 
 if test x"$have_tdb" = xyes; then
-	AC_DEFINE(HAVE_TDB)
-	AC_DEFINE(FERRIS_HAVE_TDB)
+	AC_DEFINE(HAVE_TDB,1, [] )
+	AC_DEFINE(FERRIS_HAVE_TDB,1, [] )
 fi
 AM_CONDITIONAL(HAVE_TDB, test x"$have_tdb" = xyes)
 AC_SUBST(TDB_CFLAGS)
@@ -1468,7 +1479,7 @@ AM_CONDITIONAL(HAVE_MAGICK, test "$have_magick" = yes)
 AC_SUBST(MAGICK_LIBS)
 AC_SUBST(MAGICK_CFLAGS)
 if test x"$have_magick" = xyes; then
-	AC_DEFINE(HAVE_MAGICK)
+	AC_DEFINE(HAVE_MAGICK,1, [] )
 fi;
 
 ###############################################################################
@@ -1515,7 +1526,7 @@ AM_CONDITIONAL(HAVE_LIBPNG, test "$have_libpng" = yes)
 AC_SUBST(LIBPNG_CFLAGS)
 AC_SUBST(LIBPNG_LIBS)
 if test x"$have_libpng" = xyes; then
-	AC_DEFINE(HAVE_LIBPNG)
+	AC_DEFINE(HAVE_LIBPNG,1, [] )
 dnl 	PFX="$LIBEAGEN_PLUGIN_FACTORY_PREFIX"
 dnl 	LIBEAGEN_PLUGIN_FACTORIES_LA=" $LIBEAGEN_PLUGIN_FACTORIES_LA $PFX/png/libferrispng_factory.la "
 	echo "building png module...";
@@ -1545,7 +1556,7 @@ fi
 
 AM_CONDITIONAL(HAVE_LIBDJVULIBRE, test "$have_libdjvulibre" = yes)
 if test x"$have_libdjvulibre" = xyes; then
-	AC_DEFINE(HAVE_LIBDJVULIBRE)
+	AC_DEFINE(HAVE_LIBDJVULIBRE,1, [] )
 	echo "building djvu module...";
 else
 	LIBDJVULIBRE_CFLAGS=""
@@ -1614,15 +1625,15 @@ fi;
 # http://ftp.gnu.org/gnu/unrtf/
 AC_CHECK_PROG( have_unrtf, unrtf --help, yes, no )
 AM_CONDITIONAL(HAVE_UNRTF, test x"$have_unrtf" = xyes)
-if test x"$have_unrtf" = xyes; then AC_DEFINE(HAVE_UNRTF) fi;
+if test x"$have_unrtf" = xyes; then AC_DEFINE(HAVE_UNRTF, 1, []) fi;
 
 AC_CHECK_PROG( have_hevea, hevea --help, yes, no )
 AM_CONDITIONAL(HAVE_HEVEA, test x"$have_hevea" = xyes)
-if test x"$have_hevea" = xyes; then AC_DEFINE(HAVE_HEVEA) fi;
+if test x"$have_hevea" = xyes; then AC_DEFINE(HAVE_HEVEA,1, []) fi;
 
 AC_CHECK_PROG( have_ps2ascii, ps2ascii --help, yes, no )
 AM_CONDITIONAL(HAVE_PS2ASCII, test x"$have_ps2ascii" = xyes)
-if test x"$have_ps2ascii" = xyes; then AC_DEFINE(HAVE_PS2ASCII) fi;
+if test x"$have_ps2ascii" = xyes; then AC_DEFINE(HAVE_PS2ASCII,1, []) fi;
 
 ###############################################################################
 ###############################################################################
@@ -1735,7 +1746,7 @@ AM_CONDITIONAL(HAVE_LIBJASPER, test "$have_libjasper" = yes)
 AC_SUBST(LIBJASPER_CFLAGS)
 AC_SUBST(LIBJASPER_LIBS)
 if test x$have_libjasper = xyes; then
-	AC_DEFINE(HAVE_LIBJASPER)
+	AC_DEFINE(HAVE_LIBJASPER,1, [] )
 dnl 	PFX="$LIBEAGEN_PLUGIN_FACTORY_PREFIX"
 dnl 	LIBEAGEN_PLUGIN_FACTORIES_LA=" $LIBEAGEN_PLUGIN_FACTORIES_LA $PFX/jasper/libferrisjasper_factory.la "
 fi
@@ -1787,7 +1798,7 @@ AM_CONDITIONAL(HAVE_LIBJPEG, test "$have_libjpeg" = yes)
 AC_SUBST(LIBJPEG_CFLAGS)
 AC_SUBST(LIBJPEG_LIBS)
 if test x"$have_libjpeg" = xyes; then
-	AC_DEFINE(HAVE_LIBJPEG)
+	AC_DEFINE(HAVE_LIBJPEG,1, [] )
 dnl  	PFX="$LIBEAGEN_PLUGIN_FACTORY_PREFIX"
 dnl 	LIBEAGEN_PLUGIN_FACTORIES_LA=" $LIBEAGEN_PLUGIN_FACTORIES_LA $PFX/jpeg/libferrisjpeg_factory.la "
 fi;
@@ -2031,7 +2042,7 @@ AC_SUBST(LIBMPEG3_LIBS)
 # Test for libattr native EA handling in (xfs)
 ###############################################################################
 
-AC_DEFINE(XFS_SUPER_MAGIC,0x58465342)
+AC_DEFINE(XFS_SUPER_MAGIC,0x58465342,[])
 
 AC_LANG_CPLUSPLUS
 LIBATTR_CFLAGS=" "
@@ -2078,7 +2089,7 @@ LDFLAGS=$LDFLAGS_cache
 CXXFLAGS=$CXXFLAGS_cache
 
 if test x$have_libattr = xyes; then
-	AC_DEFINE(FERRIS_HAVE_ATTR)
+	AC_DEFINE(FERRIS_HAVE_ATTR,1, [] )
 
 dnl 	PFX="$LIBEAGEN_PLUGIN_FACTORY_PREFIX"
 dnl 	LIBEAGEN_PLUGIN_FACTORIES_LA=" $LIBEAGEN_PLUGIN_FACTORIES_LA $PFX/xfsnative/libxfsnative_factory.la "
@@ -2115,8 +2126,8 @@ CXXFLAGS=$CXXFLAGS_cache
 
 AM_CONDITIONAL(HAVE_XFSPROGS, test "$have_xfsprogs" = yes)
 if test x$have_xfsprogs = xyes; then
-	AC_DEFINE(FERRIS_HAVE_XFSPROGS)
-	AC_DEFINE(FERRIS_HAVE_XFS)
+	AC_DEFINE(FERRIS_HAVE_XFSPROGS,1, [] )
+	AC_DEFINE(FERRIS_HAVE_XFS,1, [] )
 else
 	XFSPROGS_CFLAGS=""
 	XFSPROGS_LIBS=""
@@ -2191,7 +2202,7 @@ if test x$enable_flac != xno; then
 PKG_CHECK_MODULES(FLAC, flac++ >= 1.2.1,
 	[
 		have_flac=yes
-		AC_DEFINE(HAVE_FLAC)
+		AC_DEFINE(HAVE_FLAC,1, [] )
 		echo "building flac support..."
 	],
 	[
@@ -2221,7 +2232,7 @@ if test x$enable_oggz != xno; then
 PKG_CHECK_MODULES(OGGZ, oggz >= 0.9.7,
 	[
 		have_oggz=yes
-		AC_DEFINE(HAVE_OGGZ)
+		AC_DEFINE(HAVE_OGGZ,1, [] )
 		echo "building oggz support..."
 	],
 	[
@@ -2250,7 +2261,7 @@ if test x$enable_taglib != xno; then
 PKG_CHECK_MODULES(TAGLIB, taglib >= 1.5.0,
 	[
 		have_taglib=yes
-		AC_DEFINE(HAVE_TAGLIB)
+		AC_DEFINE(HAVE_TAGLIB,1, [] )
 		echo "building taglib support..."
 	],
 	[
@@ -2270,23 +2281,23 @@ AC_SUBST(TAGLIB_LIBS)
 ###############################################################################
 
 if test x$have_taglib = xyes; then
-	AC_DEFINE(TAGLIB_FOR_OGG, 1 )
-	AC_DEFINE(TAGLIB_FOR_MP3, 1 )
-	AC_DEFINE(TAGLIB_FOR_FLAC, 1 )
+	AC_DEFINE(TAGLIB_FOR_OGG, 1, [] )
+	AC_DEFINE(TAGLIB_FOR_MP3, 1, [] )
+	AC_DEFINE(TAGLIB_FOR_FLAC, 1, [] )
 else
 	if test x$have_oggz = xyes; then
-		AC_DEFINE(LIBOGGZ_FOR_OGG, 1 )
+		AC_DEFINE(LIBOGGZ_FOR_OGG, 1, [] )
 	fi
 	if test x$have_flac = xyes; then
-		AC_DEFINE(LIBFLAC_FOR_FLAC, 1 )
+		AC_DEFINE(LIBFLAC_FOR_FLAC, 1, [] )
 	fi
 	if test x$have_id3 = xyes; then
-		AC_DEFINE(ID3LIB_FOR_MP3, 1 )
+		AC_DEFINE(ID3LIB_FOR_MP3, 1, [] )
 		if test x$have_oggz != xyes; then
-			AC_DEFINE(ID3LIB_FOR_OGG, 1 )
+			AC_DEFINE(ID3LIB_FOR_OGG, 1, [] )
 		fi
 		if test x$have_flac != xyes; then
-			AC_DEFINE(ID3LIB_FOR_FLAC, 1 )
+			AC_DEFINE(ID3LIB_FOR_FLAC, 1, [] )
 		fi
 	fi
 fi
@@ -2308,7 +2319,7 @@ if test x$enable_mediainfo != xno; then
 PKG_CHECK_MODULES(MEDIAINFO, libmediainfo >= 0.7,
 	[
 		have_mediainfo=yes
-		AC_DEFINE(HAVE_MEDIAINFO)
+		AC_DEFINE(HAVE_MEDIAINFO,1, [] )
 		echo "building mediainfo support..."
 	],
 	[
@@ -2380,7 +2391,7 @@ AC_SUBST(DLG)
 AC_CHECK_LIB("dvdread", DVDOpen,
   [
 	AM_CONDITIONAL(HAVE_DVDREAD, test yes = yes)
-	AC_DEFINE(HAVE_DVDREAD)
+	AC_DEFINE(HAVE_DVDREAD,1, [] )
 	DVDREAD_CFLAGS=" "
 	DVDREAD_LIBS=" -ldvdread "
 	have_dvdread="yes"
@@ -2429,7 +2440,7 @@ have_ipc_context=yes;
 AM_CONDITIONAL(HAVE_IPC_CONTEXT, test "yes" = "yes")
 AC_SUBST(IPC_CONTEXT_CFLAGS)
 AC_SUBST(IPC_CONTEXT_LIBS)
-AC_DEFINE(FERRIS_HAVE_IPC_CONTEXT)
+AC_DEFINE(FERRIS_HAVE_IPC_CONTEXT,1, [] )
 
 ###############################################################################
 ###############################################################################
@@ -2486,7 +2497,7 @@ AM_CONDITIONAL(HAVE_LDAP, test "$have_ldap" = yes)
 AC_SUBST(LDAP_CFLAGS)
 AC_SUBST(LDAP_LIBS) 
 if test x"$have_ldap" = xyes; then
-	AC_DEFINE(HAVE_LDAP)
+	AC_DEFINE(HAVE_LDAP,1, [] )
 fi;
 
 echo "checking for ldap... $have_ldap"
@@ -2547,7 +2558,7 @@ AM_CONDITIONAL(HAVE_BONOBO, test "$have_bonobo" = yes)
 AC_SUBST(BONOBO_CFLAGS)
 AC_SUBST(BONOBO_LIBS) 
 if test x"$have_bonobo" = xyes; then
-	AC_DEFINE(HAVE_BONOBO)
+	AC_DEFINE(HAVE_BONOBO,1, [] )
 fi;
 
 echo "checking for bonobo... $have_bonobo"
@@ -2603,7 +2614,7 @@ AM_CONDITIONAL(HAVE_DBUS, test "$have_dbus" = yes)
 AC_SUBST(DBUS_CFLAGS)
 AC_SUBST(DBUS_LIBS) 
 if test x"$have_dbus" = xyes; then
-	AC_DEFINE(HAVE_DBUS)
+	AC_DEFINE(HAVE_DBUS,1, [] )
 fi;
 
 echo "checking for dbus... $have_dbus"
@@ -2629,7 +2640,7 @@ libstreamanalyzer >= 0.5.1
 libstreams >= 0.5.1,
 	[
 		have_strigi=yes
-		AC_DEFINE(HAVE_STRIGI)
+		AC_DEFINE(HAVE_STRIGI, 1, [] )
 		echo "building strigi support..."
 	],
 	[
@@ -2777,7 +2788,7 @@ if test x"$build_dbxml_module" = xyes; then
 		AC_MSG_ERROR([dbxml module relies on pathan 1.2+ and xerces-c = 2.2 detection...])
 	fi
 	echo "building dbxml mount support..."
-	AC_DEFINE(HAVE_DBXML)
+	AC_DEFINE(HAVE_DBXML,1, [] )
 	have_dbxml=yes
 	DBXML_CFLAGS=" -I$DBXML_PREFIX/include -I$DBXMLDB4_PREFIX/include $XML4C_CFLAGS $XQILLA_CFLAGS "
 	DBXML_LIBS=" -ldbxml -ldb -ldb_cxx  $XML4C_LIBS $XQILLA_LIBS "
@@ -2840,7 +2851,7 @@ AC_SUBST(GPGME_LIBS)
 AC_SUBST(GPGME_CFLAGS)
 dnl if test x$have_gpgme = xyes; then
 dnl 	echo "yes"
-dnl 	AC_DEFINE( FERRIS_HAVE_GPGME )
+dnl 	AC_DEFINE( FERRIS_HAVE_GPGME,1, [] )
 dnl else
 dnl 	echo "...not building gpgme support"
 dnl fi
@@ -2881,7 +2892,7 @@ AC_TRY_LINK(
  	key_type bv = template_bitset;
 	],
        	[
-		AC_DEFINE(HAVE_LIBGISTMIQ)
+		AC_DEFINE(HAVE_LIBGISTMIQ,1, [] )
 		have_libgistmiq=yes;
 		echo "yes."
 	],
@@ -3010,9 +3021,11 @@ CXXFLAGS=$CXXFLAGS_cache
 CFLAGS=$CFLAGS_cache
 
 
+GNULIB_LA=" \$(top_builddir)/lib/libgnu.la "
+AC_SUBST(GNULIB_LA)
 
 LIBIMAGEMAGICKNAMESPACEGLUE_LA=" \$(top_builddir)/FerrisGlue/libImageMagickNamespaceGlue.la "
-LIBFERRIS_LA=" \$(top_builddir)/Ferris/libferris.la "
+LIBFERRIS_LA=" \$(top_builddir)/Ferris/libferris.la \$(top_builddir)/lib/libgnu.la "
 LIBFERRISUI_LA=" \$(top_builddir)/FerrisUI/libferrisui.la "
 LIBFERRISXSLT_LA=" \$(top_builddir)/xsltfunctions/libferrisxslt.la "
 LIBFERRISMG_LA=" \$(top_builddir)/mg/libferrismg.la "
@@ -3045,6 +3058,8 @@ AC_SUBST(LIBFERRISINDEXING_LA)
 AC_SUBST(LIBASTEXT_PLUGIN_FACTORIES_LA)
 AC_SUBST(LIBCREATION_PLUGIN_FACTORIES_LA)
 AC_SUBST(LIBEAGEN_PLUGIN_FACTORIES_LA)
+
+
 
 SQLPLUSMODDIR="${absolute_srcdir}/plugins/context/sqlplus/"
 AC_SUBST(SQLPLUSMODDIR)
@@ -3303,7 +3318,7 @@ CXXFLAGS=$CXXFLAGS_cache
 
 if test x$have_librpm = xyes; then
 	echo building librpm support...
-	AC_DEFINE(HAVE_LIBRPM)
+	AC_DEFINE(HAVE_LIBRPM,1, [] )
 else
 	LIBRPM_CFLAGS=
 	LIBRPM_LIBS=
@@ -3361,7 +3376,7 @@ fi
 
 if test x$have_libselinux = xyes; then
 	echo building libselinux support...
-	AC_DEFINE(HAVE_LIBSELINUX)
+	AC_DEFINE(HAVE_LIBSELINUX,1, [] )
 else
 	LIBSELINUX_CFLAGS=
 	LIBSELINUX_LIBS=
@@ -3419,7 +3434,7 @@ fi
 have_btparse=no
 if test x$have_libbtparse = xyes; then
 	echo "building libbtparse support (mount bibtex)..."
-	AC_DEFINE(HAVE_LIBBTPARSE)
+	AC_DEFINE(HAVE_LIBBTPARSE,1, [] )
 	have_btparse=yes
 else
 	echo "libbtparse not found... if you want to mount bibtex install http://www.gerg.ca/software/btOOL/"
@@ -3472,7 +3487,7 @@ fi
 #have_cgicc=no
 if test x$have_cgicc = xyes; then
 	echo "building cgicc support..."
-	AC_DEFINE(HAVE_CGICC)
+	AC_DEFINE(HAVE_CGICC,1, [] )
 	have_cgicc=yes
 else
 	echo "cgicc not found..."
@@ -3535,7 +3550,7 @@ fi
 echo "post check... have_clucene:$have_clucene"
 if test x$have_clucene = xyes; then
 	echo "building clucene support..."
-	AC_DEFINE(HAVE_CLUCENE)
+	AC_DEFINE(HAVE_CLUCENE,1, [] )
 	have_clucene=yes
 else
 	echo "clucene not found..."
@@ -3660,7 +3675,7 @@ AC_TRY_LINK([
 	],
 	[
 		have_gcjlucene=yes
-		AC_DEFINE(HAVE_GCJLUCENE)
+		AC_DEFINE(HAVE_GCJLUCENE,1, [] )
 		echo "Building optional support for Lucene handled fulltext indexing..."
 	],
 	[
@@ -3754,7 +3769,7 @@ if test "x$have_evolution" = xno; then
 	echo "Trying to build with extra junk to force compilation..."
 
 EVOLUTION_BUG__EXTRA_HEADERS_TO_PREINCLUDE='#include "/usr/share/gettext/gettext.h"'
-AC_DEFINE(EVOLUTION_BUG__EXTRA_HEADERS_TO_PREINCLUDE)
+AC_DEFINE(EVOLUTION_BUG__EXTRA_HEADERS_TO_PREINCLUDE,1, [] )
 
  
 AC_TRY_COMPILE([
@@ -3859,7 +3874,7 @@ if test x$enable_ecore != xno; then
 	[
 		echo "Building optional support for mounting X Window..."
 		have_ecore=yes
-		AC_DEFINE(FERRIS_HAVE_ECORE)
+		AC_DEFINE(FERRIS_HAVE_ECORE, 1, [] )
 	], 
 	[
 		echo "NOT Building optional support for mounting X Window..."
@@ -3953,7 +3968,7 @@ if test x$enable_qtsql != xno; then
 	PKG_CHECK_MODULES(QTSQL, [QtCore >= $version $package >= $version], 
 	[
 		have_qtsql=yes
-		AC_DEFINE(HAVE_QTSQL)
+		AC_DEFINE(HAVE_QTSQL, 1, [] )
 		echo "building QtSql support..."
 	],
 	[
@@ -3991,7 +4006,7 @@ if test x$enable_qtdbus != xno; then
 	PKG_CHECK_MODULES(QTDBUS, [QtCore >= $version $package >= $version], 
 	[
 		have_qtdbus=yes
-		AC_DEFINE(HAVE_QTDBUS)
+		AC_DEFINE(HAVE_QTDBUS, 1, [] )
 		echo "building Qtdbus support..."
 	],
 	[
@@ -4018,7 +4033,7 @@ if test x$enable_qtnetwork != xno; then
 	PKG_CHECK_MODULES(QTNETWORK, [QtCore >= $version $package >= $version], 
 	[
 		have_qtnetwork=yes
-		AC_DEFINE(HAVE_QTNETWORK)
+		AC_DEFINE(HAVE_QTNETWORK, 1, [] )
 		echo "building Qtnetwork support..."
 	],
 	[
@@ -4045,7 +4060,7 @@ if test x$enable_qtgui != xno; then
 	PKG_CHECK_MODULES(QTGUI, [QtCore >= $version $package >= $version], 
 	[
 		have_qtgui=yes
-		AC_DEFINE(HAVE_QTGUI)
+		AC_DEFINE(HAVE_QTGUI, 1, [] )
 		echo "building Qtgui support..."
 	],
 	[
@@ -4073,7 +4088,7 @@ if test x$enable_qoauth != xno; then
 	PKG_CHECK_MODULES(QOAUTH, [$package >= $version], 
 	[
 		have_qoauth=yes
-		AC_DEFINE(HAVE_QOAUTH)
+		AC_DEFINE(HAVE_QOAUTH,1, [] )
 		echo "building Qoauth support..."
 	],
 	[
@@ -4102,7 +4117,7 @@ if test x$enable_qjson != xno; then
 	PKG_CHECK_MODULES(QJSON, [$package >= $version], 
 	[
 		have_qjson=yes
-		AC_DEFINE(HAVE_QJSON)
+		AC_DEFINE(HAVE_QJSON,1, [] )
 		echo "building Qjson support..."
 	],
 	[
@@ -4163,7 +4178,7 @@ AC_ARG_ENABLE(dbus-mounting,
 if test x$enable_dbusmounting != xno; then
 	if test x$have_qtdbus = xyes; then
 		have_dbusmounting=yes
-		AC_DEFINE(BUILD_DBUS_MOUNTING)
+		AC_DEFINE(BUILD_DBUS_MOUNTING,1, [] )
 		echo "building dbus mounting support..."
         else
 		echo "you need qtdbus for mounting the bus..."
@@ -4214,7 +4229,7 @@ AC_TRY_LINK([ #include <KDE/Nepomuk/ResourceManager> ],
  Nepomuk::ResourceManager::instance()->mainModel();
 	],
        	[
-		AC_DEFINE(HAVE_NEPOMUK)
+		AC_DEFINE(HAVE_NEPOMUK,1, [] )
 		have_nepomuk=yes;
 	],
 	[
@@ -4274,7 +4289,7 @@ if test x$enable_annodex != xno; then
 	[
 		echo "Building optional support for mounting Cmml media..."
 		have_cmml=yes
-		AC_DEFINE(FERRIS_HAVE_CMML)
+		AC_DEFINE(FERRIS_HAVE_CMML,1, [] )
 	], 
 	[
 		echo "NOT Building optional support for mounting Cmml media..."
@@ -4287,7 +4302,7 @@ if test x$enable_annodex != xno; then
 		[
 			echo "Building optional support for mounting Annodex media..."
 			have_annodex=yes
-			AC_DEFINE(FERRIS_HAVE_ANNODEX)
+			AC_DEFINE(FERRIS_HAVE_ANNODEX,1, [] )
 		], 
 		[
 			echo "NOT Building optional support for mounting Annodex media..."
@@ -4357,7 +4372,7 @@ if test x$enable_obby != xno; then
 	PKG_CHECK_MODULES(OBBY, $package >= $version, 
 	[
 		have_obby=yes
-		AC_DEFINE(HAVE_OBBY)
+		AC_DEFINE(HAVE_OBBY,1, [] )
 		echo "building support for mounting libobby collaborative editing..."
 	],
 	[
@@ -4405,7 +4420,7 @@ if test x$enable_beagle != xno; then
 	PKG_CHECK_MODULES(BEAGLE, $package >= $version, 
 	[
 		have_beagle=yes
-		AC_DEFINE(HAVE_BEAGLE)
+		AC_DEFINE(HAVE_BEAGLE,1, [] )
 		echo "building support for searching with beagle..."
 	],
 	[
@@ -4438,7 +4453,7 @@ if test x$enable_pulseaudio != xno; then
 	PKG_CHECK_MODULES(PULSEAUDIO, libpulse >= 0.9.21 libpulse-simple, 
 	[
 		have_pulseaudio=yes
-		AC_DEFINE(HAVE_PULSEAUDIO)
+		AC_DEFINE(HAVE_PULSEAUDIO,1, [] )
 		echo "building support for pulseaudio..."
 	],
 	[
@@ -4468,7 +4483,7 @@ if test x$enable_fspot != xno; then
 
 	if test x"$have_sqlite3" = xyes; then
 		have_fspot=yes
-		AC_DEFINE( HAVE_FSPOT, 1 )
+		AC_DEFINE( HAVE_FSPOT, 1, [] )
 	fi
 fi
 AM_CONDITIONAL(HAVE_FSPOT, test x"$have_fspot" = xyes)
@@ -4668,8 +4683,8 @@ BINDIR=`eval echo ${bindir}`
 LIBDIR=`eval echo ${libdir}`  # ./Ferris/Makefile.am
 INCLUDEDIR=`eval echo ${includedir}`
 PREFIXSTR=`eval echo ${prefix}` # used in code like ./Ferris/Ferris.cpp
-AC_DEFINE_UNQUOTED(PREFIX, std::string("$PREFIXSTR") )
-AC_DEFINE_UNQUOTED(AUTOTOOLS_CONFIG_PREFIX, std::string("$PREFIXSTR") )
+AC_DEFINE_UNQUOTED(PREFIX, std::string("$PREFIXSTR"), [] )
+AC_DEFINE_UNQUOTED(AUTOTOOLS_CONFIG_PREFIX, std::string("$PREFIXSTR"), [] )
 AC_SUBST(PREFIX)
 AC_SUBST(PREFIXSTR)
 AC_SUBST(SYSCONFDIR)
@@ -4680,13 +4695,13 @@ AC_SUBST(LIBDIR)
 AC_SUBST(INCLUDEDIR)
 DATADIR=`eval echo ${datarootdir}`
 DATADIRSTR=`eval echo ${datarootdir}` # used in code like ./Ferris/Ferris.cpp
-AC_DEFINE_UNQUOTED(AUTOTOOLS_CONFIG_DATADIR, std::string("$DATADIRSTR") )
-AC_DEFINE_UNQUOTED(AUTOTOOLS_CONFIG_DATADIRTEST, std::string("$DATADIR") )
+AC_DEFINE_UNQUOTED(AUTOTOOLS_CONFIG_DATADIR, std::string("$DATADIRSTR"), [] )
+AC_DEFINE_UNQUOTED(AUTOTOOLS_CONFIG_DATADIRTEST, std::string("$DATADIR"), [] )
 LIBDIRSTR=`eval echo ${libdir}`
-AC_DEFINE_UNQUOTED(AUTOTOOLS_CONFIG_LIBDIR, std::string("$LIBDIRSTR") )
+AC_DEFINE_UNQUOTED(AUTOTOOLS_CONFIG_LIBDIR, std::string("$LIBDIRSTR"), [] )
 
 
-AC_DEFINE( FERRIS_USER_NAME_NOBODY, "nobody" )
+AC_DEFINE( FERRIS_USER_NAME_NOBODY, "nobody", [] )
 
 
 DESKTOP_FILE_DIR=`eval echo ${PREFIXSTR}/ferris/dot-desktop-files`
@@ -4697,11 +4712,11 @@ AC_SUBST(DESKTOP_FILE_DIR)
 
 FERRIS_AS_TEXT_PLUGIN_DIR="$LIBDIR/ferris/plugins/astext"
 AC_SUBST(FERRIS_AS_TEXT_PLUGIN_DIR)
-AC_DEFINE_UNQUOTED(FERRIS_AS_TEXT_PLUGIN_DIR, std::string("$FERRIS_AS_TEXT_PLUGIN_DIR") )
+AC_DEFINE_UNQUOTED(FERRIS_AS_TEXT_PLUGIN_DIR, std::string("$FERRIS_AS_TEXT_PLUGIN_DIR"), [] )
 
 FERRIS_CREATION_PLUGIN_DIR="$LIBDIR/ferris/plugins/creation"
 AC_SUBST(FERRIS_CREATION_PLUGIN_DIR)
-AC_DEFINE_UNQUOTED(FERRIS_CREATION_PLUGIN_DIR, std::string("$FERRIS_CREATION_PLUGIN_DIR") )
+AC_DEFINE_UNQUOTED(FERRIS_CREATION_PLUGIN_DIR, std::string("$FERRIS_CREATION_PLUGIN_DIR"), [] )
 
 
 
@@ -4737,7 +4752,7 @@ AC_SUBST(LDFLAGS_APP)
 
 if test "$have_curl" = yes; then
 	if test "$have_openssl" = yes; then
-		AC_DEFINE( HAVE_WEBPHOTOS_API, "1" )
+		AC_DEFINE( HAVE_WEBPHOTOS_API, "1", [] )
 	fi
 fi
 
@@ -4935,14 +4950,12 @@ AC_SUBST(CLIENTXSLT_APP_LIBS)
 REQUIREMENTSXSLT=
 AC_SUBST(REQUIREMENTSXSLT)
 
-
-
-
 #
 # All done.
 #
 AC_OUTPUT([
 Makefile
+lib/Makefile
 ThirdParty/Makefile
 ThirdParty/internal-xerces-c-headers/Makefile
 ThirdParty/internal-xerces-c-headers/2.7.0/Makefile

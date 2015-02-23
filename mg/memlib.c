@@ -34,6 +34,8 @@
    *
  */
 
+#include <config.h>
+
 static char *RCSID = "$Id: memlib.c,v 1.1 2005/07/04 08:47:40 ben Exp $";
 
 

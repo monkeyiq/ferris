@@ -96,7 +96,7 @@ libfulltextboolean_la_SOURCES         = libfulltextboolean.cpp                \
 	AParser.cpp DLexerBase.cpp ASTBase.cpp PCCTSAST.cpp ATokenBuffer.cpp  \
 	fulltextboolean.cpp
 
-INCLUDES =						\
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
 	@STLPORT_CFLAGS@                                \
 	-I$(srcdir)/..                                  \
 	-I$(srcdir)/../..                               \

@@ -8,7 +8,7 @@ MAINTAINERCLEANFILES = Makefile.in
 
 # noinst_PROGRAMS = convert-myrdf-1172-to-1173 update-emblem-listing-1181-or-latter-to-1191 
 
-# INCLUDES =                                              \
+# INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib                                               \
 # 	@STLPORT_CFLAGS@                                \
 # 	-I. 						\
 # 	-I$(srcdir) -I$(top_srcdir) -I$(top_srcdir)/src	\

@@ -1,7 +1,7 @@
 
 plugindir = $(libdir)/ferris/plugins/eaindexers
 
-INCLUDES =						\
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
 	@STLPORT_CFLAGS@                                \
 	-I$(top_srcdir)/Indexing 			\
 	-I$(top_srcdir)         			\

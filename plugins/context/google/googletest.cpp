@@ -1,3 +1,4 @@
+#include <config.h>
 
 #include "libferrisgoogle_shared.hh"
 #include <Ferris/Ferris.hh>

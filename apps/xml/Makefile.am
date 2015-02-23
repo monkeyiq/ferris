@@ -22,7 +22,7 @@ bin_PROGRAMS = \
 	$(PROGRAMS_NEEDING_XQILLA) \
 	ferris-xml-edit
 
-INCLUDES =                                              \
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib                                               \
 	@STLPORT_CFLAGS@                                \
 	@SIGC_CFLAGS@                                   \
 	-I. 						\

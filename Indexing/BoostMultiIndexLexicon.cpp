@@ -30,6 +30,7 @@
 /**
  * uses a boost::multi_index to store both a forward and reverse lexicon
  */
+#include <config.h>
 
 #include "FullTextIndexer.hh"
 #include "FullTextIndexer_private.hh"

@@ -3,7 +3,7 @@ if HAVE_ID3
 
 plugindir = $(libdir)/ferris/plugins/eagenerators
 
-INCLUDES =						\
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
 	@STLPORT_CFLAGS@                                \
 	-I$(srcdir)/..                                  \
 	-I$(top_srcdir)/src 				\

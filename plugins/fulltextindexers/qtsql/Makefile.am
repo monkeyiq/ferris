@@ -5,7 +5,7 @@ plugin_LTLIBRARIES = libftxidxqtsql.la libftxidxqtsql_factory.la
 libftxidxqtsql_la_SOURCES = libftxidxqtsql.cpp QtSQLIndexHelper_private.hh
 libftxidxqtsql_factory_la_SOURCES = libftxidxqtsql_factory.cpp
 
-INCLUDES =						\
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
 	@STLPORT_CFLAGS@                                \
 	-I..                                            \
 	-I$(top_srcdir)/src 				\

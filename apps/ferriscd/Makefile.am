@@ -11,7 +11,7 @@ shell_DATA  = $(SHELL_FILES)
 EXTRA_DIST = $(SHELL_FILES)
 
 
-INCLUDES =                                              \
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib                                               \
 	@STLPORT_CFLAGS@                                \
 	@SIGC_CFLAGS@                                   \
 	-I. 						\

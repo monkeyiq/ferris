@@ -1,7 +1,7 @@
 
 plugindir = $(libdir)/ferris/plugins/context
 
-INCLUDES = -I$(srcdir)/.. -I$(srcdir)/../.. -I$(top_srcdir)/src -I$(includedir) \
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib  -I$(srcdir)/.. -I$(srcdir)/../.. -I$(top_srcdir)/src -I$(includedir) \
 	-I/foooooooooo \
 	-I/usr/local/lib                                \
 	@CFLAGS@

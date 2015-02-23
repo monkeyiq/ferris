@@ -52,7 +52,7 @@ EXTRA_DIST = $(srcdir)/*.sh $(srcdir)/*.pl libferris-googleearth ferris-rdfproc 
 # 	ferris-webphoto-upload \
 # 	ferris-webphoto-remote-url-to-eaindex-predicate
 
-# INCLUDES =                                              \
+# INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib                                               \
 # 	@STLPORT_CFLAGS@                                \
 # 	@SIGC_CFLAGS@                                   \
 # 	-I. 						\

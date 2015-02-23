@@ -10,7 +10,7 @@ CLEANFILES = $(MOC_DEP_SRCS)
 
 plugindir = $(libdir)/ferris/plugins/context
 
-INCLUDES =						\
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
 	@STLPORT_CFLAGS@                                \
 	@CONTEXT_PLUGIN_CFLAGS@                         \
 	-I$(srcdir)/..                                  \

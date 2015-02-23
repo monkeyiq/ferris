@@ -11,7 +11,7 @@ mocimpls.cpp: $(MOC_DEP_SRCS)
 %_moc.cpp: %.hh
 	$(MOC) $(DEFINES) $(INCPATH) $< -o $@
 
-INCLUDES =						\
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
 	@KDE_CFLAGS@                                 \
 	-I$(srcdir)/..                                  \
 	-I$(top_srcdir)/src 				\

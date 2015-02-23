@@ -31,6 +31,7 @@
  * Implementation of lexicon storage using ferris VFS itself.
  * This is probably the most basic lexicon storage plugin.
  */
+#include <config.h>
 
 #include "FullTextIndexer.hh"
 #include "FullTextIndexer_private.hh"

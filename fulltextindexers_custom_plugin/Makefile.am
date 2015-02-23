@@ -4,7 +4,7 @@ plugindir = $(libdir)/ferris/plugins/fulltextindexers
 plugin_LTLIBRARIES = libftxcustomferris.la
 libftxcustomferris_la_SOURCES = libftxcustomferris.cpp libftxcustomferris.hh
 
-INCLUDES =						\
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
 	@STLPORT_CFLAGS@                                \
 	-I..                                            \
 	-I$(top_srcdir) 				\

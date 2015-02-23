@@ -1,10 +1,11 @@
+LDADD = $(top_builddir)/lib/libgnu.la
 
 # A list of all the files in the current directory which can be regenerated
 MAINTAINERCLEANFILES = Makefile.in
 
 bin_PROGRAMS = fcat ftee
 
-INCLUDES =                                              \
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib                                               \
 	@STLPORT_CFLAGS@                                \
 	@SIGC_CFLAGS@                                   \
 	-I. 						\
@@ -16,10 +17,10 @@ INCLUDES =                                              \
 
 
 fcat_SOURCES = fcat.cpp
-fcat_LDADD = -lpopt @LIBFERRIS_LA@ 
+fcat_LDADD = -lpopt @LIBFERRIS_LA@ $(top_builddir)/lib/libgnu.la
 fcat_LDFLAGS = $(GLIB_LIBS) @SIGC_LIBS@
 
 ftee_SOURCES = ftee.cpp
-ftee_LDADD = -lpopt @LIBFERRIS_LA@ 
+ftee_LDADD = -lpopt @LIBFERRIS_LA@
 ftee_LDFLAGS = $(GLIB_LIBS) @SIGC_LIBS@
 

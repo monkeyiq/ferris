@@ -37,6 +37,8 @@
    *
  */
 
+#include <config.h>
+
 static char *RCSID = "$Id: bitio_gen.c,v 1.2 2008/06/07 21:30:09 ben Exp $";
 
 #ifdef GCC_HASCLASSVISIBILITY

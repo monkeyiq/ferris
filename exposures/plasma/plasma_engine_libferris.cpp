@@ -18,6 +18,7 @@
  *  For more details see the COPYING file in the root directory of this
  *  distribution.
  */
+#include <config.h>
  
 #include <Ferris/Ferris.hh>
 #include <Ferris/FerrisQt_private.hh>

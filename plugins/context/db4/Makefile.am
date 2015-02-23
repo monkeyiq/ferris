@@ -7,7 +7,7 @@ libferrisdb4_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
 libferrisdb4_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
 libferrisdb4_la_SOURCES         = libferrisdb4.cpp
 
-INCLUDES =						\
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
 	@STLPORT_CFLAGS@                                \
 	-I$(srcdir)/..                                  \
 	-I$(top_srcdir)/src 				\

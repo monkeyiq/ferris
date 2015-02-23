@@ -15,7 +15,7 @@ tracklist_interface.cpp tracklist_interface.h: tracklist_interface.xml
 
 
 
-INCLUDES =						\
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
 	@STLPORT_CFLAGS@                                \
 	-I$(srcdir)/..                                  \
 	-I$(top_srcdir)/src 				\

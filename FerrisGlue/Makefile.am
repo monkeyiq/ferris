@@ -1,4 +1,4 @@
-INCLUDES = @MAGICK_CFLAGS@
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib  @MAGICK_CFLAGS@
 CXXFLAGS =
 AM_CXXFLAGS =
 

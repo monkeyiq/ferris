@@ -77,7 +77,7 @@ libmbox_la_SOURCES         = libmbox.cpp                      \
 	AParser.cpp DLexerBase.cpp ASTBase.cpp PCCTSAST.cpp ATokenBuffer.cpp DLGLexer.cpp  \
 	mbox.cpp
 
-INCLUDES =						\
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
 	-I$(srcdir)/..                                  \
 	-I$(srcdir)/../..                               \
 	-I$(top_srcdir)/src 				\

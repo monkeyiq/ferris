@@ -2331,8 +2331,8 @@ dnl	if test x$with_qt = xyes ; then
 			MIMETYPE_ENGINE_DESC="KDE"
 			MIMETYPE_ENGINE_CHOSEN=yes
 			FERRIS_HAVE_KDE=yes
-			AC_DEFINE(HAVE_KDE)
-			AC_DEFINE(FERRIS_HAVE_KDE)
+			AC_DEFINE(HAVE_KDE,1,[])
+			AC_DEFINE(FERRIS_HAVE_KDE,1,[])
 		else
 			echo "Couldn't link sample KDE4 application, disabling KDE support"
 			FERRIS_HAVE_KDE=no
@@ -2582,8 +2582,8 @@ else
 		if test x"$have_plasma" = xyes; then
 			echo "Building plasma support funtions"
 			FERRIS_HAVE_PLASMA=yes
-			AC_DEFINE(HAVE_PLASMA)
-			AC_DEFINE(FERRIS_HAVE_PLASMA)
+			AC_DEFINE(HAVE_PLASMA,1,[])
+			AC_DEFINE(FERRIS_HAVE_PLASMA,1,[])
 		else
 			echo "Couldn't link sample PLASMA4 application, disabling PLASMA support"
 			FERRIS_HAVE_PLASMA=no
@@ -2704,8 +2704,8 @@ else
 		if test x"$have_sane" = xyes; then
 			echo "Building sane support funtions"
 			FERRIS_HAVE_SANE=yes
-			AC_DEFINE(HAVE_SANE)
-			AC_DEFINE(FERRIS_HAVE_SANE)
+			AC_DEFINE(HAVE_SANE,1,[])
+			AC_DEFINE(FERRIS_HAVE_SANE,1,[])
 			KSANE_CFLAGS=" $SANE_CFLAGS "
 			KSANE_LIBS=" $SANE_LIBS "
 		else
@@ -2802,8 +2802,8 @@ else
 		if test x"$have_qprinter" = xyes; then
 			echo "Building qprinter support funtions"
 			FERRIS_HAVE_QPRINTER=yes
-			AC_DEFINE(HAVE_QPRINTER)
-			AC_DEFINE(FERRIS_HAVE_QPRINTER)
+			AC_DEFINE(HAVE_QPRINTER,1,[])
+			AC_DEFINE(FERRIS_HAVE_QPRINTER,1,[])
 			QPRINTER_CFLAGS=" $QPRINTER_CFLAGS "
 			QPRINTER_LIBS=" $QPRINTER_LIBS "
 		else

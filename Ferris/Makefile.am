@@ -13,7 +13,7 @@ mocimpls.cpp: FerrisWebServices_private_moc.cpp FerrisQt_moc_impl.cpp  MetadataS
 # A list of all the files in the current directory which can be regenerated
 MAINTAINERCLEANFILES = Makefile.in
 
-INCLUDES =                                              \
+INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib                                               \
 	@STLPORT_CFLAGS@                                \
 	-I. 						\
 	-I$(srcdir) -I$(top_srcdir) 			\
@@ -116,6 +116,7 @@ libferrisperl_wrap.cpp libferrisperl.pm: libferrisperl.i
 	swig -c++ -DLIBFERRIS_INTERNAL_COMPILING_SWIG_WRAPPER \
 		-I/usr/local/include -I/usr/include `pkg-config gtk+-2.0 ferrisstreams --cflags | sed s/-pthread//g ` \
 		-perl5 -module libferrisperl  -o $(srcdir)/libferrisperl_wrap.cpp $(srcdir)/libferrisperl.i
+	sed -i -e 's/#define SWIGPERL/#include <config.h>   #define SWIGPERL /g' $(srcdir)/libferrisperl_wrap.cpp
 
 #-proxy -shadow
 

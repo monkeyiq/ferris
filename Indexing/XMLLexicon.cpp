@@ -33,6 +33,7 @@
  * The entire lexicon is loaded into RAM at startup so it should operate
  * very quickly
  */
+#include <config.h>
 
 #include "FullTextIndexer.hh"
 #include "FullTextIndexer_private.hh"
