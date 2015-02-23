@@ -97,13 +97,6 @@ namespace Ferris
     /********************************************************************************/
 
     
-    /* Compare S1 and S2 as strings holding name & indices/version numbers.  */
-    extern int strverscmp (__const char *__s1, __const char *__s2)
-        __THROW __attribute_pure__;
-    
-    /********************************************************************************/
-    /********************************************************************************/
-    /********************************************************************************/
 
     struct FERRISEXP_DLLLOCAL ContextSetCompare_FunctorData
     {
