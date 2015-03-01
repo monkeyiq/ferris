@@ -50,7 +50,7 @@
 #include "DBusGlue/com_libferris_Volume_Manager_adaptor.h"
 #include "DBusGlue/com_libferris_Volume_Manager_adaptor.cpp"
 
-#ifdef OSX
+#ifdef PLATFORM_OSX
 #define MAJOR(x) x 
 #define MINOR(x) x
 #else

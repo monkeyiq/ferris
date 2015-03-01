@@ -48,7 +48,7 @@
 
 #include "config.h"
 
-#ifdef OSX
+#ifdef PLATFORM_OSX
 const std::string LIBRARY_EXTENSION = ".dylib";
 #else
 const std::string LIBRARY_EXTENSION = ".so";

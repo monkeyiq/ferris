@@ -54,7 +54,7 @@
 #include "libeaidxcustomferris.hh"
 
 #include <numeric>
-#ifndef OSX
+#ifndef PLATFORM_OSX
 #include <ext/numeric>
 #endif
 

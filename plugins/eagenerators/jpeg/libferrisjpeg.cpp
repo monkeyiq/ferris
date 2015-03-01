@@ -38,7 +38,7 @@
 
 #include <iomanip>
 
-#ifdef OSX
+#ifdef PLATFORM_OSX
 namespace std
 {
 template<typename _Tp>

@@ -1490,7 +1490,7 @@ namespace Ferris
                         }
                         if( fd > 0 )
                         {
-#ifdef OSX
+#ifdef PLATFORM_OSX
                             cerr << "WARNING: preallocation not implemented on osx." << endl;
 #else
                             if( preallocate_with_fallocate )

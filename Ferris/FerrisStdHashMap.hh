@@ -30,6 +30,8 @@
 #ifndef _ALREADY_INCLUDED_FERRIS_STD_HASH_MAP_H_
 #define _ALREADY_INCLUDED_FERRIS_STD_HASH_MAP_H_
 
+#inclide <config.h>
+
 #ifdef STLPORT
 
 #include <hash_map>
@@ -44,7 +46,7 @@
 //#include <ext/hash_fun.h>
 #include <ext/hash_map>
 
-#ifndef OSX
+#ifndef PLATFORM_OSX
 namespace __gnu_cxx
 {
     template<>

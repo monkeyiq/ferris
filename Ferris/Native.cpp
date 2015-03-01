@@ -88,7 +88,7 @@ extern "C" {
 
 #include "FSParser_private.hh"
 
-#ifdef OSX
+#ifdef PLATFORM_OSX
   #ifndef MAJOR
     #define MAJOR(x) x
   #endif
@@ -110,7 +110,7 @@ using namespace std;
 #include "DBusGlue/com_libferris_Volume_Manager.h"
 #include "DBusGlue/com_libferris_Volume_Manager.cpp"
 
-#ifndef OSX
+#ifndef PLATFORM_OSX
   #define PERMIT_FAM
 #endif
 
@@ -122,7 +122,7 @@ namespace Ferris
     {
         guint64 p = 0, sec = 0;
 
-#ifdef OSX        
+#ifdef PLATFORM_OSX        
         p   = s.val[0];
         sec = s.val[1];
 #else
@@ -1591,7 +1591,7 @@ NativeContext::priv_getIStream( ferris_ios::openmode m )
                 << " fs:" << fs
                 << endl;
 
-#ifndef OSX
+#ifndef PLATFORM_OSX
     if( m & ferris_ios::o_mmap )
     {
         LG_NATIVE_D << "About to create a memory mapped file for:" << getURL()
@@ -2958,7 +2958,7 @@ SL_getFSMaxNameLength( NativeContext* c, const std::string& rdn, EA_Atom* atom )
     struct statfs s = c->getStatFS();
     
     fh_stringstream ss;
-#ifdef OSX
+#ifdef PLATFORM_OSX
     ss << MAXPATHLEN;
 #else
     ss << s.f_namelen;

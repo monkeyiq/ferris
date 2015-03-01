@@ -38,7 +38,7 @@ using namespace std;
 #if defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED)
 /* union semun is defined by including <sys/sem.h> */
 #else
-  #ifdef OSX
+  #ifdef PLATFORM_OSX
   #else
 /* according to X/OPEN we have to define it ourselves */
 union semun {

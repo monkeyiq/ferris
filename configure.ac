@@ -3950,6 +3950,7 @@ AC_PATH_PROGS( MOC, moc-qt4 moc )
 echo "moc program is at: $MOC"
 AC_SUBST(MOC)
 
+LIBFERRIS_PLATFORM_SPECIFICS
 
 ############
 # QtSql

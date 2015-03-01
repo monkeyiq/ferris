@@ -3409,6 +3409,39 @@ dnl alloca (in public macro) and MinGW
 dnl ######################################################################
 dnl ######################################################################
 dnl ######################################################################
+dnl # inspired by FONTFORGE_PLATFORM_SPECIFICS
+dnl ############
+AC_DEFUN([LIBFERRIS_PLATFORM_SPECIFICS],
+[
+AC_CANONICAL_HOST
+
+m4_define([default_SDK],[/])
+m4_define([default_CARBON],[System/Library/Frameworks/Carbon.framework/Carbon])
+m4_define([default_COCOA],[/System/Library/Frameworks/Cocoa.framework/Cocoa])
+m4_define([default_CORESERVICES],[System/Library/Frameworks/CoreServices.framework/CoreServices])
+
+AS_CASE([$host],
+   [*-apple-darwin*],[
+      libferris_ismac="yes"
+      AC_DEFINE([_Keyboard],[1],[Platform specific stuff])
+      AC_DEFINE([__Mac],[1],[Platform specific stuff])
+   ],
+
+   [:]  dnl DEFAULT AS_CASE
+
+) dnl END AS_CASE
+
+AM_CONDITIONAL([PLATFORM_OSX],[test x"${libferris_ismac}" = xyes])
+
+])
+
+
+
+dnl ######################################################################
+dnl ######################################################################
+dnl ######################################################################
+dnl ######################################################################
+dnl ######################################################################
 dnl ######################################################################
 dnl ######################################################################
 dnl ######################################################################
