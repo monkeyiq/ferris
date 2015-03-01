@@ -27,6 +27,30 @@
 *******************************************************************************
 ******************************************************************************/
 
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// Note that for OSX this block has to be before config.h or the Qt headers complain.
+/////
+#include <sigc++/sigc++.h>
+#include <QtCore/QObject>
+#include <QtCore/QByteArray>
+#include <QtCore/QList>
+#include <QtCore/QMap>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+#include <QtCore/QVariant>
+#include <QtDBus/QtDBus>
+#ifdef emit
+#undef emit
+#endif
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+
 #include <config.h>
 
 #include <fstream>
@@ -1796,7 +1820,7 @@ NativeContext::priv_read()
                 ss << "can not open path:" << getDirPath();
                 Throw_FerrisNotReadableAsContext( tostr(ss), this );
             }
-            while( e = readdir(d) )
+            while(( e = readdir(d) ))
             {
                 string fn = e->d_name;
                 if( fn == "." || fn == ".." )
@@ -3125,7 +3149,7 @@ NativeContext::getHasSubContextsGuess()
     if( sb.st_mode & S_IFDIR )
     {
         DIR *d; struct dirent *e;
-        if (d = opendir( getDirPath().c_str() ))
+        if(( d = opendir( getDirPath().c_str() )))
         {
             while( true )
             {

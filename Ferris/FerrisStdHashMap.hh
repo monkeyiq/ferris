@@ -30,7 +30,7 @@
 #ifndef _ALREADY_INCLUDED_FERRIS_STD_HASH_MAP_H_
 #define _ALREADY_INCLUDED_FERRIS_STD_HASH_MAP_H_
 
-#inclide <config.h>
+#include <config.h>
 
 #ifdef STLPORT
 

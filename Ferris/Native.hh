@@ -44,7 +44,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/vfs.h>
+//#include <sys/vfs.h>
 #include <unistd.h>
 
 #ifdef HAVE_LIBFILE
@@ -65,6 +65,9 @@
 #include <Fampp2GlibSupport.hh>
 
 #include <Ferris/Attribute.hh>
+
+#include <sys/param.h>
+#include <sys/mount.h>
 
 namespace Ferris
 {
