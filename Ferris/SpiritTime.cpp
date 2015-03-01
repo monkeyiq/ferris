@@ -633,7 +633,7 @@ namespace Ferris
             /********/
             /********/
 
-#ifdef DISABLE_SPIRIT_TIME_ON_PLATFORM_OSX
+#ifdef PLATFORM_OSX
             time_t operator()( const std::string& s, time_t relv  )
                 {
                     cerr << "WARN: SpiritTime is not working on osx yet" << endl;
