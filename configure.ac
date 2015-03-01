@@ -141,6 +141,7 @@ AC_ARG_ENABLE(debug,
 if test x$enable_debug = xyes; then
 	echo "setting debug mode to on..."
 	FERRIS_CF=" -O0 -g -pipe -fno-inline -fno-default-inline "; #-Wall "; 
+	FERRIS_CF=" -O0 -g -pipe -fno-inline ";
 	smartptr_assert="if( !val ) { ::Ferris::BackTrace(); assert(val); }";
 else
 	echo "setting debug mode to off..."
