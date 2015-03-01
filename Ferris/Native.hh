@@ -44,7 +44,6 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-//#include <sys/vfs.h>
 #include <unistd.h>
 
 #ifdef HAVE_LIBFILE
@@ -68,6 +67,10 @@
 
 #include <sys/param.h>
 #include <sys/mount.h>
+
+#ifndef PLATFORM_OSX
+#include <sys/vfs.h>
+#endif
 
 namespace Ferris
 {
