@@ -3420,11 +3420,13 @@ m4_define([default_CARBON],[System/Library/Frameworks/Carbon.framework/Carbon])
 m4_define([default_COCOA],[/System/Library/Frameworks/Cocoa.framework/Cocoa])
 m4_define([default_CORESERVICES],[System/Library/Frameworks/CoreServices.framework/CoreServices])
 
+echo "plaform specifics for host: $host "
 AS_CASE([$host],
    [*-apple-darwin*],[
       libferris_ismac="yes"
       AC_DEFINE([_Keyboard],[1],[Platform specific stuff])
       AC_DEFINE([__Mac],[1],[Platform specific stuff])
+      AC_DEFINE([PLATFORM_OSX],[1],[Platform specific stuff])
    ],
 
    [:]  dnl DEFAULT AS_CASE
