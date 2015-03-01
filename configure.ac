@@ -3946,10 +3946,7 @@ AC_SUBST(KDE_EAGENERATOR_LIBS)
 # moc-qt4
 ############
 
-AC_PATH_PROG( MOC, moc-qt4, [no] )
-if test x$MOC = xno; then
-   AC_PATH_PROG( MOC, moc, [no] )
-fi
+AC_PATH_PROGS( MOC, moc-qt4 moc )
 echo "moc program is at: $MOC"
 AC_SUBST(MOC)
 
