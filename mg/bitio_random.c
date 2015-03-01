@@ -40,7 +40,7 @@
 
 static char *RCSID = "$Id: bitio_random.c,v 1.1 2005/07/04 08:47:40 ben Exp $";
 
-
+#include <config.h>
 
 #include "sysfuncs.h"
 #include "memlib.h"
@@ -50,7 +50,7 @@ static char *RCSID = "$Id: bitio_random.c,v 1.1 2005/07/04 08:47:40 ben Exp $";
 #include "bitio_m_random.h"
 #include "bitio_m.h"
 
-#ifdef OSX
+#ifdef PLATFORM_OSX
 void BIO_Random_Start (FILE * f, unsigned long len, random_bitio_state * bs) {}
 void BIO_Random_Done (random_bitio_state * bs) {}
 void BIO_Random_Encode_Bit (int bit, random_bitio_state * bs) {}
