@@ -5510,5 +5510,5 @@ echo "
 optional modules that will be compiled: 
 $modlist
 
-	Copyright (C) 2001-2012 Ben Martin
+	Copyright (C) 2001-2015 Ben Martin
 "

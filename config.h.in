@@ -380,6 +380,9 @@
 /* Define to 1 when the gnulib module strerror should be tested. */
 #undef GNULIB_TEST_STRERROR
 
+/* Define to 1 when the gnulib module strtok_r should be tested. */
+#undef GNULIB_TEST_STRTOK_R
+
 /* Define to 1 when the gnulib module strverscmp should be tested. */
 #undef GNULIB_TEST_STRVERSCMP
 
@@ -433,6 +436,10 @@
 /* Define to 1 if you have the declaration of `strerror_r', and to 0 if you
    don't. */
 #undef HAVE_DECL_STRERROR_R
+
+/* Define to 1 if you have the declaration of `strtok_r', and to 0 if you
+   don't. */
+#undef HAVE_DECL_STRTOK_R
 
 /* Define to 1 if you have the <dirent.h> header file. */
 #undef HAVE_DIRENT_H
@@ -1103,6 +1110,9 @@
 /* Define to 1 if you have the `strsep' function. */
 #undef HAVE_STRSEP
 
+/* Define to 1 if you have the `strtok_r' function. */
+#undef HAVE_STRTOK_R
+
 /* Define to 1 if you have the `strverscmp' function. */
 #undef HAVE_STRVERSCMP
 
@@ -1243,6 +1253,9 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
+/* Platform specific stuff */
+#undef PLATFORM_OSX
+
 /* */
 #undef PREFIX
 
@@ -1344,6 +1357,9 @@
    stat.st_size becomes 64-bit. */
 #undef _GL_WINDOWS_64_BIT_ST_SIZE
 
+/* Platform specific stuff */
+#undef _Keyboard
+
 /* Define for large files, on AIX-style hosts. */
 #undef _LARGE_FILES
 
@@ -1373,6 +1389,9 @@
 
 /* Define to 1 if you need to in order for 'stat' and other things to work. */
 #undef _POSIX_SOURCE
+
+/* Platform specific stuff */
+#undef __Mac
 
 /* Please see the Gnulib manual for how to use these macros.
 
