@@ -596,8 +596,8 @@ int main( int argc, const char** argv )
         
 //        theDOM->normalize();
 
-        XercesDOMSupport theDOMSupport;
-        XercesParserLiaison theParserLiaison(theDOMSupport);
+        XercesParserLiaison theParserLiaison;
+        XercesDOMSupport theDOMSupport( theParserLiaison );
         
         cerr << "Creating the parsed source..." << endl;
         const XercesDOMWrapperParsedSource parsedSource(
