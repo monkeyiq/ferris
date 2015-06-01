@@ -10,7 +10,7 @@ dnl
 
 AC_SUBST(LIBFERRIS_MAJOR)
 AC_SUBST(LIBFERRIS_MINOR)
-AC_SUBST(LIBFERRIS_BETA)
+AC_SUBST(LIBsigtoy.oFERRIS_BETA)
 
 FERRIS_VERSION=$LIBFERRIS_MAJOR.$LIBFERRIS_MINOR.$LIBFERRIS_BETA
 LIBFERRIS_FULLV=$FERRIS_VERSION
@@ -31,7 +31,9 @@ AM_MAINTAINER_MODE
 cd ${srcdir}; absolute_srcdir=`pwd`; cd -;
 
 on_osx=`uname -a | grep -q -v '^Darwin'; echo $?`
-
+if test x${on_osx} = xyes; then
+	AC_DEFINE( FERRIS_ON_OSX, 1, [On OSX platform] )
+fi
 
 dnl
 dnl The rules are that 1.0.x will be stable, and 1.1.x will be development.
