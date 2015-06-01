@@ -10,16 +10,19 @@ CC_TARGET_DIR = $(DESTDIR)/usr/share/control-center/capplets/Ferris/
 CC_TARGET_ICON_DIR = $(DESTDIR)/usr/share/control-center-plus/icons/
 
 install-data-local:
+	install -d $(CC_TARGET_DIR)/;
+	install -d $(CC_TARGET_ICON_DIR)/;
+
 	@for f in $(CC_FILES); do \
 		echo install of file $$f; \
-		install -vD $$f $(CC_TARGET_DIR)/$$f; \
+		install -v $$f $(CC_TARGET_DIR)/; \
 	done
 
 	@for f in $(CC_DIR_FILES); do \
-		install -vD $$f $(CC_TARGET_DIR)/.directory; \
+		install -v $$f $(CC_TARGET_DIR)/; \
 	done
 
 	@for f in $(CC_ICONS); do \
-		install -vD $$f $(CC_TARGET_ICON_DIR)/$$f; \
+		install -v $$f $(CC_TARGET_ICON_DIR)/; \
 	done
 
