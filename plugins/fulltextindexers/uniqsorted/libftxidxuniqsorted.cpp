@@ -28,6 +28,7 @@
 *******************************************************************************
 ******************************************************************************/
 
+#include "config.h"
 #include <Ferris/HiddenSymbolSupport.hh>
 #include <Ferris/Ferris.hh>
 #include <Ferris/FullTextIndexer_private.hh>

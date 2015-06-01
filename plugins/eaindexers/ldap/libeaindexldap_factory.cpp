@@ -28,6 +28,9 @@
 *******************************************************************************
 ******************************************************************************/
 
+#include "config.h"
+#include "libeaindexldap.hh"
+
 #include <Ferris/EAIndexerMetaInterface.hh>
 #include <Ferris/FerrisCreationPlugin.hh>
 

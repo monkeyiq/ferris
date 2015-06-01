@@ -69,22 +69,22 @@ feaindex_attach_fulltext_index_LDADD = -lpopt @LIBFERRIS_LA@
 feaindex_attach_fulltext_index_LDFLAGS = $(GLIB_LIBS) @SIGC_LIBS@
 
 ferris_find_SOURCES = ferris-find.cpp
-ferris_find_LDADD = -lpopt @LIBFERRIS_LA@ @BOOST_LIBS@ -lboost_regex
+ferris_find_LDADD = -lpopt @LIBFERRIS_LA@ @BOOST_LIBS@ 
 ferris_find_LDFLAGS = $(GLIB_LIBS) @SIGC_LIBS@ 
 
 findex_remove_old_instances_SOURCES = findex-remove-old-instances.cpp
-findex_remove_old_instances_LDADD = -lpopt @LIBFERRIS_LA@ @BOOST_LIBS@ -lboost_regex
+findex_remove_old_instances_LDADD = -lpopt @LIBFERRIS_LA@ @BOOST_LIBS@ 
 findex_remove_old_instances_LDFLAGS = $(GLIB_LIBS) @SIGC_LIBS@ 
 
 feaindex_remove_old_instances_SOURCES = feaindex-remove-old-instances.cpp
-feaindex_remove_old_instances_LDADD = -lpopt @LIBFERRIS_LA@ @BOOST_LIBS@ -lboost_regex
+feaindex_remove_old_instances_LDADD = -lpopt @LIBFERRIS_LA@ @BOOST_LIBS@ 
 feaindex_remove_old_instances_LDFLAGS = $(GLIB_LIBS) @SIGC_LIBS@ 
 
 feaindex_federation_add_index_SOURCES = feaindex-federation-add-index.cpp DirectIndexConfigAccess.hh
-feaindex_federation_add_index_LDADD = -lpopt @LIBFERRIS_LA@ @BOOST_LIBS@ -lboost_regex
+feaindex_federation_add_index_LDADD = -lpopt @LIBFERRIS_LA@ @BOOST_LIBS@
 feaindex_federation_add_index_LDFLAGS = $(GLIB_LIBS) @SIGC_LIBS@ 
 
 feaindex_federation_add_url_substitution_regex_for_index_SOURCES = feaindex-federation-add-url-substitution-regex-for-index.cpp DirectIndexConfigAccess.hh
-feaindex_federation_add_url_substitution_regex_for_index_LDADD = -lpopt @LIBFERRIS_LA@ @BOOST_LIBS@ -lboost_regex
+feaindex_federation_add_url_substitution_regex_for_index_LDADD = -lpopt @LIBFERRIS_LA@ @BOOST_LIBS@ 
 feaindex_federation_add_url_substitution_regex_for_index_LDFLAGS = $(GLIB_LIBS) @SIGC_LIBS@ 
 

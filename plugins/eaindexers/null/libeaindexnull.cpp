@@ -28,6 +28,8 @@
 *******************************************************************************
 ******************************************************************************/
 
+#include "config.h"
+
 #include <Ferris/HiddenSymbolSupport.hh>
 #include "EAIndexerMetaInterface.hh"
 #include "EAIndexer.hh"

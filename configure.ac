@@ -30,6 +30,9 @@ AM_MAINTAINER_MODE
 
 cd ${srcdir}; absolute_srcdir=`pwd`; cd -;
 
+on_osx=`uname -a | grep -q -v '^Darwin'; echo $?`
+
+
 dnl
 dnl The rules are that 1.0.x will be stable, and 1.1.x will be development.
 dnl I assume to break ABI if not API between 1.0.x and 1.2.x so the major/minor
@@ -2437,11 +2440,15 @@ IPC_CONTEXT_LIBS=" "
 #CXXFLAGS=$CXXFLAGS_cache
 
 have_ipc_context=yes;
-# AM_CONDITIONAL(HAVE_IPC_CONTEXT, test "$have_ipc_context" = yes)
-AM_CONDITIONAL(HAVE_IPC_CONTEXT, test "yes" = "yes")
+if test "x${on_osx}" = x1; then
+   have_ipc_context=no;
+fi
 AC_SUBST(IPC_CONTEXT_CFLAGS)
 AC_SUBST(IPC_CONTEXT_LIBS)
-AC_DEFINE(FERRIS_HAVE_IPC_CONTEXT,1, [] )
+AM_CONDITIONAL(HAVE_IPC_CONTEXT, test "x$have_ipc_context" = "xyes")
+if test x"$have_ipc_context" = xyes; then
+   AC_DEFINE(FERRIS_HAVE_IPC_CONTEXT,1, [] )
+fi
 
 ###############################################################################
 ###############################################################################

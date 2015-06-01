@@ -28,6 +28,7 @@
 *******************************************************************************
 ******************************************************************************/
 
+#include "config.h"
 #include <Ferris/EAIndexerMetaInterface.hh>
 #include <Ferris/FerrisCreationPlugin.hh>
 

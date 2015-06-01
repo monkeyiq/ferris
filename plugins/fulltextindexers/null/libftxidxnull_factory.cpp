@@ -28,6 +28,7 @@
 *******************************************************************************
 ******************************************************************************/
 
+#include "config.h"
 #include <Ferris/FullTextIndexerMetaInterface.hh>
 #include <Ferris/FerrisCreationPlugin.hh>
 
