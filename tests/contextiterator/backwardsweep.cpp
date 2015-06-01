@@ -29,6 +29,7 @@
 ******************************************************************************/
 
 
+#include "config.h"
 #include <Ferris.hh>
 
 using namespace std;
