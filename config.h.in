@@ -275,6 +275,9 @@
 /* */
 #undef FERRIS_HAVE_XFSPROGS
 
+/* On OSX platform */
+#undef FERRIS_ON_OSX
+
 /* */
 #undef FERRIS_USER_NAME_NOBODY
 
