@@ -43,7 +43,6 @@
 #include <popt.h>
 #include <unistd.h>
 
-using namespace __gnu_cxx;
 
 using namespace std;
 using namespace Ferris;

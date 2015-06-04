@@ -32,43 +32,41 @@
 
 #include <config.h>
 
-#ifdef STLPORT
+#ifdef PLATFORM_OSX
 
-#include <hash_map>
-#define FERRIS_STD_HASH_MAP std::hash_map
-
-#include <hash_set>
-#define FERRIS_STD_HASH_SET std::hash_set
+    #include <unordered_set>
+    #include <unordered_map>
+    #define FERRIS_STD_HASH_MAP std::unordered_map
+    #define FERRIS_STD_HASH_SET std::unordered_set
 
 #else
 
 #include <string>
-//#include <ext/hash_fun.h>
 #include <ext/hash_map>
+#include <ext/hash_set>
 
 #ifndef PLATFORM_OSX
-namespace __gnu_cxx
-{
-    template<>
-    struct hash<std::string>
+    namespace __gnu_cxx
     {
-        size_t operator()(std::string& __s) const
-            { return __stl_hash_string(__s.c_str()); }
-        size_t operator()(const std::string& __s) const
-            { return __stl_hash_string(__s.c_str()); }
+        template<>
+        struct hash<std::string>
+        {
+            size_t operator()(std::string& __s) const
+                { return __stl_hash_string(__s.c_str()); }
+            size_t operator()(const std::string& __s) const
+                { return __stl_hash_string(__s.c_str()); }
+        };
     };
-};
 #endif
 namespace std
 {
     using __gnu_cxx::hash;
 };
 #define FERRIS_STD_HASH_MAP __gnu_cxx::hash_map
-#include <ext/hash_set>
 #define FERRIS_STD_HASH_SET __gnu_cxx::hash_set
 
 
+
+
 #endif
-
-
 #endif

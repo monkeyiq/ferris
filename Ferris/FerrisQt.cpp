@@ -1290,9 +1290,14 @@ public:
     
     void ensureQApplication()
     {
-        installQTMsgHandler();
-        Main::processAllPendingEvents();
-        QAppSingleton::Instance();
+        static bool v = true;
+        if( v ) 
+        {
+            v = false;
+            installQTMsgHandler();
+            Main::processAllPendingEvents();
+            QAppSingleton::Instance();
+        }
     }
     
     QNetworkAccessManager*

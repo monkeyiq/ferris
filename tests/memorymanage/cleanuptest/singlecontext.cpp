@@ -86,11 +86,11 @@ struct fx_dn_equal_to : public std::binary_function< T, T, bool>
         { return __x->getDirName() == __y->getDirName(); }
 };
 template< class T > 
-struct fx_dn_hash : public __gnu_cxx::hash< const char* >
+struct fx_dn_hash : public std::hash< const char* >
 {
     inline size_t operator()( const T s ) const
         {
-            return __gnu_cxx::hash< const char* >::operator()( s->getDirName().c_str() );
+            return std::hash< const char* >::operator()( s->getDirName().c_str() );
         }
 };
 

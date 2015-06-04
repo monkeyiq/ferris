@@ -832,6 +832,7 @@ namespace Ferris
             _Base( parent, rdn )
             {
 //                cerr << "QtsqlDBContext() rdn:" << rdn << endl;
+                ::Ferris::KDE::ensureKDEApplication();
             }
 
         virtual ~QtsqlDBContext()
