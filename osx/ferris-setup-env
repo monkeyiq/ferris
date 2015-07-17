@@ -1,0 +1,5 @@
+export SOPRANO_DIRS=/Applications/Ferris.app/Contents/Resources/usr/share
+export LD_LIBRARY_PATH=/Applications/Ferris.app/Contents/Resources/usr/local/lib/soprano/
+export LIBFERRIS_PLUGIN_PREFIX=/Applications/Ferris.app/Contents/Resources/usr/local/lib/ferris/plugins/
+export GAMIN_DEBUG_SERVER=/tmp/ferris-bundle/Ferris.app/Contents/Resources/usr/local/bin/gam_server
+
