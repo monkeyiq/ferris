@@ -925,7 +925,7 @@ createIconPageEntry( fh_emblem em )
 
     gtk_signal_connect(GTK_OBJECT( w_icon ), "clicked", GTK_SIGNAL_FUNC(iconpage_changeicon_cb), GetImpl(em) );
 
-    em->getIconName_Changed_Sig().connect( bind( sigc::ptr_fun( iconpage_iconName_changed ), w_icon ) );
+    em->getIconName_Changed_Sig().connect( sigc::bind( sigc::ptr_fun( iconpage_iconName_changed ), w_icon ) );
 }
 
 /********************************************************************************/

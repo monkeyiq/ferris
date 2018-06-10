@@ -561,7 +561,6 @@ namespace Ferris
     }
 
 
-    
     void
     XMLBaseContext::OnStreamClosed( fh_istream& ss, std::streamsize tellp, ferris_ios::openmode m )
     {
@@ -682,9 +681,10 @@ namespace Ferris
         LG_XML_D << "XMLBaseContext::priv_getIOStream()" << endl;
 //        BackTrace();
         fh_stringstream ret = real_getIOStream( m );
-        ret->getCloseSig().connect( bind( sigc::mem_fun(*this, &_Self::OnStreamClosed ), m )); 
+        ret->getCloseSig().connect( sigc::bind( sigc::mem_fun(*this, &_Self::OnStreamClosed ), m )); 
         return ret;
     }
+
 
     /********************/
     /********************/

@@ -34,9 +34,6 @@
 
 
 #include <sigc++/sigc++.h>
-#include <sigc++/object.h>
-#include <sigc++/slot.h>
-#include <sigc++/object_slot.h>
 
 using namespace std;
 

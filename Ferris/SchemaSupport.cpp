@@ -570,7 +570,7 @@ namespace Ferris
                     {
 //                        Time::Benchmark bm( "getting schema" );
                         v = false;
-                        
+
                         static fh_context base = Resolve( "~/.ferris/schema.xml" );
                         static fh_context c1 = base;
                         static fh_context c2 = Factory::makeInheritingEAContext( base );

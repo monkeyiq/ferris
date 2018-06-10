@@ -640,26 +640,7 @@ dnl
 have_package=no
 sigc_required_version=$1
 
-dnl AC_ARG_WITH(sigcxx-2x,
-dnl AC_HELP_STRING([--with-sigcxx-2x=no],[use sigc++ 2.x, --with-sigcxx-2x=yes enables]),
-dnl [  ac_use_sigcxx_2=$withval
-dnl ], ac_use_sigcxx_2="no"
-dnl )
-
-AC_ARG_WITH(sigcxx-1x,
-AC_HELP_STRING([--with-sigcxx-1x=no],[use sigc++ 1.x, --with-sigcxx-1x=yes enables]),
-[  ac_use_sigcxx_1=$withval
-], ac_use_sigcxx_1="no"
-)
-
-
 package=sigc++-2.0
-dnl if test x"$ac_use_sigcxx_2" = xyes; then
-dnl 	package=sigc++-2.0
-dnl fi
-if test x"$ac_use_sigcxx_1" = xyes; then
-	package=sigc++-1.2
-fi
 
 version=$sigc_required_version
 PKG_CHECK_MODULES(SIGC, $package >= $version,
@@ -681,6 +662,8 @@ PKG_CHECK_MODULES(SIGC, $package >= $version,
 	[$3])     
 	])
 
+dnl This is not really good. But it seems that gcc wants it to work with sigc++ 2.x on Fedora.
+SIGC_CFLAGS="$SIGC_CFLAGS -std=c++11"
 AC_SUBST(SIGC_CFLAGS)
 AC_SUBST(SIGC_LIBS)
 ])
@@ -1530,14 +1513,14 @@ AM_FERRIS_BOOST_INTERNAL_TRYLINK
 
 if test x"$have_boost" = xno; then
 	BOOST_CFLAGS=" -I/usr/local/include "
-	BOOST_LIBS=" -L/usr/local/lib -lboost_wserialization -lboost_serialization -lboost_regex "
+	BOOST_LIBS=" -L/usr/local/lib -lboost_system -lboost_wserialization -lboost_serialization -lboost_regex "
 	AM_FERRIS_BOOST_INTERNAL_TRYLINK
 fi
 
 if test x"$have_boost" = xno; then
 	if test "x$HAVE_STLPORT"="xy"; then
 		BOOST_CFLAGS=" $STLPORT_CFLAGS "
-		BOOST_LIBS=" $STLPORT_LIBS -lboost_wserialization-gcc-p  -lboost_serialization-gcc-p "
+		BOOST_LIBS=" $STLPORT_LIBS -lboost_system-gcc-p -lboost_wserialization-gcc-p  -lboost_serialization-gcc-p "
 		AM_FERRIS_BOOST_INTERNAL_TRYLINK
 	fi
 fi
@@ -1545,7 +1528,7 @@ fi
 if test x"$have_boost" = xno; then
 	if test "x$HAVE_STLPORT"="xy"; then
 		BOOST_CFLAGS=" $STLPORT_CFLAGS "
-		BOOST_LIBS=" $STLPORT_LIBS -lboost_wserialization-mt  -lboost_serialization-mt -lboost_regex-mt "
+		BOOST_LIBS=" $STLPORT_LIBS -lboost_system-mt -lboost_wserialization-mt  -lboost_serialization-mt -lboost_regex-mt "
 		AM_FERRIS_BOOST_INTERNAL_TRYLINK
 	fi
 fi
@@ -1575,6 +1558,14 @@ AM_CONDITIONAL(HAVE_BOOST, test x"$have_boost" = xyes)
 AC_SUBST(BOOST_CFLAGS)
 AC_SUBST(BOOST_LIBS)
 ])
+
+AC_DEFUN(AM_FERRIS_BOOST_NEEDED,
+[
+  TESTING_FEATURE="Boost C++ library";
+  AM_FERRIS_BOOST( 1.33.1,
+          [ echo "Found boost library ..."; ],
+          [ AC_MSG_ERROR([ERROR: boost 1.33.1 (or 1.34.1 or maybe later) is required]); exit; ] )
+])			 
 
 
 dnl ######################################################################
@@ -3411,9 +3402,11 @@ dnl ######################################################################
 dnl ######################################################################
 dnl # inspired by FONTFORGE_PLATFORM_SPECIFICS
 dnl ############
-AC_DEFUN([LIBFERRIS_PLATFORM_SPECIFICS],
+AC_DEFUN_ONCE([LIBFERRIS_PLATFORM_SPECIFICS],
 [
-AC_CANONICAL_HOST
+cd ${srcdir}; absolute_srcdir=`pwd`; cd -;
+
+
 
 m4_define([default_SDK],[/])
 m4_define([default_CARBON],[System/Library/Frameworks/Carbon.framework/Carbon])
@@ -3435,8 +3428,66 @@ AS_CASE([$host],
 
 AM_CONDITIONAL([PLATFORM_OSX],[test x"${libferris_ismac}" = xyes])
 
+
+AC_ARG_ENABLE(debug,
+[--enable-debug            compile with -g and -O0 debug information],
+[
+  if test x$enableval = xyes; then
+	echo setting debug mode to on...;
+        CFLAGS="    $CFLAGS   -O0 -g -pipe "; #-Wall ";
+	CXXFLAGS="  $CXXFLAGS -O0 -g -pipe "; #-Wall ";
+  else
+	echo setting debug mode to off...
+  fi
 ])
 
+AC_ARG_ENABLE(hiddensymbols,
+[--enable-hiddensymbols            use hidden symbols for private APIs],
+[
+  if test x$enableval = xyes; then
+	echo setting hidden symbol support...;
+        CFLAGS="    $CFLAGS   -DGCC_HASCLASSVISIBILITY -fvisibility=default -fvisibility-inlines-hidden ";
+	CXXFLAGS="  $CXXFLAGS -DGCC_HASCLASSVISIBILITY -fvisibility=default -fvisibility-inlines-hidden ";
+	AC_DEFINE(GCC_HASCLASSVISIBILITY)
+  fi
+])
+
+
+AC_ARG_ENABLE(profile,
+[--enable-profile            compile with profile debug information],
+[
+  if test x$enableval = xyes; then
+     echo setting profile mode to on...
+     CFLAGS="   $CFLAGS   -O0 -g -pg -fprofile-arcs -ftest-coverage "; 
+     CXXFLAGS=" $CXXFLAGS -O0 -g -pg -fprofile-arcs -ftest-coverage "; 
+  else
+     echo setting profile mode to off...
+  fi
+])
+
+AC_ARG_ENABLE(wrapdebug,
+[--enable-wrapdebug            compile with -g and -O0 debug information],
+[
+  if test x$enableval = xyes; then
+	echo setting debug mode to on...;
+	CFLAGS="   $CFLAGS   -O0 -g -pipe -Wall "; 
+	CXXFLAGS=" $CXXFLAGS -O0 -g -pipe -Wall "; 
+  else
+	echo setting debug mode to off...
+  fi
+])
+
+
+])
+
+AC_DEFUN([LIBFERRIS_PLATFORM_SUBST_COMPILER_FLAGS],
+[
+   AC_SUBST(CFLAGS)
+   AC_SUBST(CPPFLAGS)
+   AC_SUBST(LDFLAGS)
+   AC_SUBST(CXXFLAGS)
+   AC_SUBST(CXXCPPFLAGS)
+])
 
 
 dnl ######################################################################

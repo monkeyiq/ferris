@@ -973,13 +973,15 @@ namespace Ferris
                 {
                     fh_iostream ret = w->getEditIOStream( ContentLength, title );
                     ret->getCloseSig().connect(
-                        bind( sigc::mem_fun(*this, &_Self::OnStreamingWriteClosed ), m )); 
+                        sigc::bind(
+                            sigc::mem_fun(*this, &_Self::OnStreamingWriteClosed ), m )); 
                     return ret;
                 }
                 
                 fh_iostream ret = w->getUploadIOStream( ContentLength, title );
                 ret->getCloseSig().connect(
-                    bind( sigc::mem_fun(*this, &_Self::OnStreamingWriteClosed ), m )); 
+                    sigc::bind(
+                        sigc::mem_fun(*this, &_Self::OnStreamingWriteClosed ), m )); 
                 return ret;
             }
         

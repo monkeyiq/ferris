@@ -429,6 +429,12 @@ namespace Ferris
         LG_FACTORY_D << "RootContextFactory::getRootContext() setting cache ContextClassName:"
                      << ContextClassName << " obj addr :" << toVoid(obj) << endl;
 
+        if( !obj ) 
+        {
+            cerr << "Warning, can not create object of filesystem type:" << ContextClassName << endl;
+        }
+        
+        
 //     cerr << "RootContextFactory::getRootContext() setting cache ContextClassName:"
 //          << ContextClassName << " obj addr :" << toVoid(obj) << endl;
 //     cerr << "RootContextFactory::getRootContext() setting cache path: "
@@ -1278,15 +1284,14 @@ namespace Ferris
     bool
     RootContextFactory::hasOverMounter( const fh_context& ctx )
     {
-//        cerr << "RootContextFactory::hasOverMounter( enter ) c:" << ctx->getURL() << endl;
         
         bool ret = false;
     
         for( Droppers_t::const_iterator iter = getDroppers().begin();
              iter != getDroppers().end(); iter++ )
         {
-//             cerr << "RootContextFactory::hasOverMounter() first:" << iter->first
-//                  << " sec:" << toVoid(iter->second) << endl;
+             // cerr << "RootContextFactory::hasOverMounter() first:" << iter->first
+             //      << " sec:" << toVoid(iter->second) << endl;
             
             fh_ommatchers m = iter->second->GetOverMountMatchers( this );
         

@@ -359,6 +359,7 @@ FerrisException_CodeState( __FILE__ ,  __LINE__ , __PRETTY_FUNCTION__ ), \
     
     FERRISEXP_API fh_stringstream tostream( fh_domdoc doc, bool gFormatPrettyPrint = true );
     FERRISEXP_API fh_stringstream tostream( DOMNode& n, bool gFormatPrettyPrint = true );
+    FERRISEXP_API std::string tostr( fh_domdoc doc, bool gFormatPrettyPrint = true );
     
     FERRISEXP_API std::string tostr( const XMLCh* xc );
     FERRISEXP_API std::string XMLToString( const XMLCh* xc, const std::string def = "" );

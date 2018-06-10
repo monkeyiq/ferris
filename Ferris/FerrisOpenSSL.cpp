@@ -94,7 +94,7 @@ namespace Ferris
             basic_digest_streambuf( const basic_digest_streambuf& );
             basic_digest_streambuf& operator = ( const basic_digest_streambuf& );
 
-            EVP_MD_CTX mdctx;
+            EVP_MD_CTX* mdctx;
             const EVP_MD *md;
             unsigned char md_value[EVP_MAX_MD_SIZE];
             unsigned int md_len;
@@ -118,11 +118,14 @@ namespace Ferris
                 {
                     m_digestValue = "N/A";
                 }
-                EVP_DigestInit(&mdctx, md);
+                
+                mdctx = EVP_MD_CTX_new();
+                EVP_DigestInit(mdctx, md);
             }
 
             virtual ~basic_digest_streambuf()
             {
+                EVP_MD_CTX_free(mdctx);                
             }
     
         protected:
@@ -135,7 +138,7 @@ namespace Ferris
              */
             virtual int write_out_given_data( const char_type* buffer, std::streamsize sz )
             {
-                EVP_DigestUpdate(&mdctx, buffer, sz );
+                EVP_DigestUpdate(mdctx, buffer, sz );
                 return sz;
             }
 
@@ -150,7 +153,7 @@ namespace Ferris
                     
                 if( m_digestValue.empty() )
                 {
-                    EVP_DigestFinal(&mdctx, md_value, &md_len);
+                    EVP_DigestFinal(mdctx, md_value, &md_len);
                     fh_stringstream ret;
                     radixdump( ret, md_value, md_value + md_len, 16 );
                     m_digestValue = ret.str();

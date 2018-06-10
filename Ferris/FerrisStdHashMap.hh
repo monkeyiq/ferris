@@ -60,7 +60,7 @@
 #endif
 namespace std
 {
-    using __gnu_cxx::hash;
+//    using __gnu_cxx::hash;
 };
 #define FERRIS_STD_HASH_MAP __gnu_cxx::hash_map
 #define FERRIS_STD_HASH_SET __gnu_cxx::hash_set

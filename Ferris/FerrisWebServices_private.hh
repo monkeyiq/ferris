@@ -240,7 +240,7 @@ namespace Ferris
                 LG_WEBSERVICE_D << "ContentLength:" << ContentLength << endl;
                 
                 fh_iostream ret = u->createStreamingUpload( ContentType );
-                ret->getCloseSig().connect( bind( sigc::mem_fun(*this, &_Self::OnStreamClosed ), m )); 
+                ret->getCloseSig().connect( sigc::bind( sigc::mem_fun(*this, &_Self::OnStreamClosed ), m )); 
                 return ret;
             }
         

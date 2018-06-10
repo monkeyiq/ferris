@@ -616,7 +616,7 @@ namespace Ferris
             {
                 DEBUG << "priv_getIOStream(top) status" << endl;
                 fh_stringstream ret = real_getIOStream( m );
-                ret->getCloseSig().connect( bind( sigc::mem_fun(*this, &_Self::OnStreamClosed ), m )); 
+                ret->getCloseSig().connect( sigc::bind( sigc::mem_fun(*this, &_Self::OnStreamClosed ), m )); 
                 DEBUG << "priv_getIOStream(ret) status" << endl;
                 return ret;
             }

@@ -1614,7 +1614,7 @@ NativeContext::priv_getIStream( ferris_ios::openmode m )
                 << " path:" << getDirPath()
                 << " m:" << m
                 << " m.masked:" << ferris_ios::maskOffFerrisOptions( m )
-                << " fs:" << fs
+//                << " fs:" << fs
                 << endl;
 
 #ifndef PLATFORM_OSX
@@ -1679,7 +1679,7 @@ NativeContext::priv_getIOStream( ferris_ios::openmode m )
                 << " path:" << getDirPath()
                 << " m:" << m
                 << " m.masked:" << ferris_ios::maskOffFerrisOptions( m )
-                << " fs:" << fs
+//                << " fs:" << fs
                 << endl;
     if( !fs->good() )
     {

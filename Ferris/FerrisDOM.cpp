@@ -971,6 +971,13 @@ namespace Ferris
         return handleBadDeclaration(ss);
 #endif
     }
+
+    std::string tostr( fh_domdoc doc, bool gFormatPrettyPrint )
+    {
+        fh_stringstream ss = tostream( doc, gFormatPrettyPrint );
+        return tostr(ss);
+    }
+    
     
     fh_stringstream tostream( fh_domdoc doc, bool gFormatPrettyPrint )
     {

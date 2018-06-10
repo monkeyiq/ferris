@@ -210,7 +210,9 @@ namespace Ferris
                 fh_stringstream ret;
                 if( !( m & std::ios::trunc ) )
                     ret = real_getIOStream( m );
-                ret->getCloseSig().connect( bind( sigc::mem_fun(*this, &_Self::priv_OnStreamClosed ), m ));
+                ret->getCloseSig().connect(
+                    sigc::bind(
+                        sigc::mem_fun(*this, &_Self::priv_OnStreamClosed ), m ));
 //                cerr << "priv_getIOStream()" << endl;
                 return ret;
             }
@@ -4404,6 +4406,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
         }
         fh_context makeInheritingEAContext( fh_context ctx )
         {
+            
             InheritingEAContext* c = new InheritingEAContext( 0, ctx );
             fh_context ret;
             Upcast( ret, c );

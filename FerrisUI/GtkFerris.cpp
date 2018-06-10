@@ -364,7 +364,7 @@ namespace FerrisUI
 
         fh_etagere et = Factory::getEtagere();
         et->getEmblemCreated_Sig().connect(
-            bind(
+            sigc::bind(
                 sigc::ptr_fun( getEmblemListViewPixbuf_Update ), &emblemPixbufs ));
         
         return emblemPixbufs[ em ];

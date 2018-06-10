@@ -198,7 +198,7 @@ namespace Ferris
                    std::exception)
             {
                 fh_stringstream ss;
-                ss->getCloseSig().connect( bind( sigc::mem_fun(*this, &_Self::priv_OnStreamClosed ), m ));
+                ss->getCloseSig().connect( sigc::bind( sigc::mem_fun(*this, &_Self::priv_OnStreamClosed ), m ));
                 return ss;
             }
 

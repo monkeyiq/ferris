@@ -38,8 +38,6 @@
 
 #include <sigc++/sigc++.h>
 #include <sigc++/slot.h>
-#include <sigc++/object.h>
-#include <sigc++/object_slot.h>
 
 #include <glib.h>
 

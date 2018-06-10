@@ -53,8 +53,6 @@
 #include <sigc++/sigc++.h>
 #include <sigc++/slot.h>
 #include <sigc++/bind.h>
-#include <sigc++/object.h>
-#include <sigc++/object_slot.h>
 
 #include <Ferris/FerrisQt_private.hh>
 #include <Ferris/FerrisKDE.hh>

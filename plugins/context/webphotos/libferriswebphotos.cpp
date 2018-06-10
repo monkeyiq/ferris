@@ -568,7 +568,7 @@ namespace Ferris
                     cerr << "Using old, non streaming upload because of scaling..." << endl;
                     fh_stringstream ret = real_getIOStream( m );
                     ret->getCloseSig().connect(
-                        bind( sigc::mem_fun(*this, &_Self::OnStreamClosed ), m )); 
+                        sigc::bind( sigc::mem_fun(*this, &_Self::OnStreamClosed ), m )); 
                     return ret;
                 }
                 
@@ -588,7 +588,7 @@ namespace Ferris
 
                 fh_iostream ret = wu->getUploadIOStream( ContentLength, title, desc );
                 ret->getCloseSig().connect(
-                    bind( sigc::mem_fun(*this, &_Self::OnStreamingWriteClosed ), m )); 
+                    sigc::bind( sigc::mem_fun(*this, &_Self::OnStreamingWriteClosed ), m )); 
                 return ret;
             }
         
@@ -740,7 +740,7 @@ namespace Ferris
                    std::exception)
         {
             fh_stringstream ret = real_getIOStream( m );
-            ret->getCloseSig().connect( bind( sigc::mem_fun(*this, &_Self::OnStreamClosed ), m )); 
+            ret->getCloseSig().connect( sigc::bind( sigc::mem_fun(*this, &_Self::OnStreamClosed ), m )); 
             return ret;
         }
         

@@ -6700,7 +6700,7 @@ string digest( fh_istream ifs, string DigestName )
 {
     fh_stringstream ret;
     
-    EVP_MD_CTX mdctx;
+    EVP_MD_CTX* mdctx;
     const EVP_MD *md;
     unsigned char md_value[EVP_MAX_MD_SIZE];
     unsigned int md_len;
@@ -6711,6 +6711,7 @@ string digest( fh_istream ifs, string DigestName )
 
     InitOpenSSL();
 
+
     md = EVP_get_digestbyname(DigestName.c_str());
     if( !md )
     {
@@ -6720,14 +6721,15 @@ string digest( fh_istream ifs, string DigestName )
 
     try
     {
-        EVP_DigestInit(&mdctx, md);
+        mdctx = EVP_MD_CTX_new();
+        EVP_DigestInit(mdctx, md);
         optimal_block_size = EVP_MD_block_size( md );
         buf = new char[optimal_block_size+1];
 
         while( ifs->good() )
         {
             ifs->read(buf, optimal_block_size);
-            EVP_DigestUpdate(&mdctx, buf, ifs->gcount());
+            EVP_DigestUpdate(mdctx, buf, ifs->gcount());
         }
 
         delete [] buf;
@@ -6737,9 +6739,11 @@ string digest( fh_istream ifs, string DigestName )
             return tostr(ret);
         }
             
-        EVP_DigestFinal(&mdctx, md_value, &md_len);
+        EVP_DigestFinal(mdctx, md_value, &md_len);
 
         radixdump( ret, md_value, md_value + md_len, 16 );
+
+        EVP_MD_CTX_free(mdctx);
         return tostr(ret);
     }
     catch( ... )
@@ -6747,6 +6751,7 @@ string digest( fh_istream ifs, string DigestName )
         s="";
     }
 
+    EVP_MD_CTX_free(mdctx);
     ret << s;
     return tostr(ret);
 }
@@ -11492,7 +11497,9 @@ Context::getMedallion()
     {
         connected = true;
         Factory::getPluginOutOfProcNotificationEngine().
-            getMedallionUpdated_Sig().connect( bind( sigc::ptr_fun( OnMedallionUpdated ), &cache ) );
+            getMedallionUpdated_Sig().connect(
+                sigc::bind(
+                    sigc::ptr_fun( OnMedallionUpdated ), &cache ) );
     }
 
     if( fh_medallion m = cache.get( this ) )

@@ -738,7 +738,7 @@ namespace Ferris
          * wrong with the stream
          */
         fh_iostream ret = priv_getIOStream(m);
-        LG_ATTR_D << "getIOStream() ret:" << ret << endl;
+//        LG_ATTR_D << "getIOStream() ret:" << ret << endl;
 
 //         ret->exceptions( ios::badbit | ios::failbit );
 //         ret->exceptions( ios::goodbit);
@@ -1278,9 +1278,9 @@ namespace Ferris
 //             cerr << "EA_Atom_ReadWrite::getIOStream(8)" << endl;
 //             cerr << "EA_Atom_ReadWrite::getIOStream(8) ss.rc:" << ss->rdbuf()->getReferenceCount() << endl;
             ss->getCloseSig().connect(
-                bind(
-                    bind(
-                        bind(
+                sigc::bind(
+                    sigc::bind(
+                        sigc::bind(
                             sigc::mem_fun( *this, &_Self::On_IOStreamClosed),
                             rdn ),
                         c ),

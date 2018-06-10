@@ -376,7 +376,7 @@ namespace Ferris
                 {
 //                  ret << data;
                 }
-                ret->getCloseSig().connect( bind( sigc::mem_fun( *this, &_Self::OnStreamClosed ), m ));
+                ret->getCloseSig().connect( sigc::bind( sigc::mem_fun( *this, &_Self::OnStreamClosed ), m ));
                 return ret;
             }
 

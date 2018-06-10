@@ -399,8 +399,8 @@ namespace Ferris
                 }
 
                 
-                XercesDOMSupport theDOMSupport;
-                XercesParserLiaison theParserLiaison(theDOMSupport);
+                XercesParserLiaison theParserLiaison;
+                XercesDOMSupport theDOMSupport( theParserLiaison );
 
                 const XercesDOMWrapperParsedSource parsedSource(
                     GetImpl(inputDOM), theParserLiaison, theDOMSupport );
@@ -562,7 +562,7 @@ namespace Ferris
 
                 LG_XSLTFS_D << "getIOStream() on non base element" << endl;
                 fh_iostream ret = _Base::getIOStream( m );
-                ret->getCloseSig().connect( bind( sigc::mem_fun( *this, &_Self::OnSubStreamClosed ), m ));
+                ret->getCloseSig().connect( sigc::bind( sigc::mem_fun( *this, &_Self::OnSubStreamClosed ), m ));
                 return ret;
             }
     protected:
@@ -803,8 +803,8 @@ namespace Ferris
                     
                 LG_XSLTFS_D << "xmlContext:" << xmlContext->getURL() << endl;
                     
-                XercesDOMSupport theDOMSupport;
-                XercesParserLiaison theParserLiaison(theDOMSupport);
+                XercesParserLiaison theParserLiaison;
+                XercesDOMSupport theDOMSupport( theParserLiaison );
 
                 const XercesDOMWrapperParsedSource parsedSource(
                     GetImpl(theDOM), theParserLiaison, theDOMSupport );
@@ -1755,13 +1755,13 @@ namespace Ferris
         if( Lazy_XSLTFS_DOMWrapper* lp = dynamic_cast<Lazy_XSLTFS_DOMWrapper*>( p ) )
         {
             fh_iostream ret = Delegate->getParent()->priv_getIOStream( m );
-            ret->getCloseSig().connect( bind( sigc::mem_fun( *this, &_Self::OnDocumentRootStreamClosed ), m ));
+            ret->getCloseSig().connect( sigc::bind( sigc::mem_fun( *this, &_Self::OnDocumentRootStreamClosed ), m ));
             return ret;
         }
                 
         fh_iostream ret = Delegate->priv_getIOStream( m );
 //                fh_stringstream ret = priv_getRealStream( m );
-        ret->getCloseSig().connect( bind( sigc::mem_fun( *this, &_Self::OnDocumentRootStreamClosed ), m ));
+        ret->getCloseSig().connect( sigc::bind( sigc::mem_fun( *this, &_Self::OnDocumentRootStreamClosed ), m ));
         return ret;
     }
     

@@ -35,6 +35,7 @@
 #include <Ferris/Ferris.hh>
 #include <Ferris/ChainedViewContext.hh>
 #include <Ferris/SignalStreams.hh>
+#include <Ferris/Debug.hh>
 #include <sigc++/sigc++.h>
 #include <sys/utsname.h>
 

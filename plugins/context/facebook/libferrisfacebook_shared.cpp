@@ -1051,7 +1051,7 @@ namespace Ferris
                 cerr << "Using old, non streaming upload because of scaling..." << endl;
                 fh_stringstream ret;
                 ret->getCloseSig().connect(
-                    bind( sigc::mem_fun(*this, &_Self::OnStreamClosed ), ContentType )); 
+                    sigc::bind( sigc::mem_fun(*this, &_Self::OnStreamClosed ), ContentType )); 
                 return ret;
             }
             

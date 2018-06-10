@@ -38,8 +38,6 @@
 #include <sigc++/sigc++.h>
 #include <sigc++/slot.h>
 #include <sigc++/bind.h>
-#include <sigc++/object.h>
-#include <sigc++/object_slot.h>
 
 #include <errno.h>
 
@@ -283,7 +281,7 @@ namespace Ferris
                    std::exception)
             {
                 fh_stringstream ret = real_getIOStream();
-                ret->getCloseSig().connect( bind( sigc::mem_fun( *this, &CommonDBContext::OnStreamClosed ), m )); 
+                ret->getCloseSig().connect( sigc::bind( sigc::mem_fun( *this, &CommonDBContext::OnStreamClosed ), m )); 
 
                 LG_COMMONDB_D << "priv_getIOStream() url:" << this->getURL()
                               << " tellp:" << ret->tellp()

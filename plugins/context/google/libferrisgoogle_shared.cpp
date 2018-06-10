@@ -1962,7 +1962,7 @@ namespace Ferris
         DEBUG << "preparing iostream for user..." << endl;
         fh_iostream ret = m_streamToQIO->getStream();
         ferris_ios::openmode m = 0;
-        ret->getCloseSig().connect( bind( sigc::mem_fun(*this, &_Self::OnStreamClosed ), m )); 
+        ret->getCloseSig().connect( sigc::bind( sigc::mem_fun(*this, &_Self::OnStreamClosed ), m )); 
         DEBUG << "GDriveFile::getIOStream(end)" << endl;
         return ret;
     }

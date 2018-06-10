@@ -1278,7 +1278,7 @@ namespace Ferris
             {
                 stringstream ss;
                 ss << "Error. No RSP element at top level of data." << endl
-                   << "Data from server:" << tostream( doc, true ) << endl;
+                   << "Data from server:" << tostr( doc, true ) << endl;
                 LG_WEBPHOTO_W << tostr(ss);
                 Throw_WebPhotoException( tostr(ss), 0 );
             }

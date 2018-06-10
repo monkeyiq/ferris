@@ -1017,7 +1017,8 @@ namespace Ferris
 
                 fh_iostream ret = w->getEditIOStream( ContentLength, title, getPassword(), isPrivate() );
                 ret->getCloseSig().connect(
-                    bind( sigc::mem_fun(*this, &_Self::OnStreamingWriteClosed ), m )); 
+                    sigc::bind(
+                        sigc::mem_fun(*this, &_Self::OnStreamingWriteClosed ), m )); 
                 DEBUG << "priv_getIOStream(2e)" << endl;
                 return ret;
             }

@@ -1,8 +1,8 @@
 PACKAGE=libferris
-AC_INIT(libferris, 1.5.30)
-LIBFERRIS_BETA=30
-LIBFERRIS_MINOR=5
-LIBFERRIS_MAJOR=1
+AC_INIT(libferris, 2.0.1)
+LIBFERRIS_BETA=1
+LIBFERRIS_MINOR=0
+LIBFERRIS_MAJOR=2
 
 dnl
 dnl  /usr/local/src/git/gnulib/gnulib-tool --import strverscmp readlinkat extern-inline
