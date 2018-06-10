@@ -12,7 +12,7 @@ INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib                            
 	@GLIB_CFLAGS@                                   
 
 test_setStrAttr_SOURCES = test_setStrAttr.cpp
-test_setStrAttr_LDFLAGS = @STLPORT_LDFLAGS@ @GLIB_LIBS@        
+test_setStrAttr_LDFLAGS =  @GLIB_LIBS@        
 test_setStrAttr_LDADD = -lpopt @LIBFERRIS_LA@         
 
 
