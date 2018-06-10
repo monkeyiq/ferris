@@ -207,9 +207,9 @@ typedef class EA_Atom_Static FspotByteArrayAttribute;
 
         if( !r )
         {
-            string regexstr = getEDBString( FDB_GENERAL,
-                                            CFG_FSPOT_POSITIVE_OVERLAY_REGEX_K,
-                                            CFG_FSPOT_POSITIVE_OVERLAY_REGEX_DEF );
+            string regexstr = getConfigString( FDB_GENERAL,
+                                               CFG_FSPOT_POSITIVE_OVERLAY_REGEX_K,
+                                               CFG_FSPOT_POSITIVE_OVERLAY_REGEX_DEF );
             if( !regexstr.empty() )
             {
                 r = toregexh( regexstr );

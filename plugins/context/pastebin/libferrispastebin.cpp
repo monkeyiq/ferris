@@ -389,7 +389,7 @@ namespace Ferris
         
         std::stringstream ifs;
         QList<QNetworkCookie> cl;
-        std::string bakedCookies = getEDBString( m_dataPath, earl, "" );
+        std::string bakedCookies = getConfigString( m_dataPath, earl, "" );
         if( bakedCookies.empty() )
         {
             DEBUG << "cookiesForUrl() bakedCookies is empty!" << endl;
@@ -459,7 +459,7 @@ namespace Ferris
         DEBUG << "m_dataPath:" << m_dataPath << endl;
         DEBUG << "setCookiesFromUrl() earl:" << earl << endl;
         
-        setEDBString( m_dataPath, earl, tostr(ofs), true, true );
+        setConfigString( m_dataPath, earl, tostr(ofs), true );
     }
     
     
@@ -568,7 +568,7 @@ namespace Ferris
         }
         
 
-//        string bakedCookies = getEDBString( FDB_SECURE, "wiki-cookies", "" );
+//        string bakedCookies = getConfigString( FDB_SECURE, "wiki-cookies", "" );
 //        if( !bakedCookies.empty())
 //            loadCookies( getQManager()->cookieJar(), bakedCookies );
         
@@ -643,7 +643,7 @@ namespace Ferris
                     //     archive & *si;
                     // }
                     // DEBUG << "ofs:" << tostr(ofs) << endl;
-                    // setEDBString( FDB_SECURE, "wiki-cookies", tostr(ofs) );
+                    // setConfigString( FDB_SECURE, "wiki-cookies", tostr(ofs) );
                     
                     
                 }

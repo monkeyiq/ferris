@@ -391,11 +391,10 @@ namespace Ferris
         {
             try
             {
-                string envNamesCSV = getEDBString(
+                string envNamesCSV = getConfigString(
                     FDB_GENERAL,
                     "default-inherited-environment-names",
                     "",
-                    true,
                     true );
 
                 set<string> theSet;

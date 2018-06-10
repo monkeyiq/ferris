@@ -190,9 +190,9 @@ namespace Ferris
         if( v )
         {
             v = false;
-            ret = isTrue( getEDBString( FDB_GENERAL,
-                                        CFG_RDFCACHE_ATTRS_ENABLED_K,
-                                        CFG_RDFCACHE_ATTRS_ENABLED_DEFAULT ) );
+            ret = isTrue( getConfigString( FDB_GENERAL,
+                                           CFG_RDFCACHE_ATTRS_ENABLED_K,
+                                           CFG_RDFCACHE_ATTRS_ENABLED_DEFAULT ) );
         }
         return ret;
     }
@@ -2470,9 +2470,9 @@ namespace Ferris
              static FERRIS_STD_HASH_SET< std::string > col;
              if( col.empty() )
              {
-                 string d = getEDBString( FDB_GENERAL,
-                                          CFG_RDFCACHE_ATTRS_LIST_K,
-                                          CFG_RDFCACHE_ATTRS_LIST_DEFAULT );
+                 string d = getConfigString( FDB_GENERAL,
+                                             CFG_RDFCACHE_ATTRS_LIST_K,
+                                             CFG_RDFCACHE_ATTRS_LIST_DEFAULT );
                  if( !d.empty() )
                  {
                      stringlist_t sl;

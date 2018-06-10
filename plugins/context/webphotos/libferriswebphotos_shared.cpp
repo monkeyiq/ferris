@@ -993,7 +993,7 @@ namespace Ferris
     {
         stringstream ss;
         ss << CFG_WEBPHOTOS_TOKEN_K << "-" << getImplementationShortName() << "-" << getUserName();
-        string ret = getEDBString( FDB_SECURE, tostr(ss), CFG_WEBPHOTOS_TOKEN_DEFAULT );
+        string ret = getConfigString( FDB_SECURE, tostr(ss), CFG_WEBPHOTOS_TOKEN_DEFAULT );
 
         LG_WEBPHOTO_D << "getting token key:" << ss.str() << endl;
         LG_WEBPHOTO_D << "have token:" << ret << endl;
@@ -1006,7 +1006,7 @@ namespace Ferris
     {
         stringstream ss;
         ss << CFG_WEBPHOTOS_TOKEN_K << "-" << getImplementationShortName() << "-" << getUserName();
-        setEDBString( FDB_SECURE, tostr(ss), token );
+        setConfigString( FDB_SECURE, tostr(ss), token );
         LG_WEBPHOTO_D << "setting token key:" << ss.str() << endl;
     }
 
@@ -1022,8 +1022,8 @@ namespace Ferris
     {
         stringstream ss;
         ss << CFG_WEBPHOTOS_DEFAULT_USERNAME_KEY << "-" << getImplementationShortName();
-        string ret = getEDBString( FDB_SECURE, tostr(ss),
-                                   CFG_WEBPHOTOS_DEFAULT_USERNAME_DEFAULT );
+        string ret = getConfigString( FDB_SECURE, tostr(ss),
+                                      CFG_WEBPHOTOS_DEFAULT_USERNAME_DEFAULT );
         // cerr << "WebPhotos::getDefaultUsername() k:" << ss.str()
         //      << " ret:" << ret << endl;
         // cerr << "rest url:" << getRESTURL() << endl;
@@ -1035,7 +1035,7 @@ namespace Ferris
     {
         stringstream ss;
         ss << CFG_WEBPHOTOS_DEFAULT_USERNAME_KEY << "-" << getImplementationShortName();
-        setEDBString( FDB_SECURE, tostr(ss), s );
+        setConfigString( FDB_SECURE, tostr(ss), s );
     }
 
 
@@ -1044,7 +1044,7 @@ namespace Ferris
     {
         stringstream ss;
         ss << CFG_WEBPHOTOS_LARGEST_DIM_K << "-" << getImplementationShortName();
-        string ret = getEDBString( FDB_GENERAL, tostr(ss), "0" );
+        string ret = getConfigString( FDB_GENERAL, tostr(ss), "0" );
         return toint(ret);
     }
     
@@ -1053,7 +1053,7 @@ namespace Ferris
     {
         stringstream ss;
         ss << CFG_WEBPHOTOS_LARGEST_DIM_K << "-" << getImplementationShortName();
-        setEDBString( FDB_GENERAL, tostr(ss), tostr(v) );
+        setConfigString( FDB_GENERAL, tostr(ss), tostr(v) );
     }
 
 
@@ -1062,7 +1062,7 @@ namespace Ferris
     {
         stringstream ss;
         ss << CFG_WEBPHOTOS_INCLUDE_EA_IS_PRESENT_REGEX_K << "-" << getImplementationShortName();
-        string s = getEDBString( FDB_GENERAL, tostr(ss), "" );
+        string s = getConfigString( FDB_GENERAL, tostr(ss), "" );
         return s;
     }
     
@@ -1086,7 +1086,7 @@ namespace Ferris
     {
         stringstream ss;
         ss << CFG_WEBPHOTOS_INCLUDE_EA_IS_PRESENT_REGEX_K << "-" << getImplementationShortName();
-        setEDBString( FDB_GENERAL, tostr(ss), s );
+        setConfigString( FDB_GENERAL, tostr(ss), s );
         
         if( s.empty() )
             m_includeEAIsPresentRegex = 0;
@@ -1099,7 +1099,7 @@ namespace Ferris
     {
         stringstream ss;
         ss << CFG_WEBPHOTOS_INCLUDE_EA_AND_VALUE_REGEX_K << "-" << getImplementationShortName();
-        string s = getEDBString( FDB_GENERAL, tostr(ss), "" );
+        string s = getConfigString( FDB_GENERAL, tostr(ss), "" );
         return s;
     }
     
@@ -1124,7 +1124,7 @@ namespace Ferris
 //        cerr << "setDefaultIncludeEAandValueRegex() s:" << s << endl;
         stringstream ss;
         ss << CFG_WEBPHOTOS_INCLUDE_EA_AND_VALUE_REGEX_K << "-" << getImplementationShortName();
-        setEDBString( FDB_GENERAL, tostr(ss), s );
+        setConfigString( FDB_GENERAL, tostr(ss), s );
 
         if( s.empty() )
             m_includeEAandValueRegex = 0;
@@ -1138,7 +1138,7 @@ namespace Ferris
     {
         stringstream ss;
         ss << CFG_WEBPHOTOS_DEFAULT_PROTECTION_PUBLIC_K << "-" << getImplementationShortName();
-        string ret = getEDBString( FDB_GENERAL, tostr(ss), "0" );
+        string ret = getConfigString( FDB_GENERAL, tostr(ss), "0" );
         return isTrue(ret);
     }
     
@@ -1147,14 +1147,14 @@ namespace Ferris
 //        cerr << "setDefaultImageProtectionPublic() v:" << v << endl;
         stringstream ss;
         ss << CFG_WEBPHOTOS_DEFAULT_PROTECTION_PUBLIC_K << "-" << getImplementationShortName();
-        setEDBString( FDB_GENERAL, tostr(ss), tostr(v) );
+        setConfigString( FDB_GENERAL, tostr(ss), tostr(v) );
     }
     
     bool WebPhotos::isDefaultImageProtectionFriend()
     {
         stringstream ss;
         ss << CFG_WEBPHOTOS_DEFAULT_PROTECTION_FRIEND_K << "-" << getImplementationShortName();
-        string ret = getEDBString( FDB_GENERAL, tostr(ss), "0" );
+        string ret = getConfigString( FDB_GENERAL, tostr(ss), "0" );
         return isTrue(ret);
     }
         
@@ -1162,7 +1162,7 @@ namespace Ferris
     {
         stringstream ss;
         ss << CFG_WEBPHOTOS_DEFAULT_PROTECTION_FRIEND_K << "-" << getImplementationShortName();
-        setEDBString( FDB_GENERAL, tostr(ss), tostr(v) );
+        setConfigString( FDB_GENERAL, tostr(ss), tostr(v) );
     }
     
         
@@ -1170,7 +1170,7 @@ namespace Ferris
     {
         stringstream ss;
         ss << CFG_WEBPHOTOS_DEFAULT_PROTECTION_FAMILY_K << "-" << getImplementationShortName();
-        string ret = getEDBString( FDB_GENERAL, tostr(ss), "0" );
+        string ret = getConfigString( FDB_GENERAL, tostr(ss), "0" );
         return isTrue(ret);
     }
             
@@ -1178,7 +1178,7 @@ namespace Ferris
     {
         stringstream ss;
         ss << CFG_WEBPHOTOS_DEFAULT_PROTECTION_FAMILY_K << "-" << getImplementationShortName();
-        setEDBString( FDB_GENERAL, tostr(ss), tostr(v) );
+        setConfigString( FDB_GENERAL, tostr(ss), tostr(v) );
     }
     
             
@@ -1188,7 +1188,7 @@ namespace Ferris
     {
         stringstream ss;
         ss << CFG_WEBPHOTOS_USERNAME_K << "-" << getImplementationShortName();
-        string ret = getEDBString( FDB_SECURE, tostr(ss), "" );
+        string ret = getConfigString( FDB_SECURE, tostr(ss), "" );
         cerr << "WebPhotos::getUserName() k:" << ss.str()
              << " ret:" << ret << endl;
         if( ret.empty() )
@@ -1205,7 +1205,7 @@ namespace Ferris
     {
         stringstream ss;
         ss << CFG_WEBPHOTOS_FULLNAME_K << "-" << getImplementationShortName();
-        string ret = getEDBString( FDB_SECURE, tostr(ss), "" );
+        string ret = getConfigString( FDB_SECURE, tostr(ss), "" );
         return ret;
     }
     
@@ -1217,7 +1217,7 @@ namespace Ferris
         m_username = s;
         stringstream ss;
         ss << CFG_WEBPHOTOS_USERNAME_K << "-" << getImplementationShortName();
-        setEDBString( FDB_SECURE, tostr(ss), s );
+        setConfigString( FDB_SECURE, tostr(ss), s );
     }
     
     void
@@ -1225,7 +1225,7 @@ namespace Ferris
     {
         stringstream ss;
         ss << CFG_WEBPHOTOS_FULLNAME_K << "-" << getImplementationShortName();
-        setEDBString( FDB_SECURE, tostr(ss), s );
+        setConfigString( FDB_SECURE, tostr(ss), s );
     }
     
 

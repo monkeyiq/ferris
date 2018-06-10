@@ -40,18 +40,16 @@ namespace Ferris
     /******************************************************************************/
     /******************************************************************************/
 
-    FERRISEXP_API std::string getEDBString( const std::string& edbname_relhome,
-                                            const std::string& k,
-                                            const std::string& def,
-                                            bool isEdbName_RelativeToHome = true,
-                                            bool throw_for_errors = false );
-    
-    FERRISEXP_API void setEDBString( const std::string& edbname_relhome,
-                                     const std::string& k,
-                                     const std::string& v,
-                                     bool isEdbName_RelativeToHome = true,
-                                     bool throw_for_errors = false );
+    FERRISEXP_API std::string getConfigString( const std::string& dbpath,
+                                               const std::string& k,
+                                               const std::string& def,
+                                               bool throw_for_errors = false );
 
+    FERRISEXP_API void setConfigString( const std::string& dbpath,
+                                        const std::string& k,
+                                        const std::string& v,
+                                        bool throw_for_errors = false );
+    
     
 
 

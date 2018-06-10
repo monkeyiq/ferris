@@ -86,11 +86,11 @@ namespace Ferris
 //            cerr << "getUserPass(top) serv:" << serv << endl;
             LDAPAuthInfo ret;
 
-            ret.username = getEDBString( DBNAME, makeKey( serv, "-username" ), "");
-            ret.password = getEDBString( DBNAME, makeKey( serv, "-password" ), "");
-            ret.basedn   = getEDBString( DBNAME, makeKey( serv, "-basedn" ), "");
+            ret.username = getConfigString( DBNAME, makeKey( serv, "-username" ), "");
+            ret.password = getConfigString( DBNAME, makeKey( serv, "-password" ), "");
+            ret.basedn   = getConfigString( DBNAME, makeKey( serv, "-basedn" ), "");
             ret.lookup_basedn =
-                isTrue( getEDBString( DBNAME, makeKey( serv, "-lookup-basedn" ), "0" ));
+                isTrue( getConfigString( DBNAME, makeKey( serv, "-lookup-basedn" ), "0" ));
             if( ret.basedn.empty() )
                 ret.lookup_basedn = "1";
 
@@ -104,10 +104,10 @@ namespace Ferris
         
         void setUserPass( std::string serv, const LDAPAuthInfo& d )
         {
-            setEDBString( DBNAME, makeKey( serv, "-username" ), d.username );
-            setEDBString( DBNAME, makeKey( serv, "-password" ), d.password );
-            setEDBString( DBNAME, makeKey( serv, "-basedn" ), d.basedn );
-            setEDBString( DBNAME, makeKey( serv, "-lookup-basedn" ), tostr(d.lookup_basedn) );
+            setConfigString( DBNAME, makeKey( serv, "-username" ), d.username );
+            setConfigString( DBNAME, makeKey( serv, "-password" ), d.password );
+            setConfigString( DBNAME, makeKey( serv, "-basedn" ), d.basedn );
+            setConfigString( DBNAME, makeKey( serv, "-lookup-basedn" ), tostr(d.lookup_basedn) );
         }
         
     };

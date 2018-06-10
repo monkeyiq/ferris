@@ -128,9 +128,9 @@ namespace Ferris
             , m_secDBPrefix( secdbprefix )
             , m_consumerKeyPrefix( consumerKeyPrefix )
         {
-            m_uid        = getEDBString( DBNAME, CFG_IDENTICA_UID_K,       CFG_IDENTICA_UID_DEF );
-            m_username   = getEDBString( DBNAME, CFG_IDENTICA_USERNAME_K,  CFG_IDENTICA_USERNAME_DEF );
-            m_fullname   = getEDBString( DBNAME, CFG_IDENTICA_FULLNAME_K,  CFG_IDENTICA_FULLNAME_DEF );
+            m_uid        = getConfigString( DBNAME, CFG_IDENTICA_UID_K,       CFG_IDENTICA_UID_DEF );
+            m_username   = getConfigString( DBNAME, CFG_IDENTICA_USERNAME_K,  CFG_IDENTICA_USERNAME_DEF );
+            m_fullname   = getConfigString( DBNAME, CFG_IDENTICA_FULLNAME_K,  CFG_IDENTICA_FULLNAME_DEF );
 
             if( !m_consumerKeyPrefix.empty() )
             {
@@ -148,8 +148,8 @@ namespace Ferris
                 const string DBNAME = FDB_SECURE;
                 std::string k;
 
-                m_token = getEDBString( DBNAME, m_secDBPrefix + "-token", "" );
-                m_tokenSecret = getEDBString( DBNAME, m_secDBPrefix + "-token-secret", "" );
+                m_token = getConfigString( DBNAME, m_secDBPrefix + "-token", "" );
+                m_tokenSecret = getConfigString( DBNAME, m_secDBPrefix + "-token-secret", "" );
             }
     
     
@@ -277,8 +277,8 @@ namespace Ferris
             DEBUG << "accessSecret:" << m_tokenSecret << endl;
 
             const string DBNAME = FDB_SECURE;
-            setEDBString( DBNAME, m_secDBPrefix + "-token", m_token );
-            setEDBString( DBNAME, m_secDBPrefix + "-token-secret", m_tokenSecret );
+            setConfigString( DBNAME, m_secDBPrefix + "-token", m_token );
+            setConfigString( DBNAME, m_secDBPrefix + "-token-secret", m_tokenSecret );
             return frompm( pm );
         }
 

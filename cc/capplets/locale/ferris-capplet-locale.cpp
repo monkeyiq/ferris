@@ -52,13 +52,13 @@ GtkWidget* w_strftime;
 
 void SaveData()
 {
-    setEDBString( FDB_GENERAL, "strftime-format-string",
-                  gtk_entry_get_text(GTK_ENTRY(w_strftime)));
+    setConfigString( FDB_GENERAL, "strftime-format-string",
+                     gtk_entry_get_text(GTK_ENTRY(w_strftime)));
 }
 
 void LoadData()
 {
-    string t = getEDBString( FDB_GENERAL, "strftime-format-string", "" );
+    string t = getConfigString( FDB_GENERAL, "strftime-format-string", "" );
     if( !t.length() )
     {
         t = "%b %e %H:%M";

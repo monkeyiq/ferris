@@ -301,7 +301,7 @@ perhapsFixUUIDLinks( fh_model m, string fn, const ml_t& nodes )
                     fh_node earlnode = niter->first;
                     fh_node uuidnode = niter->second;
 
-                    static const string smushLeaderRegexString = getEDBString(
+                    static const string smushLeaderRegexString = getConfigString(
                         FDB_GENERAL,
                         CFG_RDF_GLOBAL_SMUSH_GROUP_LEADER_K,
                         CFG_RDF_GLOBAL_SMUSH_GROUP_LEADER_DEFAULT );

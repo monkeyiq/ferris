@@ -77,7 +77,7 @@ namespace Ferris
                                       const std::string& def )
         {
             string k = agentUUID + "_" + uk;
-            return getEDBString( FDB_GENERAL, k, def, true, true );
+            return getConfigString( FDB_GENERAL, k, def, true );
         }
 
         static void setAgentConfig( const std::string& agentUUID,
@@ -85,7 +85,7 @@ namespace Ferris
                                     const std::string& v )
         {
             string k = agentUUID + "_" + uk;
-            return setEDBString( FDB_GENERAL, k, v );
+            return setConfigString( FDB_GENERAL, k, v );
         }
 
         typedef map< string, fh_agent > agents_t;
@@ -639,12 +639,12 @@ namespace Ferris
             setAgentConfig( uuid, AI_AGENT_TYPE_KEY,          AI_AGENT_TYPE_BINARY );
             
             {
-                string n = getEDBString( FDB_GENERAL,
-                                         AI_AGENT_UUIDLIST_KEY,
-                                         AI_AGENT_UUIDLIST_DEFAULT );
+                string n = getConfigString( FDB_GENERAL,
+                                            AI_AGENT_UUIDLIST_KEY,
+                                            AI_AGENT_UUIDLIST_DEFAULT );
                 stringlist_t sl = Util::parseCommaSeperatedList( n );
                 sl.push_back( uuid );
-                setEDBString( FDB_GENERAL, AI_AGENT_UUIDLIST_KEY, Util::createCommaSeperatedList( sl ));
+                setConfigString( FDB_GENERAL, AI_AGENT_UUIDLIST_KEY, Util::createCommaSeperatedList( sl ));
             }
             
             return ret;
@@ -668,12 +668,12 @@ namespace Ferris
         {
             string name = d->getName();
 
-            string n = getEDBString( FDB_GENERAL,
-                                     AI_AGENT_UUIDLIST_KEY,
-                                     AI_AGENT_UUIDLIST_DEFAULT );
+            string n = getConfigString( FDB_GENERAL,
+                                        AI_AGENT_UUIDLIST_KEY,
+                                        AI_AGENT_UUIDLIST_DEFAULT );
             stringlist_t sl = Util::parseCommaSeperatedList( n );
             sl.erase( find( sl.begin(), sl.end(), d->getUUID() ) );
-            setEDBString( FDB_GENERAL, AI_AGENT_UUIDLIST_KEY, Util::createCommaSeperatedList( sl ));
+            setConfigString( FDB_GENERAL, AI_AGENT_UUIDLIST_KEY, Util::createCommaSeperatedList( sl ));
         }
         
         fh_agent getCompleteAgent()
@@ -1023,9 +1023,9 @@ namespace Ferris
             if( forceReload || cache.empty() )
             {
                 cache.clear();
-                string n = getEDBString( FDB_GENERAL,
-                                         AI_AGENT_UUIDLIST_KEY,
-                                         AI_AGENT_UUIDLIST_DEFAULT );
+                string n = getConfigString( FDB_GENERAL,
+                                            AI_AGENT_UUIDLIST_KEY,
+                                            AI_AGENT_UUIDLIST_DEFAULT );
                 stringlist_t sl = Util::parseCommaSeperatedList( n );
                 
                 for( stringlist_t::iterator si = sl.begin(); si!=sl.end(); ++si )

@@ -892,7 +892,7 @@ my_search_equal_func(GtkTreeModel *model,
         {
             fh_stringstream ss;
             ss << "mysql-server-" << serv;
-            setEDBString( DBNAME, tostr(ss), "1" );
+            setConfigString( DBNAME, tostr(ss), "1" );
         }
 
 //         setUserPass( serv, user, pass );
@@ -907,7 +907,7 @@ my_search_equal_func(GtkTreeModel *model,
 
         fh_stringstream ss;
         gtk_tree_model_foreach( tm, GtkTreeModelForeachFunc(SaveData_fe), &ss );
-        setEDBString( DBNAME, "mysql-server-keys", tostr(ss) );
+        setConfigString( DBNAME, "mysql-server-keys", tostr(ss) );
 
         GtkTreeSelection* selection = gtk_tree_view_get_selection ( tv );
         gtk_tree_selection_unselect_all( selection );
@@ -1075,7 +1075,7 @@ my_search_equal_func(GtkTreeModel *model,
         string servdb;
     
         fh_stringstream kss;
-        kss << getEDBString( DBNAME, "mysql-server-keys", "" );
+        kss << getConfigString( DBNAME, "mysql-server-keys", "" );
 
         while( getline( kss, servdb, ' ' ))
         { 

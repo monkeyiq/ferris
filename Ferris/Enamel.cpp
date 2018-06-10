@@ -481,7 +481,7 @@ namespace Ferris
             string strkey = getName();
             char* key     = (char*)strkey.c_str();
 
-            string v = getEDBString( FDB_LOGGING, strkey, "" );
+            string v = getConfigString( FDB_LOGGING, strkey, "" );
             if( v.length() )
             {
                 std::stringstream ss;
@@ -551,7 +551,7 @@ namespace Ferris
         fh_ostream&
         LogStateBase::getStream( Timber::Facility_t f, state_t d )
         {
-            string lfn = getEDBString( FDB_GENERAL, LOGGING_TO_FILENAME_KEY, "" );
+            string lfn = getConfigString( FDB_GENERAL, LOGGING_TO_FILENAME_KEY, "" );
             if( !lfn.empty() )
             {
                 static fh_fstream fs = fh_fstream( lfn, ios::out | ios::app );
@@ -893,8 +893,9 @@ namespace Ferris
                     int extraArgInfo = 0;
                     
                     if( !isTrue(
-                            getEDBString( FDB_GENERAL,
-                                          SHOW_LOGGING_POPT_OPTIONS_BY_DEFAULT, "0" )))
+                            getConfigString( FDB_GENERAL,
+                                             SHOW_LOGGING_POPT_OPTIONS_BY_DEFAULT,
+                                             "0" )))
                     {
                         extraArgInfo |= POPT_ARGFLAG_DOC_HIDDEN;
                     }

@@ -442,7 +442,7 @@ int main( int argc, char** argv )
             {
                 fh_stringstream ss;
                 ss << "mysql-server-" << serv;
-                setEDBString( DBNAME, tostr(ss), "1" );
+                setConfigString( DBNAME, tostr(ss), "1" );
             }
             
             setUserPass( serv, user, pass );            

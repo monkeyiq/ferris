@@ -172,7 +172,7 @@ void SaveSmush( fh_TreeSmushing newTree, fh_SmushSet ss, GtkTreeIter* piter )
 
 void SaveData()
 {
-    setEDBString( FDB_GENERAL,
+    setConfigString( FDB_GENERAL,
                   CFG_RDF_GLOBAL_SMUSH_GROUP_LEADER_K,
                   tostr( GTK_ENTRY(w_GlobalSmushGroupLeaderRegex)));
     
@@ -201,14 +201,14 @@ void SaveData()
     m_TreeSmushing->sync();
 
 
-    setEDBString( FDB_GENERAL, CFG_RDFCACHE_ATTRS_ENABLED_K,
-                  tostr(gtk_toggle_button_get_active(
-                            GTK_TOGGLE_BUTTON(w_RDFCacheAttrsEnabled))));
+    setConfigString( FDB_GENERAL, CFG_RDFCACHE_ATTRS_ENABLED_K,
+                     tostr(gtk_toggle_button_get_active(
+                               GTK_TOGGLE_BUTTON(w_RDFCacheAttrsEnabled))));
     
     {
         stringlist_t sl = m_RDFCacheAttrsList->getStringList();
         string d = Util::createCommaSeperatedList( sl );
-        setEDBString( FDB_GENERAL, CFG_RDFCACHE_ATTRS_LIST_K, d );
+        setConfigString( FDB_GENERAL, CFG_RDFCACHE_ATTRS_LIST_K, d );
     }
     
 }
@@ -263,14 +263,14 @@ void LoadData()
 
     gtk_toggle_button_set_active(
         GTK_TOGGLE_BUTTON(w_RDFCacheAttrsEnabled),
-        isTrue( getEDBString( FDB_GENERAL,
-                              CFG_RDFCACHE_ATTRS_ENABLED_K,
-                              CFG_RDFCACHE_ATTRS_ENABLED_DEFAULT )));
+        isTrue( getConfigString( FDB_GENERAL,
+                                 CFG_RDFCACHE_ATTRS_ENABLED_K,
+                                 CFG_RDFCACHE_ATTRS_ENABLED_DEFAULT )));
 
     {
-        string d = getEDBString( FDB_GENERAL,
-                                 CFG_RDFCACHE_ATTRS_LIST_K,
-                                 CFG_RDFCACHE_ATTRS_LIST_DEFAULT );
+        string d = getConfigString( FDB_GENERAL,
+                                    CFG_RDFCACHE_ATTRS_LIST_K,
+                                    CFG_RDFCACHE_ATTRS_LIST_DEFAULT );
         stringlist_t sl;
         Util::parseCommaSeperatedList( d, sl );
         m_RDFCacheAttrsList->setStringList( sl );
@@ -641,9 +641,9 @@ void make_window()
                                   0, 1, r, r+1 );
         w = w_GlobalSmushGroupLeaderRegex = gtk_entry_new();
         gtk_entry_set_text( GTK_ENTRY(w),
-                            getEDBString( FDB_GENERAL,
-                                          CFG_RDF_GLOBAL_SMUSH_GROUP_LEADER_K,
-                                          CFG_RDF_GLOBAL_SMUSH_GROUP_LEADER_DEFAULT ).c_str());
+                            getConfigString( FDB_GENERAL,
+                                             CFG_RDF_GLOBAL_SMUSH_GROUP_LEADER_K,
+                                             CFG_RDF_GLOBAL_SMUSH_GROUP_LEADER_DEFAULT ).c_str());
         gtk_table_attach_defaults(GTK_TABLE(gtk_table), w, 1, 2, r, r+1 );
 
 

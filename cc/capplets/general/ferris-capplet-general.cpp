@@ -83,52 +83,52 @@ void LoadData()
 
     gtk_toggle_button_set_active(
         GTK_TOGGLE_BUTTON(w_copy_use_sendfile_default),
-        isTrue( getEDBString( FDB_GENERAL, USE_SENDFILE_IF_POSSIBLE, "0" )));
+        isTrue( getConfigString( FDB_GENERAL, USE_SENDFILE_IF_POSSIBLE, "0" )));
     gtk_entry_set_text(
         GTK_ENTRY(w_copy_sendfile_chunksize),
-        getEDBString( FDB_GENERAL, COPY_INPUT_IN_MMAP_MODE_FOR_OBJECTS_LARGER_THAN, "262144" ).c_str());
+        getConfigString( FDB_GENERAL, COPY_INPUT_IN_MMAP_MODE_FOR_OBJECTS_LARGER_THAN, "262144" ).c_str());
 
     gtk_toggle_button_set_active(
         GTK_TOGGLE_BUTTON(w_copy_input_in_mmap_mode_by_default),
-        isTrue( getEDBString( FDB_GENERAL, COPY_INPUT_IN_MMAP_MODE_BY_DEFAULT, "" )));
+        isTrue( getConfigString( FDB_GENERAL, COPY_INPUT_IN_MMAP_MODE_BY_DEFAULT, "" )));
     gtk_entry_set_text(
         GTK_ENTRY(w_copy_input_in_mmap_mode_for_objects_larger_than),
-        getEDBString( FDB_GENERAL, COPY_INPUT_IN_MMAP_MODE_FOR_OBJECTS_LARGER_THAN, "" ).c_str());
+        getConfigString( FDB_GENERAL, COPY_INPUT_IN_MMAP_MODE_FOR_OBJECTS_LARGER_THAN, "" ).c_str());
 
     gtk_toggle_button_set_active(
         GTK_TOGGLE_BUTTON(w_copy_output_in_mmap_mode_by_default),
-        isTrue( getEDBString( FDB_GENERAL, COPY_OUTPUT_IN_MMAP_MODE_BY_DEFAULT, "" )));
+        isTrue( getConfigString( FDB_GENERAL, COPY_OUTPUT_IN_MMAP_MODE_BY_DEFAULT, "" )));
     gtk_entry_set_text(
         GTK_ENTRY(w_copy_output_in_mmap_mode_for_objects_larger_than),
-        getEDBString( FDB_GENERAL, COPY_OUTPUT_IN_MMAP_MODE_FOR_OBJECTS_LARGER_THAN, "" ).c_str());
+        getConfigString( FDB_GENERAL, COPY_OUTPUT_IN_MMAP_MODE_FOR_OBJECTS_LARGER_THAN, "" ).c_str());
 
     gtk_entry_set_text(
         GTK_ENTRY(w_attributes_to_auto_rea),
-        getEDBString( FDB_GENERAL,
+        getConfigString( FDB_GENERAL,
                       CFG_ATTRIBUTES_TO_AUTO_REA_K,
                       CFG_ATTRIBUTES_TO_AUTO_REA_DEFAULT ).c_str());
 
     gtk_entry_set_text(
         GTK_ENTRY(w_attributes_always_available_in_ui_model),
-        getEDBString( FDB_GENERAL,
+        getConfigString( FDB_GENERAL,
                       CFG_ATTRIBUTES_ALWAYS_IN_UI_MODEL_K,
                       CFG_ATTRIBUTES_ALWAYS_IN_UI_MODEL_DEFAULT ).c_str());
 
     gtk_entry_set_text(
         GTK_ENTRY(w_fspot_positive_overlay_regex_string),
-        getEDBString( FDB_GENERAL,
+        getConfigString( FDB_GENERAL,
                       CFG_FSPOT_POSITIVE_OVERLAY_REGEX_K,
                       CFG_FSPOT_POSITIVE_OVERLAY_REGEX_DEF ).c_str());
     
     gtk_entry_set_text(
         GTK_ENTRY(w_attributes_gnu_diff_files),
-        getEDBString( FDB_GENERAL,
+        getConfigString( FDB_GENERAL,
                       CFG_ATTRIBUTES_GNU_DIFF_CMD_FILES_K,
                       CFG_ATTRIBUTES_GNU_DIFF_CMD_FILES_DEFAULT ).c_str());
 
     
     {
-        string d = getEDBString( FDB_GENERAL,
+        string d = getConfigString( FDB_GENERAL,
                                  CFG_FORCE_PASSIVE_VIEW_K,
                                  CFG_FORCE_PASSIVE_VIEW_DEFAULT );
         cerr << "load data:" << d << endl;
@@ -139,7 +139,7 @@ void LoadData()
     
 
     {
-        string d = getEDBString( FDB_GENERAL,
+        string d = getConfigString( FDB_GENERAL,
                                  CFG_XSLTFS_STYLESHEET_PATH_K,
                                  CFG_XSLTFS_STYLESHEET_PATH_DEFAULT );
         stringlist_t sl;
@@ -150,11 +150,11 @@ void LoadData()
 
     gtk_toggle_button_set_active(
         GTK_TOGGLE_BUTTON(w_glob_process_for_file_urls_aswell),
-        isTrue( getEDBString( FDB_GENERAL,
+        isTrue( getConfigString( FDB_GENERAL,
                               CFG_GLOB_SKIP_FILE_URLS_K,
                               CFG_GLOB_SKIP_FILE_URLS_DEFAULT )));
     {
-        string d = getEDBString( FDB_GENERAL,
+        string d = getConfigString( FDB_GENERAL,
                                  CFG_GLOB_SKIP_REGEX_LIST_K,
                                  CFG_GLOB_SKIP_REGEX_LIST_DEFAULT );
         stringlist_t sl;
@@ -165,7 +165,7 @@ void LoadData()
 
     gtk_toggle_button_set_active(
         GTK_TOGGLE_BUTTON(w_copy_precalculate),
-        isTrue( getEDBString( FDB_GENERAL,
+        isTrue( getConfigString( FDB_GENERAL,
                               CFG_PRECALCULATE_FOR_COPY_K,
                               CFG_PRECALCULATE_FOR_COPY_DEFAULT )));
     
@@ -174,9 +174,9 @@ void LoadData()
 //     {
 //         gtk_toggle_button_set_active(
 //             GTK_TOGGLE_BUTTON(w_vm_auto_cleanup),
-//             isTrue( getEDBString( FDB_GENERAL, "vm-auto-cleanup", "0" )));
+//             isTrue( getConfigString( FDB_GENERAL, "vm-auto-cleanup", "0" )));
 
-//         string t = getEDBString( FDB_GENERAL,
+//         string t = getConfigString( FDB_GENERAL,
 //                                  "vm-auto-cleanup-maxfreeatonce",
 //                                  "500" );
 //         gtk_range_set_value ( GTK_RANGE(w_vm_auto_cleanup_maxfreeatonce), toint( t ) );
@@ -186,46 +186,46 @@ void LoadData()
 
 void SaveData()
 {
-    setEDBString( FDB_GENERAL, USE_SENDFILE_IF_POSSIBLE,
-                  tostr(gtk_toggle_button_get_active(
-                            GTK_TOGGLE_BUTTON(w_copy_use_sendfile_default))));
-    setEDBString( FDB_GENERAL, SENDFILE_CHUNK_SIZE,
-                  gtk_entry_get_text(
-                      GTK_ENTRY(w_copy_sendfile_chunksize)));
+    setConfigString( FDB_GENERAL, USE_SENDFILE_IF_POSSIBLE,
+                     tostr(gtk_toggle_button_get_active(
+                               GTK_TOGGLE_BUTTON(w_copy_use_sendfile_default))));
+    setConfigString( FDB_GENERAL, SENDFILE_CHUNK_SIZE,
+                     gtk_entry_get_text(
+                         GTK_ENTRY(w_copy_sendfile_chunksize)));
 
-    setEDBString( FDB_GENERAL, COPY_INPUT_IN_MMAP_MODE_BY_DEFAULT,
-                  tostr(gtk_toggle_button_get_active(
-                            GTK_TOGGLE_BUTTON(w_copy_input_in_mmap_mode_by_default))));
-    setEDBString( FDB_GENERAL, COPY_INPUT_IN_MMAP_MODE_FOR_OBJECTS_LARGER_THAN,
-                  gtk_entry_get_text(
-                      GTK_ENTRY(w_copy_input_in_mmap_mode_for_objects_larger_than)));
+    setConfigString( FDB_GENERAL, COPY_INPUT_IN_MMAP_MODE_BY_DEFAULT,
+                     tostr(gtk_toggle_button_get_active(
+                               GTK_TOGGLE_BUTTON(w_copy_input_in_mmap_mode_by_default))));
+    setConfigString( FDB_GENERAL, COPY_INPUT_IN_MMAP_MODE_FOR_OBJECTS_LARGER_THAN,
+                     gtk_entry_get_text(
+                         GTK_ENTRY(w_copy_input_in_mmap_mode_for_objects_larger_than)));
 
-    setEDBString( FDB_GENERAL, COPY_OUTPUT_IN_MMAP_MODE_BY_DEFAULT,
-                  tostr(gtk_toggle_button_get_active(
-                            GTK_TOGGLE_BUTTON(w_copy_output_in_mmap_mode_by_default))));
-    setEDBString( FDB_GENERAL, COPY_OUTPUT_IN_MMAP_MODE_FOR_OBJECTS_LARGER_THAN,
-                  gtk_entry_get_text(
-                      GTK_ENTRY(w_copy_output_in_mmap_mode_for_objects_larger_than)));
+    setConfigString( FDB_GENERAL, COPY_OUTPUT_IN_MMAP_MODE_BY_DEFAULT,
+                     tostr(gtk_toggle_button_get_active(
+                               GTK_TOGGLE_BUTTON(w_copy_output_in_mmap_mode_by_default))));
+    setConfigString( FDB_GENERAL, COPY_OUTPUT_IN_MMAP_MODE_FOR_OBJECTS_LARGER_THAN,
+                     gtk_entry_get_text(
+                         GTK_ENTRY(w_copy_output_in_mmap_mode_for_objects_larger_than)));
 
-    setEDBString( FDB_GENERAL, CFG_ATTRIBUTES_TO_AUTO_REA_K,
-                  gtk_entry_get_text( GTK_ENTRY(w_attributes_to_auto_rea)));
+    setConfigString( FDB_GENERAL, CFG_ATTRIBUTES_TO_AUTO_REA_K,
+                     gtk_entry_get_text( GTK_ENTRY(w_attributes_to_auto_rea)));
 
-    setEDBString( FDB_GENERAL, CFG_ATTRIBUTES_ALWAYS_IN_UI_MODEL_K,
-                  gtk_entry_get_text( GTK_ENTRY(w_attributes_always_available_in_ui_model)));
+    setConfigString( FDB_GENERAL, CFG_ATTRIBUTES_ALWAYS_IN_UI_MODEL_K,
+                     gtk_entry_get_text( GTK_ENTRY(w_attributes_always_available_in_ui_model)));
 
-    setEDBString( FDB_GENERAL, CFG_FSPOT_POSITIVE_OVERLAY_REGEX_K,
-                  gtk_entry_get_text( GTK_ENTRY(w_fspot_positive_overlay_regex_string)));
+    setConfigString( FDB_GENERAL, CFG_FSPOT_POSITIVE_OVERLAY_REGEX_K,
+                     gtk_entry_get_text( GTK_ENTRY(w_fspot_positive_overlay_regex_string)));
     
-    setEDBString( FDB_GENERAL, CFG_ATTRIBUTES_GNU_DIFF_CMD_FILES_K,
-                  gtk_entry_get_text( GTK_ENTRY(w_attributes_gnu_diff_files)));
+    setConfigString( FDB_GENERAL, CFG_ATTRIBUTES_GNU_DIFF_CMD_FILES_K,
+                     gtk_entry_get_text( GTK_ENTRY(w_attributes_gnu_diff_files)));
     
     {
         stringlist_t sl = m_passiveViewList->getStringList();
         string d = Util::createNullSeperatedList( sl );
         cerr << "save data:" << d << endl;
-        setEDBString( FDB_GENERAL, CFG_FORCE_PASSIVE_VIEW_K, d );
+        setConfigString( FDB_GENERAL, CFG_FORCE_PASSIVE_VIEW_K, d );
 
-//         string d2 = getEDBString( FDB_GENERAL, CFG_FORCE_PASSIVE_VIEW_K, CFG_FORCE_PASSIVE_VIEW_DEFAULT );
+//         string d2 = getConfigString( FDB_GENERAL, CFG_FORCE_PASSIVE_VIEW_K, CFG_FORCE_PASSIVE_VIEW_DEFAULT );
 //         cerr << "loaded again:" << d2 << endl;
     }
 
@@ -233,32 +233,32 @@ void SaveData()
     {
         stringlist_t sl = m_xsltStylesheetPathList->getStringList();
         string d = Util::createNullSeperatedList( sl );
-        setEDBString( FDB_GENERAL, CFG_XSLTFS_STYLESHEET_PATH_K, d );
+        setConfigString( FDB_GENERAL, CFG_XSLTFS_STYLESHEET_PATH_K, d );
     }
 
     
-    setEDBString( FDB_GENERAL, CFG_GLOB_SKIP_FILE_URLS_K,
-                  tostr(gtk_toggle_button_get_active(
-                            GTK_TOGGLE_BUTTON(w_glob_process_for_file_urls_aswell))));
+    setConfigString( FDB_GENERAL, CFG_GLOB_SKIP_FILE_URLS_K,
+                     tostr(gtk_toggle_button_get_active(
+                               GTK_TOGGLE_BUTTON(w_glob_process_for_file_urls_aswell))));
     {
         stringlist_t sl = m_globSkipRegexList->getStringList();
         string d = Util::createNullSeperatedList( sl );
-        setEDBString( FDB_GENERAL, CFG_GLOB_SKIP_REGEX_LIST_K, d );
+        setConfigString( FDB_GENERAL, CFG_GLOB_SKIP_REGEX_LIST_K, d );
     }
 
-    setEDBString( FDB_GENERAL, CFG_PRECALCULATE_FOR_COPY_K,
-                  tostr(gtk_toggle_button_get_active(
-                            GTK_TOGGLE_BUTTON(w_copy_precalculate))));
+    setConfigString( FDB_GENERAL, CFG_PRECALCULATE_FOR_COPY_K,
+                     tostr(gtk_toggle_button_get_active(
+                               GTK_TOGGLE_BUTTON(w_copy_precalculate))));
 
     
     
 //     {
-//         setEDBString( FDB_GENERAL, "vm-auto-cleanup",
+//         setConfigString( FDB_GENERAL, "vm-auto-cleanup",
 //                       tostr(gtk_toggle_button_get_active(
 //                                 GTK_TOGGLE_BUTTON(w_vm_auto_cleanup))));
 
 //         string v = tostr((int)gtk_range_get_value(GTK_RANGE(w_vm_auto_cleanup_maxfreeatonce)));
-//         setEDBString( FDB_GENERAL, "vm-auto-cleanup-maxfreeatonce", v );
+//         setConfigString( FDB_GENERAL, "vm-auto-cleanup-maxfreeatonce", v );
         
 //     }
 }

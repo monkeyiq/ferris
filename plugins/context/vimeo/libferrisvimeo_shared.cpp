@@ -124,15 +124,15 @@ namespace Ferris
         Vimeo::Vimeo()
             : m_qauth( new QOAuth::Interface )
         {
-            m_uid        = getEDBString( DBNAME, CFG_VIMEO_UID_K, CFG_VIMEO_UID_DEF );
-            m_username   = getEDBString( DBNAME, CFG_VIMEO_USERNAME_K,    CFG_VIMEO_USERNAME_DEF );
-            m_fullname   = getEDBString( DBNAME, CFG_VIMEO_FULLNAME_K,    CFG_VIMEO_FULLNAME_DEF );
-            m_authToken  = getEDBString( DBNAME, CFG_VIMEO_AUTH_TOKEN_K,  CFG_VIMEO_AUTH_TOKEN_DEF );
+            m_uid        = getConfigString( DBNAME, CFG_VIMEO_UID_K, CFG_VIMEO_UID_DEF );
+            m_username   = getConfigString( DBNAME, CFG_VIMEO_USERNAME_K,    CFG_VIMEO_USERNAME_DEF );
+            m_fullname   = getConfigString( DBNAME, CFG_VIMEO_FULLNAME_K,    CFG_VIMEO_FULLNAME_DEF );
+            m_authToken  = getConfigString( DBNAME, CFG_VIMEO_AUTH_TOKEN_K,  CFG_VIMEO_AUTH_TOKEN_DEF );
             m_apiKey     = getStrSubCtx( "~/.ferris/vimeo-api-key.txt", "" );
             m_apiSecret  = getStrSubCtx( "~/.ferris/vimeo-api-secret.txt", "" );
 
-            m_token       = getEDBString( DBNAME, "vimeo-token", "" );
-            m_tokenSecret = getEDBString( DBNAME, "vimeo-token-secret", "" );
+            m_token       = getConfigString( DBNAME, "vimeo-token", "" );
+            m_tokenSecret = getConfigString( DBNAME, "vimeo-token-secret", "" );
             m_qauth->setConsumerKey(    getStrSubCtx( "~/.ferris/vimeo-api-key.txt", "" ).c_str());
             m_qauth->setConsumerSecret( getStrSubCtx( "~/.ferris/vimeo-api-secret.txt", "" ).c_str());
         }
@@ -447,8 +447,8 @@ namespace Ferris
             DEBUG << "accessSecret:" << m_tokenSecret << endl;
 
             const string DBNAME = FDB_SECURE;
-            setEDBString( DBNAME, "vimeo-token",        m_token );
-            setEDBString( DBNAME, "vimeo-token-secret", m_tokenSecret );
+            setConfigString( DBNAME, "vimeo-token",        m_token );
+            setConfigString( DBNAME, "vimeo-token-secret", m_tokenSecret );
             return frompm( pm );
         }
         

@@ -43,13 +43,13 @@ namespace Ferris
         {
             fh_stringstream ss;
             ss << "odbc-dsn-" << DSN << "-username";
-            user = getEDBString( DBNAME, tostr(ss), "" );
+            user = getConfigString( DBNAME, tostr(ss), "" );
         }
         
         {
             fh_stringstream ss;
             ss << "odbc-dsn-" << DSN << "-password";
-            pass = getEDBString( DBNAME, tostr(ss), "" );
+            pass = getConfigString( DBNAME, tostr(ss), "" );
         }
 
         return make_pair( user, pass );
@@ -60,13 +60,13 @@ namespace Ferris
         {
             fh_stringstream ss;
             ss << "odbc-dsn-" << serv << "-username";
-            setEDBString( DBNAME, tostr(ss), user );
+            setConfigString( DBNAME, tostr(ss), user );
         }
 
         {
             fh_stringstream ss;
             ss << "odbc-dsn-" << serv << "-password";
-            setEDBString( DBNAME, tostr(ss), pass );
+            setConfigString( DBNAME, tostr(ss), pass );
         }        
     }
     

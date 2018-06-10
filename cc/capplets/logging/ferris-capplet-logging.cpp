@@ -89,9 +89,9 @@ void SaveData(void)
 {
 //    cerr << "SaveData() filename:" << tostr( GTK_ENTRY(w_logToFile)) << endl;
     
-    setEDBString( FDB_GENERAL, SHOW_LOGGING_POPT_OPTIONS_BY_DEFAULT,
+    setConfigString( FDB_GENERAL, SHOW_LOGGING_POPT_OPTIONS_BY_DEFAULT,
                   tostr(gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w_showInPopt))));
-    setEDBString( FDB_GENERAL, LOGGING_TO_FILENAME_KEY, tostr( GTK_ENTRY(w_logToFile)));
+    setConfigString( FDB_GENERAL, LOGGING_TO_FILENAME_KEY, tostr( GTK_ENTRY(w_logToFile)));
 
     for( loginfo_t::iterator iter = loginfo.begin(); iter != loginfo.end(); ++iter )
     {
@@ -100,7 +100,7 @@ void SaveData(void)
         vss << gtk_range_get_value ( GTK_RANGE( iter->slide ));
         vss >> val;
         const string& k = gtk_label_get_text( GTK_LABEL( iter->lab ) );
-        setEDBString( FDB_LOGGING, k, tostr( left_shift_filled( 1, val )) );
+        setConfigString( FDB_LOGGING, k, tostr( left_shift_filled( 1, val )) );
 //        cerr << "k:" << k << " v:" << tostr(vss) << endl;
     }
 }
@@ -213,7 +213,7 @@ void make_window()
     for( FLI iter = Loggers.begin(); iter != Loggers.end(); ++iter )
     {
         const string& k = iter->first;
-        const string& v = getEDBString( FDB_LOGGING, k, tostr(DEFAULT_LOGGING_VALUE) );
+        const string& v = getConfigString( FDB_LOGGING, k, tostr(DEFAULT_LOGGING_VALUE) );
         int vi = DEFAULT_LOGGING_VALUE;
         
         fh_stringstream ss;
@@ -243,7 +243,7 @@ void make_window()
     w = w_showInPopt = gtk_check_button_new_with_label("Show popt logging options");
     gtk_toggle_button_set_active(
         GTK_TOGGLE_BUTTON(w),
-        isTrue( getEDBString( FDB_GENERAL, SHOW_LOGGING_POPT_OPTIONS_BY_DEFAULT, "0" )));
+        isTrue( getConfigString( FDB_GENERAL, SHOW_LOGGING_POPT_OPTIONS_BY_DEFAULT, "0" )));
     
     gtk_table_attach_defaults(GTK_TABLE(gtk_table), w, 0, 2, r, r+1 );
     ++r;
@@ -254,7 +254,7 @@ void make_window()
                               0, 1, r, r+1 );
     w = w_logToFile = gtk_entry_new();
     gtk_entry_set_text( GTK_ENTRY(w),
-                        getEDBString( FDB_GENERAL, LOGGING_TO_FILENAME_KEY, "" ).c_str());
+                        getConfigString( FDB_GENERAL, LOGGING_TO_FILENAME_KEY, "" ).c_str());
     gtk_table_attach_defaults(GTK_TABLE(gtk_table), w, 1, 2, r, r+1 );
     ++r;
     

@@ -82,9 +82,9 @@ typedef class EA_Atom_Static StrigiByteArrayAttribute;
 
         if( !r )
         {
-            string regexstr = getEDBString( FDB_GENERAL,
-                                            CFG_STRIGI_POSITIVE_OVERLAY_REGEX_K,
-                                            CFG_STRIGI_POSITIVE_OVERLAY_REGEX_DEF );
+            string regexstr = getConfigString( FDB_GENERAL,
+                                               CFG_STRIGI_POSITIVE_OVERLAY_REGEX_K,
+                                               CFG_STRIGI_POSITIVE_OVERLAY_REGEX_DEF );
             if( !regexstr.empty() )
             {
                 r = toregexh( regexstr );

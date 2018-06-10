@@ -77,24 +77,24 @@ namespace Ferris
         
         void SET_EAINDEX_EANAMES_NOT_TO_INDEX_DEFAULT( const std::string& v )
         {
-            setEDBString( GET_FDB_GENERAL(), "EAINDEX_EANAMES_NOT_TO_INDEX", v );
+            setConfigString( GET_FDB_GENERAL(), "EAINDEX_EANAMES_NOT_TO_INDEX", v );
         }
         void SET_EAINDEX_EANAMES_REGEX_IGNORE_DEFAULT( const std::string& v )
         {
-            setEDBString( GET_FDB_GENERAL(), "EAINDEX_EANAMES_REGEX_IGNORE", v );
+            setConfigString( GET_FDB_GENERAL(), "EAINDEX_EANAMES_REGEX_IGNORE", v );
         }
         void SET_EAINDEX_MAX_VALUE_SIZE_TO_INDEX_DEFAULT( const std::string& v )
         {
-            setEDBString( GET_FDB_GENERAL(), "EAINDEX_MAX_VALUE_SIZE_TO_INDEX", v );
+            setConfigString( GET_FDB_GENERAL(), "EAINDEX_MAX_VALUE_SIZE_TO_INDEX", v );
         }
         void SET_EAINDEX_EANAMES_TO_INDEX_REGEX_DEFAULT( const std::string& v )
         {
-            setEDBString( GET_FDB_GENERAL(), "EAINDEX_EANAMES_TO_INDEX_REGEX", v );
+            setConfigString( GET_FDB_GENERAL(), "EAINDEX_EANAMES_TO_INDEX_REGEX", v );
         }
 
         std::string GET_EAINDEX_EANAMES_NOT_TO_INDEX_DEFAULT()
         {
-            return getEDBString(
+            return getConfigString(
                 GET_FDB_GENERAL(), "EAINDEX_EANAMES_NOT_TO_INDEX",
                 "name,language-human,content,as-xml,as-json,as-text,as-rdf,"
                 "block-count,dontfollow-block-count,inode,dontfollow-inode,dontfollow-size,"
@@ -132,7 +132,7 @@ namespace Ferris
                 /**/ + "^geospatial-.*$" + '\0'
                 ;
             
-            string ret = getEDBString( GET_FDB_GENERAL(), "EAINDEX_EANAMES_REGEX_IGNORE", def );
+            string ret = getConfigString( GET_FDB_GENERAL(), "EAINDEX_EANAMES_REGEX_IGNORE", def );
 
 //             cerr << "GET_EAINDEX_EANAMES_REGEX_IGNORE_DEFAULT(cs:" << commaSeperated << ") "
 //                  << " FDB_GENERAL:" << GET_FDB_GENERAL()
@@ -145,13 +145,13 @@ namespace Ferris
         }
         std::string GET_EAINDEX_MAX_VALUE_SIZE_TO_INDEX_DEFAULT()
         {
-            return getEDBString(
+            return getConfigString(
                 GET_FDB_GENERAL(), "EAINDEX_MAX_VALUE_SIZE_TO_INDEX",
                 "1024" );
         }
         std::string GET_EAINDEX_EANAMES_TO_INDEX_REGEX_DEFAULT()
         {
-            return getEDBString( GET_FDB_GENERAL(), "EAINDEX_EANAMES_TO_INDEX_REGEX", ".*" );
+            return getConfigString( GET_FDB_GENERAL(), "EAINDEX_EANAMES_TO_INDEX_REGEX", ".*" );
         }
         
 
@@ -162,12 +162,12 @@ namespace Ferris
         const string IDXMGR_NONRESOLVABLE_NOT_TO_REMOVE_REGEX_K = "idxmgr-nonresolvable-not-to-remove-regex-k";
         void SET_EAINDEX_NONRESOLVABLE_NOT_TO_REMOVE_REGEX_DEFAULT( const std::string& v )
         {
-            setEDBString( GET_FDB_GENERAL(), "EAINDEX_NONRESOLVABLE_NOT_TO_REMOVE_REGEX", v );
+            setConfigString( GET_FDB_GENERAL(), "EAINDEX_NONRESOLVABLE_NOT_TO_REMOVE_REGEX", v );
         }
         std::string GET_EAINDEX_NONRESOLVABLE_NOT_TO_REMOVE_REGEX_DEFAULT( bool commaSeperated )
         {
             string def = (std::string)"" + '\0';
-            string ret = getEDBString( GET_FDB_GENERAL(), "EAINDEX_NONRESOLVABLE_NOT_TO_REMOVE_REGEX", def );
+            string ret = getConfigString( GET_FDB_GENERAL(), "EAINDEX_NONRESOLVABLE_NOT_TO_REMOVE_REGEX", def );
 
             if( commaSeperated )
                 replace( ret.begin(), ret.end(), '\0', ',' );

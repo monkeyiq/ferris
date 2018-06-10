@@ -281,20 +281,13 @@ namespace Ferris
      * LG_XXX_D logging because it might create a cyclic loop.
      *
      */
-    string getEDBString( const string& edbname_relhome,
-                         const string& k,
-                         const string& def,
-                         bool isEdbName_RelativeToHome,
-                         bool throw_for_errors )
+    string getConfigString( const string& dbname_relhome,
+                            const string& k,
+                            const string& def,
+                            bool throw_for_errors )
     {
-        /* Dont cache non local files */
-        if( !isEdbName_RelativeToHome )
-        {
-            return get_db4_string( edbname_relhome, k, def, throw_for_errors );
-        }
-        
-        string filename = Shell::getHomeDirPath_nochecks()+edbname_relhome;
-        fh_database db = getCachedDb4( edbname_relhome, filename, k, throw_for_errors, "get" );
+        string filename = Shell::getHomeDirPath_nochecks()+dbname_relhome;
+        fh_database db = getCachedDb4( dbname_relhome, dbname_relhome, k, throw_for_errors, "get" );
         if( db )
         {
             return get_db4_string( db, k, def, throw_for_errors );
@@ -302,6 +295,18 @@ namespace Ferris
         
         return def;
     }
+
+    void setConfigString( const string& edbname_relhome,
+                          const string& k,
+                          const string& v,
+                          bool throw_for_errors )
+    {
+        string filename = edbname_relhome;
+        fh_database db = getCachedDb4( edbname_relhome, edbname_relhome, k, throw_for_errors, "set" );
+        if( db )
+            set_db4_string( db, k, v, throw_for_errors );
+    }
+    
 
     /******************************************************************************/
     /******************************************************************************/
@@ -406,30 +411,6 @@ namespace Ferris
     }
 
     
-    void setEDBString( const string& edbname_relhome,
-                       const string& k,
-                       const string& v,
-                       bool isEdbName_RelativeToHome,
-                       bool throw_for_errors )
-    {
-        string filename = edbname_relhome;
-        if( isEdbName_RelativeToHome )
-        {
-            filename = Shell::getHomeDirPath_nochecks()+edbname_relhome;
-        }
-
-//        cerr << "setEDBString(A) k:" << k << " v:" << v << endl;
-
-        /* Dont cache non local files */
-        if( !isEdbName_RelativeToHome )
-        {
-            return set_db4_string( filename, k, v, throw_for_errors );
-        }
-
-        fh_database db = getCachedDb4( edbname_relhome, filename, k, throw_for_errors, "set" );
-        if( db )
-            set_db4_string( db, k, v, throw_for_errors );
-    }
 
     static STLdb4::fh_database
     ensureFerrisConfigFileExists_sub( const std::string& parentPath,

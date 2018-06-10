@@ -132,9 +132,9 @@ public:
 //              << endl;
         
         {
-            static string regexstr = getEDBString( FDB_GENERAL,
-                                                   CFG_ALLOWS_KERNEL_EA_REGEX,
-                                                   CFG_ALLOWS_KERNEL_EA_REGEX_DEFAULT );
+            static string regexstr = getConfigString( FDB_GENERAL,
+                                                      CFG_ALLOWS_KERNEL_EA_REGEX,
+                                                      CFG_ALLOWS_KERNEL_EA_REGEX_DEFAULT );
             static bool emp = regexstr.empty();
             if( !emp )
             {

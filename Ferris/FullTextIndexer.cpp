@@ -73,7 +73,7 @@ namespace Ferris
         std::string GET_INDEX_NONRESOLVABLE_NOT_TO_REMOVE_REGEX_DEFAULT( bool commaSeperated )
         {
             string def = (std::string)"" + '\0';
-            string ret = getEDBString( GET_FDB_GENERAL(), "EAINDEX_NONRESOLVABLE_NOT_TO_REMOVE_REGEX", def );
+            string ret = getConfigString( GET_FDB_GENERAL(), "EAINDEX_NONRESOLVABLE_NOT_TO_REMOVE_REGEX", def );
 
             if( commaSeperated )
                 replace( ret.begin(), ret.end(), '\0', ',' );

@@ -3180,9 +3180,9 @@ static void setExistsSubDir_Cache( Context*c, time_t c_ctime, bool hasSubContext
     fh_stringstream keyss;
     keyss << "exists-subdir-" << Util::replace_all( c->getURL(), '/', '-' );
 
-    setEDBString( FDB_CACHE, tostr(keyss), tostr( hasSubContext ));
+    setConfigString( FDB_CACHE, tostr(keyss), tostr( hasSubContext ));
     keyss << "-ctime";
-    setEDBString( FDB_CACHE, tostr(keyss), tostr( c_ctime ));
+    setConfigString( FDB_CACHE, tostr(keyss), tostr( c_ctime ));
 }
 
 static int getExistsSubDir_Cache( Context*c, time_t c_ctime )
@@ -3192,9 +3192,9 @@ static int getExistsSubDir_Cache( Context*c, time_t c_ctime )
 
     try
     {
-        int ret   = toint(getEDBString( FDB_CACHE, tostr(keyss), "0", true, true ));
+        int ret   = toint(getConfigString( FDB_CACHE, tostr(keyss), "0", true ));
         keyss << "-ctime";
-        time_t ct = toType<time_t>(getEDBString( FDB_CACHE, tostr(keyss), "0", true, true ));
+        time_t ct = toType<time_t>(getConfigString( FDB_CACHE, tostr(keyss), "0", true ));
 
         /* If the time the cache was created is still fresh then return cache */
         if( ct >= c_ctime )

@@ -123,7 +123,7 @@ namespace Ferris
                     alwaysJournalInitialized = true;
                     alwaysJournal =
                         isTrue(
-                            getEDBString( FDB_GENERAL, "always-journal-xml", "0" ));
+                            getConfigString( FDB_GENERAL, "always-journal-xml", "0" ));
                     LG_XML_D << "always-journal-xml config:" << alwaysJournal << endl;
 
                     if( !alwaysJournal )

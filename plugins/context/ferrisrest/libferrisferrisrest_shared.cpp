@@ -69,13 +69,13 @@ namespace Ferris
             {
                 fh_stringstream ss;
                 ss << "ferrisrest--" << Key << "-username";
-                user = getEDBString( DBNAME, tostr(ss), "" );
+                user = getConfigString( DBNAME, tostr(ss), "" );
             }
         
             {
                 fh_stringstream ss;
                 ss << "ferrisrest--" << Key << "-password";
-                pass = getEDBString( DBNAME, tostr(ss), "" );
+                pass = getConfigString( DBNAME, tostr(ss), "" );
             }
 
             return make_pair( user, pass );
@@ -90,13 +90,13 @@ namespace Ferris
             {
                 fh_stringstream ss;
                 ss << "ferrisrest--" << Key << "-username";
-                setEDBString( DBNAME, tostr(ss), user );
+                setConfigString( DBNAME, tostr(ss), user );
             }
 
             {
                 fh_stringstream ss;
                 ss << "ferrisrest--" << Key << "-password";
-                setEDBString( DBNAME, tostr(ss), pass );
+                setConfigString( DBNAME, tostr(ss), pass );
             }        
         }
 
@@ -105,7 +105,7 @@ namespace Ferris
             string Key = server;
             fh_stringstream ss;
             ss << "ferrisrest--" << Key << "-baseurl";
-            return getEDBString( DBNAME, tostr(ss), "" );
+            return getConfigString( DBNAME, tostr(ss), "" );
         }
         
         void setBaseURI( const std::string& server, const std::string& baseurl )
@@ -113,7 +113,7 @@ namespace Ferris
             string Key = server;
             fh_stringstream ss;
             ss << "ferrisrest--" << Key << "-baseurl";
-            setEDBString( DBNAME, tostr(ss), baseurl );
+            setConfigString( DBNAME, tostr(ss), baseurl );
         }
         
         

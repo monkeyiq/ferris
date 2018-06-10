@@ -1343,7 +1343,7 @@ namespace Ferris
             {
                 return FormatOverRide;
             }
-            return getEDBString( FDB_GENERAL, "strftime-format-string", "%y %b %e %H:%M" );
+            return getConfigString( FDB_GENERAL, "strftime-format-string", "%y %b %e %H:%M" );
         }
 
         /**

@@ -44,6 +44,74 @@ extern "C"
         throw( RootContextCreationFailed );
 };
     
+
+
+    FERRISEXP_API std::string getEDBString( const std::string& edbname_relhome,
+                                            const std::string& k,
+                                            const std::string& def,
+                                            bool isEdbName_RelativeToHome = true,
+                                            bool throw_for_errors = false );
+    
+    FERRISEXP_API void setEDBString( const std::string& edbname_relhome,
+                                     const std::string& k,
+                                     const std::string& v,
+                                     bool isEdbName_RelativeToHome = true,
+                                     bool throw_for_errors = false );
+
+    
+    /**
+     * Note that as this function is called from the logging code, it can not use any
+     * LG_XXX_D logging because it might create a cyclic loop.
+     *
+     */
+    string getEDBString( const string& edbname_relhome,
+                         const string& k,
+                         const string& def,
+                         bool isEdbName_RelativeToHome,
+                         bool throw_for_errors )
+    {
+        /* Dont cache non local files */
+        if( !isEdbName_RelativeToHome )
+        {
+            return get_db4_string( edbname_relhome, k, def, throw_for_errors );
+        }
+        
+        string filename = Shell::getHomeDirPath_nochecks()+edbname_relhome;
+        fh_database db = getCachedDb4( edbname_relhome, filename, k, throw_for_errors, "get" );
+        if( db )
+        {
+            return get_db4_string( db, k, def, throw_for_errors );
+        }
+        
+        return def;
+    }
+    
+
+    void setEDBString( const string& edbname_relhome,
+                       const string& k,
+                       const string& v,
+                       bool isEdbName_RelativeToHome,
+                       bool throw_for_errors )
+    {
+        string filename = edbname_relhome;
+        if( isEdbName_RelativeToHome )
+        {
+            filename = Shell::getHomeDirPath_nochecks()+edbname_relhome;
+        }
+
+//        cerr << "setEDBString(A) k:" << k << " v:" << v << endl;
+
+        /* Dont cache non local files */
+        if( !isEdbName_RelativeToHome )
+        {
+            return set_db4_string( filename, k, v, throw_for_errors );
+        }
+
+        fh_database db = getCachedDb4( edbname_relhome, filename, k, throw_for_errors, "set" );
+        if( db )
+            set_db4_string( db, k, v, throw_for_errors );
+    }
+
     
 class FERRISEXP_CTXPLUGIN edbContext
     :

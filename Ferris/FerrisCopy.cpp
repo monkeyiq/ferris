@@ -1001,21 +1001,21 @@ namespace Ferris
         preallocate_with_fallocate( false ),
         preallocate_with_ftruncate( false ),
         InputInMemoryMappedMode( 
-            isTrue( getEDBString( FDB_GENERAL, COPY_INPUT_IN_MMAP_MODE_BY_DEFAULT, "0" ))),
+            isTrue( getConfigString( FDB_GENERAL, COPY_INPUT_IN_MMAP_MODE_BY_DEFAULT, "0" ))),
         AutoInputInMemoryMappedModeSize(
             Util::convertByteString(
-                getEDBString( FDB_GENERAL, COPY_INPUT_IN_MMAP_MODE_FOR_OBJECTS_LARGER_THAN, "0" ))),
+                getConfigString( FDB_GENERAL, COPY_INPUT_IN_MMAP_MODE_FOR_OBJECTS_LARGER_THAN, "0" ))),
         OutputInMemoryMappedMode(
-            isTrue( getEDBString( FDB_GENERAL, COPY_OUTPUT_IN_MMAP_MODE_BY_DEFAULT, "0" ))),
+            isTrue( getConfigString( FDB_GENERAL, COPY_OUTPUT_IN_MMAP_MODE_BY_DEFAULT, "0" ))),
         AutoOutputInMemoryMappedModeSize(
             Util::convertByteString(
-                getEDBString( FDB_GENERAL, COPY_OUTPUT_IN_MMAP_MODE_FOR_OBJECTS_LARGER_THAN, "0" ))),
+                getConfigString( FDB_GENERAL, COPY_OUTPUT_IN_MMAP_MODE_FOR_OBJECTS_LARGER_THAN, "0" ))),
         m_useSendfileIfPossible(
             Util::convertByteString(
-                getEDBString( FDB_GENERAL, USE_SENDFILE_IF_POSSIBLE, "0" ))),
+                getConfigString( FDB_GENERAL, USE_SENDFILE_IF_POSSIBLE, "0" ))),
         m_sendfileChunkSize(
             Util::convertByteString(
-                getEDBString( FDB_GENERAL, SENDFILE_CHUNK_SIZE, "262144" ))),
+                getConfigString( FDB_GENERAL, SENDFILE_CHUNK_SIZE, "262144" ))),
         TotalBytesCopied( 0 ),
         TotalBytesToCopy( 0 )
 //         OutputInDirectMode( false ),
@@ -2556,7 +2556,9 @@ namespace Ferris
         if( ExplicitSELinuxContext ) cp->setExplicitSELinuxContext( ExplicitSELinuxContext );
         if( CloneSELinuxContext )    cp->setCloneSELinuxContext( CloneSELinuxContext );
         {
-            bool p = isTrue( getEDBString( FDB_GENERAL, CFG_PRECALCULATE_FOR_COPY_K, CFG_PRECALCULATE_FOR_COPY_DEFAULT ) );
+            bool p = isTrue( getConfigString( FDB_GENERAL,
+                                              CFG_PRECALCULATE_FOR_COPY_K,
+                                              CFG_PRECALCULATE_FOR_COPY_DEFAULT ) );
             if( DontPrecacheSourceSize )
                 p = false;
             if( PrecacheSourceSize )

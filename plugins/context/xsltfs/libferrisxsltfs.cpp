@@ -716,9 +716,9 @@ namespace Ferris
                 if( s.empty() )
                     return s;
                 
-                string d = getEDBString( FDB_GENERAL,
-                                         CFG_XSLTFS_STYLESHEET_PATH_K,
-                                         CFG_XSLTFS_STYLESHEET_PATH_DEFAULT );
+                string d = getConfigString( FDB_GENERAL,
+                                            CFG_XSLTFS_STYLESHEET_PATH_K,
+                                            CFG_XSLTFS_STYLESHEET_PATH_DEFAULT );
                 stringlist_t sl;
                 Util::parseNullSeperatedList( d, sl );
                 sl.push_back( (string)CFG_XSLTFS_STYLESHEET_PATH_DEFAULT );
@@ -1272,9 +1272,9 @@ namespace Ferris
                 if( s.empty() )
                     return s;
                 
-                string d = getEDBString( FDB_GENERAL,
-                                         CFG_XSLTFS_STYLESHEET_PATH_K,
-                                         CFG_XSLTFS_STYLESHEET_PATH_DEFAULT );
+                string d = getConfigString( FDB_GENERAL,
+                                            CFG_XSLTFS_STYLESHEET_PATH_K,
+                                            CFG_XSLTFS_STYLESHEET_PATH_DEFAULT );
                 stringlist_t sl;
                 Util::parseNullSeperatedList( d, sl );
                 sl.push_back( (string)CFG_XSLTFS_STYLESHEET_PATH_DEFAULT );

@@ -327,9 +327,9 @@ namespace Ferris
 
         static stringlist_t autorea =
             Util::parseCommaSeperatedList(
-                getEDBString( FDB_GENERAL,
-                              CFG_ATTRIBUTES_TO_AUTO_REA_K,
-                              CFG_ATTRIBUTES_TO_AUTO_REA_DEFAULT ));
+                getConfigString( FDB_GENERAL,
+                                 CFG_ATTRIBUTES_TO_AUTO_REA_K,
+                                 CFG_ATTRIBUTES_TO_AUTO_REA_DEFAULT ));
         static bool autorea_is_empty = autorea.empty();
         if( !autorea_is_empty )
         {
@@ -6974,11 +6974,11 @@ SL_getSizeMediaCountStream( Context* c, const std::string& rdn, EA_Atom* atom )
         szss >> s;
     }
 
-    double MediaSize = toType<double>( getEDBString(
+    double MediaSize = toType<double>( getConfigString(
                                            FDB_GENERAL,
                                            MediaSizeKey,
                                            MediaSizeDefault ));
-        
+    
     s = s / MediaSize;
     fh_stringstream ss;
     ss << s;
@@ -8111,7 +8111,9 @@ Context::getForcePassiveView()
     if( v() )
     {
         stringlist_t sl;
-        string d = getEDBString( FDB_GENERAL, CFG_FORCE_PASSIVE_VIEW_K, CFG_FORCE_PASSIVE_VIEW_DEFAULT );
+        string d = getConfigString( FDB_GENERAL,
+                                    CFG_FORCE_PASSIVE_VIEW_K,
+                                    CFG_FORCE_PASSIVE_VIEW_DEFAULT );
         if( d.empty() )
         {
             haveRegex = false;
@@ -12501,8 +12503,8 @@ void FerrisInternal::reparentSelectionContext( Context* parent, fh_context NewCh
     {
         std::string getCURLProxyCommandLineOption()
         {
-            string proxyname = getEDBString( FDB_GENERAL, "curl-use-proxy-name", "" );
-            string proxyport = getEDBString( FDB_GENERAL, "curl-use-proxy-port", "" );
+            string proxyname = getConfigString( FDB_GENERAL, "curl-use-proxy-name", "" );
+            string proxyport = getConfigString( FDB_GENERAL, "curl-use-proxy-port", "" );
             stringstream ret;
             if( !proxyname.empty() )
             {

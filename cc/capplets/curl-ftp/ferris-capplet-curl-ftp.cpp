@@ -71,93 +71,93 @@ void LoadData()
 
     gtk_toggle_button_set_active(
         GTK_TOGGLE_BUTTON(w_useproxy),
-        isTrue( getEDBString( FDB_GENERAL, "curl-use-proxy", "" )));
+        isTrue( getConfigString( FDB_GENERAL, "curl-use-proxy", "" )));
     
     gtk_entry_set_text(
         GTK_ENTRY(w_proxyname),
-        getEDBString( FDB_GENERAL, "curl-use-proxy-name", "" ).c_str());
+        getConfigString( FDB_GENERAL, "curl-use-proxy-name", "" ).c_str());
     gtk_entry_set_text(
         GTK_ENTRY(w_proxyport),
-        getEDBString( FDB_GENERAL, "curl-use-proxy-port", "" ).c_str());
+        getConfigString( FDB_GENERAL, "curl-use-proxy-port", "" ).c_str());
     gtk_entry_set_text(
         GTK_ENTRY(w_proxyuserpass),
-        getEDBString( FDB_GENERAL, "curl-use-proxy-userpass", "" ).c_str());
+        getConfigString( FDB_GENERAL, "curl-use-proxy-userpass", "" ).c_str());
 
     gtk_toggle_button_set_active(
         GTK_TOGGLE_BUTTON(w_tunnel),
-        isTrue( getEDBString( FDB_GENERAL, "curl-use-proxy-tunnel", "" )));
+        isTrue( getConfigString( FDB_GENERAL, "curl-use-proxy-tunnel", "" )));
 
     gtk_entry_set_text(
         GTK_ENTRY(w_timeout),
-        getEDBString( FDB_GENERAL, "curl-transfer-timeout", "" ).c_str());
+        getConfigString( FDB_GENERAL, "curl-transfer-timeout", "" ).c_str());
 
     gtk_toggle_button_set_active(
         GTK_TOGGLE_BUTTON(w_usessl),
-        isTrue( getEDBString( FDB_GENERAL, "curl-use-ssl", "0" )));
+        isTrue( getConfigString( FDB_GENERAL, "curl-use-ssl", "0" )));
 
     gtk_range_set_value (
         GTK_RANGE(w_sslversion),
-        toint(getEDBString( FDB_GENERAL, "curl-use-ssl-version-number", "3" )));
+        toint(getConfigString( FDB_GENERAL, "curl-use-ssl-version-number", "3" )));
     
     gtk_entry_set_text(GTK_ENTRY(w_useragent), 
-                       getEDBString( FDB_GENERAL, "curl-agent-name", "" ).c_str());
+                       getConfigString( FDB_GENERAL, "curl-agent-name", "" ).c_str());
     gtk_entry_set_text(GTK_ENTRY(w_clientif), 
-                       getEDBString( FDB_GENERAL, "curl-client-interface", "" ).c_str());
+                       getConfigString( FDB_GENERAL, "curl-client-interface", "" ).c_str());
 
     gtk_range_set_value (
         GTK_RANGE(w_maxredir),
-        toint(getEDBString( FDB_GENERAL, "curl-max-redirects", "8" )));
+        toint(getConfigString( FDB_GENERAL, "curl-max-redirects", "8" )));
 
     gtk_toggle_button_set_active(
         GTK_TOGGLE_BUTTON(w_verbose),
-        isTrue( getEDBString( FDB_GENERAL, "curl-verbose", "0" )));
+        isTrue( getConfigString( FDB_GENERAL, "curl-verbose", "0" )));
 
     gtk_toggle_button_set_active(
         GTK_TOGGLE_BUTTON(w_usenetrc),
-        isTrue( getEDBString( FDB_GENERAL, "curl-use-netrc", "1" )));
+        isTrue( getConfigString( FDB_GENERAL, "curl-use-netrc", "1" )));
     
 }
 
 void SaveData()
 {
-    setEDBString( FDB_GENERAL, "curl-use-proxy",
-                  tostr(gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w_useproxy))));
-    setEDBString( FDB_GENERAL, "curl-use-proxy-name",
-                  gtk_entry_get_text(GTK_ENTRY(w_proxyname)));
-    setEDBString( FDB_GENERAL, "curl-use-proxy-port",
-                  gtk_entry_get_text(GTK_ENTRY(w_proxyport)));
-    setEDBString( FDB_GENERAL, "curl-use-proxy-userpass",
-                  gtk_entry_get_text(GTK_ENTRY(w_proxyuserpass)));
-    setEDBString( FDB_GENERAL, "curl-use-proxy-tunnel",
-                  tostr(gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w_tunnel))));
+    setConfigString( FDB_GENERAL, "curl-use-proxy",
+                     tostr(gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w_useproxy))));
+    setConfigString( FDB_GENERAL, "curl-use-proxy-name",
+                     gtk_entry_get_text(GTK_ENTRY(w_proxyname)));
+    setConfigString( FDB_GENERAL, "curl-use-proxy-port",
+                     gtk_entry_get_text(GTK_ENTRY(w_proxyport)));
+    setConfigString( FDB_GENERAL, "curl-use-proxy-userpass",
+                     gtk_entry_get_text(GTK_ENTRY(w_proxyuserpass)));
+    setConfigString( FDB_GENERAL, "curl-use-proxy-tunnel",
+                     tostr(gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w_tunnel))));
 
-     /************/
+    /************/
 
-    setEDBString( FDB_GENERAL, "curl-transfer-timeout",
-                  gtk_entry_get_text(GTK_ENTRY(w_timeout)));
+    setConfigString( FDB_GENERAL, "curl-transfer-timeout",
+                     gtk_entry_get_text(GTK_ENTRY(w_timeout)));
 
     /************/
     
-    setEDBString( FDB_GENERAL, "curl-use-ssl",
-                  tostr(gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w_usessl))));
-    setEDBString( FDB_GENERAL, "curl-use-ssl-version-number",
-                  tostr((int)gtk_range_get_value(GTK_RANGE(w_sslversion))));
+    setConfigString( FDB_GENERAL, "curl-use-ssl",
+                     tostr(gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w_usessl))));
+    setConfigString( FDB_GENERAL, "curl-use-ssl-version-number",
+                     tostr((int)gtk_range_get_value(GTK_RANGE(w_sslversion))));
      
      /************/
 
-    setEDBString( FDB_GENERAL, "curl-agent-name",
-                  gtk_entry_get_text(GTK_ENTRY(w_useragent)));
-    setEDBString( FDB_GENERAL, "curl-client-interface",
-                  gtk_entry_get_text(GTK_ENTRY(w_clientif)));
-    setEDBString( FDB_GENERAL, "curl-max-redirects",
-                  tostr((int)gtk_range_get_value(GTK_RANGE(w_maxredir))));
+    setConfigString( FDB_GENERAL, "curl-agent-name",
+                     gtk_entry_get_text(GTK_ENTRY(w_useragent)));
+    setConfigString( FDB_GENERAL, "curl-client-interface",
+                     gtk_entry_get_text(GTK_ENTRY(w_clientif)));
+    setConfigString( FDB_GENERAL, "curl-max-redirects",
+                     tostr((int)gtk_range_get_value(GTK_RANGE(w_maxredir))));
 
      /************/
 
-    setEDBString( FDB_GENERAL, "curl-verbose",
-                  tostr(gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w_verbose))));
-    setEDBString( FDB_GENERAL, "curl-use-netrc",
-                  tostr(gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w_usenetrc))));
+    setConfigString( FDB_GENERAL, "curl-verbose",
+                     tostr(gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w_verbose))));
+    setConfigString( FDB_GENERAL, "curl-use-netrc",
+                     tostr(gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w_usenetrc))));
 }
 
 

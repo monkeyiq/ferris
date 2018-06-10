@@ -2653,9 +2653,9 @@ namespace Ferris
         // see if the user has settings to not expand this URL
         if( !DisableExpansion )
         {
-            if( isTrue( getEDBString( FDB_GENERAL,
-                                      CFG_GLOB_SKIP_FILE_URLS_K,
-                                      CFG_GLOB_SKIP_FILE_URLS_DEFAULT )))
+            if( isTrue( getConfigString( FDB_GENERAL,
+                                         CFG_GLOB_SKIP_FILE_URLS_K,
+                                         CFG_GLOB_SKIP_FILE_URLS_DEFAULT )))
             {
 //                 // disable for anything that is absolute, relative or a file://
 //                 // url
@@ -2682,9 +2682,9 @@ namespace Ferris
                 sl_v = false;
                 stringlist_t sl;
                 
-                string d = getEDBString( FDB_GENERAL,
-                                         CFG_GLOB_SKIP_REGEX_LIST_K,
-                                         CFG_GLOB_SKIP_REGEX_LIST_DEFAULT );
+                string d = getConfigString( FDB_GENERAL,
+                                            CFG_GLOB_SKIP_REGEX_LIST_K,
+                                            CFG_GLOB_SKIP_REGEX_LIST_DEFAULT );
                 LG_GLOB_D << "expandShellGlobs() disable regex:" << d << endl;
                 if( !d.empty() )
                 {

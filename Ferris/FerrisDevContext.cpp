@@ -152,9 +152,9 @@ namespace Ferris
             {
                 fh_stringstream ss;
                 ++m_state;
-                setEDBString( FDB_FERRISDEV,
-                              getKeyPrefix() + name,
-                              tostr( m_state ));
+                setConfigString( FDB_FERRISDEV,
+                                 getKeyPrefix() + name,
+                                 tostr( m_state ));
                 ss << m_state;
                 return ss;
             }
@@ -167,9 +167,9 @@ namespace Ferris
             FerrisDevGeneratorContext( parent, rdn ),
             m_state( 0 )
             {
-                m_state = toType<T>( getEDBString( FDB_FERRISDEV,
-                                                   getKeyPrefix() + name,
-                                                   "0" ));
+                m_state = toType<T>( getConfigString( FDB_FERRISDEV,
+                                                      getKeyPrefix() + name,
+                                                      "0" ));
             }
         
         virtual ~FerrisDevGeneratorContext_intX()

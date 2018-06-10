@@ -2882,9 +2882,9 @@ namespace FerrisUI
             LG_GTKFERRIS_D << "FerrisTreeModel_Impl::UpdateColumnNames(getting ea-names-union-view)" << endl;
             addEAToSet( unionset,  getStrAttr( rc, "recommended-ea-union-view", "" ));
             LG_GTKFERRIS_D << "FerrisTreeModel_Impl::UpdateColumnNames(getting fixed additions)" << endl;
-            addEAToSet( unionset,  getEDBString( FDB_GENERAL,
-                                                 CFG_ATTRIBUTES_ALWAYS_IN_UI_MODEL_K,
-                                                 CFG_ATTRIBUTES_ALWAYS_IN_UI_MODEL_DEFAULT ));
+            addEAToSet( unionset,  getConfigString( FDB_GENERAL,
+                                                    CFG_ATTRIBUTES_ALWAYS_IN_UI_MODEL_K,
+                                                    CFG_ATTRIBUTES_ALWAYS_IN_UI_MODEL_DEFAULT ));
             unionset.insert( treeicon_pixbuf_cn );
             unionset.insert( emblems_pixbuf_cn );
             unionset.insert( ferris_iconname_pixbuf_cn );

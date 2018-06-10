@@ -3555,9 +3555,9 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
         if( p->haveTwoContexts( c ) )
         {
             fh_stringstream cmdss;
-            cmdss << getEDBString( FDB_GENERAL, 
-                                   CFG_ATTRIBUTES_GNU_DIFF_CMD_FILES_K,
-                                   CFG_ATTRIBUTES_GNU_DIFF_CMD_FILES_DEFAULT )
+            cmdss << getConfigString( FDB_GENERAL, 
+                                      CFG_ATTRIBUTES_GNU_DIFF_CMD_FILES_K,
+                                      CFG_ATTRIBUTES_GNU_DIFF_CMD_FILES_DEFAULT )
                   << " " << p->getFirstContext( c )->getDirPath()
                   << " " << p->getSecondContext( c )->getDirPath();
 
@@ -3625,9 +3625,9 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
         fh_runner&        m_runidiff     = p->m_runidiff;
 
         fh_stringstream cmdss;
-        cmdss << getEDBString( FDB_GENERAL, 
-                               CFG_ATTRIBUTES_GNU_DIFF_CMD_FILES_K,
-                               CFG_ATTRIBUTES_GNU_DIFF_CMD_FILES_DEFAULT )
+        cmdss << getConfigString( FDB_GENERAL, 
+                                  CFG_ATTRIBUTES_GNU_DIFF_CMD_FILES_K,
+                                  CFG_ATTRIBUTES_GNU_DIFF_CMD_FILES_DEFAULT )
               << " " << p->getFirstContext( c )->getDirPath()
               << " " << p->getSecondContext( c )->getDirPath();
         m_runidiff->setCommandLine( tostr(cmdss) );
@@ -3704,9 +3704,9 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
         // and then read diffs result
         //
         fh_stringstream cmdss;
-        cmdss << getEDBString( FDB_GENERAL, 
-                               CFG_ATTRIBUTES_GNU_DIFF_CMD_FILES_K,
-                               CFG_ATTRIBUTES_GNU_DIFF_CMD_FILES_DEFAULT )
+        cmdss << getConfigString( FDB_GENERAL, 
+                                  CFG_ATTRIBUTES_GNU_DIFF_CMD_FILES_K,
+                                  CFG_ATTRIBUTES_GNU_DIFF_CMD_FILES_DEFAULT )
               << " /dev/fd/" << fcat_stdout_fd1
               << " /dev/fd/" << fcat_stdout_fd2;
         m_runidiff->setCommandLine( tostr(cmdss) );

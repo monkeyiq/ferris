@@ -1330,11 +1330,11 @@ public:
                 m_qmanager = ret;
             }
             
-            if( isTrue( getEDBString( FDB_GENERAL, "curl-use-proxy", "" )))
+            if( isTrue( getConfigString( FDB_GENERAL, "curl-use-proxy", "" )))
             {
-                std::string proxyname = getEDBString( FDB_GENERAL, "curl-use-proxy-name", "" );
-                int         proxyport = toint( getEDBString( FDB_GENERAL, "curl-use-proxy-port", "3128" ));
-                std::string proxyuserpass = getEDBString( FDB_GENERAL, "curl-use-proxy-userpass", "" );
+                std::string proxyname = getConfigString( FDB_GENERAL, "curl-use-proxy-name", "" );
+                int         proxyport = toint( getConfigString( FDB_GENERAL, "curl-use-proxy-port", "3128" ));
+                std::string proxyuserpass = getConfigString( FDB_GENERAL, "curl-use-proxy-userpass", "" );
                 stringlist_t t = Util::parseSeperatedList( proxyuserpass, ':' );
                 std::string user = "";
                 std::string pass = "";

@@ -176,7 +176,7 @@ namespace Ferris
 
         curl_easy_setopt( m_curl, CURLOPT_URL, earl.c_str() );
 
-//        string proxyname = getEDBString( FDB_GENERAL, "curl-use-proxy-name", "" );
+//        string proxyname = getConfigString( FDB_GENERAL, "curl-use-proxy-name", "" );
 //        curl_easy_setopt( m_curl, CURLOPT_PROXY, proxyname.c_str() );
         
         curl_easy_setopt( m_curl, CURLOPT_CUSTOMREQUEST, 0 );

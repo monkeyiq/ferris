@@ -479,10 +479,10 @@ namespace Ferris
 //         autoCleanUpCall(true)
         numberOfAllowedPermanentContextsInFreeList(-1),
         maxNumberOfContextsToFreeAtOnce(
-            toint( getEDBString( FDB_GENERAL, "vm-auto-cleanup-maxfreeatonce", "100" ))),
+            toint( getConfigString( FDB_GENERAL, "vm-auto-cleanup-maxfreeatonce", "100" ))),
         maxNumberOfContextsInFreeList(
-            toint( getEDBString( FDB_GENERAL, "vm-auto-cleanup-maxnumberinfreelist", "15" ))),
-        autoCleanUpCall( toint( getEDBString( FDB_GENERAL, "vm-auto-cleanup", "0" ))),
+            toint( getConfigString( FDB_GENERAL, "vm-auto-cleanup-maxnumberinfreelist", "15" ))),
+        autoCleanUpCall( toint( getConfigString( FDB_GENERAL, "vm-auto-cleanup", "0" ))),
         m_insideResolveCall( 0 ),
         m_insideCleanupCall( false )
     {
