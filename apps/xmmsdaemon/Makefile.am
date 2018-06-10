@@ -9,7 +9,6 @@ endif
 bin_PROGRAMS = $(XMMS_SERVERCOMMAND) 
 
 INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib                                               \
-	@STLPORT_CFLAGS@                                \
 	-I. 						\
 	-I$(top_srcdir)/ego -I../ego			\
 	-I$(srcdir) -I$(top_srcdir) 			\

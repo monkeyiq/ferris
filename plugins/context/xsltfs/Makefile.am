@@ -9,7 +9,6 @@ libferrisxsltfs_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
 libferrisxsltfs_la_SOURCES         = libferrisxsltfs.cpp 
 
 INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
-	@STLPORT_CFLAGS@                                \
 	-I$(srcdir)/..                                   \
 	-I$(top_srcdir)/src 				\
 	-I$(includedir)					\

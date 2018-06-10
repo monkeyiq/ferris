@@ -5,7 +5,6 @@ MAINTAINERCLEANFILES = Makefile.in
 bin_PROGRAMS = ftail
 
 INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib                                               \
-	@STLPORT_CFLAGS@                                \
 	-I. 						\
 	-I$(srcdir) -I$(top_srcdir) -I$(top_srcdir)/src	\
 	-I$(top_builddir)				\

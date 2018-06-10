@@ -6,7 +6,6 @@ libftxidxuniqsorted_la_SOURCES = libftxidxuniqsorted.cpp
 libftxidxuniqsorted_factory_la_SOURCES = libftxidxuniqsorted_factory.cpp
 
 INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
-	@STLPORT_CFLAGS@                                \
 	-I..                                            \
 	-I$(top_srcdir)/src 				\
 	-I$(includedir)					\

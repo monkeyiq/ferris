@@ -8,7 +8,6 @@ libferrisdtl_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
 libferrisdtl_la_SOURCES         = libferrisdtl.cpp
 
 INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
-	@STLPORT_CFLAGS@                                \
 	-I$(srcdir)/..                                  \
 	-I$(top_srcdir)/src 				\
 	-I$(includedir)					\

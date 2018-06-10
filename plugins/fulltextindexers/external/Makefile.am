@@ -6,7 +6,6 @@ libftxidxexternal_la_SOURCES = libftxidxexternal.cpp
 libftxidxexternal_factory_la_SOURCES = libftxidxexternal_factory.cpp
 
 INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
-	@STLPORT_CFLAGS@                                \
 	-I..                                            \
 	-I$(top_srcdir)/src 				\
 	-I$(includedir)					\

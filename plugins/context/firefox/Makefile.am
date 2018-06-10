@@ -11,7 +11,6 @@ libferrisfirefox_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
 libferrisfirefox_la_SOURCES         = libferrisfirefox.cpp 
 
 INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
-	@STLPORT_CFLAGS@                                \
 	-I$(srcdir)/..                                  \
 	-I$(top_srcdir)/src 				\
 	-I$(includedir)					\

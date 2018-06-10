@@ -1,6 +1,5 @@
 
 INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
-	@STLPORT_CFLAGS@                                \
 	-I$(srcdir)/..                                  \
 	-I.                                             \
 	-I$(top_srcdir)/src 				\

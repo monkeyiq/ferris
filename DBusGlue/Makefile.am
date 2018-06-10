@@ -66,7 +66,6 @@ METADATA_COMMANDS = force-header-generation
 noinst_PROGRAMS = $(METADATA_COMMANDS) 
 
 INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib                                               \
-	@STLPORT_CFLAGS@                                \
 	-I. 						\
 	-I$(srcdir) -I$(top_srcdir) 			\
 	-I$(top_builddir)				\

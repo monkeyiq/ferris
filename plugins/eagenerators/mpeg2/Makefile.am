@@ -3,7 +3,6 @@ if HAVE_LIBMPG2
 plugindir = $(libdir)/ferris/plugins/eagenerators
 
 INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
-	@STLPORT_CFLAGS@                                \
 	-I$(srcdir)/..                                  \
 	-I$(top_srcdir)/src 				\
 	-I$(includedir)					\

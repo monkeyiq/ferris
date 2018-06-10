@@ -9,7 +9,6 @@ libmpeg3_la_SOURCES = libmpeg3.cpp
 libmpeg3_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
 
 INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
-	@STLPORT_CFLAGS@                                \
 	-I$(srcdir)/..                                  \
 	-I$(top_srcdir)/src 				\
 	-I$(includedir)					\

@@ -6,7 +6,6 @@ libftxidxodbc_la_SOURCES = libftxidxodbc.cpp ODBCIndexHelper_private.hh
 libftxidxodbc_factory_la_SOURCES = libftxidxodbc_factory.cpp
 
 INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
-	@STLPORT_CFLAGS@                                \
 	-I..                                            \
 	-I$(top_srcdir)/src 				\
 	-I$(includedir)					\

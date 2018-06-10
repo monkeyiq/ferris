@@ -23,7 +23,6 @@ metadata-clients-common.moc: metadata-clients-common.cpp
 	$(MOC) $(srcdir)/metadata-clients-common.hh -o metadata-clients-common.moc
 
 INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib                                               \
-	@STLPORT_CFLAGS@                                \
 	-I. 						\
 	-I$(srcdir) -I$(top_srcdir) 			\
 	-I$(top_builddir)				\

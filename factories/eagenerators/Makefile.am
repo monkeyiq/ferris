@@ -97,7 +97,6 @@ MEDIAINFO = libferrismediainfoea_factory.cpp
 endif
 
 INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
-	@STLPORT_CFLAGS@                                \
 	-I..                                            \
 	-I$(top_srcdir)/plugins/eagenerators 		\
 	-I$(includedir)					\

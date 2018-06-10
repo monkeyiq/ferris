@@ -9,7 +9,6 @@ libferrisannodex_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
 libferrisannodex_la_SOURCES         = libferrisannodex.cpp 
 
 INCLUDES = -I$(top_builddir)/lib -I$(top_srcdir)/lib 						\
-	@STLPORT_CFLAGS@                                \
 	-I$(srcdir)/..                                  \
 	-I$(top_srcdir)/src 				\
 	-I$(includedir)					\
