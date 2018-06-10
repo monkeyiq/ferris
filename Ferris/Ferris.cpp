@@ -160,6 +160,40 @@ using namespace Ferris::RDFCore;
 
 namespace Ferris
 {
+    // const char* getDotFerrisPathCSTR()
+    // {
+    //     static std::string s = getDotFerrisPath();
+    //     return s.c_str();
+    // }
+    
+    
+    std::string getDotFerrisPath()
+    {
+//        return "~/.ferris/";
+        
+        static string ret = "";
+        static bool v = true;
+        if( v )
+        {
+            v = false;
+            ret = Shell::getHomeDirPath_nochecks() + "/.ferris/";
+            char* p = getenv("LIBFERRIS_DOT_FERRIS_PATH");
+            if( p )
+            {
+                ret = p;
+                ret += "/";
+            }
+        }
+        
+        return ret;
+    }
+    std::string getDotFerrisPartialMatchPath()
+    {
+        return "/.ferris/";
+    }
+    
+
+    
     const string FERRIS_CONFIG_APPS_DIR = "/.ferris/apps.db";
     const string FERRIS_CONFIG_EVENT_DIR = "/.ferris/eventbind.db";
     const string FERRIS_CONFIG_MIMEBIND_DIR = "/.ferris/mimebind.db";
@@ -5328,7 +5362,7 @@ Context::OnReadComplete_setupUserOverlayLinks()
 
         try
         {
-            fh_context r = Resolve("~/.ferris/user-overlay-links.xml/user-overlay-links");
+            fh_context r = Resolve(getDotFerrisPath() + "user-overlay-links.xml/user-overlay-links");
             fh_context byRegex = r->getSubContext("link-by-regex");
 
             for( Context::iterator ci = byRegex->begin(); ci != byRegex->end(); ++ci )

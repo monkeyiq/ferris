@@ -1,0 +1,29 @@
+################################################################################
+################################################################################
+################################################################################
+#
+# Test Ferris::Time functions
+#
+################################################################################
+################################################################################
+################################################################################
+
+proc run_ferris_time_ParseRelativeTimeString {} {
+    
+    global UTBASE
+    global SDATA
+    global verbose
+    
+    set cmd "$UTBASE/ut_ParseRelativeTimeString"
+    rt_expected [rt_version "Ferris::Time::ParseRelativeTimeString" ] "Success" "$cmd";
+}
+
+global SDATA
+global verbose
+
+if { $verbose > 1 } {
+    send_user "Testing Ferris::Time namespaced functions...\n"
+}
+
+run_ferris_time_ParseRelativeTimeString
+

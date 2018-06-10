@@ -37,3 +37,7 @@ aclocal.m4
 autom4te.cache
 /*.sum
 /ferris.xml
+
+apps/fcreate/fcreate
+appsui/gfcreate/gfcreate
+

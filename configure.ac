@@ -4227,7 +4227,7 @@ NEPOMUK_LIBS=
 if test x"$have_kde" = xyes; then
 
    	NEPOMUK_CFLAGS=" $KDE_CFLAGS $SOPRANO_CFLAGS "
-   	NEPOMUK_LIBS=" $KDE_LIBS $SOPRANO_LIBS -lnepomuk "
+   	NEPOMUK_LIBS=" $KDE_LIBS $SOPRANO_LIBS  "
 
 	CFLAGS_cache=$CFLAGS
 	CXXFLAGS_cache=$CXXFLAGS
@@ -4963,6 +4963,12 @@ REQUIREMENTSXSLT=
 AC_SUBST(REQUIREMENTSXSLT)
 
 #
+# Testing
+#
+AC_DEFINE( FERRIS_USER_NAME_NOBODY, "nobody" )
+
+
+#
 # All done.
 #
 AC_OUTPUT([
@@ -5052,6 +5058,7 @@ apps/tools/Makefile
 apps/rest/Makefile
 apps/yuibrowser/Makefile
 apps/yuibrowser/images/Makefile
+apps/fcreate/Makefile
 appsui/Makefile
 appsui/gfcopy/Makefile
 appsui/gfrm/Makefile
@@ -5060,6 +5067,7 @@ appsui/gfdl/Makefile
 appsui/gfproperties/Makefile
 appsui/gfindex/Makefile
 appsui/volumemanager/Makefile
+appsui/gfcreate/Makefile
 tests/Makefile
 tests/contextiostream/Makefile
 tests/runner/Makefile
@@ -5270,6 +5278,7 @@ dot-ferris/sane/dot-discovered/gray-100/options/Makefile
 dot-ferris/sane/dot-discovered/gray-300/options/Makefile
 dot-ferris/sane/dot-discovered/gray-600/options/Makefile
 dot-ferris/sane/dot-discovered/gray-base/options/Makefile
+dot-ferris/ferriscreate/Makefile
 media/Makefile
 media/icons/Makefile
 media/xslt/Makefile
@@ -5311,6 +5320,12 @@ exposures/plasma/Makefile
 exposures/perl/Makefile
 exposures/kio/Makefile
 patches/Makefile
+testsuite/Makefile
+testsuite/config/Makefile
+testsuite/ferris.test/Makefile
+testsuite/sampledata/Makefile
+testsuite/sampledata/create_fulltextindex/Makefile
+testsuite/expected_output/Makefile
 ferris-config
 ferris.pc
 ferrisui.pc

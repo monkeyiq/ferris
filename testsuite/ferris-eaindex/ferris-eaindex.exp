@@ -1,0 +1,481 @@
+################################################################################
+################################################################################
+################################################################################
+#
+# Test EA Index
+#
+################################################################################
+################################################################################
+################################################################################
+
+
+proc remake_eaindex_at { idx dgapcode forwardlexiconclass reverselexiconclass } {
+
+    
+    global SDATA
+    global verbose
+
+    if { $verbose > 1 } {
+	send_user "remaking index at $idx...\n"
+	send_user "cmd:  fcreate --create-type=eaindex --target-path=$idx document-number-gap-code=$dgapcode attribute-name-mapping=$forwardlexiconclass forward-value-mapping=$forwardlexiconclass reverse-value-mapping=$reverselexiconclass \n\n"
+    }
+
+    recreate_clean_tmp_subdir "$idx"
+
+    #
+    # setup the new index.
+    #
+    set cmd "fcreate --create-type=eaindex --target-path=$idx  document-number-gap-code=$dgapcode attribute-name-mapping=$forwardlexiconclass forward-value-mapping=$forwardlexiconclass reverse-value-mapping=$reverselexiconclass"
+    set testname [rt_version "fcreate" ]
+    rt_expected "$testname" "eof" "$cmd";
+
+#     spawn fcreate --create-type=eaindex --target-path=$idx \
+# 	document-number-gap-code=$dgapcode                  \
+# 	attribute-name-mapping=$forwardlexiconclass         \
+# 	forward-value-mapping=$forwardlexiconclass          \
+# 	reverse-value-mapping=$reverselexiconclass
+#     expect {
+# 	-re "cought e:" { fail "ferriscreate for fulltext index caused an exception"; return; }
+# 	timeout { fail "Failed to spawn fcreate (timeout)"; return; }
+#     }
+}
+
+
+#
+# Add the document at path filename to the index at path idx. Treat
+# addition as a test and failure counts toward overall count of failures.
+#
+proc eaindex_add { idx filename } {
+    
+    global SDATA
+    global verbose
+    global TMPSAMPLEDATA
+    
+    if { $verbose > 1 } {
+	send_user  "Adding file:$filename to eaindex at $idx...\n"
+    }
+
+    set cmd "feaindexadd -P $idx -d $TMPSAMPLEDATA/$filename"
+    set testname [rt_version "feaindexadd" ]
+    rt_expected "$testname" "Total contexts indexed:1" "$cmd";
+}
+
+#
+# Search the index at idx using the given ffilter string
+# and pass iff the exact number of results are found.
+#
+proc eaindex_search { idx wantedmatches ffilter } {
+    
+    global SDATA
+    global verbose
+    global FEAINDEXQUERY
+    
+    if { $verbose > 1 } {
+	send_user  "Searching for $ffilter should get $wantedmatches matches...\n"
+    }
+
+    set cmd "$FEAINDEXQUERY -P $idx $ffilter"
+    set testname [rt_version "feaindexquery" ]
+    rt_expected "$testname" "Found $wantedmatches matches at the foll" "$cmd";
+
+#     spawn nice feaindexquery -P $idx $ffilter
+#     expect {
+# 	-re "Found $wantedmatches matches at the foll" { pass "Found $wantedmatches as expected"; return }
+# 	-re "(cought|error)" { fail "Exception occured during query on $ffilter"; }
+# 	timeout { fail "Failed to add new file $filename to index (timeout)"; }
+#     }
+#     fail "Incorrect number of results returned from index:$idx looking for $ffilter"
+}
+
+proc run_ea_index_test { idx recreate dgapcode forwardlexiconclass reverselexiconclass } {
+    
+    global SDATA
+    global verbose
+
+    if { $verbose > 1 } {
+	send_user "Creating an attribute index for some of the documents in sampledata\n"
+    }
+
+
+
+    set test createeaindex
+    if { $recreate > 0 } {
+
+	remake_eaindex_at $idx $dgapcode $forwardlexiconclass $reverselexiconclass
+	
+	#
+	# add a few documents to the index.
+	#
+	send_user "populating eaindex at $idx...\n"
+	eaindex_add $idx  alice13a.txt
+	eaindex_add $idx  snark12.txt
+	eaindex_add $idx  nobos10.txt
+	eaindex_add $idx  boysw10.txt
+	eaindex_add $idx  warw11.txt
+	eaindex_add $idx  frsls10.txt
+    }    
+
+    #
+    # sanity check the index
+    #
+    set test "check eaindex for sanity, document map single"
+    set cmd "db_dump -p $idx/document-map.db"
+    set testname [rt_version "db_dump" ]
+    rt_expected_re "$testname" "sampledata/frsls10.txt" "$cmd";
+
+#     spawn nice db_dump -p $idx/document-map.db
+#     expect {
+# 	-re "sampledata/frsls10.txt" { pass "$test" }
+# 	timeout { fail "Failed on $test (timeout)"; }
+#     }
+
+    set test "check eaindex for sanity, document map full"
+    set cmd "db_dump -p $idx/document-map.db"
+    set testname [rt_version "db_dump" ]
+    rt_expected_re "$testname" "HEADER=END\r\n.*\r\n.*sampledata/alice13a.txt\r\n.*sampledata/snark12.txt\r\n.*sampledata/nobos10.txt\r\n.*sampledata/boysw10.txt\r\n.*sampledata/warw11.txt\r\n.*sampledata/frsls10.txt\r\nDATA=END" "$cmd";
+
+#     spawn nice db_dump -p $idx/document-map.db
+#     expect {
+# 	-re "HEADER=END\r\n.*\r\n.*sampledata/alice13a.txt\r\n.*sampledata/snark12.txt\r\n.*sampledata/nobos10.txt\r\n.*sampledata/boysw10.txt\r\n.*sampledata/warw11.txt\r\n.*sampledata/frsls10.txt\r\nDATA=END" { pass "$test" }
+# 	timeout { fail "Failed on $test (timeout)"; }
+#     }
+
+    #
+    # do some queries
+    #
+    set test "query eaindex"
+    eaindex_search $idx 6  "(size>=10)"
+    eaindex_search $idx 2  "(size>=259215)"
+    eaindex_search $idx 2  "(size>=342169)"
+    eaindex_search $idx 1  "(size>=342170)"
+    eaindex_search $idx 1  "(size>=363974)"
+    eaindex_search $idx 0  "(size>=363975)"
+
+    eaindex_search $idx 0  "(size<=10)"
+    eaindex_search $idx 0  "(size<=40661)"
+    eaindex_search $idx 1  "(size<=40662)"
+    eaindex_search $idx 1  "(size<=40663)"
+    eaindex_search $idx 4  "(size<=259215)"
+    eaindex_search $idx 5  "(size<=342169)"
+    eaindex_search $idx 5  "(size<=342170)"
+    eaindex_search $idx 5  "(size<=363973)"
+    eaindex_search $idx 6  "(size<=363974)"
+    eaindex_search $idx 6  "(size<=363975)"
+
+    eaindex_search $idx 1  "(size==342169)"
+    eaindex_search $idx 5  "(!(size==342169))"
+    eaindex_search $idx 0  "(size==342170)"
+
+
+     eaindex_search $idx 6  "(name-extension==txt)"
+     eaindex_search $idx 6  "(name-extension=~xt)"
+
+#     eaindex_search $idx 6  "(name=~.*txt)"
+#     eaindex_search $idx 3  "(name=~.*10.txt)"
+#     eaindex_search $idx 2  "(name=~.*s10.txt)"
+#     eaindex_search $idx 4  "(name=~^.*s.*$)"
+
+#     eaindex_search $idx 1  "(name==alice13a.txt)"
+#     eaindex_search $idx 0  "(name==alice13b.txt)"
+
+}
+
+proc run_plugin_ea_index_test { idx recreate eaidxtype useFullRegexes } {
+    
+    global SDATA
+    global verbose
+    global TMPFS
+    global FCREATE
+    global FMEDALLION
+    global FEAINDEXADD
+
+    if { $verbose > 1 } {
+	send_user "Creating an attribute index for some of the documents in sampledata\n"
+    }
+
+    set dbname "ferristestingeaidx"
+    set test createeaindex
+    if { $recreate > 0 } {
+
+	spawn bash -c "psql -c 'drop database $dbname;' template1"
+	expect {}
+
+	recreate_clean_tmp_subdir "$idx"
+
+	set cmd "$FCREATE $idx --create-type=$eaidxtype dbname=$dbname template-dbname=ferriseatemplate"
+	set testname [rt_version "fcreate" ]
+	rt_expected "$testname" "eof" "$cmd";
+
+# 	spawn fcreate $idx --create-type=$eaidxtype dbname=$dbname
+# 	expect {
+# 	    -re "cought e:" { fail "ferriscreate for fulltext index caused an exception"; return; }
+# 	    timeout { fail "Failed to spawn fcreate (timeout)"; return; }
+# 	}
+	
+	#
+	# add a few documents to the index.
+	#
+	send_user "populating eaindex at $idx...\n"
+	eaindex_add $idx  alice13a.txt
+	eaindex_add $idx  snark12.txt
+	eaindex_add $idx  nobos10.txt
+	eaindex_add $idx  boysw10.txt
+	eaindex_add $idx  warw11.txt
+	eaindex_add $idx  frsls10.txt
+    }
+
+    
+    
+
+    #
+    # do some queries
+    #
+    set test "query eaindex"
+    eaindex_search $idx 6  "(size>=10)"    
+    eaindex_search $idx 2  "(size>=259215)"
+    eaindex_search $idx 2  "(size>=342169)"
+    eaindex_search $idx 1  "(size>=342170)"
+    eaindex_search $idx 1  "(size>=363974)"
+    eaindex_search $idx 0  "(size>=363975)"
+
+    eaindex_search $idx 0  "(size<=10)"
+    eaindex_search $idx 0  "(size<=40661)"
+    eaindex_search $idx 1  "(size<=40662)"
+    eaindex_search $idx 1  "(size<=40663)"
+    eaindex_search $idx 4  "(size<=259215)"
+    eaindex_search $idx 5  "(size<=342169)"
+    eaindex_search $idx 5  "(size<=342170)"
+    eaindex_search $idx 5  "(size<=363973)"
+    eaindex_search $idx 6  "(size<=363974)"
+    eaindex_search $idx 6  "(size<=363975)"
+
+    eaindex_search $idx 1  "(size==342169)"
+    eaindex_search $idx 5  "(!(size==342169))"
+    eaindex_search $idx 0  "(size==342170)"
+
+
+    eaindex_search $idx 6  "(url=~.*txt)"
+    eaindex_search $idx 3  "(url=~.*10.txt)"
+    eaindex_search $idx 2  "(url=~.*s10.txt)"
+    if { $useFullRegexes } {
+	eaindex_search $idx 6  "(url=~^.*s.*$)"
+    }
+
+    eaindex_search $idx 1  "(url==file:///.*/sampledata/alice13a.txt)"
+    eaindex_search $idx 0  "(url==file:///.*/sampledata/alice13b.txt)"
+
+    set inpath "$idx/emblemed-file"
+    system touch $inpath
+    sleep 1;
+    system $FMEDALLION -a -e libferris $inpath
+    sleep 1;
+    system nice $FEAINDEXADD -P $idx -d $inpath
+    sleep 1;
+    eaindex_search $idx 1  "(emblem:has-libferris==1)"
+
+    
+}
+
+
+proc run_eaindex_revoke_alice_alice {} {
+    
+    global SDATA
+    global verbose
+
+    set desc "This test adds alice.txt and then adds alice.txt again to the eaindex."
+    set idx "/tmp/ferris-revoke"
+    if { $verbose > 1 } {
+	send_user  "Testing docid revokation...\n"
+	send_user  "$desc\n"
+    }
+    
+    set interestingEA        "name,path,size,md5"
+    set dgapcode             "Interpolative"
+    set forwardlexiconclass  "Uncompressed" 
+    set reverselexiconclass  "Uncompressed"
+    remake_eaindex_at $idx $dgapcode $forwardlexiconclass $reverselexiconclass
+
+    set test "add docuemnt to index"
+
+    set filename     alice13a.txt
+    set tmpfilename  /tmp/$filename
+    system cp -av $SDATA/$filename $tmpfilename
+    if { $verbose > 1 } {
+	send_user  "Adding file:$filename from $tmpfilename to eaindex at $idx ...\n"
+    }
+
+    set cmd "feaindexadd -v -P $idx -d $tmpfilename --ea-to-index \"$interestingEA\"";
+    set testname [rt_version "feaindexadd" ]
+    rt_expected "$testname" "Total contexts indexed:1" "$cmd";
+
+#     spawn nice feaindexadd -v -P $idx -d $tmpfilename \
+# 	--ea-to-index "$interestingEA"
+#     expect {
+# 	-re "error:.*Exception" { fail "Error adding $filename to index" }
+# 	-re "cought e:" { fail "Can't add file to index"; }
+# 	timeout { fail "Failed to add new file $filename to index (timeout)"; }
+#     }
+
+    set cmd "feaindexadd -v -P $idx -d $tmpfilename --ea-to-index \"$interestingEA\"";
+    set testname [rt_version "feaindexadd" ]
+    rt_expected "$testname" "Total contexts indexed:1" "$cmd";
+
+#     spawn nice feaindexadd -v -P $idx -d $tmpfilename \
+# 	--ea-to-index "$interestingEA"
+#     expect {
+# 	-re "error:.*Exception" { fail "Error adding $filename to index" }
+# 	-re "cought e:" { fail "Can't add file to index"; }
+# 	timeout { fail "Failed to add new file $filename to index (timeout)"; }
+#     }
+    #
+    # Compare an XML dump of the index with one we prepared earlier.
+    #
+    set expected eaindex-revoke-alice-then-alice.xml
+    set actual /tmp/index.xml
+    system feaindexquery -v -P $idx --dump-index >|$actual
+    compare_expected_compressed_file $expected $actual "eaindex: alice then alice again"
+
+}
+
+
+proc run_eaindex_revoke_alice_snark {} {
+    
+    global SDATA
+    global verbose
+
+    set desc "This test adds alice.txt and then adds alice.txt again to the eaindex."
+    set idx "/tmp/ferris-revoke"
+    if { $verbose > 1 } {
+	send_user  "Testing docid revokation...\n"
+	send_user  "$desc\n"
+    }
+    
+    set interestingEA        "name,path,size,md5"
+    set dgapcode             "Interpolative"
+    set forwardlexiconclass  "Uncompressed" 
+    set reverselexiconclass  "Uncompressed"
+    remake_eaindex_at $idx $dgapcode $forwardlexiconclass $reverselexiconclass
+
+    set test "add docuemnt to index"
+
+    set filename     alice13a.txt
+    set tmpfilename  /tmp/$filename
+    system cp -av $SDATA/$filename $tmpfilename
+    if { $verbose > 1 } {
+	send_user  "Adding file:$filename from $tmpfilename to eaindex at $idx ...\n"
+    }
+
+    set cmd "feaindexadd -v -P $idx -d $tmpfilename --ea-to-index \"$interestingEA\"";
+    set testname [rt_version "feaindexadd" ]
+    rt_expected "$testname" "Total contexts indexed:1" "$cmd";
+
+#     spawn nice feaindexadd -v -P $idx -d $tmpfilename \
+# 	--ea-to-index "$interestingEA"
+#     expect {
+# 	-re "error:.*Exception" { fail "Error adding $filename to index" }
+# 	-re "cought e:" { fail "Can't add file to index"; }
+# 	timeout { fail "Failed to add new file $filename to index (timeout)"; }
+#     }
+
+    set filename snark12.txt
+    system cp -av $SDATA/$filename $tmpfilename
+    if { $verbose > 1 } {
+	send_user  "Reindexing using new contents:$filename from $tmpfilename to index at $idx ...\n"
+    }
+
+    set cmd "nice feaindexadd -v -P $idx -d $tmpfilename --ea-to-index \"$interestingEA\"";
+    set testname [rt_version "feaindexadd" ]
+    rt_expected "$testname" "Total contexts indexed:1" "$cmd";
+
+#     spawn nice feaindexadd -v -P $idx -d $tmpfilename \
+# 	--ea-to-index "$interestingEA"
+#     expect {
+# 	-re "error:.*Exception" { fail "Error adding $filename to index" }
+# 	-re "cought e:" { fail "Can't add file to index"; }
+# 	timeout { fail "Failed to add new file $filename to index (timeout)"; }
+#     }
+    set expected eaindex-revoke-alice-then-snark.xml
+    set actual /tmp/index.xml
+    system feaindexquery -v -P $idx --dump-index >|$actual
+    system cp -av $actual /tmp/eaindex-uncompact.xml
+    compare_expected_compressed_file $expected $actual "eaindex: alice then snark"
+
+    if { $verbose > 1 } {
+	send_user  "Compacting the attribute index at $idx ...\n"
+    }
+    set cmd "feaindexcompact -v -P $idx"
+    set testname [rt_version "feaindexcompact" ]
+    rt_expected "$testname" "eof" "$cmd";
+
+#     spawn nice feaindexcompact -v -P $idx 
+#     expect {
+# 	-re "error:.*Exception" { fail "Error adding $filename to index" }
+# 	-re "cought e:" { fail "Can't add file to index"; }
+# 	timeout { fail "Failed to add new file $filename to index (timeout)"; }
+#     }
+    set actual /tmp/index.xml
+    system feaindexquery -v -P $idx --dump-index >|$actual
+    system cp -av $actual /tmp/eaindex-compact.xml
+
+    #
+    # Compare an XML dump of the index with one we prepared earlier.
+    #
+    set expected eaindex-revoke-alice-then-snark-compact.xml
+    set actual /tmp/index.xml
+    system feaindexquery -v -P $idx --dump-index >|$actual
+    compare_expected_compressed_file $expected $actual "eaindex: alice then snark then compact"
+
+}
+
+proc run_eaindex_revoke_suite {} {
+    
+    global SDATA
+    global verbose
+    
+    if { $verbose > 1 } {
+	send_user "Testing docid revokation and reclaim for attribute index...\n"
+    }
+
+    run_eaindex_revoke_alice_alice
+    run_eaindex_revoke_alice_snark
+}
+
+    global SDATA
+    global verbose
+    
+    if { $verbose > 1 } {
+	send_user "Testing attribute index...\n"
+    }
+
+    system rm "-rf" "~/.ferris/rdfdb/*"
+
+# FIXME    
+#    run_ea_index_test "/tmp/eaindex" 1 "None"           "Uncompressed" "Uncompressed"
+
+#     run_ea_index_test "/tmp/eaindex" 1 "Interpolative"  "Uncompressed" "Uncompressed"
+#     run_ea_index_test "/tmp/eaindex" 1 "Golomb"         "Uncompressed" "Uncompressed"
+    
+#     run_ea_index_test "/tmp/eaindex" 1 "None"           "FrontCodedBlocks" "Uncompressed"
+#     run_ea_index_test "/tmp/eaindex" 1 "Interpolative"  "FrontCodedBlocks" "Uncompressed"
+#     run_ea_index_test "/tmp/eaindex" 1 "Golomb"         "FrontCodedBlocks" "Uncompressed"
+
+#     run_ea_index_test "/tmp/eaindex" 1 "None"           "FrontCodedBlocks" "FrontCodedBlocks"
+
+#     run_eaindex_revoke_suite
+    
+    send_user "Testing attribute index... drop database ferristestingeaidx\n"
+    spawn bash -c "psql -c 'drop database ferristestingeaidx;' template1"
+    expect {}
+    sleep 1;
+
+    run_plugin_ea_index_test "/tmp/eaindex"   1 "eaindexpostgresql" 1
+
+
+
+
+
+
+## This is wrong, run_plugin_ea_index_test{} does psql drop database commands.
+###    run_plugin_ea_index_test "/tmp/eaindexrdf" 1 "redland"
+
+

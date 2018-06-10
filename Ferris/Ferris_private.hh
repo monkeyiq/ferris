@@ -46,7 +46,11 @@
 
 namespace Ferris
 {
+    
 
+
+    
+    
     extern const std::string FERRIS_CONFIG_APPS_DIR;
     extern const std::string FERRIS_CONFIG_EVENT_DIR;
     extern const std::string FERRIS_CONFIG_MIMEBIND_DIR;

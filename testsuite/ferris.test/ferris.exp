@@ -1,0 +1,1580 @@
+#   Copyright (C) 2003 Ben Martin
+# Based on calc.exp which is GPL and Copyright (C) 1997 - 2001 Free Software Foundation, Inc.
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
+
+#
+# These need refresh
+# ferris-glob wants to create a pg database.
+#
+#
+
+#
+# expectations that clean up in case of error. Note that `$test' is
+# a purely local variable.
+#
+# The first of these is used to match any bad responses, and resynchronise
+# things by finding a prompt. The second is a timeout error, and shouldn't
+# ever be triggered.
+#
+expect_after {
+    global expect_out
+
+	-re "\[^\n\r\]*$prompt$" {
+		fail "$test (bad match)"
+		if { $verbose > 0 } {
+			regexp ".*\r\n(\[^\r\n\]+)(\[\r\n\])+$prompt$" \
+						$expect_out(buffer) "" output
+			send_user "\tUnmatched output: \"$output\"\n"
+		}
+	}
+	timeout {
+		fail "$test (timeout)"
+	}
+}
+
+
+################################################################################
+################################################################################
+################################################################################
+
+
+
+
+
+
+
+
+
+
+###
+###
+###
+
+proc run_manytoone_context_conflict_test_private { opcode datasource resolveMethod extraParams expectedResult } {
+    
+    global UTBASE
+    global SDATA
+    global verbose
+    
+    set ftype   "union"
+    set BASEDIR "/tmp/testbase"
+    
+    recreate_clean_tmp_subdir "$BASEDIR"
+    system tar -C  $BASEDIR -xf $SDATA/many2onefs.tar
+    system tar -C  $BASEDIR -xf $SDATA/many2onefs-bigset.tar
+
+    set test "ut_manybasetoone_viewcontext --basedir=$BASEDIR $opcode $datasource $resolveMethod $extraParams -c -C"
+    if { $verbose > 1 } {
+	send_user "Testing union context class. $test\n"
+    }
+
+    set cmd "$UTBASE/ut_manybasetoone_viewcontext -c -C --basedir=$BASEDIR $opcode $datasource $resolveMethod $extraParams"
+    set testname [rt_version "ut_manybasetoone_viewcontext" ]
+    rt_expected_re "$testname" "$expectedResult" "$cmd";
+
+#     spawn $UTBASE/ut_manybasetoone_viewcontext -c -C --basedir=$BASEDIR $opcode $datasource $resolveMethod $extraParams
+#     expect {
+# 	-re "$expectedResult" { pass "Successful test of many to one filesystem $test"; return; }
+# 	-re "ERROR" { fail "Failed test of many to one filesystem $test";               return; }
+# 	default { fail "Failed test of many to one filesystem $test (timeout)";         return; }
+#     }
+#     fail "Didn't get expected output for test of many to one filesystem $test";
+}
+
+proc run_manytoone_context_conflict_test { opcode datasource extraParams expectedResult } {
+    run_manytoone_context_conflict_test_private $opcode $datasource "--dummy"       $extraParams $expectedResult
+    run_manytoone_context_conflict_test_private $opcode $datasource "--use-resolve" $extraParams $expectedResult    
+}
+
+proc run_union_context {} {
+    
+    global SDATA
+    global verbose
+    
+    if { $verbose > 1 } {
+	send_user "running union context test suite...\n"
+    }
+
+    set opcode "--use-union"
+    
+    run_manytoone_context_conflict_test $opcode "--conflict-test" "--dummy" \
+ "dj1c_ex1:disjoint1-conflict1,dj1c_ex2:disjoint1-conflict1,dj1fileA:disjoint1,dj1fileB:disjoint1,dj1fileC:disjoint1"
+
+    run_manytoone_context_conflict_test $opcode "--conflict-3-test" "--dummy" \
+ "dj1c_ex1:disjoint1-conflict1,dj1c_ex2:disjoint1-conflict1,dj1fileA:disjoint1,dj1fileB:disjoint1,dj1fileC:disjoint1,dj2c_ex5:"
+
+    run_manytoone_context_conflict_test $opcode "--disjoint-test"  "--dummy" \
+ "dj1fileA:disjoint1,dj1fileB:disjoint1,dj1fileC:disjoint1,dj2_file01:,dj2_file02:,dj2_file03:"
+
+    # run the above tests with reversed union ordering.
+    run_manytoone_context_conflict_test $opcode "--conflict-test" "--reverse" \
+ "dj1c_ex1:disjoint1-conflict1,dj1c_ex2:disjoint1-conflict1,dj1fileA:disjoint1-conflict1,dj1fileB:disjoint1-conflict1,dj1fileC:disjoint1"
+
+    run_manytoone_context_conflict_test $opcode "--conflict-3-test" "--reverse" \
+ "dj1c_ex1:disjoint1-conflict1,dj1c_ex2:disjoint1-conflict1,dj1fileA:dj-cf2,dj1fileB:disjoint1-conflict1,dj1fileC:dj-cf2,dj2c_ex5:"
+
+
+    run_manytoone_context_conflict_test $opcode "--disjoint-test" "--reverse" \
+ "dj1fileA:disjoint1,dj1fileB:disjoint1,dj1fileC:disjoint1,dj2_file01:,dj2_file02:,dj2_file03:,"
+
+    #
+    # Testing on some more meaty data
+    #
+    send_user "running $opcode fs tests on larger (500 item) data set\n"
+    run_manytoone_context_conflict_test $opcode "--use-bigset-3" "--digest" "71a245655caba42e147468284168a1c7"
+    run_manytoone_context_conflict_test $opcode "--use-bigset-3" "-Dr"      "d09650d38ae459db00555eeab029d907"
+
+}
+
+proc run_setintersection_context {} {
+    
+    global SDATA
+    global verbose
+    
+    if { $verbose > 1 } {
+	send_user "running union context test suite...\n"
+    }
+
+    set opcode "--use-intersection"
+    run_manytoone_context_conflict_test $opcode "--conflict-test"   "--dummy" "dj1fileA:disjoint1,dj1fileB:disjoint1"
+    run_manytoone_context_conflict_test $opcode "--conflict-3-test" "--dummy" "dj1fileA:disjoint1"
+    run_manytoone_context_conflict_test $opcode "--disjoint-test"   "--dummy" "NOTHING"
+
+    # run the above tests with reversed union ordering.
+    run_manytoone_context_conflict_test $opcode "--conflict-test"   "--reverse" \
+	"dj1fileA:disjoint1-conflict1,dj1fileB:disjoint1-conflict1"
+    run_manytoone_context_conflict_test $opcode "--conflict-3-test" "--reverse" "dj1fileA:dj-cf2"
+    run_manytoone_context_conflict_test $opcode "--disjoint-test"   "--reverse" "NOTHING"
+
+    #
+    # Testing on some more meaty data
+    #
+    send_user "running $opcode fs tests on larger (500 item) data set\n"
+    run_manytoone_context_conflict_test $opcode "--use-bigset-3" "--digest" "7e3e33ab4c65077122b404504b010159"
+    run_manytoone_context_conflict_test $opcode "--use-bigset-3" "-Dr"      "3d5689767ad760ef14aae45ff5d0ad57"
+}
+
+proc run_setdifference_context {} {
+    
+    global SDATA
+    global verbose
+    
+    if { $verbose > 1 } {
+	send_user "running union context test suite...\n"
+    }
+    
+    set opcode "--use-difference"
+    run_manytoone_context_conflict_test $opcode "--conflict-test"   "--dummy" "dj1fileC:disjoint1"
+    run_manytoone_context_conflict_test $opcode "--conflict-3-test" "--dummy" "NOTHING"
+    run_manytoone_context_conflict_test $opcode "--disjoint-test"   "--dummy" "dj1fileA:disjoint1,dj1fileB:disjoint1,dj1fileC:disjoint1"
+
+    # run the above tests with reversed union ordering.
+    run_manytoone_context_conflict_test $opcode "--conflict-test"   "--reverse" "dj1c_ex1:disjoint1-conflict1,dj1c_ex2:disjoint1-conflict1"
+    run_manytoone_context_conflict_test $opcode "--conflict-3-test" "--reverse" "dj2c_ex5:"
+    run_manytoone_context_conflict_test $opcode "--disjoint-test"   "--reverse" "dj2_file01:,dj2_file02:,dj2_file03:"
+
+    #
+    # Testing on some more meaty data
+    #
+    send_user "running $opcode fs tests on larger (500 item) data set\n"
+    run_manytoone_context_conflict_test $opcode "--use-bigset-3" "--digest" "dcd038f13b54661660002fb4def0785b"
+    run_manytoone_context_conflict_test $opcode "--use-bigset-3" "-Dr"      "5037ac9512c7dd929085da5983e6d571"
+
+}
+
+proc run_setsymdifference_context {} {
+    
+    global SDATA
+    global verbose
+    
+    if { $verbose > 1 } {
+	send_user "running union context test suite...\n"
+    }
+    
+    set opcode "--use-sym-diff"
+    run_manytoone_context_conflict_test $opcode "--conflict-test"   "--dummy"  \
+	"dj1c_ex1:disjoint1-conflict1,dj1c_ex2:disjoint1-conflict1,dj1fileC:disjoint1"
+    run_manytoone_context_conflict_test $opcode "--conflict-3-test" "--dummy" \
+	"dj1c_ex1:disjoint1-conflict1,dj1c_ex2:disjoint1-conflict1,dj1fileA:dj-cf2,dj2c_ex5:"
+    run_manytoone_context_conflict_test $opcode "--disjoint-test"   "--dummy" \
+	"dj1fileA:disjoint1,dj1fileB:disjoint1,dj1fileC:disjoint1,dj2_file01:,dj2_file02:,dj2_file03:"
+
+    # run the above tests with reversed union ordering.
+    run_manytoone_context_conflict_test $opcode "--conflict-test"   "--reverse" \
+	"dj1c_ex1:disjoint1-conflict1,dj1c_ex2:disjoint1-conflict1,dj1fileC:disjoint1"
+    run_manytoone_context_conflict_test $opcode "--conflict-3-test" "--reverse" \
+	"dj1c_ex1:disjoint1-conflict1,dj1c_ex2:disjoint1-conflict1,dj1fileA:disjoint1,dj2c_ex5:"
+    run_manytoone_context_conflict_test $opcode "--disjoint-test"   "--reverse" \
+	"dj1fileA:disjoint1,dj1fileB:disjoint1,dj1fileC:disjoint1,dj2_file01:,dj2_file02:,dj2_file03:"
+
+    #
+    # Testing on some more meaty data
+    #
+    send_user "running $opcode fs tests on larger (500 item) data set\n"
+    run_manytoone_context_conflict_test $opcode "--use-bigset-3" "--digest" "8a8e5a3cd1ea5e842e409965d1b10d72"
+    run_manytoone_context_conflict_test $opcode "--use-bigset-3" "-Dr"      "e2eec9e9f1f8495920356f7e2e14f612"
+
+}
+
+proc run_many_to_one_context_suite {} {
+    run_union_context
+    run_setintersection_context
+    run_setdifference_context
+    run_setsymdifference_context
+}
+
+################################################################################
+################################################################################
+################################################################################
+#
+# Test inherit ea context
+#
+################################################################################
+################################################################################
+################################################################################
+
+proc run_facade_inheritea_context {} {
+    
+    global UTBASE
+    global SDATA
+    global verbose
+    
+    set XMLFILENAME "inherit-context-test.xml"
+    set ftype   "db4"
+    set BASEDIR "/tmp/junk"
+    set XMLPATH "$BASEDIR/inherit-context-test.xml"
+
+    if { $verbose > 1 } {
+	send_user "Testing context for type $ftype...\n"
+    }
+    
+    recreate_clean_tmp_subdir "$BASEDIR"
+    spawn cp -av   $SDATA/inherit-context-test.xml $XMLPATH
+
+    set cmd "$UTBASE/ut_inheritea -x \"inheritea:/file://$XMLPATH\""
+    set testname [rt_version "ut_inheritea" ]
+    rt_expected "$testname" "Success" "$cmd";
+
+#     spawn nice $UTBASE/ut_inheritea -x "inheritea:/file://$XMLPATH"
+#     expect {
+# 	-re "Success" { pass "for inheritea context"; return } 
+# 	-re "ERROR" { fail "Exception occured during codec test for inheritea context"; }
+#     }
+#     fail "problem with codec test for inheritea context"
+}
+
+proc run_context_facade_suite {} {
+    
+    global SDATA
+    global verbose
+    
+    if { $verbose > 1 } {
+	send_user "Testing context facade classes...\n"
+    }
+
+    run_facade_inheritea_context
+}
+
+
+
+
+################################################################################
+################################################################################
+################################################################################
+#
+# Test ffilter string mounting
+#
+################################################################################
+################################################################################
+################################################################################
+
+proc run_ffilter_test { ffilter expected } {
+    
+    global UTBASE
+    global SDATA
+    global verbose
+
+    set cmd "$UTBASE/ut_ffilter -f \"$ffilter\""
+    rt_expected_re [rt_version "ffilter" ] "$expected" "$cmd";
+
+#     if { $verbose > 1 } {
+# 	send_user  "Testing ffilter AST for: $ffilter...\n"
+#     }
+#     spawn nice $UTBASE/ut_ffilter -f "$ffilter"
+#     expect {
+# 	-re "$expected" { pass "ffilter: $ffilter"; return }
+# 	-re "error:.*Exception" { fail "Error on ffilter: $ffilter" }
+# 	-re "invalid token near" { fail "Parse Error on ffilter: $ffilter" }
+# 	timeout { fail "Failed on ffilter: $ffilter (timeout)"; }
+#     }
+}
+
+proc run_ffilter_suite {} {
+    
+    global SDATA
+    global verbose
+    
+    if { $verbose > 1 } {
+	send_user "Testing ffilter mounting...\n"
+    }
+
+    run_ffilter_test "(&(name==foo)(size==bar))" ".*name:/ token:\r\n.*name:& token:&\r\n.*name:== token:==\r\n.*name:foo token:foo\r\n.*name:name token:name\r\n.*name:==--1 token:==\r\n.*name:bar token:bar\r\n.*name:size token:size\r\n"
+
+    run_ffilter_test "(&(name==foo)(size==bar)(key1==value1)(key2==value2))" "name:/ token:\r\n.*name:& token:&\r\n.*name:== token:==\r\n.*name:foo token:foo\r\n.*name:name token:name\r\n.*name:==--1 token:==\r\n.*name:bar token:bar\r\n.*name:size token:size\r\n.*name:==--2 token:==\r\n.*name:key1 token:key1\r\n.*name:value1 token:value1\r\n.*name:==--3 token:==\r\n.*name:key2 token:key2\r\n.*name:value2 token:value2\r\n"
+
+    run_ffilter_test "(|(&(name==foo)(size==bar)(key1==value1)(key2==value2))(ork1<=orv1)(ork2<=orv2)(ork3>=orv3))" "name:/ token:\r\n.*name:| token:|\r\n.*name:& token:&\r\n.*name:== token:==\r\n.*name:foo token:foo\r\n.*name:name token:name\r\n.*name:==--1 token:==\r\n.*name:bar token:bar\r\n.*name:size token:size\r\n.*name:==--2 token:==\r\n.*name:key1 token:key1\r\n.*name:value1 token:value1\r\n.*name:==--3 token:==\r\n.*name:key2 token:key2\r\n.*name:value2 token:value2\r\n.*name:<= token:<=\r\n.*name:ork1 token:ork1\r\n.*name:orv1 token:orv1\r\n.*name:<=--1 token:<=\r\n.*name:ork2 token:ork2\r\n.*name:orv2 token:orv2\r\n.*name:>= token:>=\r\n.*name:ork3 token:ork3\r\n.*name:orv3 token:orv3\r\n"
+
+    run_ffilter_test "(!(|(&(name==foo)(size==bar)(key1==value1)(key2==value2))(ork1<=orv1)(ork2<=orv2)(ork3>=orv3)))" ".*name:/ token:\r\n.*name:! token:!\r\n.*name:| token:|\r\n.*name:& token:&\r\n.*name:== token:==\r\n.*name:foo token:foo\r\n.*name:name token:name\r\n.*name:==--1 token:==\r\n.*name:bar token:bar\r\n.*name:size token:size\r\n.*name:==--2 token:==\r\n.*name:key1 token:key1\r\n.*name:value1 token:value1\r\n.*name:==--3 token:==\r\n.*name:key2 token:key2\r\n.*name:value2 token:value2\r\n.*name:<= token:<=\r\n.*name:ork1 token:ork1\r\n.*name:orv1 token:orv1\r\n.*name:<=--1 token:<=\r\n.*name:ork2 token:ork2\r\n.*name:orv2 token:orv2\r\n.*name:>= token:>=\r\n.*name:ork3 token:ork3\r\n.*name:orv3 token:orv3\r\n"
+
+    run_ffilter_test "(fred=~.*)" ".*name:/ token:\r\n.*name:=~ token:=~\r\n.*name:.* token:.*\r\n.*name:fred token:fred\r\n"
+
+
+}
+
+################################################################################
+################################################################################
+################################################################################
+#
+# Test code from FerrisDOM.cpp
+#
+################################################################################
+################################################################################
+################################################################################
+
+proc run_ferrisdom_test { testcase } {
+    
+    global UTBASE
+    global SDATA
+    global verbose
+
+    set cmd "$UTBASE/ut_ferrisdom $testcase"
+    rt_expected [rt_version "ferrisdom" ] "Success" "$cmd";
+
+#     if { $verbose > 1 } {
+# 	send_user  "Testing FerrisDOM: $testcase...\n"
+#     }
+#     spawn nice $UTBASE/ut_ferrisdom "$testcase"
+#     expect {
+# 	-re "Success" { pass "ferrisdom case: $testcase"; return }
+# 	-re "error:.*Exception" { fail "Error on ferrisdom case: $testcase" }
+# 	default { fail "Failed on ferrisdom case: $testcase (timeout)"; }
+#     }
+}
+
+proc run_ferrisdom_suite {} {
+    
+    global UTBASE
+    global SDATA
+    global verbose
+    
+    if { $verbose > 1 } {
+	send_user "Testing ferrisdom...\n"
+    }
+
+    set BASEDIR "/tmp/testbase"
+    recreate_clean_tmp_subdir $BASEDIR
+    system tar -C  $BASEDIR -xpf $SDATA/many2onefs.tar
+#    system tar -C  $BASEDIR -xpf $SDATA/many2onefs-bigset.tar
+
+    run_ferrisdom_test "--test-raw1"
+    run_ferrisdom_test "--test-raw1-ferris"
+    run_ferrisdom_test "--test-streamtodom"
+    run_ferrisdom_test "--test-mountdom"
+    run_ferrisdom_test "--test-domtostream"
+    run_ferrisdom_test "--test-setgetattr"
+# This test relies on an XML compare in the C++ source.
+#    run_ferrisdom_test "--basedir=/tmp/testbase --test-contexttoxml"
+    verify_output_contains "$UTBASE/ut_ferrisdom --basedir=/tmp/testbase --test-contexttoxml" "<keyval key=\"writable\">1</keyval>"
+
+    run_ferrisdom_test "--test-readwritemsg"
+    run_ferrisdom_test "--test-escapetoxmlattr"
+    run_ferrisdom_test "--basedir=/tmp/testbase --test-makedom"
+}
+
+
+################################################################################
+################################################################################
+################################################################################
+#
+# Test code for XSLT operations
+#
+################################################################################
+################################################################################
+################################################################################
+
+proc run_xslt_test { testcase } {
+    
+    global UTBASE
+    global SDATA
+    global verbose
+
+    if { $verbose > 1 } {
+	send_user  "Testing XSLT case: $testcase...\n"
+    }
+    spawn nice $UTBASE/ut_xslt "$testcase"
+    expect {
+	-re "Success" { pass "xslt case: $testcase"; return }
+	-re "error:.*Exception" { fail "Error on xslt case: $testcase" }
+	timeout { fail "Failed on xslt case: $testcase (timeout)"; }
+    }
+}
+
+proc run_xslt_suite {} {
+    
+    global SDATA
+    global verbose
+    
+    if { $verbose > 1 } {
+	send_user "Testing xslt code...\n"
+    }
+
+    set BASEDIR "/tmp/testbase"
+    system rm -rf   $BASEDIR
+    system mkdir -p $BASEDIR
+    system tar -C  $BASEDIR -xpf $SDATA/many2onefs.tar
+#    system tar -C  $BASEDIR -xpf $SDATA/many2onefs-bigset.tar
+
+    run_xslt_test "--test-simple"
+}
+
+################################################################################
+################################################################################
+################################################################################
+#
+# Test code for medallion operations
+#
+################################################################################
+################################################################################
+################################################################################
+
+proc run_medallion_test { testcase remakedir usehome } {
+    
+    global UTBASE
+    global SDATA
+    global verbose
+
+    set BASEPARENT "/tmp";
+
+    if { $usehome > 0 } {
+	set BASEPARENT "~/.ferris"
+    }
+    set BASEDIR "$BASEPARENT/etagere"
+
+    if { $verbose > 1 } {
+	send_user  "Testing Medallion case: $testcase ...\n"
+    }
+    if { $remakedir > 0 } {
+	recreate_clean_tmp_subdir $BASEDIR
+# 	system rm -rf   $BASEDIR
+# 	system mkdir -p $BASEDIR
+	system cp /etc/skel/.ferris/etagere/*db $BASEDIR
+    }
+    send_user "cmd: nice $UTBASE/ut_medallion $testcase --basedir=$BASEPARENT\n"
+
+    set cmd "$UTBASE/ut_medallion $testcase --basedir=$BASEPARENT"
+    set testname [rt_version "ut_medallion" ]
+    rt_expected "$testname" "Success" "$cmd";
+
+#     spawn nice $UTBASE/ut_medallion "$testcase" --basedir=$BASEPARENT
+#     expect {
+# 	-re "Success" { pass "Medallion case: $testcase"; return }
+# 	-re "error:" { fail "Error on Medallion case: $testcase" }
+# 	-re "terminate called" { fail "Error on Medallion case: $testcase" }
+# 	timeout { fail "Failed on Medallion case: $testcase (timeout)"; }
+#     }
+}
+
+proc run_medallion_suite {} {
+    
+    global SDATA
+    global verbose
+    
+    if { $verbose > 1 } {
+	send_user "Testing medallion code...\n"
+    }
+
+    system rm "-rf" "~/.ferris/rdfdb/*"
+    run_medallion_test "--create-verysmall-etagere"   1 0
+    run_medallion_test "--test-emblem-setters"        1 0
+    run_medallion_test "--test-simple-medallion-set"  0 0
+    run_medallion_test "--test-simple-medallion-get"  0 0
+
+    system rm "-rf" "~/.ferris/rdfdb/*"
+    run_medallion_test "--create-verysmall-etagere"   1 0
+    run_medallion_test "--test-linear-medallion-set"  0 0
+    run_medallion_test "--test-linear-medallion-get"  0 0
+
+    system rm "-rf" "~/.ferris/rdfdb/*"
+    run_medallion_test "--create-verysmall-etagere"   1 0
+    run_medallion_test "--test-dumpto-verysmall"      0 0
+
+    run_medallion_test "--test-single-parent"         1 0
+
+    run_medallion_test "--single-parent-chain"             1 0
+    run_medallion_test "--test-dumpto-single-parent-chain" 0 0
+
+    run_medallion_test "--test-large-tree"            1 0
+    run_medallion_test "--test-dumpto-large-tree"     0 0
+
+
+    run_medallion_test "--emblems-from-medallion-set"  1 1
+    run_medallion_test "--emblems-from-medallion-get"  0 1
+    run_medallion_test "--stateless-medallion-ea-test" 0 1
+}
+
+################################################################################
+################################################################################
+################################################################################
+#
+# Test code for etagere and its filesystem
+#
+################################################################################
+################################################################################
+################################################################################
+
+
+
+proc run_etagere_create { idx name iconpath desc } {
+    
+    global SDATA
+    global verbose
+
+    set cmd "fcreate $idx --create-type=file name=$name iconpath=$iconpath description=$desc"
+    set testname [rt_version "fcreate" ]
+    rt_expected "$testname" "eof" "$cmd";
+
+#     spawn fcreate $idx --create-type=file \
+# 	name=$name iconpath=$iconpath description=$desc
+#     expect {
+# 	-re "cought e:" { fail "ferriscreate for emblem caused an exception"; return; }
+# 	timeout { fail "Failed to spawn fcreate (timeout)"; return; }
+#     }
+#     pass "fcreate etagere idx:$idx name:$name"
+}
+
+proc run_etagere_suite {} {
+    
+    global SDATA
+    global verbose
+    
+
+    if { $verbose > 1 } {
+	send_user "Testing etagere code...\n"
+    }
+
+    set BASEDIR "~/.ferris/etagere"
+    recreate_clean_tmp_subdir "$BASEDIR"
+    system cp /etc/skel/.ferris/etagere/*db $BASEDIR
+
+    run_etagere_create "etagere://"          "toplevel"  "" ""
+    run_etagere_create "etagere://toplevel"  "sub1"      "" ""
+    run_etagere_create "etagere://toplevel"  "sub2"      "" ""
+
+    compare_with_ferrisls "etagere://"           \
+	{<ferrisls url=\"etagere:///\"  name=\"/\"  >.*<context  name=\"toplevel\"[^/]+/>.*</ferrisls>}
+
+    compare_with_ferrisls "etagere://toplevel"    \
+	{<ferrisls url=\"etagere:///toplevel\"  name=\"toplevel\"  >.*<context  name=\"sub1\"[^/]+/>.*<context  name=\"sub2\"[^/]+/>.*</ferrisls>}
+
+    run_ferrisrm "etagere://toplevel/sub1"
+    compare_with_ferrisls "etagere://toplevel"    \
+ 	{<ferrisls url=\"etagere:///toplevel\"  name=\"toplevel\"  >.*<context  name=\"sub2\"[^/]+/>.*</ferrisls>}
+
+
+}
+
+
+
+
+################################################################################
+################################################################################
+################################################################################
+#
+# Test code for the out of process notification deamon
+#
+################################################################################
+################################################################################
+################################################################################
+
+proc run_ut_oproc { par } {
+    
+    global UTBASE
+    global SDATA
+    global verbose
+    set TMPDIR "/active-tmp/base"
+    
+    set cmd "$UTBASE/ut_outofproc_notification $par --basedir $TMPDIR --unittest-exe-basedir $UTBASE"
+
+    if { $verbose > 1 } {
+	send_user "testing oproc deamon cmd:$cmd\n"
+    }
+
+    spawn nice $UTBASE/ut_outofproc_notification $par --basedir $TMPDIR --unittest-exe-basedir $UTBASE
+    expect {
+	-re "cought e:" { fail "ut_oproc $par failed with an exception"; return; }
+	timeout { fail "ut_oproc $par Failed with timeout"; return; }
+    }
+    pass "ut_oproc $par"
+}
+
+proc run_oproc_test_suite {} {
+    
+    global SDATA
+    global verbose
+    
+    if { $verbose > 1 } {
+	send_user "Testing cross process notification code...\n"
+    }
+
+    run_ut_oproc "-1"
+    run_ut_oproc "-2"
+    run_ut_oproc "-3"
+}
+
+################################################################################
+################################################################################
+################################################################################
+#
+# Test code for fuzzy assert / retraction in medallions
+#
+################################################################################
+################################################################################
+################################################################################
+
+# proc run_agent { BASEDIR par } {
+#     
+#     global UTBASE
+#     global SDATA
+#     global verbose
+# #     set TMPDIR "/active-tmp/base"
+    
+# #     set cmd "$UTBASE/ut_outofproc_notification $par --basedir $TMPDIR --unittest-exe-basedir $UTBASE"
+
+# #     if { $verbose > 1 } {
+# # 	send_user "testing oproc deamon cmd:$cmd\n"
+# #     }
+
+# #     spawn nice $UTBASE/ut_outofproc_notification $par --basedir $TMPDIR --unittest-exe-basedir $UTBASE
+# #     expect {
+# # 	-re "cought e:" { fail "ut_oproc $par failed with an exception"; return; }
+# # 	timeout { fail "ut_oproc $par Failed with timeout"; return; }
+# #     }
+# #     pass "ut_oproc $par"
+# }
+
+
+proc run_fmedallion { Mode EmblemName Person Sureness FilePath } {
+    
+    global SDATA
+    global verbose
+
+    set cmd "fmedallion $Mode -e $EmblemName -p $Person -s $Sureness $FilePath"
+    set testname [rt_version "fmedallion" ]
+    rt_expected "$testname" "eof" "$cmd";
+
+
+#     if { $verbose > 1 } {
+# 	send_user "Running cmd: $cmd \n"
+#     }
+#     spawn nice fmedallion $Mode -e $EmblemName -p $Person -s $Sureness $FilePath
+#     expect {
+# 	-re "cought e" { fail "Failed with an exception cmd: $cmd"; return; }
+# 	timeout { fail "Failed with timeout cmd: $cmd"; return; }
+#     }
+#     pass "fmedallion_add"
+}
+
+proc run_ut_fuzzymedallion { BASEDIR FileName Personality Mode Data } {
+    
+    global UTBASE
+    global SDATA
+    global verbose
+
+    set cmd "$UTBASE/ut_fuzzymedallion -p $Personality --basedir $BASEDIR --filename $FileName $Mode \"$Data\""
+    set testname [rt_version "ut_fuzzymedallion" ]
+    rt_expected "$testname" "Success" "$cmd";
+
+#     if { $verbose > 1 } {
+# 	send_user "Running cmd: $cmd \n"
+#     }
+#     spawn nice $UTBASE/ut_fuzzymedallion -p $Personality \
+# 	--basedir $BASEDIR --filename $FileName $Mode "$Data"
+#     expect {
+# 	-re "cought e:" { fail "Failed with an exception cmd: $cmd"; return; }
+# 	-re "error:" { fail "Failed with an exception cmd: $cmd"; return; }
+# 	timeout { fail "Failed with timeout cmd: $cmd"; return; }
+#     }
+#     pass "ut_fuzzymedallion $Mode"
+}
+
+#
+# Use fmedallion to play with a file's medallion adding / removing / checking
+# the assertions that it contains  
+#
+proc run_simple_medallion_tests { BASEDIR } {
+    
+    global UTBASE
+    global SDATA
+    global verbose
+
+    set ToyFileName file1
+    set ToyFilePath $BASEDIR/$ToyFileName
+    exec touch     $ToyFilePath
+    set Personality "user"
+
+    if { $verbose > 1 } {
+	send_user "About to test basic medallion code\n"
+	send_user "File at $ToyFilePath must support EA for this to work\n"
+    }
+    
+    #
+    # make a very simple medallion with two assertions
+    #
+    run_fmedallion "-a" "tape" $Personality "100" $ToyFilePath
+    run_fmedallion "-a" "favs" $Personality "100" $ToyFilePath
+    run_ut_fuzzymedallion $BASEDIR $ToyFileName $Personality "--emblem-beliefs-match" "tape 100 favs 100"
+
+    #
+    # some retraction aswell
+    #
+    set ToyFileName file2
+    set ToyFilePath $BASEDIR/$ToyFileName
+    exec touch     $ToyFilePath
+
+    run_fmedallion "-a" "tape" $Personality "100" $ToyFilePath
+    run_fmedallion "-r" "favs" $Personality "100" $ToyFilePath
+    run_ut_fuzzymedallion $BASEDIR $ToyFileName $Personality "--emblem-beliefs-match" "tape 100 favs -100"
+
+    #
+    # as a different personality
+    #
+    set ToyFileName genericAgent1
+    set ToyFilePath $BASEDIR/$ToyFileName
+    exec touch     $ToyFilePath
+    set Personality "generic-agent"
+    run_fmedallion "-a" "tape" $Personality "100" $ToyFilePath
+    run_fmedallion "-r" "favs" $Personality "100" $ToyFilePath
+    run_ut_fuzzymedallion $BASEDIR $ToyFileName $Personality "--emblem-beliefs-match" "tape 100 favs -100"
+
+    #
+    # as a different personality with fuzzy values
+    #
+    set ToyFileName genericAgent2
+    set ToyFilePath $BASEDIR/$ToyFileName
+    exec touch     $ToyFilePath
+    set Personality "generic-agent"
+    run_fmedallion "-a" "tape" $Personality "50" $ToyFilePath
+    run_fmedallion "-r" "favs" $Personality "70" $ToyFilePath
+    run_ut_fuzzymedallion $BASEDIR $ToyFileName $Personality "--emblem-beliefs-match" "tape 50 favs -70"
+
+    #
+    # Changing of the agents mind by changing assertions
+    #
+    set ToyFileName genericAgent3
+    set ToyFilePath $BASEDIR/$ToyFileName
+    exec touch     $ToyFilePath
+    set Personality "generic-agent"
+    run_fmedallion "-a" "tape" $Personality "50" $ToyFilePath
+    run_fmedallion "-r" "tape" $Personality "60" $ToyFilePath
+    run_fmedallion "-r" "favs" $Personality "70" $ToyFilePath
+    run_fmedallion "-a" "favs" $Personality "30" $ToyFilePath
+    run_ut_fuzzymedallion $BASEDIR $ToyFileName $Personality "--emblem-beliefs-match" "tape -60 favs 30"
+
+
+    #
+    # Intermixed operations
+    #
+    set ToyFileName genericAgentIntermixed
+    set ToyFilePath $BASEDIR/$ToyFileName
+    exec touch     $ToyFilePath
+    set Personality "generic-agent"
+    run_fmedallion "-r" "tape" $Personality "60" $ToyFilePath
+    run_fmedallion "-a" "favs" $Personality "30" $ToyFilePath
+    run_fmedallion "-a" "tape" $Personality "50" $ToyFilePath
+    run_fmedallion "-r" "favs" $Personality "70" $ToyFilePath
+    run_ut_fuzzymedallion $BASEDIR $ToyFileName $Personality "--emblem-beliefs-match" "tape 50 favs -70"
+
+    ################################################################################
+    #
+    # Test the belief code when many agents are making assertions
+    #
+    # expects the etagere to have generic-agent and frodo at same level in etagere
+    # (like sample etagere in testsuite dir)
+    #
+    ################################################################################
+
+    #
+    # This expects that the belief resolution system is running using mean with user
+    # override.
+    #
+    send_user "The following expects that the belief resolution system is running\n"
+    send_user "using mean with user override.\n"
+
+    set ToyFileName genericAgentMultiBelief
+    set ToyFilePath $BASEDIR/$ToyFileName
+    exec touch     $ToyFilePath
+    set Personality "generic-agent"
+    run_fmedallion "-r" "tape" $Personality "60" $ToyFilePath
+    run_fmedallion "-a" "favs" $Personality "30" $ToyFilePath
+    run_fmedallion "-a" "tape" $Personality "50" $ToyFilePath
+    run_fmedallion "-r" "favs" $Personality "70" $ToyFilePath
+    run_ut_fuzzymedallion $BASEDIR $ToyFileName $Personality "--emblem-fuzzy-values" "tape 50 favs -70"
+    set Personality "frodo"
+    run_fmedallion "-a" "favs" $Personality "30" $ToyFilePath
+    run_ut_fuzzymedallion $BASEDIR $ToyFileName $Personality "--emblem-fuzzy-values" "tape 50 favs -20"
+    run_fmedallion "-a" "tape" $Personality "60" $ToyFilePath
+    run_ut_fuzzymedallion $BASEDIR $ToyFileName $Personality "--emblem-fuzzy-values" "tape 55 favs -20"
+    
+
+    set Personality "user"
+    run_fmedallion "-r" "favs" $Personality "100" $ToyFilePath
+    run_ut_fuzzymedallion $BASEDIR $ToyFileName $Personality "--emblem-fuzzy-values" "tape 55 favs -100"
+    run_fmedallion "-R" "favs" $Personality "100" $ToyFilePath
+    run_fmedallion "-r" "tape" $Personality "100" $ToyFilePath
+    run_ut_fuzzymedallion $BASEDIR $ToyFileName $Personality "--emblem-fuzzy-values" "tape -100 favs -20"
+    run_fmedallion "-R" "tape" $Personality "100" $ToyFilePath
+    run_fmedallion "-a" "favs" $Personality "100" $ToyFilePath
+    run_ut_fuzzymedallion $BASEDIR $ToyFileName $Personality "--emblem-fuzzy-values" "tape 55 favs 100"
+    run_fmedallion "-a" "tape" $Personality "100" $ToyFilePath
+    run_ut_fuzzymedallion $BASEDIR $ToyFileName $Personality "--emblem-fuzzy-values" "tape 100 favs 100"
+    run_fmedallion "-R" "tape" $Personality "100" $ToyFilePath
+    run_fmedallion "-R" "favs" $Personality "100" $ToyFilePath
+    run_ut_fuzzymedallion $BASEDIR $ToyFileName $Personality "--emblem-fuzzy-values" "tape 55 favs -20"
+
+    
+}
+
+proc run_fuzzy_emblem_test_suite {} {
+    
+    global SDATA
+    global verbose
+
+    if { $verbose > 1 } {
+	send_user "Testing the ability to attach many fuzzy beliefs to a medallion\n"
+	send_user "this allows agents to express their opinion about files\n"
+    }
+
+    set BASEDIR "/tmp/fuzzy-medallion-test"
+    recreate_clean_tmp_subdir "~/.ferris/etagere"
+    system cp /etc/skel/.ferris/etagere/*db "~/.ferris/etagere"
+
+    system rm "-rf" "~/.ferris/rdfdb/*"
+    system rm -rf   $BASEDIR
+    system mkdir -p $BASEDIR
+    system tar -C  ~/.ferris -xf $SDATA/etagere-sample.tar
+    set ToyFileName file1
+    set ToyFilePath $BASEDIR/$ToyFileName
+
+    run_simple_medallion_tests $BASEDIR 
+#    run_agent                  $BASEDIR 
+}
+
+
+################################################################################
+################################################################################
+################################################################################
+#
+# relational database module tests
+#
+################################################################################
+################################################################################
+################################################################################
+
+
+proc test_creation_table { url tablename sql } {
+    
+    global SDATA
+    global verbose
+
+    set ftype "table"
+    
+    if { $verbose > 1 } {
+	send_user "Testing the creation of type: $ftype...\n"
+    }
+    
+
+    spawn fcreate $url --create-type=$ftype --rdn=$tablename sql=$sql
+    expect {
+	-re "Created new context: \(.*\)" 
+	{
+	    set ext ""
+	    pass "Created context as expected";  
+	    return;
+	}
+	-re "cought e:" { fail "ferriscreate for $ftype caused an exception";   return; }
+	timeout { fail "Failed to spawn fcreate (timeout)"; return; }
+    }
+}
+
+proc test_creation_tuple { url fieldvalues1 fieldvalues2 } {
+    
+    global SDATA
+    global verbose
+
+    set ftype "tuple"
+    
+    if { $verbose > 1 } {
+	send_user "Testing the creation of type: $ftype...\n"
+	send_user "CREATE: fcreate $url --create-type=$ftype --rdn=\"\" $fieldvalues1 $fieldvalues2\n"
+    }
+    
+    spawn fcreate $url --create-type=$ftype --rdn="" $fieldvalues1 $fieldvalues2
+    expect {
+	-re "Created new context: \(.*\)" 
+	{
+	    set ext ""
+	    pass "Created context as expected";  
+	    return;
+	}
+	-re "cought e:" { fail "ferriscreate for $ftype caused an exception";   return; }
+	timeout { fail "Failed to spawn fcreate (timeout)"; return; }
+    }
+}
+
+
+#
+# Requires the AOM DSN to point at the localhost database which has an
+# aom database with an aom table in it which contains unit specifications.
+#
+# Database dump is on testsuite/databases/aom.sql
+#
+proc run_odbc_context {} {
+    compare_with_ferrisls "odbc://aom/aom" \
+	"<ferrisls>.*<ferrisls url=\"odbc:///aom/aom\"  name=\"aom\"  >.*<context  Unit=\" \"  CostF=\" \"  CostW=\" \"  CostG=\" \"  CostFv=\" \"  Pop=\" \"  HackD=\" \"  PierceD=\" \"  CrushD=\" \"  Range=\" \"  HP=\" \"  HackA=\" \"  PierceA=\" \"  CrushA=\" \"  Speed=\" \"  LineOS=\" \"  ProdTm=\" \"  FavBnty=\" \"  id=\" \"  name=\"aom\"  primary-key=\"id\"  />.*<context  file=\" \"  title=\" \"  artist=\" \"  album=\" \"  Year=\" \"  Track=\" \"  id=\" \"  name=\"music\"  primary-key=\"id\"  />.*</ferrisls>.*</ferrisls>"
+
+    compare_with_ferrisls "odbc://aom/aom/aom" \
+	"<ferrisls>.*<ferrisls url=\"odbc:///aom/aom/aom\"  name=\"aom\"  >.*<context  Unit=\"Villager\"  CostF=\"50\"  CostW=\"0\"  CostG=\"0\"  CostFv=\"0\"  Pop=\"1\"  HackD=\"8\"  PierceD=\"6\"  CrushD=\"0\"  Range=\"12\"  HP=\"65\"  HackA=\"25\"  PierceA=\"35\"  CrushA=\"99\"  Speed=\"3.8\"  LineOS=\"14\"  ProdTm=\"14\"  FavBnty=\"1.08\"  id=\"1\"  name=\"1\"  primary-key=\"id\"  />.*<context  Unit=\"Hetairoi\"  CostF=\"60\"  CostW=\"0\"  CostG=\"100\"  CostFv=\"0\"  Pop=\"3\"  HackD=\"8\"  PierceD=\"0\"  CrushD=\"0\"  Range=\"0\"  HP=\"110\"  HackA=\"10\"  PierceA=\"40\"  CrushA=\"99\"  Speed=\"4.8\"  LineOS=\"16\"  ProdTm=\"17\"  FavBnty=\"1.08\"  id=\"10\"  name=\"10\"  primary-key=\"id\"  />.*<context  Unit=\"Huskarl\"  CostF=\"0\"  CostW=\"75\"  CostG=\"40\"  CostFv=\"0\"  Pop=\"2\"  HackD=\"8\"  PierceD=\"0\"  CrushD=\"0\"  Range=\"0\"  HP=\"115\"  HackA=\"15\"  PierceA=\"50\"  CrushA=\"99\"  Speed=\"5\"  LineOS=\"16\"  ProdTm=\"9\"  FavBnty=\"1.08\"  id=\"100\"  name=\"100\"  primary-key=\"id\"  />.*<context  Unit=\"Jarl\"  CostF=\"50\"  CostW=\"0\"  CostG=\"80\"  CostFv=\"0\"  Pop=\"3\"  HackD=\"9\"  PierceD=\"0\"  CrushD=\"0\"  Range=\"0\"  HP=\"180\"  HackA=\"20\"  PierceA=\"35\"  CrushA=\"99\"  Speed=\"4.8\"  LineOS=\"16\"  ProdTm=\"9\"  FavBnty=\"1.08\"  id=\"101\"  name=\"101\"  primary-key=\"id\"  />.*<context  Unit=\"Portable Ram\"  CostF=\"0\"  CostW=\"125\"  CostG=\"125\"  CostFv=\"0\"  Pop=\"3\"  HackD=\"0\"  PierceD=\"0\"  CrushD=\"40\"  Range=\"0\"  HP=\"250\"  HackA=\"5\"  PierceA=\"99\"  CrushA=\"90\"  Speed=\"3.6\"  LineOS=\"14\"  ProdTm=\"17\"  FavBnty=\"1.08\"  id=\"102\"  name=\"102\"  primary-key=\"id\"  />.*"
+
+
+
+}
+
+#
+# requires access to mysql server at localhost with a 'aom' database which
+# has the music and aom tables as given in the database dump.
+#
+# there is a temporary table made called foobar which must not exist on starting
+# this script.
+#
+# Database dump is on testsuite/databases/aom.sql
+#
+proc run_mysql_context {} {
+
+    compare_with_ferrisls "mysql://localhost/aom" \
+	"<ferrisls>.*<ferrisls url=\"mysql:///localhost/aom\"  name=\"aom\"  >.*<context  Unit=\" \"  CostF=\" \"  CostW=\" \"  CostG=\" \"  CostFv=\" \"  Pop=\" \"  HackD=\" \"  PierceD=\" \"  CrushD=\" \"  Range=\" \"  HP=\" \"  HackA=\" \"  PierceA=\" \"  CrushA=\" \"  Speed=\" \"  LineOS=\" \"  ProdTm=\" \"  FavBnty=\" \"  id=\" \"  name=\"aom\"  primary-key=\"HP-HackA-PierceA-CrushA-id\"  />.*<context  file=\" \"  title=\" \"  artist=\" \"  album=\" \"  Year=\" \"  Track=\" \"  id=\" \"  name=\"music\"  primary-key=\"id\"  />.*</ferrisls>.*</ferrisls>"
+
+    compare_with_ferrisls "mysql://localhost/aom/aom" \
+	"<ferrisls>.*<ferrisls url=\"mysql:///localhost/aom/aom\"  name=\"aom\"  >.*<context  Unit=\"Pharaoh\"  CostF=\"0\"  CostW=\"0\"  CostG=\"0\"  CostFv=\"0\"  Pop=\"0\"  HackD=\"0\"  PierceD=\"12\"  CrushD=\"0\"  Range=\"4\"  HP=\"100\"  HackA=\"15\"  PierceA=\"15\"  CrushA=\"99\"  Speed=\"4\"  LineOS=\"16\"  ProdTm=\"0\"  FavBnty=\"2.16\"  id=\"52\"  name=\"100-15-15-99-52\"  primary-key=\"HP-HackA-PierceA-CrushA-id\"  />.*<context  Unit=\"Militia\" .*"
+
+    exec mysql aom -e "drop table if exists foobar;"
+
+    test_creation_table "mysql://localhost/aom" "foobar" "create table foobar ( fooid int, fooname varchar(100) )"
+    test_creation_tuple "mysql://localhost/aom/foobar" "fooid=45"    "fooname=Freddy"
+    test_creation_tuple "mysql://localhost/aom/foobar" "fooid=101"   "fooname=Timmy"
+    test_creation_tuple "mysql://localhost/aom/foobar" "fooid=3002"  "fooname=danshi"
+    
+    compare_with_ferrisls "mysql://localhost/aom/foobar" \
+	"<ferrisls>.*<ferrisls url=\"mysql:///localhost/aom/foobar\"  name=\"foobar\"  >.*<context  fooid=\"101\"  fooname=\"Timmy\"  name=\"101-Timmy\"  primary-key=\"fooid-fooname\"  />.*<context  fooid=\"3002\"  fooname=\"danshi\"  name=\"3002-danshi\"  primary-key=\"fooid-fooname\"  />.*<context  fooid=\"45\"  fooname=\"Freddy\"  name=\"45-Freddy\"  primary-key=\"fooid-fooname\"  />.*</ferrisls>.*</ferrisls>"
+    
+    run_context_writeea "mysql" "mysql://localhost/aom/foobar/3002-danshi" "fooname" "Z"
+
+    compare_with_ferrisls "mysql://localhost/aom/foobar" \
+	"<ferrisls>.*<ferrisls url=\"mysql:///localhost/aom/foobar\"  name=\"foobar\"  >.*<context  fooid=\"101\"  fooname=\"Timmy\"  name=\"101-Timmy\"  primary-key=\"fooid-fooname\"  />.*<context  fooid=\"3002\"  fooname=\"Z\"  name=\"3002-Z\"  primary-key=\"fooid-fooname\"  />.*<context  fooid=\"45\"  fooname=\"Freddy\"  name=\"45-Freddy\"  primary-key=\"fooid-fooname\"  />.*</ferrisls>.*</ferrisls>"
+
+    ###########
+    #
+    # now lets do it all again with a primary key ;)
+    #
+    exec mysql aom -e "drop table if exists foobar;"
+    test_creation_table "mysql://localhost/aom" "foobar" "create table foobar ( fooid int primary key, fooname varchar(100) )"
+    test_creation_tuple "mysql://localhost/aom/foobar" "fooid=45"    "fooname=Freddy"
+    test_creation_tuple "mysql://localhost/aom/foobar" "fooid=101"   "fooname=Timmy"
+    test_creation_tuple "mysql://localhost/aom/foobar" "fooid=3002"  "fooname=danshi"
+    
+    compare_with_ferrisls "mysql://localhost/aom/foobar" \
+	"<ferrisls>.*<ferrisls url=\"mysql:///localhost/aom/foobar\"  name=\"foobar\"  >.*<context  fooid=\"101\"  fooname=\"Timmy\"  name=\"101\"  primary-key=\"fooid\"  />.*<context  fooid=\"3002\"  fooname=\"danshi\"  name=\"3002\"  primary-key=\"fooid\"  />.*<context  fooid=\"45\"  fooname=\"Freddy\"  name=\"45\"  primary-key=\"fooid\"  />.*</ferrisls>.*</ferrisls>"
+    
+     run_context_writeea "mysql" "mysql://localhost/aom/foobar/3002" "fooname" "Z"
+
+     compare_with_ferrisls "mysql://localhost/aom/foobar" \
+	"<ferrisls>.*<ferrisls url=\"mysql:///localhost/aom/foobar\"  name=\"foobar\"  >.*<context  fooid=\"101\"  fooname=\"Timmy\"  name=\"101\"  primary-key=\"fooid\"  />.*<context  fooid=\"3002\"  fooname=\"Z\"  name=\"3002\"  primary-key=\"fooid\"  />.*<context  fooid=\"45\"  fooname=\"Freddy\"  name=\"45\"  primary-key=\"fooid\"  />.*</ferrisls>.*</ferrisls>"
+
+    exec mysql aom -e "drop table if exists foobar;"
+}
+
+#
+# requires access to mysql server at localhost with a 'aom' database which
+# has the music and aom tables as given in the database dump.
+#
+# there is a temporary table made called foobar which must not exist on starting
+# this script.
+#
+# Database dump is on testsuite/databases/aom.sql
+#
+proc run_pg_context {} {
+
+#     compare_with_ferrisls "pg://localhost/aom" \
+# 	"<ferrisls>.*<ferrisls url=\"pg:///localhost/aom\"  name=\"aom\"  >.*<context  unit=\" \"  costf=\" \"  costw=\" \"  costg=\" \"  costfv=\" \"  pop=\" \"  hackd=\" \"  pierced=\" \"  crushd=\" \"  range=\" \"  hp=\" \"  hacka=\" \"  piercea=\" \"  crusha=\" \"  speed=\" \"  lineos=\" \"  prodtm=\" \"  favbnty=\" \"  id=\" \"  __diagram0__=\" \"  name=\"aom\"  primary-key=\"id\"  />.*.*</ferrisls>.*</ferrisls>"
+
+
+#     compare_with_ferrisls "pg://localhost/aom/aom" \
+# 	"<ferrisls>.*<ferrisls url=\"pg:///localhost/aom/aom\"  name=\"aom\"  >.*context  unit=\"Villager\"  costf=\"50\"  costw=\"0\"  costg=\"0\"  costfv=\"0\"  pop=\"1\"  hackd=\"8\"  pierced=\"6\"  crushd=\"0\"  range=\"12\"  hp=\"65\"  hacka=\"25\"  piercea=\"35\"  crusha=\"99\"  speed=\"3.8\"  lineos=\"14\"  prodtm=\"14.*context  unit=\"Hetairoi\"  costf=\"60\"  costw=\"0\"  costg=\"100\"  costfv=\"0\"  pop=\"3\"  hackd=\"8\"  pierced=\"0\"  crushd=\"0\"  range=\"0\"  hp=\"110\"  hacka=\"10\"  piercea=\"40\"  crusha=\"99\"  speed=\"4.8\".*"
+
+    spawn psql ferristester -c "drop table foobar;"
+    sleep 5
+
+    test_creation_table "pg://localhost/ferristester" "foobar" "create table foobar ( fooid int, fooname varchar(100) )"
+    test_creation_tuple "pg://localhost/ferristester/foobar" "fooid=45"    "fooname=Freddy"
+    test_creation_tuple "pg://localhost/ferristester/foobar" "fooid=101"   "fooname=Timmy"
+    test_creation_tuple "pg://localhost/ferristester/foobar" "fooid=3002"  "fooname=danshi"
+    
+    compare_with_ferrisls "pg://localhost/ferristester/foobar" \
+	"<ferrisls>.*<ferrisls url=\"pg:///localhost/ferristester/foobar\"  name=\"foobar\"  >.*<context  fooid=\"101\"  fooname=\"Timmy\"  name=\"101-Timmy\"  primary-key=\"fooid-fooname\"  />.*<context  fooid=\"3002\"  fooname=\"danshi\"  name=\"3002-danshi\"  primary-key=\"fooid-fooname\"  />.*<context  fooid=\"45\"  fooname=\"Freddy\"  name=\"45-Freddy\"  primary-key=\"fooid-fooname\"  />.*</ferrisls>.*</ferrisls>"
+
+
+    run_context_writeea "postgresql" "pg://localhost/ferristester/foobar/3002-danshi" "fooname" "Z"
+
+    compare_with_ferrisls "pg://localhost/ferristester/foobar" \
+	"<ferrisls>.*<ferrisls url=\"pg:///localhost/ferristester/foobar\"  name=\"foobar\"  >.*<context  fooid=\"101\"  fooname=\"Timmy\"  name=\"101-Timmy\"  primary-key=\"fooid-fooname\"  />.*<context  fooid=\"3002\"  fooname=\"Z\"  name=\"3002-Z\"  primary-key=\"fooid-fooname\"  />.*<context  fooid=\"45\"  fooname=\"Freddy\"  name=\"45-Freddy\"  primary-key=\"fooid-fooname\"  />.*</ferrisls>.*</ferrisls>"
+
+
+#     ###########
+#     #
+#     # now lets do it all again with a primary key ;)
+#     #
+
+    spawn psql ferristester -c "drop table foobar;"
+    sleep 5
+
+    test_creation_table "pg://localhost/ferristester" "foobar" "create table foobar ( fooid int primary key, fooname varchar(100) )"
+    test_creation_tuple "pg://localhost/ferristester/foobar" "fooid=45"    "fooname=Freddy"
+    test_creation_tuple "pg://localhost/ferristester/foobar" "fooid=101"   "fooname=Timmy"
+    test_creation_tuple "pg://localhost/ferristester/foobar" "fooid=3002"  "fooname=danshi"
+
+    compare_with_ferrisls "pg://localhost/ferristester/foobar" \
+	"<ferrisls>.*<ferrisls url=\"pg:///localhost/ferristester/foobar\"  name=\"foobar\"  >.*<context  fooid=\"101\"  fooname=\"Timmy\"  name=\"101\"  primary-key=\"fooid\"  />.*<context  fooid=\"3002\"  fooname=\"danshi\"  name=\"3002\"  primary-key=\"fooid\"  />.*<context  fooid=\"45\"  fooname=\"Freddy\"  name=\"45\"  primary-key=\"fooid\"  />.*</ferrisls>.*</ferrisls>"
+    
+
+    run_context_writeea "postgresql" "pg://localhost/ferristester/foobar/3002" "fooname" "Z"
+
+    compare_with_ferrisls "pg://localhost/ferristester/foobar" \
+	"<ferrisls>.*<ferrisls url=\"pg:///localhost/ferristester/foobar\"  name=\"foobar\"  >.*<context  fooid=\"101\"  fooname=\"Timmy\"  name=\"101\"  primary-key=\"fooid\"  />.*<context  fooid=\"3002\"  fooname=\"Z\"  name=\"3002\"  primary-key=\"fooid\"  />.*<context  fooid=\"45\"  fooname=\"Freddy\"  name=\"45\"  primary-key=\"fooid\"  />.*</ferrisls>.*</ferrisls>"
+
+
+
+
+
+#    spawn psql ferristester -c "drop table foobar;"
+
+}
+
+proc run_relational_context {} {
+
+#    run_odbc_context
+#    run_mysql_context
+    run_pg_context
+}
+
+
+
+################################################################################
+################################################################################
+################################################################################
+#
+# xsltfs:// test suite
+#
+################################################################################
+################################################################################
+################################################################################
+
+proc run_xstlfs_test_suite {} {
+
+    global UTBASE    
+    global SDATA
+    global verbose
+    global TMPFS
+
+    if { $verbose > 1 } {
+	send_user "Testing the xsltfs:// forward and reverse mappings\n"
+    }
+
+    send_user "Testing direct XML -> XML xstlfs:// implementation\n"
+
+    set BASEDIR "/tmp/rpmtester-xslt-example"
+    recreate_clean_tmp_subdir "$BASEDIR"
+    system cp -av $SDATA/xsltfs-example.xml "$BASEDIR/"
+
+    system mkdir -p "~/ferrisfu1se"
+    system mkdir -p "~/.ferris/xsltfs-stylesheets/"
+    recreate_clean_tmp_subdir "~/.ferris/xsltfs-stylesheets/"
+    system cp -av "$SDATA/xsltfs-*.xsl" "~/.ferris/xsltfs-stylesheets/"
+
+    set expected ".*version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\".*<root>.*<context bar1=\"\" bar2=\".*\" original-url=\"file:///tmp/rpmtester-xslt-example/xsltfs-example.xml/root/file3\">File3PrefixThis is file3 content.File3Postfix.</context>.*</root>"
+    set cmd "fcat xsltfs://context/file/tmp/rpmtester-xslt-example/xsltfs-example.xml?stylesheet=xsltfs-example.xsl"
+    rt_expected_re "Forward-transform" "$expected" "$cmd"
+
+    system "echo -n  \"This is the new content\" | ferris-redirect -T 'xsltfs://context/file/tmp/rpmtester-xslt-example/xsltfs-example.xml?stylesheet=xsltfs-example.xsl&reverse-stylesheet=xsltfs-example-reverse.xsl/root/context'"
+    set expected "xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\".*<root>.*<file3 bar2=\"Augmented...\" foo1=\" XYZ foo1content \">ReversePrefix..CONTENT:This is the new content..ReversePostfix.</file3>.*</root>"
+    set cmd "cat $BASEDIR/xsltfs-example.xml"
+    rt_expected_re "Reverse-transform" "$expected" "$cmd"
+
+    send_user "testing implicit updates reverse stylsheet...\n"
+    system "echo -n  \"ZZZ\" | ferris-redirect -T 'xsltfs://context/file/tmp/rpmtester-xslt-example/xsltfs-example.xml?stylesheet=xsltfs-example.xsl&reverse-stylesheet=xsltfs-example-implicit-reverse.xsl/root/context'"
+    set expected "xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\".*<root>.*<file3 bar2=\"Augmented... XYZ foo1content \" foo1=\" XYZ foo1content \">IReversePrefix..CONTENT:ZZZ..IReversePostfix.</file3>.*</root>"
+    set cmd "cat $BASEDIR/xsltfs-example.xml"
+    rt_expected_re "Implicit-Updates-reverse-transform" "$expected" "$cmd"
+
+
+    send_user "Testing postgresql to office document xstlfs:// implementation\n"
+
+    system rm -rf   "~/.ferris/filesystem-to-xsltfs-sheets"
+    system rm  -f   "~/.ferris/filesystem-to-xsltfs-sheets-next-id"
+    send_user "\n\nIF THIS FAILS THEN MAKE SURE TO UNMOUNT FUSE FILESYSTEMS in ~/ferrisfuse\n\n\n"
+    system rm -rf   "~/ferrisfuse"
+
+    send_user "Setting up database...\n"
+    spawn psql ferristester -c "drop table foobar;"
+    sleep 2
+    send_user "cmd psql ferristester -f $UTBASE/databases/foobar.pg\n"
+    spawn psql ferristester -f $UTBASE/databases/foobar.pg
+    sleep 2
+    
+    set cmd "ferris-filesystem-to-xsltfs-sheets --plugin excel2003 postgresql://localhost/ferristester/foobar --fuse foobar"
+    send_user "Setting up implicit stylesheets...CMD:$cmd\n"
+    rt_expected "ferris-filesystem-to-xsltfs-sheets" "implicit-sheets" $cmd
+
+    sleep 2
+    cd ~/ferrisfuse
+    system ./mount-foobar.sh
+    system "xmllint --format foobar/foobar.xml >|/tmp/foobar.xml"
+    mydiff "forward-xslt" "" "/tmp/foobar.xml" "$SDATA/foobar.xml"
+
+    send_user "Performing reverse mapping to update the database."
+    spawn cp "-vf" "$SDATA/foobar-updated.xml" "foobar/foobar.xml"
+    expect eof;
+    sleep 2
+
+    rt_expected "Update of freddy was successful" "Freddy-Updated" "fcat -a fooname pg://localhost/ferristester/foobar/45"
+    rt_expected "Update of Z was successful" "ABC-Was-Z-In the original" "fcat -a fooname pg://localhost/ferristester/foobar/3002"
+
+    send_user "Performing explict update of 3002 by itself.\n"
+    set UpdateData "JUST-A-single-UPDATE"
+    system "echo $UpdateData | ferris-redirect -T foobar/foobar.xml/Workbook/Worksheet/Table/Row--2/Cell--2/Data"
+    rt_expected "Explcit update of 3002 was successful" "$UpdateData" "fcat -a fooname pg://localhost/ferristester/foobar/3002"
+
+
+    send_user "Going back to original data by updating the individual cell files\n"
+    system "echo -n Z | ferris-redirect -T foobar/foobar.xml/Workbook/Worksheet/Table/Row--2/Cell--2/Data"
+    system "echo -n Freddy | ferris-redirect -T foobar/foobar.xml/Workbook/Worksheet/Table/Row--3/Cell--2/Data"
+    system "xmllint --format foobar/foobar.xml >|/tmp/foobar.xml"
+    mydiff "updated-and-back-xslt" "" "/tmp/foobar.xml" "$SDATA/foobar.xml"
+    
+
+    system fusermount -u ~/ferrisfuse/foobar
+
+
+}
+
+################################################################################
+################################################################################
+################################################################################
+#
+# ferrisrm and ferrismv test suite
+#
+################################################################################
+################################################################################
+################################################################################
+
+proc run_rename_and_remove_fclip_tests {} {
+
+    global UTBASE    
+    global SDATA
+    global verbose
+    global TMPFS
+
+    if { $verbose > 1 } {
+	send_user "Testing the ferrisrm and ferrismv clients through the fclipcut, fclippaste..\n"
+    }
+
+    remount_tmpfs
+    set BASEDIR "$TMPFS/input"
+    recreate_clean_tmp_subdir "$BASEDIR"
+    system tar -C  $BASEDIR -xf $SDATA/sizetestdata.tar
+    cd "$BASEDIR"
+
+    send_user "Testing ferrismv within composite file\n"
+    set TESTDB "$BASEDIR/testing.db"
+    system cp "-fv" "$SDATA/raw.db" "$TESTDB"
+    set cmd "ftouch -v $TESTDB/DirOne"
+    rt_expected [ rt_version "nested-rename" ] "touched:" "$cmd";
+    set cmd "ftouch -v $TESTDB/DirOne/NestedFileB"
+    rt_expected [ rt_version "nested-rename" ] "touched:" "$cmd";
+    set cmd "ftouch -v $TESTDB/DirOne/file1A"
+    rt_expected [ rt_version "nested-rename" ] "touched:" "$cmd";
+
+    ###########################################
+    # do the same tests using the ClipAPI
+    set tname "clip-to-subdir"
+
+    # verify fclip goodness
+    set cmd "ferrisls --xmlraw testing.db/DirOne"
+    set expected "<ferrisls>\r\n<ferrisls url=\"file:///testing-ferris-tmpfs/input/testing.db/DirOne\"  name=\"DirOne\"  >\r\n <context  name=\"NestedFileB\"  />\r\n <context  name=\"file1A\"  />\r\n</ferrisls>\r\n</ferrisls>\r\n"
+    rt_expected [ rt_version "$tname-verifyA" ] "$expected" "$cmd"
+    set cmd "ferrisls --xmlraw testing.db"
+    set expected "<ferrisls>\r\n<ferrisls url=\"file:///testing-ferris-tmpfs/input/testing.db\"  name=\"testing.db\"  >\r\n <context  name=\"DirOne\"  />\r\n</ferrisls>\r\n</ferrisls>\r\n"
+    rt_expected [ rt_version "$tname-verifyB" ] "$expected" "$cmd"
+
+    set tname "fcopy-to-subdir"
+    system "echo 'hello123' | ferris-redirect -T testing.db/mahou"
+    system "fclipcopy -v testing.db/mahou"
+    system "fclippaste -v testing.db/DirOne"
+    sleep 4;
+
+    set expected "hello123\r\n"
+    set cmd "fcat testing.db/mahou"
+    rt_expected [ rt_version "$tname-verifyC" ] "$expected" "$cmd"
+    set cmd "fcat testing.db/DirOne/mahou"
+    rt_expected [ rt_version "$tname-verifyD" ] "$expected" "$cmd"
+
+    set tname "fcopy-from-composite-file"
+    system "echo ThisIsTheNestedFileB | ferris-redirect -T testing.db/DirOne/NestedFileB"
+    system "fclipcopy -v    testing.db/DirOne/mahou"
+    system "fclipcopy -v -a testing.db/DirOne/NestedFileB"
+    system "fclippaste -v ."
+    sleep 5
+    set expected "hello123\r\n"
+    set cmd "fcat mahou"
+    rt_expected [ rt_version "$tname-verify" ] "$expected" "$cmd"
+    set expected "ThisIsTheNestedFileB\r\n"
+    set cmd "fcat NestedFileB"
+    rt_expected [ rt_version "$tname-verify" ] "$expected" "$cmd"
+
+    set tname "fclip-to-composite-file"
+    system "echo tgb >| tgbfile"
+    system "echo yhn >| yhnfile"
+    system "fclipcut -v    tgbfile yhnfile"
+    system "fclippaste -v testing.db"
+    sleep 5
+
+    set expected "tgb\r\n"
+    set cmd "fcat testing.db/tgbfile"
+    rt_expected [ rt_version "$tname-verify" ] "$expected" "$cmd"
+    set expected "yhn\r\n"
+    set cmd "fcat testing.db/yhnfile"
+    rt_expected [ rt_version "$tname-verify" ] "$expected" "$cmd"
+    set expected "stat: cannot stat `tgbfile': No such file or directory\r\n"
+    set cmd "stat tgbfile"
+    rt_expected [ rt_version "$tname-verify" ] "$expected" "$cmd"
+    set expected "stat: cannot stat `yhnfile': No such file or directory\r\n"
+    set cmd "stat yhnfile"
+    rt_expected [ rt_version "$tname-verify" ] "$expected" "$cmd"
+    set cmd "ferrisls --xmlraw testing.db"
+    set expected "<ferrisls>\r\n<ferrisls url=\"file:///testing-ferris-tmpfs/input/testing.db\"  name=\"testing.db\"  >\r\n <context  name=\"DirOne\"  />\r\n <context  name=\"mahou\"  />\r\n <context  name=\"tgbfile\"  />\r\n <context  name=\"yhnfile\"  />\r\n</ferrisls>\r\n</ferrisls>"
+    rt_expected [ rt_version "$tname-verify" ] "$expected" "$cmd"
+
+
+}
+
+proc run_rename_and_remove_test_suite {} {
+
+    global UTBASE    
+    global SDATA
+    global verbose
+    global TMPFS
+
+    if { $verbose > 1 } {
+	send_user "Testing the ferrisrm and ferrismv clients on inter and intra filesystems..\n"
+    }
+
+    remount_tmpfs
+    set BASEDIR "$TMPFS/input"
+    recreate_clean_tmp_subdir "$BASEDIR"
+    system tar -C  $BASEDIR -xf $SDATA/sizetestdata.tar
+    cd "$BASEDIR"
+
+
+
+
+    rt_expected "simple-move1" "moving test.5000 to $BASEDIR/test.5001" "ferrismv -v test.5000 test.5001"
+    rt_expected "simple-move2" "test.5001" "ferrisls -lh --show-ea=name test.5001"
+
+    rt_expected "simple-remove1" "removing test.4500" "ferrisrm -v test.4500"
+    rt_expected_re "simple-remove2" "ls.cpp cought:NoSuchSubContext.*Context does not exist.*rdn:test.4500" "ferrisls -lh test.4500"
+
+    set TMPDIR "/tmp/ferristester-rename-and-remove"
+    recreate_clean_tmp_subdir "$TMPDIR"
+
+    set expected ".*oving test.5001 to .*/tmp/ferristester-rename-and-remove/+test.5001.*"
+    set cmd "ferrismv -v test.5001 $TMPDIR/"
+    rt_expected_re "crossfs-move1" "$expected" "$cmd"
+
+    set expected "test.5001\[ \t\]*5000\[ \t\]*6bf95a48f366bdf8af3a198c7b723c77.*"
+    set cmd "ferrisls -lh --show-ea=name,size,md5 $TMPDIR/test.5001"
+    rt_expected_re "crossfs-move2" "$expected" "$cmd"
+
+    set cmd "ferrisrm -rfv \"$BASEDIR/dirA\""
+    set expected "removing file:///testing-ferris-tmpfs/input/dirA/da_1\r\nremoving file:///testing-ferris-tmpfs/input/dirA/da_2\r\nremoving file:///testing-ferris-tmpfs/input/dirA/da_3\r\nremoving /testing-ferris-tmpfs/input/dirA\r\n"
+    rt_expected "ferrisrm1" "$expected" "$cmd"
+
+    
+
+    send_user "Testing ferrismv within composite file\n"
+    set TESTDB "$BASEDIR/testing.db"
+    cd "$BASEDIR"
+    system cp "-fv" "$SDATA/raw.db" "$TESTDB"
+    set cmd "ftouch -v $TESTDB/file1A"
+    rt_expected [ rt_version "nested-rename" ] "touched:" "$cmd";
+    set cmd "ftouch -v $TESTDB/DirOne"
+    rt_expected [ rt_version "nested-rename" ] "touched:" "$cmd";
+    set cmd "ftouch -v $TESTDB/DirOne/NestedFileB"
+    rt_expected [ rt_version "nested-rename" ] "touched:" "$cmd";
+
+    ###########################################
+    # run the move to a subdir
+    set tname "composite-move-to-subdir"
+    set expected "moving file1A to $TESTDB/DirOne/file1A"
+    set cmd "ferrismv -v testing.db/file1A testing.db/DirOne"
+    rt_expected [ rt_version "$tname" ] "$expected" "$cmd"
+    
+    # verify the tree
+    set expected "<ferrisls>\r\n<ferrisls url=\"file:///testing-ferris-tmpfs/input/testing.db\"  name=\"testing.db\"  >\r\n <context  name=\"DirOne\"  />\r\n</ferrisls>\r\n</ferrisls>\r\n"
+    set cmd "ferrisls --xmlraw testing.db"
+    rt_expected [ rt_version "$tname-verify" ] "$expected" "$cmd"
+
+    set expected "NestedFileB\r\nfile1A\r\n"
+    set cmd "ferrisls -1 testing.db/DirOne"
+    rt_expected [ rt_version "$tname-verify" ] "$expected" "$cmd"
+
+
+    #############################################
+    # run the move to a the root of the overmount
+    set tname "composite-move-from-subdir"
+    set expected "moving NestedFileB to $TESTDB/NestedFileB"
+    set cmd "ferrismv -v testing.db/DirOne/NestedFileB testing.db"
+    rt_expected [ rt_version "$tname" ] "$expected" "$cmd"
+    
+    # verify the tree
+    set expected "<ferrisls>\r\n<ferrisls url=\"file:///testing-ferris-tmpfs/input/testing.db\"  name=\"testing.db\"  >\r\n <context  name=\"DirOne\"  />\r\n <context  name=\"NestedFileB\"  />\r\n</ferrisls>\r\n</ferrisls>\r\n"
+    set cmd "ferrisls --xmlraw testing.db"
+    rt_expected [ rt_version "$tname-verify" ] "$expected" "$cmd"
+
+    set expected "<ferrisls>\r\n<ferrisls url=\"file:///testing-ferris-tmpfs/input/testing.db/DirOne\"  name=\"DirOne\"  >\r\n <context  name=\"file1A\"  />\r\n</ferrisls>\r\n</ferrisls>\r\n"
+    set cmd "ferrisls --xmlraw testing.db/DirOne"
+    rt_expected [ rt_version "$tname-verify" ] "$expected" "$cmd"
+
+    run_rename_and_remove_fclip_tests
+
+    send_user "Checking the moving of a whole tree of files into the root of a composite.\n"
+    set tname "mv-tree-to-composite"
+    system "mkdir -p z/subd1"
+    system "mkdir -p z/subd2/subsubA"
+    set datestr [ exec date "+%Y-%M-%d-%H_%M_%S" ]
+    system "mkdir -p z/subd1"
+    system "echo $datestr > z/datefile1"
+    system "echo Z$datestr > z/subd2/subsubfile"
+
+    system "cp -av z zclone"
+
+    set cmd "ferrismv -av z testing.db"
+    set expected "moving z to /testing-ferris-tmpfs/input/testing.db/z\r\ncp file:///testing-ferris-tmpfs/input/z to file:///testing-ferris-tmpfs/input/testing.db/z\r\ncp file:///testing-ferris-tmpfs/input/z/datefile1 to file:///testing-ferris-tmpfs/input/testing.db/z/datefile1\r\ncp file:///testing-ferris-tmpfs/input/z/subd1 to file:///testing-ferris-tmpfs/input/testing.db/z/subd1\r\ncp file:///testing-ferris-tmpfs/input/z/subd2 to file:///testing-ferris-tmpfs/input/testing.db/z/subd2\r\ncp file:///testing-ferris-tmpfs/input/z/subd1 to file:///testing-ferris-tmpfs/input/testing.db/z/subd1\r\ncp file:///testing-ferris-tmpfs/input/z/subd2 to file:///testing-ferris-tmpfs/input/testing.db/z/subd2\r\ncp file:///testing-ferris-tmpfs/input/z/subd2/subsubA to file:///testing-ferris-tmpfs/input/testing.db/z/subd2/subsubA\r\ncp file:///testing-ferris-tmpfs/input/z/subd2/subsubfile to file:///testing-ferris-tmpfs/input/testing.db/z/subd2/subsubfile\r\ncp file:///testing-ferris-tmpfs/input/z/subd2/subsubA to file:///testing-ferris-tmpfs/input/testing.db/z/subd2/subsubA\r\nremoving file:///testing-ferris-tmpfs/input/z/subd2/subsubA\r\nremoving file:///testing-ferris-tmpfs/input/z/subd2/subsubfile\r\nremoving file:///testing-ferris-tmpfs/input/z/datefile1\r\nremoving file:///testing-ferris-tmpfs/input/z/subd1\r\nremoving file:///testing-ferris-tmpfs/input/z/subd2\r\nremoving z\r\n"
+    rt_expected [ rt_version "$tname-verify" ] "$expected" "$cmd"
+
+    set cmd "ferrisls --xmlraw testing.db/z/subd2"
+    set expected "<ferrisls>\r\n<ferrisls url=\"file:///testing-ferris-tmpfs/input/testing.db/z/subd2\"  name=\"subd2\"  >\r\n <context  name=\"subsubA\"  mode=\"755\"  />\r\n <context  name=\"subsubfile\"  />\r\n</ferrisls>\r\n</ferrisls>\r\n"
+    rt_expected [ rt_version "$tname-verify" ] "$expected" "$cmd"
+
+    
+    set tname "ferriscp-to-existing-clone"
+    system "mkdir -p z"
+    set cmd "ferriscp -av zclone z"
+    set expected "cp file:///testing-ferris-tmpfs/input/zclone to file:///testing-ferris-tmpfs/input/z/zclone\r\ncp file:///testing-ferris-tmpfs/input/zclone/datefile1 to file:///testing-ferris-tmpfs/input/z/zclone/datefile1\r\ncp file:///testing-ferris-tmpfs/input/zclone/subd1 to file:///testing-ferris-tmpfs/input/z/zclone/subd1\r\ncp file:///testing-ferris-tmpfs/input/zclone/subd2 to file:///testing-ferris-tmpfs/input/z/zclone/subd2\r\ncp file:///testing-ferris-tmpfs/input/zclone/subd1 to file:///testing-ferris-tmpfs/input/z/zclone/subd1\r\ncp file:///testing-ferris-tmpfs/input/zclone/subd2 to file:///testing-ferris-tmpfs/input/z/zclone/subd2\r\ncp file:///testing-ferris-tmpfs/input/zclone/subd2/subsubA to file:///testing-ferris-tmpfs/input/z/zclone/subd2/subsubA\r\ncp file:///testing-ferris-tmpfs/input/zclone/subd2/subsubfile to file:///testing-ferris-tmpfs/input/z/zclone/subd2/subsubfile\r\ncp file:///testing-ferris-tmpfs/input/zclone/subd2/subsubA to file:///testing-ferris-tmpfs/input/z/zclone/subd2/subsubA\r\n"
+    rt_expected [ rt_version "$tname-verify" ] "$expected" "$cmd"
+
+
+    set cmd "cat z/zclone/datefile1"
+    set expected "$datestr\r\n"
+    rt_expected [ rt_version "$tname-verify" ] "$expected" "$cmd"
+    set ndatestr [ exec date "+%Y-%M-%d-%H_%M_%S" ]
+    system "echo $ndatestr > zclone/datefile1"
+
+    send_user "Starting interactive replace session using an existing tree\n";
+    set cmd "ferriscp -avi zclone z"
+    eval spawn $cmd
+    expect "Replace file:///testing-ferris-tmpfs/input/z/zclone/datefile1";
+    expect "filetype:?";
+    send "y\r";
+    expect "Replace file:///testing-ferris-tmpfs/input/z/zclone/subd2/subsubfile"; 
+    send "y\r";
+
+    set rc [ wait ]
+    send_user "$tname result $rc\n"
+    set rcok [ expr ([ lindex $rc 3 ]==0 && [ lindex $rc 3 ]==0) ]
+    if { $rcok } {
+	pass "interactive ferriscp returned success.\n";
+    }
+
+    send_user "Done with interactive replace session using an existing tree\n";
+    set cmd "cat z/zclone/datefile1"
+    set expected "$ndatestr\r\n"
+    rt_expected [ rt_version "$tname-verify" ] "$expected" "$cmd"
+}
+
+
+
+################################################################################
+################################################################################
+################################################################################
+#
+# test the Context reclaim and remake code (memory manager)
+#
+################################################################################
+################################################################################
+################################################################################
+
+
+proc run_memory_manager_test_suite {} {
+
+    global UTBASE
+    global SDATA
+    global verbose
+    global TMPFS
+
+    if { $verbose > 1 } {
+	send_user "Testing the memory manager..\n"
+    }
+
+    set UTCMD "$UTBASE/ut_memory_manager"
+    set GUTENDIR   "/tmp/ferris-mm/guten"
+    set MANYONEDIR "/tmp/ferris-mm/many2onefs"
+    set XMLDIR   "/tmp/ferris-mm/xml"
+    set SIMPLEXMLDIR   "/tmp/ferris-mm/xml"
+    set DB4DIR   "/tmp/ferris-mm/db4"
+    recreate_clean_tmp_subdir "/tmp/ferris-mm"
+    recreate_clean_tmp_subdir $GUTENDIR
+    recreate_clean_tmp_subdir $MANYONEDIR
+    recreate_clean_tmp_subdir $XMLDIR
+    recreate_clean_tmp_subdir $SIMPLEXMLDIR
+    recreate_clean_tmp_subdir $DB4DIR
+
+    system cp -av $SDATA/alice13a.txt $SDATA/boysw10.txt $SDATA/dmoro11.txt $SDATA/nobos10.txt $SDATA/snark12.txt $SDATA/warw11.txt "$GUTENDIR/"
+    system cp -av $SDATA/inherit-context-test.xml   $XMLDIR
+    system cp -av $SDATA/simple.xml                 $SIMPLEXMLDIR
+    system cp -av $SDATA/raw.db                     $DB4DIR
+    system tar -C  $MANYONEDIR -xf $SDATA/many2onefs.tar
+
+    set cmd "$UTCMD --basedir=$GUTENDIR --ferris-filter-clean -c 3 --ferris-filter=\"(name=~.*)\" "
+    rt_expected [rt_version "mm. ferris-filter reclaim" ] "Success" "$cmd";
+
+    set cmd "$UTCMD --basedir=$GUTENDIR -n 1 --simple-read-and-clean -c 3  --ferris-filter=\"(name=~.*)\" "
+    rt_expected [rt_version "mm. gutendir simple read" ] "Success" "$cmd";
+
+    set cmd "$UTCMD --basedir=$MANYONEDIR -n 1 --simple-read-and-clean -c 2  --ferris-filter=\"(name=~.*)\" "
+    rt_expected [rt_version "mm. many to one simple read" ] "Success" "$cmd";
+
+    set cmd "$UTCMD --basedir=$MANYONEDIR -n 1 --simple-recursive-read-and-clean -c 2 "
+    rt_expected [rt_version "mm. many to one simple recurse" ] "Success" "$cmd";
+
+    set cmd "$UTCMD --basedir=$SIMPLEXMLDIR -n 1 --simple-recursive-read-and-clean -c 2 -1 "
+    rt_expected [rt_version "mm. XML simple recurse" ] "Success" "$cmd";
+
+    set cmd "$UTCMD --basedir=$XMLDIR -n 1 --simple-recursive-read-and-clean -c 3 -1 "
+    rt_expected [rt_version "mm. XML recurse" ] "Success" "$cmd";
+
+    set cmd "$UTCMD --basedir=$DB4DIR -n 1 --simple-recursive-read-and-clean -c 3 -1 "
+    rt_expected [rt_version "mm. db4 read" ] "Success" "$cmd";
+
+
+}
+
+
+################################################################################
+################################################################################
+################################################################################
+#
+# Here we go
+#
+################################################################################
+################################################################################
+################################################################################
+
+proc run_all {} {
+    run_rename_and_remove_test_suite
+    run_ferrisdom_suite
+    run_creation_suite
+    run_ffilter_suite
+    run_full_text_index_suite
+    run_many_to_one_context_suite
+    run_context_facade_suite
+    run_etagere_suite
+    run_medallion_suite
+    run_oproc_test_suite
+    run_relational_context
+    #run_dbxml_context
+    run_fuzzy_emblem_test_suite
+    run_xstlfs_test_suite
+    run_shell_glob_test_suite
+#     run_plugin_ea_index_test "/tmp/cleaindex" 1 "eaindexclucene" 0
+#     remount_tmpfs
+#     run_plugin_full_text_index_test "$TMPFS/clidx" 1 "fulltextindexclucene"
+
+    run_memory_manager_test_suite
+
+}
+
+proc backup_and_clean_dot_files {} {
+
+    set cdate [ exec date "+%Y-%M-%d-%H_%M_%S" ]
+    set etagerebak "~/.ferris/etagere.user.autobackup.$cdate"
+    set rdfdbbak "~/.ferris/rdfdb.autobackup.$cdate"
+    send_user "WARNING, your existing etagere will be moved from ~/.ferris/etagere TO $etagerebak\n"
+    system mv "~/.ferris/etagere" "$etagerebak"
+    system mkdir -p "~/.ferris/etagere"
+    system cp /etc/skel/.ferris/etagere/*db "~/.ferris/etagere/"
+    system rm -f "/tmp/ferris-test-output/*";
+    system mv "~/.ferris/rdfdb" "$rdfdbbak"
+    system mkdir -p "~/.ferris/rdfdb"
+}
+
+
+# global env;
+# global ROOTDIR;
+# set ::env(LIBFERRIS_DOT_FERRIS_PATH) "$DOTFERRIS";
+# set ::env(LIBFERRIS_DONT_CONNECT_WITH_OUT_OF_PROC_DAEMON) "1";
+
+    
+# verbose "Starting up $SITETEST using .ferris at $DOTFERRIS"
+# setup_tmp_dot_ferris
+# setup_tmpsampledata
+
+
+system $FERRISLS -lh /tmp/dot-ferris
+system $FCAT /tmp/df
+
+#
+# OK, some simple stuff to start.
+# does ferrisls work
+# does fcat work
+# can I see the md5 of a file
+# can I ferriscp a file ok?
+#
+
+#backup_and_clean_dot_files
+#verbose "Running all existing tests... this will take a long time..."
+
+## run_shell_glob_test_suite
+#run_all
+
+

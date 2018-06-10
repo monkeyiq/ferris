@@ -1,0 +1,16 @@
+header
+--- start of message:0
+key:m1key1 value:m1value1
+key:m1key2 value:m1value2
+key:m1key3 value:m1value3
+--- end of message:0 ---
+--- start of message:1
+key:m2key1 value:m2value1
+key:m2key2 value:m2value2
+key:m2key3 value:m2value3
+--- end of message:1 ---
+--- start of message:2
+key:m3key1 value:m3value1
+key:m3key2 value:m3value2
+key:m3key3 value:m3value3
+--- end of message:2 ---

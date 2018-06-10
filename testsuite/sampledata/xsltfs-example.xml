@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<root>
+  <file1 size="200"/>
+  <file2 interesting="yes"/>
+  <file3 foo1="foo1content">This is file3 content.</file3>
+</root>

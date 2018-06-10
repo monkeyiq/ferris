@@ -36,7 +36,7 @@ namespace Ferris
     namespace Private
     {
         const std::string link_ctx_applications_name = "applications";
-//        const std::string link_ctx_applications_url  = "~/.ferris/apps.db";
+//        const std::string link_ctx_applications_url  = getDotFerrisPath() + "apps.db";
         const std::string link_ctx_applications_url  = "apps://";
         typedef Loki::SingletonHolder<
             LinkContextSchemeVFS_RootContextDropper<
@@ -46,7 +46,7 @@ namespace Ferris
         static RootContextDropper& applicationsd = link_ctx_applications_singleton::Instance();
 
         const std::string link_ctx_apps_name = "apps";
-        const std::string link_ctx_apps_url  = "~/.ferris/apps.db";
+        const std::string link_ctx_apps_url  = getDotFerrisPath() + "apps.db";
         typedef Loki::SingletonHolder<
             LinkContextSchemeVFS_RootContextDropper<
             link_ctx_apps_name, link_ctx_apps_url >,
@@ -55,7 +55,7 @@ namespace Ferris
 
         
         const std::string link_ctx_events_name = "events";
-        const std::string link_ctx_events_url  = "~/.ferris/eventbind.db";
+        const std::string link_ctx_events_url  = getDotFerrisPath() + "eventbind.db";
         typedef Loki::SingletonHolder<
             LinkContextSchemeVFS_RootContextDropper<
             link_ctx_events_name, link_ctx_events_url >,
@@ -81,7 +81,7 @@ namespace Ferris
         
         
         const std::string link_ctx_mime_name = "mime";
-        const std::string link_ctx_mime_url  = "~/.ferris/mimebind.db";
+        const std::string link_ctx_mime_url  = getDotFerrisPath() + "mimebind.db";
         typedef Loki::SingletonHolder<
             LinkContextSchemeVFS_RootContextDropper<
             link_ctx_mime_name, link_ctx_mime_url >,
@@ -89,7 +89,7 @@ namespace Ferris
          static RootContextDropper& mimed = link_ctx_mime_singleton::Instance();
 
         const std::string link_ctx_fileclip_name = "file-clipboard";
-        const std::string link_ctx_fileclip_url  = "~/.ferris/file-clipboard.db";
+        const std::string link_ctx_fileclip_url  = getDotFerrisPath() + "file-clipboard.db";
         typedef Loki::SingletonHolder<
             LinkContextSchemeVFS_RootContextDropper<
             link_ctx_fileclip_name, link_ctx_fileclip_url >,
@@ -105,7 +105,7 @@ namespace Ferris
 //          static RootContextDropper& newsd = link_ctx_news_singleton::Instance();
 
         const std::string link_ctx_bookmarks_name = "bookmarks";
-        const std::string link_ctx_bookmarks_url  = "~/.ferris/bookmarks.db";
+        const std::string link_ctx_bookmarks_url  = getDotFerrisPath() + "bookmarks.db";
         typedef Loki::SingletonHolder<
             LinkContextSchemeVFS_RootContextDropper<
             link_ctx_bookmarks_name, link_ctx_bookmarks_url >,
@@ -131,7 +131,7 @@ namespace Ferris
 
         
         const std::string link_ctx_rdf_name = "myrdf";
-        const std::string link_ctx_rdf_url  = "~/.ferris/rdfdb/myrdf-sp2o.db";
+        const std::string link_ctx_rdf_url  = getDotFerrisPath() + "rdfdb/myrdf-sp2o.db";
         typedef Loki::SingletonHolder<
             LinkContextSchemeVFS_RootContextDropper<
             link_ctx_rdf_name, link_ctx_rdf_url >,
@@ -141,7 +141,7 @@ namespace Ferris
 
 
 //         const std::string link_ctx_schema_name = "schema";
-//         const std::string link_ctx_schema_url  = "~/.ferris/schema.xml";
+//         const std::string link_ctx_schema_url  = getDotFerrisPath() + "schema.xml";
 //         typedef Loki::SingletonHolder<
 //             LinkContextSchemeVFS_RootContextDropper<
 //             link_ctx_schema_name, link_ctx_schema_url > > link_ctx_schema_singleton;
@@ -188,7 +188,7 @@ namespace Ferris
          static RootContextDropper& _pixelpiped = link_ctx_pixelpipe_singleton::Instance();
         
         const std::string link_ctx_eaindexes_name = "eaindexes";
-        const std::string link_ctx_eaindexes_url  = "~/.ferris/ea-indexes";
+        const std::string link_ctx_eaindexes_url  = getDotFerrisPath() + "ea-indexes";
         typedef Loki::SingletonHolder<
             LinkContextSchemeVFS_RootContextDropper<
             link_ctx_eaindexes_name, link_ctx_eaindexes_url >,
@@ -196,7 +196,7 @@ namespace Ferris
          static RootContextDropper& _eaindexesd = link_ctx_eaindexes_singleton::Instance();
 
         const std::string link_ctx_ftxindexes_name = "ftxindexes";
-        const std::string link_ctx_ftxindexes_url  = "~/.ferris/full-text-indexes";
+        const std::string link_ctx_ftxindexes_url  = getDotFerrisPath() + "full-text-indexes";
         typedef Loki::SingletonHolder<
             LinkContextSchemeVFS_RootContextDropper<
             link_ctx_ftxindexes_name, link_ctx_ftxindexes_url >,

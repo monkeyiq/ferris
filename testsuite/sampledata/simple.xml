@@ -1,0 +1,4 @@
+<toplevel>
+  <child1/>
+  <child2 attr1="v1" attr2="v2" attr3="v3" attr4="v4" />
+</toplevel>

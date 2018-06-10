@@ -1,0 +1,10 @@
+<basedir base="fred" >
+    <fileA></fileA>
+    <fileB base="override" ></fileB>
+    <fileC></fileC>
+    <dir01 a="1" >
+       <file01></file01>
+       <file02 a="2" b="this_is_b" ></file02>
+    </dir01>
+
+</basedir>

@@ -100,6 +100,7 @@ namespace Ferris
 
 namespace Ferris
 {
+    
     namespace RDF {};
     namespace redlandea {};
     
@@ -129,6 +130,14 @@ namespace Ferris
 #ifdef GCC_HASCLASSVISIBILITY
 #pragma GCC visibility push(default)
 #endif
+
+    /**
+     * Traditionally ~/.ferris but can be changed to allow settings to
+     * be loaded from elsewhere. It is simplest to make the function
+     * named this way as it mirrors the thinking of what it does.
+     */
+    std::string getDotFerrisPath();
+//    const char* getDotFerrisPathCSTR();
     
     std::string getIOErrorDescription( fh_istream&  ss );
     std::string getIOErrorDescription( fh_ostream&  ss );

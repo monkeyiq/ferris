@@ -770,7 +770,7 @@ namespace Ferris
         }
 
         {
-            string dotferrisPath = Shell::getHomeDirPath_nochecks() + "/.ferris";
+            string dotferrisPath = getDotFerrisPath();
 //             CERR << "isDir():" << ret->isDir()
 //                  << " is-native:" << ret->getIsNativeContext()
 //                  << " rdn:" << rdn

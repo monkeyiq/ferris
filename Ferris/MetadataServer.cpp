@@ -261,7 +261,7 @@ namespace Ferris
         if( !ret )
         {
 //            string shortNamesToUseString = "xine,imlib2,jpeg,magick,png";
-            string shortNamesToUseString = getStrSubCtx( "~/.ferris/use-out-of-process-metadata-plugins",
+            string shortNamesToUseString = getStrSubCtx( getDotFerrisPath() + "use-out-of-process-metadata-plugins",
                                                          "xine,imlib2,jpeg,magick,png" );
 
             ret = new s_ImageEAGeneratorsExtensionToShortName_t();

@@ -45,15 +45,36 @@ namespace Ferris
 
     std::string GET_FDB_GENERAL()
     {
-        return "/.ferris/general.db";
+        return getDotFerrisPath() + "/general.db";
     }
-    
-    const std::string FDB_GENERAL   = GET_FDB_GENERAL();//"/.ferris/general.db";
-    const std::string FDB_FERRISDEV = "/.ferris/general.db";
-    char const FDB_LOGGING[] = "/.ferris/logging.db";
-    const std::string FDB_SECURE  = "/.ferris/secure.db";
-    const std::string FDB_CACHE   = "/.ferris/cache.db";
-    const std::string CREATEHISTORY_RELATIVE = "/.ferris/cache.db/create-history";
+    std::string GET_FDB_FERRISDEV()
+    {
+        return getDotFerrisPath() + "/general.db";
+    }
+    FERRISEXP_API std::string& GET_FDB_LOGGING()
+    {
+        static string s = getDotFerrisPath() + "/logging.db";
+        return s;
+    }
+    std::string GET_FDB_SECURE()
+    {
+        return getDotFerrisPath() + "/secure.db";
+    }
+    std::string GET_FDB_CACHE()
+    {
+        return getDotFerrisPath() + "/cache.db";
+    }
+    std::string GET_CREATEHISTORY_RELATIVE()
+    {
+        return getDotFerrisPath() + "cache.db/create-history";
+    }
+    const std::string FDB_GENERAL   = GET_FDB_GENERAL();
+    const std::string FDB_FERRISDEV = getDotFerrisPath() + "general.db";
+    const std::string FDB_LOGGING = GET_FDB_LOGGING();
+    const std::string FDB_SECURE  = getDotFerrisPath() + "secure.db";
+    const std::string FDB_CACHE   = getDotFerrisPath() + "cache.db";
+    const std::string CREATEHISTORY_RELATIVE = getDotFerrisPath() + "cache.db/create-history";
+
 
     /******************************************************************************/
     /******************************************************************************/
@@ -527,7 +548,7 @@ namespace Ferris
 
 
     const char* CFG_XSLTFS_STYLESHEET_PATH_K = "cfg-xsltfs-stylesheet-path";
-    const char* CFG_XSLTFS_STYLESHEET_PATH_DEFAULT = "~/.ferris/xsltfs-stylesheets/";
+    std::string CFG_XSLTFS_STYLESHEET_PATH_DEFAULT = getDotFerrisPath() + "/xsltfs-stylesheets/";
 
     const char* CFG_GLOB_SKIP_REGEX_LIST_K = "cfg-glob-skip-regex-list";
     const char* CFG_GLOB_SKIP_REGEX_LIST_DEFAULT = "";

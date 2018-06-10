@@ -206,7 +206,6 @@ namespace Ferris
 {
     const string EMBLEM_TOPLEVEL_SYSTEM_NAME = "libferris";
     
-    const string ETAGERE_ROOT = "~/.ferris/etagere";
     const string DB_COLDEM  = "/cold-emblems.db";
 
     
@@ -227,6 +226,7 @@ namespace Ferris
     const string ETAGERE_ONTOLOGY_ID_KEY = "ontology-id";
     const string ETAGERE_IDLIST_KEY = "et-idlist";
 
+    const string ETAGERE_ROOT = getDotFerrisPath() + "etagere";
 
     bool contains( emblems_t& el, fh_emblem em )
     {
@@ -1196,7 +1196,7 @@ namespace Ferris
     {
         if( path.empty() )
         {
-            m_basepath = ETAGERE_ROOT;
+            m_basepath = getDotFerrisPath() + "etagere";
         }
         LG_EMBLEM_D << "Etagere::Etagere() path:" << m_basepath << endl;
         loadAllEmblems();

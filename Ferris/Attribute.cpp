@@ -58,7 +58,7 @@ namespace Ferris
 
         if( !m )
         {
-            fh_context rdfdbc = Shell::acquireContext( "~/.ferris/rdfcacheattrs" );
+            fh_context rdfdbc = Shell::acquireContext( getDotFerrisPath() + "rdfcacheattrs" );
             std::string storage_name = getStrSubCtx( rdfdbc, "ferris-storage-name", "" );
 
             string dboptionsDefault = "";
@@ -68,17 +68,17 @@ namespace Ferris
                 dboptionsDefault = tostr(ss);
             }
 
-            m = Model::FromMetadataContext( "~/.ferris/rdfcacheattrs/metadata" );
+            m = Model::FromMetadataContext( getDotFerrisPath() + "rdfcacheattrs/metadata" );
                 
             // if( !storage_name.empty() )
             // {
-            //     std::string db_name      = getStrSubCtx( rdfdbc, "ferris-db-name", "~/.ferris/rdfcacheattrs/cacheonly" );
+            //     std::string db_name      = getStrSubCtx( rdfdbc, "ferris-db-name", getDotFerrisPath() + "rdfcacheattrs/cacheonly" );
             //     std::string db_options   = getStrSubCtx( rdfdbc, "ferris-db-options", dboptionsDefault );
             //     m = Model::ObtainDB( storage_name, db_name, db_options );
             // }
             // else
             // {
-            //     m = Model::ObtainDB( rdfdbc, "cacheonly", "~/.ferris/rdfcacheattrs" );
+            //     m = Model::ObtainDB( rdfdbc, "cacheonly", getDotFerrisPath() + "rdfcacheattrs" );
             // }
         }
         

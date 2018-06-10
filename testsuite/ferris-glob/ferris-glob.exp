@@ -1,0 +1,76 @@
+################################################################################
+################################################################################
+################################################################################
+#
+# test the expanding of shell globs for non-native kernel URLs like pg://
+#
+################################################################################
+################################################################################
+################################################################################
+
+
+global UTBASE    
+global SDATA
+global verbose
+global TMPFS
+
+if { $verbose > 1 } {
+    send_user "Testing the shell globbing..\n"
+}
+
+# #
+# # For native testing we need some way to get bash to resolve the glob
+# #
+# #     send_user "testing a shell glob on an in kernel path...\n"
+# #     remount_tmpfs
+# #     set BASEDIR "$TMPFS/input"
+# #     recreate_clean_tmp_subdir "$BASEDIR"
+# #     system tar -C  $BASEDIR -xf $SDATA/sizetestdata.tar
+# #     cd "$BASEDIR"
+# #     compare_with_ferrisls "\$(bash -c \"ls -1 /testing-ferris-tmpfs/input/test.51*\")" \
+#     # 	{<ferrisls>.*<ferrisls[ ]+url="file:///testing-ferris-tmpfs/input/test.512"[ ]+name="test.512"[ ]+>.*<context.*name="test.512"[ ]+/>[ \n]*</ferrisls>[ \n]*</ferrisls>[ \n]*<ferrisls>[ \n]*<ferrisls[ ]+url="file:///testing-ferris-tmpfs/input/test.513"[ ]+name="test.513"[ ]+>[ \n]*<context.*name="test.513"[ ]+/>[ \n]*</ferrisls>[ \n]*</ferrisls>[ \n]*<ferrisls>[ \n]*<ferrisls[ ]+url="file:///testing-ferris-tmpfs/input/test.514"[ ]+name="test.514"[ ]+>[ \n]*<context.*name="test.514"[ ]+/>[ \n]*</ferrisls>[ \n]*</ferrisls>}
+
+# #     compare_with_ferrisls "./test.51*"    \
+#     # 	{<ferrisls>.*<ferrisls[ ]+url="file:///testing-ferris-tmpfs/input/test.512"[ ]+name="test.512"[ ]+>.*<context.*name="test.512"[ ]+/>[ \n]*</ferrisls>[ \n]*</ferrisls>[ \n]*<ferrisls>[ \n]*<ferrisls[ ]+url="file:///testing-ferris-tmpfs/input/test.513"[ ]+name="test.513"[ ]+>[ \n]*<context.*name="test.513"[ ]+/>[ \n]*</ferrisls>[ \n]*</ferrisls>[ \n]*<ferrisls>[ \n]*<ferrisls[ ]+url="file:///testing-ferris-tmpfs/input/test.514"[ ]+name="test.514"[ ]+>[ \n]*<context.*name="test.514"[ ]+/>[ \n]*</ferrisls>[ \n]*</ferrisls>}
+
+# #     compare_with_ferrisls "/testing-ferris-tmpfs/input/test.5?[2-4]"    \
+#     # 	{<ferrisls>.*<ferrisls[ ]+url="file:///testing-ferris-tmpfs/input/test.512"[ ]+name="test.512"[ ]+>.*<context.*name="test.512"[ ]+/>[ \n]*</ferrisls>[ \n]*</ferrisls>[ \n]*<ferrisls>[ \n]*<ferrisls[ ]+url="file:///testing-ferris-tmpfs/input/test.513"[ ]+name="test.513"[ ]+>[ \n]*<context.*name="test.513"[ ]+/>[ \n]*</ferrisls>[ \n]*</ferrisls>[ \n]*<ferrisls>[ \n]*<ferrisls[ ]+url="file:///testing-ferris-tmpfs/input/test.514"[ ]+name="test.514"[ ]+>[ \n]*<context.*name="test.514"[ ]+/>[ \n]*</ferrisls>[ \n]*</ferrisls>}
+
+
+# send_user "testing a shell glob on a pg:// URL...\n"
+# spawn bash -c "psql -c 'drop database globtest;' root"
+# expect eof
+# send_user "Setting up database...\n"
+# spawn psql root -c "create database globtest;"
+# expect eof
+# spawn psql globtest -c "create table mytab ( name varchar(100) primary key, msg varchar(1024) );"
+# expect eof
+# spawn psql globtest -c "insert into mytab values ( 'message1', 'message number 1' );"
+# expect eof
+# spawn psql globtest -c "insert into mytab values ( 'message2', '2nd in control' );"
+# expect eof
+# spawn psql globtest -c "insert into mytab values ( 'msg3', 'san ban' );"
+# expect eof
+# spawn psql globtest -c "insert into mytab values ( 'msg4', 'quat' );"
+# expect eof
+# spawn psql globtest -c "insert into mytab values ( 'msg5', 'go' );"
+# expect eof
+# sleep 15
+
+# compare_with_ferrisls "pg://localhost/globtest"    \
+#     {<ferrisls>.*<ferrisls url=\"pg:///localhost/globtest\"  name=\"globtest\"  >.*<context.*name="mytab".*primary-key="name"[^/]+/>.*</ferrisls>}
+
+# compare_with_ferrisls "pg://localhost/globtest/mytab"    \
+#     {<ferrisls>.*<ferrisls url="pg:///localhost/globtest/mytab".*>.*<context[ ]+name="message1"[ ]+msg="message number 1"[ ]+name="message1"[ ]+primary-key="name"[ ]+/>.*<context[ ]+name="message2"[ ]+msg="2nd in control"[ ]+name="message2"[ ]+primary-key="name"[ ]+/>.*<context[ ]+name="msg3"[ ]+msg="san ban".*</ferrisls>.*</ferrisls>}
+
+# compare_with_ferrisls "pg://localhost/globtest/mytab/mess*"    \
+#     {<ferrisls>.*<ferrisls[ ]+url="pg:///localhost/globtest/mytab/message1"[ ]+name="message1"[ ]+>.*[ ]+<context[ ]+name="message1"[ ]+msg="message[ ]+number[ ]+1"[ ]+name="message1"[ ]+primary-key="name"[ ]+/>.*</ferrisls>.*</ferrisls>.*<ferrisls>.*<ferrisls[ ]+url="pg:///localhost/globtest/mytab/message2"[ ]+name="message2"[ ]+>.*[ ]+<context[ ]+name="message2"[ ]+msg="2nd[ ]+in[ ]+control"[ ]+name="message2"[ ]+primary-key="name"[ ]+/>.*</ferrisls>.*</ferrisls>}
+
+# compare_with_ferrisls "pg://localhost/globtest/mytab/message?"    \
+#     {<ferrisls>.*<ferrisls[ ]+url="pg:///localhost/globtest/mytab/message1"[ ]+name="message1"[ ]+>.*[ ]+<context[ ]+name="message1"[ ]+msg="message[ ]+number[ ]+1"[ ]+name="message1"[ ]+primary-key="name"[ ]+/>.*</ferrisls>.*</ferrisls>.*<ferrisls>.*<ferrisls[ ]+url="pg:///localhost/globtest/mytab/message2"[ ]+name="message2"[ ]+>.*[ ]+<context[ ]+name="message2"[ ]+msg="2nd[ ]+in[ ]+control"[ ]+name="message2"[ ]+primary-key="name"[ ]+/>.*</ferrisls>.*</ferrisls>}
+
+
+
+
+
+

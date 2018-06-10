@@ -1,0 +1,458 @@
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+# FULL TEXT INDEXING TESTS
+################################################################################
+################################################################################
+################################################################################
+
+#
+# Add the document at path filename to the index at path idx. Treat
+# addition as a test and failure counts toward overall count of failures.
+#
+proc index_add { idx filename } {
+
+    global SDATA
+    global verbose
+
+    set cmd "findexadd -P $idx $SDATA/$filename"
+    rt_expected [rt_version "index_add" ] "Total contexts indexed:1" "$cmd";
+
+#     if { $verbose > 1 } {
+# 	send_user "Adding file:$filename to index at $idx...\n"
+#         send_user "  CMD: findexadd -P $idx $SDATA/$filename\n"
+#     }
+#     spawn nice findexadd -P $idx $SDATA/$filename
+#     expect {
+# 	-re "error:.*Exception" { fail "Error adding $filename to index" }
+# 	-re "cought e:" { fail "Can't add file to index"; }
+# 	-re "ERROR:" { fail "Can't add file to index"; }
+# 	"Total contexts indexed:1" {pass "Added file:$filename to eaindex at $idx...\n"; return;}
+# 	default { fail "Failed to add new file $filename to index (timeout)"; }
+#     }
+}
+
+#
+# Check that the value given by popopt gives the shouldbe value on the
+# index at path idx
+#
+proc index_test { idx popopt shouldbe } {
+
+    global SDATA
+    global verbose
+    global FINDEXQUERY
+
+    if { $verbose > 1 } {
+	send_user  "Testing option $popopt that should give $shouldbe...\n"
+	send_user  "cmd: $FINDEXQUERY -P $idx $popopt\n"
+    }
+    set tmp [ exec $FINDEXQUERY -P $idx $popopt ]
+    if [ string match $tmp $shouldbe ] {
+	pass "Testing $idx option $popopt did give expected $shouldbe" 
+    } else {
+	fail "Incorrect value given for index_test testing option:$popopt expected value $shouldbe gave $tmp";
+    }
+}
+
+#
+# Search the index at idx for the given terms and pass iff the exact number
+# of results are found.
+#
+proc index_search { idx wantedmatches ranked terms } {
+
+    global SDATA
+    global verbose
+
+    set cmd "findexquery -P $idx $ranked $terms"
+    rt_expected [rt_version "index_search" ] "Found $wantedmatches matches at the foll" "$cmd";
+
+#     set cmd "nice findexquery -P $idx $ranked $terms"
+#     if { $verbose > 1 } {
+# 	send_user  "Searching for term $terms should get $wantedmatches matches...\n"
+# 	send_user  "cmd: $cmd\n"
+#     }
+
+#     spawn bash -c "$cmd"
+#     expect {
+# 	-re "Found $wantedmatches matches at the foll" { pass "Found $wantedmatches as expected"; return }
+# 	-re "(cought|error)" { fail "Exception occured during query on $terms"; }
+# 	timeout { fail "Failed to add new file $filename to index (timeout)"; }
+#     }
+#     fail "Incorrect number of results returned from index:$idx looking for $terms rankedmode=$ranked wanted:$wantedmatches\n"
+}
+
+
+#
+# Search the index at idx for the given terms in ranked mode and only pass if the ordering is
+# as shown in wantedorder
+#
+proc index_search_ranked_order { idx terms wantedorder } {
+
+    global SDATA
+    global verbose
+
+    set cmd "findexquery -P $idx -r $terms"
+    rt_expected_re [rt_version "index_search_ranked_order" ] "$wantedorder" "$cmd";
+
+#     if { $verbose > 1 } {
+# 	send_user  "Searching for term $terms with desired ranked result order...\n"
+#     }
+#     spawn nice findexquery -P $idx -r $terms
+#     expect {
+# 	-re $wantedorder { pass "Found ranked query results in desired order for $terms"; return } 
+# 	-re "(cought|error)" { fail "Exception occured during query on $terms"; }
+# 	timeout { fail "Failed to add new file $filename to index (timeout)"; }
+#     }
+#     fail "Ranked order found was not correct for index:$idx looking for $terms"
+}
+
+
+################################################################################
+################################################################################
+################################################################################
+
+proc remake_full_text_index_at { idx fulltexttype dropstop skiplistsize dgapcode dftcode lexiconclass } {
+
+    global SDATA
+    global verbose
+    global FCREATE
+
+    if { $verbose > 1 } {
+	send_user "cmd:$FCREATE $idx --create-type=$fulltexttype drop-stop-words=$dropstop inverted-skiplist-max-size=$skiplistsize document-number-gap-code=$dgapcode frequency-of-term-in-document-code=$dftcode lexicon-class=$lexiconclass\n"
+    }
+
+    recreate_clean_tmp_subdir $idx
+    set cmd "$FCREATE $idx --create-type=$fulltexttype drop-stop-words=$dropstop inverted-skiplist-max-size=$skiplistsize document-number-gap-code=$dgapcode frequency-of-term-in-document-code=$dftcode \"lexicon-class=$lexiconclass\" ";
+    rt_expected "fcreate-ftx-idx" "eof" "$cmd";
+
+}
+
+#
+# Driver to optionally create a new index in a path at idx which is removed forcefully
+# first and a new index created there with docuemnts then added.
+# 
+# After optional creation & init some queries and tests are done to ensure that the index
+# can provide the passing results.
+#
+proc run_full_text_index_test { idx recreate skiplistsize dgapcode dftcode lexiconclass } {
+
+    global SDATA
+    global verbose
+
+    if { $verbose > 1 } {
+	send_user "Running a complete full text index test pass idx:$idx recreate:$recreate,\n"
+	send_user "  skiplistsize:$skiplistsize dgapcode:$dgapcode dftcode:$dftcode lexicon:$lexiconclass...\n"
+    }
+
+    set test createindex
+    if { $recreate > 0 } {
+
+	send_user "Recreating index...\n"
+	remake_full_text_index_at $idx "fulltextindex" "0" $skiplistsize $dgapcode $dftcode $lexiconclass
+
+	#
+	# add a few documents to the index.
+	#
+	send_user "Populating index...\n"
+	set test "add docuemnt to index"
+	index_add $idx  alice13a.txt
+	index_add $idx  snark12.txt
+	index_add $idx  nobos10.txt
+	index_add $idx  boysw10.txt
+	index_add $idx  warw11.txt
+	index_add $idx  frsls10.txt
+    }
+
+
+    #
+    # sanity check the index
+    #
+    set test "check index config"
+
+    index_test $idx "--get-number-of-terms"                    "7702"
+    index_test $idx "--get-size-of-inverted-list-chunks"       "$skiplistsize"
+    index_test $idx "--get-document-number-gap-code"           "$dgapcode"
+    index_test $idx "--get-frequency-of-term-in-document-code" "$dftcode" 
+    index_test $idx "--get-lexicon-class"                      "$lexiconclass"
+
+    #
+    # do some queries
+    #
+#    set test "query index"
+#    index_search $idx 1 "-r"        "alice"
+#    index_search $idx 5 "--boolean" "world"
+#    index_search $idx 5 "-r"        "world"
+#    index_search $idx 3 "--boolean" "world ant"
+#    index_search $idx 5 "-r"        "world ant"
+#    index_search $idx 6 "-r"        "core fun mad cat alice eat queen hatter"
+#    index_search_ranked_order $idx  "core fun mad cat alice eat queen hatter" \
+#	".*alice13a.txt.*nobos10.txt.*warw11.txt.*frsls10.txt.*boysw10.txt.*snark12.txt"
+
+}
+
+
+#
+# Driver to optionally create a new index in a path at idx which is removed forcefully
+# first and a new index created there with docuemnts then added.
+# 
+# After optional creation & init some queries and tests are done to ensure that the index
+# can provide the passing results.
+#
+proc run_plugin_full_text_index_test { idx recreate fulltexttype } {
+
+    global SDATA
+    global verbose
+
+    if { $verbose > 1 } {
+	send_user "Running a complete full text index test pass idx:$idx recreate:$recreate,\n"
+    }
+
+    set dbname "ferristestingftxidx"
+    set test createindex
+    if { $recreate > 0 } {
+	
+	recreate_clean_tmp_subdir $idx
+	spawn bash -c "psql -c 'drop database $dbname;' template1"
+	expect eof
+	set cmd "fcreate $idx --create-type=$fulltexttype dbname=$dbname"
+	rt_expected "plugin_ftx_fcreate" "eof" "$cmd";
+
+# 	send_user "cmd: $cmd\n"
+# 	spawn fcreate $idx --create-type=$fulltexttype dbname=$dbname
+# 	expect {
+# 	    -re "cought e:" { fail "ferriscreate for fulltext index caused an exception"; return; }
+# 	    timeout { fail "Failed to spawn fcreate (timeout)"; return; }
+# 	}
+
+
+	#
+	# add a few documents to the index.
+	#
+	set test "add docuemnt to index"
+	index_add $idx  alice13a.txt
+	index_add $idx  snark12.txt
+	index_add $idx  nobos10.txt
+	index_add $idx  boysw10.txt
+	index_add $idx  warw11.txt
+	index_add $idx  frsls10.txt
+    }
+
+
+    #
+    # do some queries
+    #
+    set test "query index"
+    index_search $idx 5 "--boolean" "world"
+    index_search $idx 2 "--boolean" "world ant"
+
+}
+
+
+#
+# Test a specific coded to make sure that decode(encode(x)) == x for a list of numbers
+# also, things like the number of bytes generated by encode should == the number consumed by decode.
+#
+proc ut_index_compression { codec } {
+
+    global UTBASE
+    global SDATA
+    global verbose
+
+    set cmd "$UTBASE/ut_index_compression $codec"
+    rt_expected [rt_version "ut_index_compression" ] "Roundtrip was success" "$cmd";
+
+#     if { $verbose > 1 } {
+# 	send_user  "Testing compression codec $codec...\n"
+#     }
+#     spawn nice $UTBASE/ut_index_compression $codec
+#     expect {
+# 	-re "Roundtrip was success" { pass "for codec $codec"; return } 
+# 	-re "ERROR" { fail "Exception occured during codec test for $codec"; }
+# 	timeout { fail "Failed during codec test for $codec (timeout)"; }
+#     }
+#     fail "problem with codec test for $codec"
+
+}
+
+proc compare_expected_compressed_file { expected actual msg } {
+
+    global SDATA
+    global verbose
+
+    #
+    # Compare an XML dump of the index with one we prepared earlier.
+    #
+    system cp -av $SDATA/../expected_output/$expected.bz2 /tmp
+    system bunzip2 -f /tmp/$expected.bz2
+    
+    mydiff "compare_expected_compressed_file" "" $actual /tmp/$expected;
+#     set rc [ diff  $actual /tmp/$expected ]
+#     if { $rc == 1 } {
+# 	pass "Got expected output ex:$expected ac:$actual $msg"
+#     } else {
+# 	fail "Did not get expected output ex:$expected ac:$actual $msg"
+#     }
+}
+
+proc run_full_text_index_revoke_alice_alice {} {
+
+    global SDATA
+    global verbose
+
+    set desc "This test first adds alice.txt to the fulltext index, then adds alice.txt again from the same path. When alice.txt is added the second time the first docid will be marked as revoked and because the addition of the same file will add the same terms and thus effect the same inverted lists then all inverted references to the first docid will be dropped in the process of adding the document to the index the second time. Thus this will purge the first docid aswell at the end of the second file indexing process."
+
+    set idx "/tmp/ferris-revoke"
+    if { $verbose > 1 } {
+	send_user  "Testing docid revokation...\n"
+	send_user  "$desc\n"
+    }
+
+    remake_full_text_index_at $idx "fulltextindex" "0" 5 "Interpolative"  "Gamma"  "FrontCodedBlocks (3-in-4)"
+    set test "add docuemnt to index"
+
+    set filename     alice13a.txt
+    set tmpfilename  /tmp/$filename
+    system cp -av $SDATA/$filename $tmpfilename
+    if { $verbose > 1 } {
+	send_user  "Adding file:$filename from $tmpfilename to index at $idx ...\n"
+    }
+    spawn nice findexadd -v -P $idx $tmpfilename
+    expect {
+	-re "error:.*Exception" { fail "Error adding $filename to index" }
+	-re "cought e:" { fail "Can't add file to index"; }
+	"Total contexts indexed:1" {pass "Added file:$filename to eaindex at $idx...\n"; return;}
+	timeout { fail "Failed to add new file $filename to index (timeout)"; }
+    }
+    spawn nice findexadd -v -P $idx $tmpfilename
+    expect {
+	-re "error:.*Exception" { fail "Error adding $filename to index" }
+	-re "cought e:" { fail "Can't add file to index"; }
+	"Total contexts indexed:1" {pass "Added file:$filename to eaindex at $idx...\n"; return;}
+	timeout { fail "Failed to add new file $filename to index (timeout)"; }
+    }
+    #
+    # Compare an XML dump of the index with one we prepared earlier.
+    #
+    set expected fulltextindex-revoke-alice-then-alice.xml
+    set actual /tmp/index.xml
+    system findexquery -v -P $idx --dump-index >|$actual
+    compare_expected_compressed_file $expected $actual "alice then alice again"
+}
+
+proc run_full_text_index_revoke_alice_snark {} {
+
+    global SDATA
+    global verbose
+
+    set desc "This test first adds alice.txt to the fulltext index, then replaces alice.txt with the contents of snark.txt and reindexes it. After the test there should still be inverted file references to the docid that alice.txt originally used when it was indexed but that docid will be revoked and the contents of snark will be indexed as alice.txt"
+
+    set idx "/tmp/ferris-revoke"
+    if { $verbose > 1 } {
+	send_user  "Testing docid revokation...\n"
+	send_user  "$desc\n"
+    }
+
+    remake_full_text_index_at $idx "fulltextindex" "0" 5 "Interpolative"  "Gamma"  "FrontCodedBlocks (3-in-4)"
+    set test "add docuemnt to index"
+    
+    set filename     alice13a.txt
+    set tmpfilename  /tmp/$filename
+    system cp -av $SDATA/$filename $tmpfilename
+    if { $verbose > 1 } {
+	send_user  "Adding file:$filename from $tmpfilename to index at $idx ...\n"
+    }
+    spawn nice findexadd -v -P $idx $tmpfilename
+    expect {
+	-re "error:.*Exception" { fail "Error adding $filename to index" }
+	-re "cought e:" { fail "Can't add file to index"; }
+	"Total contexts indexed:1" {pass "Added file:$filename to eaindex at $idx...\n"; return;}
+	timeout { fail "Failed to add new file $filename to index (timeout)"; }
+    }
+
+    set filename snark12.txt
+    system cp -av $SDATA/$filename $tmpfilename
+    if { $verbose > 1 } {
+	send_user  "Reindexing using new contents:$filename from $tmpfilename to index at $idx ...\n"
+    }
+    spawn nice findexadd -v -P $idx $tmpfilename
+    expect {
+	-re "error:.*Exception" { fail "Error adding $filename to index" }
+	-re "cought e:" { fail "Can't add file to index"; }
+	"Total contexts indexed:1" {pass "Added file:$filename to eaindex at $idx...\n"; return;}
+	timeout { fail "Failed to add new file $filename to index (timeout)"; }
+    }
+
+    #
+    # Compare an XML dump of the index with one we prepared earlier.
+    #
+    set expected fulltextindex-revoke-alice-then-snark.xml
+    set actual /tmp/index.xml
+    system findexquery -v -P $idx --dump-index >|$actual
+    compare_expected_compressed_file $expected $actual "alice then snark"
+
+    if { $verbose > 1 } {
+	send_user  "Compacting the fulltext index at $idx ...\n"
+    }
+    spawn nice findexcompact -v -P $idx 
+    expect {
+	-re "error:.*Exception" { fail "Error adding $filename to index" }
+	-re "cought e:" { fail "Can't add file to index"; }
+	timeout { fail "Failed to add new file $filename to index (timeout)"; }
+    }
+
+    #
+    # Compare an XML dump of the index with one we prepared earlier.
+    #
+    set expected fulltextindex-revoke-alice-then-snark-compact.xml
+    set actual /tmp/index.xml
+    system findexquery -v -P $idx --dump-index >|$actual
+    compare_expected_compressed_file $expected $actual "alice then snark compact"
+}
+
+proc run_full_text_index_revoke_suite {} {
+
+    global SDATA
+    global verbose
+
+    run_full_text_index_revoke_alice_alice
+    run_full_text_index_revoke_alice_snark
+}
+
+
+
+global TMPFS
+
+
+ut_index_compression "--interpolative"
+ut_index_compression "--golomb"
+ut_index_compression "--gamma"
+ut_index_compression "--delta"
+
+# It is simpler to require the test files to be downloaded than include them here.
+
+# run_full_text_index_test "/tmp/ferris-exp1" 1 5 "Interpolative"  "Gamma"  "boost-multi-index"
+
+# run_full_text_index_test "/tmp/ferris-exp2" 1 5 "Interpolative"  "Gamma"  "Uncompressed (db4 hash)"
+# run_full_text_index_test "/tmp/ferris-exp3" 1 5 "Interpolative"  "Gamma"  "FrontCodedBlocks (3-in-4)"
+# run_full_text_index_test "/tmp/ferris-exp4" 1 5 "None"           "None"   "FrontCodedBlocks (3-in-4)"
+# run_full_text_index_test "/tmp/ferris-exp5" 1 5 "Interpolative"  "Gamma"  "Uncompressed (db4 hash)"
+
+# run_full_text_index_test "/tmp/ferris-exp6" 1 5 "Interpolative"  "Gamma"  "FrontCodedBlocks (3-in-4)"
+# run_full_text_index_test "/tmp/ferris-exp7" 1 5 "Golomb"         "Gamma"  "FrontCodedBlocks (3-in-4)"
+# run_full_text_index_test "/tmp/ferris-exp8" 1 5 "Golomb"         "Delta"  "FrontCodedBlocks (3-in-4)"
+# run_full_text_index_test "/tmp/ferris-exp9" 1 5 "None"           "None"   "FrontCodedBlocks (3-in-4)"
+# run_full_text_index_test "/tmp/ferris-exp10" 1 5 "Interpolative"  "Gamma"  "Uncompressed (db4 hash)"
+# run_full_text_index_test "/tmp/ferris-exp11" 1 5 "Gamma"          "Gamma"  "Uncompressed (db4 hash)"
+# run_full_text_index_test "/tmp/ferris-exp12" 1 5 "Delta"          "Gamma"  "Uncompressed (db4 hash)"
+
+# run_full_text_index_revoke_suite
+
+# run_full_text_index_test "/tmp/ferris-exp13" 1 5 "Interpolative"  "Gamma"  "Filesystem"
+
+# remount_tmpfs
+# run_plugin_full_text_index_test "$TMPFS/idx" 1 "fulltextindextsearch2"
+
+
+

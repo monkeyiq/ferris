@@ -42,7 +42,7 @@ namespace Ferris
 {
     namespace OProcMessage
     {
-        const string FERRIS_OUT_OF_PROC_NOTIFICATION_DEAMON_ROOT = "~/.ferris/oprocnotify";
+        const string FERRIS_OUT_OF_PROC_NOTIFICATION_DEAMON_ROOT = getDotFerrisPath() + "oprocnotify";
 
         string appendToServPath( const std::string& r )
         {

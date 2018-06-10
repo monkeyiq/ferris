@@ -1,0 +1,104 @@
+################################################################################
+################################################################################
+################################################################################
+#
+# fileutils clients test suite
+#
+################################################################################
+################################################################################
+################################################################################
+
+proc run_ferris_fileutils_test { ClientCmd Mode Inputpath Outputpath } {    
+    global SDATA
+    global verbose
+
+    set CLIENT "$ClientCmd"
+    set cmd "$ClientCmd $Mode $Inputpath $Outputpath"
+    set testname [rt_version "ferris_fileutils_test" ]
+    rt_expected "$testname" "eof" "$cmd";
+}
+
+
+
+global SDATA
+global verbose
+global TMPFS
+
+if { $verbose > 1 } {
+    send_user "Testing the ferriscp, ferrismv, ferrisrm clients\n"
+}
+
+set BASEDIR "/tmp/ferris-fileutils-test"
+set MODE "-av"
+set STATFMT "\"size:%s access:%A type:%F gid:%g uid:%u mtime:%Y\""
+set STATFMTNOTIME "\"size:%s access:%A type:%F gid:%g uid:%u\""
+recreate_clean_tmp_subdir "$BASEDIR"
+
+# Simple one file copy
+set inpath  "$SDATA/alice13a.txt"
+set originalpath "$inpath"
+set outpath "$BASEDIR/alice13a.txt"
+run_ferris_fileutils_test "ferriscp" "$MODE" "$inpath" "$outpath"
+verify_output_contains "md5sum $outpath" "135e06ad31b169065bccbf03ec7236f2"
+verify_output_contains "stat -c $STATFMT $outpath" [ exec stat -c $STATFMT $inpath ]
+
+# move the file and check it again
+set inpath  "$outpath"
+set outpath "$BASEDIR/alice13a.txt.moved"
+run_ferris_fileutils_test "ferrismv" "$MODE" "$inpath" "$outpath"
+verify_output_contains "md5sum $outpath" "135e06ad31b169065bccbf03ec7236f2"
+verify_output_contains "stat -c $STATFMT $outpath" [ exec stat -c $STATFMT $originalpath ]
+# while we're here lets make sure we can get the data from fcat/ferrisls
+verify_output_contains "fcat $outpath" "Project Gutenberg has made arrangements with Duncan"
+verify_output_contains "fcat $outpath -a size" "153477"
+verify_output_contains "fcat $outpath -a mtime" "1046324608"
+verify_output_contains "ferrisls -d --show-ea=size  $outpath" "153477"
+verify_output_contains "ferrisls -d --show-ea=mtime $outpath" "1046324608"
+
+
+# expand a tar of files and recursive copy it
+recreate_clean_tmp_subdir "$BASEDIR"
+set inpath  "$BASEDIR/input_dir"
+set originalpath "$inpath"
+set outpath  "$BASEDIR/output_dir"
+system mkdir -p $inpath
+system tar -C $inpath -xf $SDATA/sizetestdata.tar 
+run_ferris_fileutils_test "ferriscp" "$MODE" "$inpath" "$outpath"
+verify_output_identical "cd $inpath && ls -R"  "cd $outpath && ls -R"  ""
+verify_output_identical "cd $inpath && ls -Rl" "cd $outpath && ls -Rl" ""
+
+# move the tree and check it again
+set inpath  "$outpath"
+set outpath "$BASEDIR/moved"
+run_ferris_fileutils_test "ferrismv" "$MODE" "$inpath" "$outpath"
+verify_output_identical "cd $originalpath && ls -R"  "cd $outpath && ls -R"  ""
+verify_output_identical "cd $originalpath && ls -Rl" "cd $outpath && ls -Rl" ""
+
+# test a special file
+recreate_clean_tmp_subdir "$BASEDIR"
+set inpath  "$BASEDIR/input"
+set originalpath "$inpath"
+set outpath  "$BASEDIR/output"
+system mkfifo $inpath
+run_ferris_fileutils_test "ferriscp" "$MODE" "$inpath" "$outpath"
+verify_output_contains "stat -c $STATFMT $outpath" [ exec stat -c $STATFMT $inpath ]
+
+# test a link to a special file
+set outpath  "$BASEDIR/link-old"
+system ln -s $inpath $outpath
+set inpath  "$outpath"
+set outpath  "$BASEDIR/link-new"
+run_ferris_fileutils_test "ferriscp" "$MODE" "$inpath" "$outpath"
+verify_output_contains "stat -c $STATFMTNOTIME $outpath" [ exec stat -c $STATFMTNOTIME $inpath ]
+
+# lets check the copy into self check in FerrisCopy.cpp
+# we'll do this in a tmpfs because we need a hard limit if it fails.
+remount_tmpfs
+set inpath  "$TMPFS/foo"
+set outpath  "$TMPFS/foo/bar"
+system "mkdir -p $outpath"
+verify_output_contains "ferriscp $MODE $inpath $outpath" "Attempt to copy into self"
+
+
+
+

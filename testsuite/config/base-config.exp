@@ -1,0 +1,608 @@
+#   Copyright (C) 2016 Ben Martin
+
+set SITETEST "libferris 2016"
+
+# FIXME: update to sane path for everybody.
+set UTBASE "/tmp/DevelopBuild/ferris/testsuite"
+
+
+# /testing-ferris-tmpfs should be a tmpfs of 16mb user mount/demountable
+# /etc/fstab entry
+# tmpfs                   /testing-ferris-tmpfs   tmpfs   size=16m,user   0 0
+# /testing-ferris-tmpfs should be mounted before running this test suite
+#
+set TMPFS "/testing-ferris-tmpfs"
+set timeout 145
+
+set DOTFERRIS     "/tmp/dot-ferris"
+set TMPSAMPLEDATA "/tmp/sampledata"
+
+set FERRISLS "$ROOTDIR/apps/ls/ferrisls"
+set FCAT     "$ROOTDIR/apps/cat/fcat"
+set FMKDIR   "$ROOTDIR/apps/fmkdir/fmkdir"
+set FCREATE  "$ROOTDIR/apps/fcreate/fcreate"
+set FEAINDEXADD    "$ROOTDIR/apps/fulltextindex/feaindexadd"
+set FEAINDEXQUERY  "$ROOTDIR/apps/fulltextindex/feaindexquery"
+set FINDEXADD      "$ROOTDIR/apps/fulltextindex/findexadd"
+set FINDEXQUERY    "$ROOTDIR/apps/fulltextindex/findexquery"
+set FMEDALLION     "$ROOTDIR/apps/fmedallion/fmedallion"
+
+##
+## some nice general purpose functions
+##
+
+
+proc setup_tmp_dot_ferris {} {
+    global SDATA
+    
+    system rm -rf  "/tmp/dot-ferris";
+    system cp -a   "$SDATA/../../dot-ferris" "/tmp/"
+}
+proc setup_tmpsampledata {} {
+    global SDATA
+    global TMPSAMPLEDATA
+    global GUTEN
+    
+    system rm -rf  "/tmp/sampledata";
+    system cp -a    $SDATA $TMPSAMPLEDATA
+    verbose "GUTEN: $GUTEN "
+    system cp -av    "$GUTEN/*txt" $TMPSAMPLEDATA
+}
+
+
+#
+# remove and recreate a /tmp/foo directory
+#
+proc recreate_clean_tmp_subdir { path } {
+    send_user  "recreate_clean_tmp_subdir $path\n"
+    system touch     $path
+    system chmod -R u+rwx $path
+    system rm -rf   $path
+    system mkdir -p $path
+}
+
+proc remount_tmpfs { } {
+    global TMPFS
+    spawn umount $TMPFS 
+    expect
+    sleep 1
+    system mount   $TMPFS
+}
+
+################################################################################
+################################################################################
+################################################################################
+
+
+set rt_version_var 1;
+
+proc rt_version { prefixstr } {
+    global rt_version_var;
+    incr rt_version_var;
+    set tmp $prefixstr;
+    append tmp $rt_version_var;
+    return "$tmp";
+}
+
+proc rt_capture_out { testname expected cmd expect_out_buffer_so_far getrest } {
+
+    global SDATA
+    global verbose
+    upvar spawn_id spawn_id;
+    global expect_out
+
+    send_user "rt_capture_out $getrest\n"
+    set actual "$expect_out_buffer_so_far";
+    send_user "FAILING... $testname  getrest:$getrest  actual:$actual\n";
+    if { $getrest > 0 } {
+	set timeout 5;
+	expect {
+	    eof { append actual $expect_out(buffer); }
+	    timeout { }
+	}
+    }
+    set OUTFILEBASE "/tmp/ferris-test-output/";
+    system mkdir -p $OUTFILEBASE;
+    set outfilename "$OUTFILEBASE/$testname";
+    fail "cmd: $cmd SEE: $outfilename ";
+
+    send_user "OUTFILE:$outfilename\n";
+    send_user "actual:$actual\n";
+    set dumpfile [ open "$outfilename" w ];
+    puts $dumpfile " cmd: $cmd\n";
+    puts $dumpfile " expected: $expected\n";
+    puts $dumpfile " actual: $actual\n";
+    close $dumpfile;
+
+    set dumpfile [ open "$outfilename.expected" w ];
+    puts $dumpfile "$expected";
+    close $dumpfile;
+    set dumpfile [ open "$outfilename.actual" w ];
+    puts $dumpfile "$actual";
+    close $dumpfile;
+
+}
+
+proc rt_expected { testname expected cmd } {
+    global SDATA
+    global verbose
+    global expect_out
+
+    set failed_with_timeout 0
+    set failed_with_eof 0
+    send_user "rt_expected cmd:$cmd\n";
+    eval spawn $cmd
+    expect {
+        $expected { 
+	    pass "XXX $cmd ex:$expected buf:$expect_out(buffer)"; 
+	    if { $expected != "eof" } {
+		expect eof;
+	    }
+	    return; 
+	}
+	timeout { set failed_with_timeout 1; set bufcache "$expect_out(buffer)"; }
+	eof { set failed_with_eof 1; set bufcache "$expect_out(buffer)"; }
+	-re "cought e" { set bufcache "$expect_out(buffer)"; }
+	-re "error:" { set bufcache "$expect_out(buffer)"; }
+	-re "Error:" { set bufcache "$expect_out(buffer)"; }
+	-re "ERROR" { set bufcache "$expect_out(buffer)"; }
+	"Unhandled Java exception" { set bufcache "$expect_out(buffer)"; }
+    }
+
+    set getrest 0;
+    if { $failed_with_timeout != 1 } {
+	if { $failed_with_eof != 1 } {
+	    set getrest 1;
+	}
+    }
+    rt_capture_out $testname $expected $cmd $bufcache $getrest;
+
+
+#     set actual $expect_out(buffer);
+#     send_user "FAILING... $testname  actual:$actual\n";
+#     if { $failed_with_timeout != 1 } {
+# 	if { $failed_with_eof != 1 } {
+# 	    expect {
+# 		eof { append actual $expect_out(buffer); }
+# 	    }
+# 	}
+#     }
+#     set OUTFILEBASE "/tmp/ferris-test-output/";
+#     system mkdir -p $OUTFILEBASE;
+#     set outfilename "$OUTFILEBASE/$testname";
+#     fail "failed_with_timeout:$failed_with_timeout cmd: $cmd SEE: $outfilename ";
+
+#     set dumpfile [ open "$outfilename" w ];
+#     puts $dumpfile " failed_with_timeout:$failed_with_timeout\n";
+#     puts $dumpfile " cmd: $cmd\n";
+#     puts $dumpfile " expected: $expected\n";
+#     puts $dumpfile " actual: $actual\n";
+}
+
+proc rt_expected_re { testname expected cmd } {
+    global SDATA
+    global verbose
+    global expect_out
+
+    set failed_with_timeout 0
+    set failed_with_eof 0
+    send_user "rt_expected_re cmd:$cmd\n";
+    eval spawn $cmd
+    expect {
+        -re $expected { 
+	    pass "XXX $cmd ex:$expected buf:$expect_out(buffer)"; 
+	    if { $expected != "eof" } {
+		expect eof;
+	    }
+	    return; 
+	}
+	timeout { set failed_with_timeout 1; set bufcache "$expect_out(buffer)"; }
+	eof { set failed_with_eof 1; set bufcache "$expect_out(buffer)"; }
+	-re "cought e" { set bufcache "$expect_out(buffer)"; }
+	-re "error:" { set bufcache "$expect_out(buffer)"; }
+	-re "Error:" { set bufcache "$expect_out(buffer)"; }
+	-re "ERROR" { set bufcache "$expect_out(buffer)"; }
+	"Unhandled Java exception" { set bufcache "$expect_out(buffer)"; }
+    }
+
+    set getrest 0;
+    if { $failed_with_timeout != 1 } {
+	if { $failed_with_eof != 1 } {
+	    set getrest 1;
+	}
+    }
+
+    rt_capture_out $testname $expected $cmd $bufcache $getrest;
+}
+
+proc verify_output_contains { cmd expected_quoted } {
+    
+    global SDATA
+    global verbose
+    
+    set expected [string trim $expected_quoted "\""]
+
+    set testname [rt_version "verify_output_contains" ]
+    rt_expected "$testname" "$expected" "$cmd";
+
+#     set CLIENT "verify file information"
+#     spawn bash -c "$cmd"
+#     expect {
+# 	$expected { pass "$CLIENT"; return; }
+# 	-re "cought e:" { fail "$CLIENT Failed with an exception cmd: $cmd"; return; }
+# 	-re "error:" { fail "$CLIENT Failed with an exception cmd: $cmd"; return; }
+# 	timeout { fail "$CLIENT Failed with timeout cmd: $cmd"; return; }
+#     }
+#     fail "$CLIENT didn't give expected output:$expected cmd: $cmd"
+}
+
+proc mydiff { testname diffflags fileA fileB } {
+
+    set cmd "diff -Nsuar $diffflags $fileA $fileB"
+    rt_expected "$testname" "Files $fileA and $fileB are identical" "$cmd";
+}
+
+set verify_output_identical_counter 1
+
+proc verify_output_identical { cmdA cmdB diffflags } {
+    
+    global SDATA
+    global verbose
+    global verify_output_identical_counter
+
+    set out1 "/tmp/cmdA.out"
+    set out2 "/tmp/cmdB.out"
+    system "eval $cmdA >|$out1"
+    system "eval $cmdB >|$out2"
+    
+    set cmd "diff -Nsuar $diffflags $out1 $out2"
+    set testname [rt_version "verify_output_identical cmdA:$cmdA cmdB:$cmdB" ]
+    set verify_output_identical_counter [ expr $verify_output_identical_counter + 1 ]
+    set capfile "verify_output_identical_$verify_output_identical_counter"
+    rt_expected "$capfile" "Files $out1 and $out2 are identical" "$cmd";
+
+#     spawn bash -c "$cmd"
+#     expect {
+# 	"Files $out1 and $out2 are identical" { pass "expected output found"; return; }
+#     }
+#     fail "Different output than expected found. cmdA:$cmdA cmdB:$cmdB "
+}
+
+
+################################################################################
+################################################################################
+################################################################################
+
+#
+# generates the XML ferrisls and compares it to an expected value
+#
+proc compare_with_ferrisls { url expected } {
+
+    global SDATA
+    global verbose
+    global FERRISLS
+
+    set cmd "$FERRISLS --xmlraw $url"
+    set testname [rt_version "compare-with-ferrisls" ]
+    rt_expected_re "$testname" "$expected" "$cmd";
+
+#     spawn nice ferrisls -2 $url
+#     expect {
+# 	-re $expected   { pass "ferrisls gave correct expected result"; return; }
+# 	-re "cought e:" { fail "ferrisls caused an exception"; return; }
+# 	-re "error:"    { fail "ferrisls caused an exception"; return; }
+# 	timeout { fail "Failed to ferrisls (timeout)"; return; }
+#     }
+#     fail "unexpected result from ferrisls at $url"; 
+}
+
+#
+# compare fcat -a attr url to an expected value
+#
+proc compare_with_fcat { attr url expected } {
+
+    global SDATA
+    global verbose
+    global FCAT
+
+    set cmd "$FCAT -a $attr $url"
+    set testname [rt_version "compare-with-fcat" ]
+    rt_expected_re "$testname" "$expected" "$cmd";
+}
+
+proc run_ferrisrm { url } {
+
+    global SDATA
+    global verbose
+    
+    send_user "removing context at:$url\n"
+    set cmd "ferrisrm -v $url"
+    set testname [rt_version "ferrisrm" ]
+    rt_expected "$testname" "eof" "$cmd";
+
+#     spawn nice ferrisrm -v $url
+#     expect {
+# 	-re "cought e:" { fail "ferrisrm caused an exception"; return; }
+# 	-re "error:"    { fail "ferrisrm caused an exception"; return; }
+# 	timeout { fail "Failed to ferrisrm (timeout)"; return; }
+#     }
+#     pass "removed $url"; 
+}
+
+proc run_fmkdir { path expected } {
+    
+    global SDATA
+    global verbose
+    global FMKDIR
+
+    set cmd "$FMKDIR -v $path"
+    set testname [rt_version "ferris_mkdir_test" ]
+    rt_expected_re "$testname" "$expected" "$cmd";
+}
+
+
+
+################################################################################
+################################################################################
+################################################################################
+#
+# Test creation plugins
+#
+################################################################################
+################################################################################
+################################################################################
+
+
+
+proc test_creation_db4 { subtype baselinefile } {
+    
+    global SDATA
+    global verbose
+    
+    set ftype "db4"
+
+    if { $verbose > 1 } {
+	send_user "Testing the creation of type: $ftype...$subtype\n"
+    }
+    
+    set BASEDIR "/tmp/junk"
+    recreate_clean_tmp_subdir "$BASEDIR"
+
+    set rdn "test"
+    spawn fcreate $BASEDIR --create-type=$ftype --rdn=$rdn database-type=$subtype
+    expect {
+	-re "Created new context: \(.*\)" 
+	{
+	    set ext ""
+	    pass "Created context as expected";  
+
+	    set infonew [exec db_dump  /tmp/junk/test       | grep -v uid | head -18]
+	    set infoold [exec db_dump  $SDATA/$baselinefile | grep -v uid | head -18]
+
+	    if [ string match $infonew $infoold ] {
+		pass "Newly created db4 context has expected structure";
+	    } else {
+		fail "Newly created context $rdn$ext doesn't match expected data. expected:$infoold actual:$infonew ";
+	    }
+	    return;
+	}
+	-re "cought e:" { fail "ferriscreate for $ftype caused an exception";   return; }
+	timeout { fail "Failed to spawn fcreate (timeout)"; return; }
+    }
+}
+
+proc test_creation_xml { ftype baselinefile performdiff } {
+    
+    global SDATA
+    global verbose
+    
+    if { $verbose > 1 } {
+	send_user "Testing the creation of type: $ftype...\n"
+    }
+    
+    set BASEDIR "/tmp/junk"
+    recreate_clean_tmp_subdir "$BASEDIR"
+
+    set rdn "test.$ftype"
+    send_user "command: fcreate $BASEDIR --create-type=$ftype --rdn=$rdn root-element=root\n"
+    spawn fcreate $BASEDIR --create-type=$ftype --rdn=$rdn root-element=root
+    expect {
+	-re "Created new context: \(.*\)" 
+	{
+	    set ext ""
+	    pass "Created context as expected";  
+
+	    if { $performdiff } {
+		set newfilename "/tmp/junk/$rdn"
+		mydiff "test_creation_xml" "" $newfilename $SDATA/$baselinefile;
+
+# 		if { [ diff $newfilename $SDATA/$baselinefile ] > 0 } {
+# 		    pass "Newly created $ftype context has expected structure";
+# 		} else {
+# 		    fail "Newly created context $ftype doesn't have the byte contents it should";
+# 		}
+		return;
+	    } else {
+		pass "Newly created $ftype context creation didn't throw (no diff performed)";
+	    }
+	}
+	-re "cought e:" { fail "ferriscreate for $ftype caused an exception";   return; }
+	timeout { fail "Failed to spawn fcreate (timeout)"; return; }
+    }
+}
+
+
+proc test_creation_x { ftype baselinefile } {
+    
+    global SDATA
+    global verbose
+
+    set rdn $baselinefile
+    if { $verbose > 1 } {
+	send_user "Testing the creation of type: $ftype...\n"
+    }
+    
+    set BASEDIR "/tmp/junk"
+    recreate_clean_tmp_subdir "$BASEDIR"
+
+    set cmd "fcreate $BASEDIR --create-type=$ftype --rdn=$rdn"
+    if { $verbose > 1 } {
+	send_user "Running cmd: $cmd \n"
+    }
+
+    spawn fcreate $BASEDIR --create-type=$ftype --rdn=$rdn 
+    expect {
+	-re "Created new context: \(.*\)" 
+	{
+	    set ext ""
+	    pass "Created context as expected";  
+
+	    set newfilename "/tmp/junk/$rdn"
+	    mydiff "test_creation_x-$ftype" "" $newfilename $SDATA/$baselinefile;
+# 	    if { [ diff $newfilename $SDATA/$baselinefile ] > 0 } {
+# 		pass "Newly created $ftype context has expected structure";
+# 	    } else {
+# 		fail "Newly created context $ftype doesn't have the byte contents it should";
+# 	    }
+	    return;
+	}
+	-re "cought e:" { fail "ferriscreate for $ftype caused an exception";   return; }
+	timeout { fail "Failed to spawn fcreate (timeout)"; return; }
+    }
+}
+
+proc test_creation_dir { baselinefile } {
+    
+    global SDATA
+    global verbose
+
+    set ftype "dir"
+    
+    if { $verbose > 1 } {
+	send_user "Testing the creation of type: $ftype...\n"
+    }
+    
+    set BASEDIR "/tmp/junk"
+    recreate_clean_tmp_subdir "$BASEDIR"
+
+    set rdn "test"
+    set cmd "fcreate $BASEDIR --create-type=$ftype --rdn=$rdn"
+    if { $verbose > 1 } {
+	send_user "Running cmd: $cmd \n"
+    }
+
+    spawn fcreate $BASEDIR --create-type=$ftype --rdn=$rdn 
+    expect {
+	-re "Created new context: \(.*\)" 
+	{
+	    set ext ""
+	    pass "Created context as expected";  
+
+	    set newfilename "/tmp/junk/$rdn"
+	    if { [ string match [ file attributes $newfilename ] [ file attributes $SDATA/$baselinefile ] ] } {
+		pass "Newly created $ftype context has expected structure";
+	    } else {
+		set actualattrs [ file attributes $newfilename ]
+		set expectedattrs [ file attributes $SDATA/$baselinefile ]
+		fail "Newly created context $ftype doesn't have the byte contents it should\n expected:$expectedattrs actual:$actualattrs";
+	    }
+	    return;
+	}
+	-re "cought e:" { fail "ferriscreate for $ftype caused an exception";   return; }
+	timeout { fail "Failed to spawn fcreate (timeout)"; return; }
+    }
+}
+
+
+proc test_creation_fulltextindex {} {
+    
+    global SDATA
+    global verbose
+
+    set ftype "fulltextindex"
+    
+    if { $verbose > 1 } {
+	send_user "Testing the creation of type: $ftype...\n"
+    }
+    
+    set BASEDIR      "/tmp/junklex"
+    set skiplistsize 5
+    set dgapcode     "Interpolative"
+    set dftcode      "Delta"
+    set lexiconclass "Uncompressed (db4 hash)"
+    recreate_clean_tmp_subdir "$BASEDIR"
+
+    set rdn "test"
+    spawn fcreate $BASEDIR --create-type=$ftype     \
+	inverted-skiplist-max-size=$skiplistsize    \
+	document-number-gap-code=$dgapcode          \
+	frequency-of-term-in-document-code=$dftcode \
+	"lexicon-class=$lexiconclass"
+    expect {
+	-re "Created new context: \(.*\)" 
+	{
+	    set ext ""
+	    pass "Created context as expected";  
+
+	    if { $verbose > 1 } {
+		send_user "testing the db4 subparts of chosen full text index format\n"
+	    }
+	    test_creation_db4 "Btree" create_fulltextindex/full-text-index-config.db
+	    test_creation_db4 "Hash"  create_fulltextindex/lexicon.db
+	    return;
+	}
+	-re "cought e:" { fail "ferriscreate for $ftype caused an exception";   return; }
+	timeout { fail "Failed to spawn fcreate (timeout)"; return; }
+    }
+}
+
+
+proc run_creation_suite {} {
+
+    test_creation_x    "file"  "create_file"
+    test_creation_dir          "create_dir"
+    test_creation_db4  "Btree" "create_db4_btree"
+    test_creation_db4  "Hash"  "create_db4_hash"
+    test_creation_xml   "xml"    "create_xml"    1
+#    test_creation_xml   "dbxml"  "create_dbxml"  0
+}
+
+################################################################################
+################################################################################
+################################################################################
+
+
+
+
+################################################################################
+################################################################################
+################################################################################
+
+
+
+
+################################################################################
+################################################################################
+################################################################################
+
+
+
+################################################################################
+################################################################################
+################################################################################
+
+
+
+################################################################################
+################################################################################
+################################################################################
+
+global env;
+global ROOTDIR;
+set ::env(LIBFERRIS_DOT_FERRIS_PATH) "$DOTFERRIS";
+set ::env(LIBFERRIS_DONT_CONNECT_WITH_OUT_OF_PROC_DAEMON) "1";
+
+verbose "Starting up $SITETEST using .ferris at $DOTFERRIS"
+setup_tmp_dot_ferris
+setup_tmpsampledata
+

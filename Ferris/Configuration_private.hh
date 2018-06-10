@@ -43,10 +43,12 @@ namespace Ferris
 {
     /* Private use only */
 
-    FERRISEXP_API extern char const FDB_LOGGING[];
+    FERRISEXP_API std::string& GET_FDB_LOGGING();
+    FERRISEXP_API extern const std::string FDB_LOGGING;
     FERRISEXP_API extern const std::string FDB_SECURE;
     FERRISEXP_API extern const std::string FDB_CACHE;
     FERRISEXP_API extern const std::string CREATEHISTORY_RELATIVE;
+
 
     /******************************************************************************/
     /******************************************************************************/

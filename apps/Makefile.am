@@ -38,7 +38,8 @@ SUBDIRS = \
 	du                          \
 	scripts                     \
 	$(UPNPDIR)                  \
-	tools rest yuibrowser
+	tools rest yuibrowser       \
+	fcreate
 
 
 bin_SCRIPTS = $(srcdir)/*.sh $(srcdir)/*.pl libferris-googleearth ferris-rdfproc fedit ferris-internal-extract-subtitles-to-format

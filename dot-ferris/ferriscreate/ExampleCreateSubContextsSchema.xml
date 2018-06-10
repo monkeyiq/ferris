@@ -1,0 +1,64 @@
+<schema name="http://www.monkeyiq.org/create.xsd">
+	<elementType name="CreateSubContext">
+		<sequence minOccur="1" maxOccur="1">
+			<elementTypeRef name="dir"  />
+			<elementTypeRef name="file" />
+			<elementTypeRef name="png"  />
+			<elementTypeRef name="mp3"  />
+		</sequence>	
+	</elementType>
+
+	<elementType name="dir">
+		<elementType name="name" default="new directory">
+			<dataTypeRef name="string"/>
+		</elementType>
+	</elementType>
+
+	<elementType name="file">
+		<elementType name="name" default="new file">
+			<dataTypeRef name="string"/>
+		</elementType>
+	</elementType>
+
+	<elementType name="png">
+		<elementType name="name" default="new.png">
+			<dataTypeRef name="string"/>
+		</elementType>
+		<elementType name="width" default="800">
+			<dataTypeRef name="int"/>
+		</elementType>
+		<elementType name="height" default="600">
+			<dataTypeRef name="int"/>
+		</elementType>
+
+		<elementType name="colorspace">
+			<dataTypeRef name="ColorSpaceListT"/>
+		</elementType>
+
+		<simpleType name="ColorSpaceT">
+			<restriction base="string">
+				<enumeration value="RGB"/>
+				<enumeration value="Gray"/>
+				<enumeration value="YUV"/>
+				<enumeration value="CMYK"/>
+			</restriction>
+		</simpleType>
+
+		<simpleType name="ColorSpaceListT">
+			<list itemType="ColorSpaceT"/>
+			<restriction>
+				<length value="1"/>
+			</restriction>
+		</simpleType>
+
+
+	</elementType>
+
+	<elementType name="mp3">
+		<elementType name="name" default="new.mp3">
+			<dataTypeRef name="string"/>
+		</elementType>
+	</elementType>
+
+</schema>
+

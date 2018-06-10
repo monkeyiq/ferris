@@ -1,0 +1,21 @@
+medallion header
+el emblems:
+currentel emblems:tape,
+added emblems:tape,
+removed emblems:
+
+el emblems:tape,
+currentel emblems:bomb,tape,
+added emblems:bomb,
+removed emblems:
+
+el emblems:bomb,tape,
+currentel emblems:bomb,
+added emblems:
+removed emblems:tape,
+
+el emblems:bomb,
+currentel emblems:
+added emblems:
+removed emblems:bomb,
+

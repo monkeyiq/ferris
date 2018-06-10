@@ -1323,9 +1323,9 @@ namespace Ferris
             bool usingCustomStore = false;
             try
             {
-//                 fh_context rdfdbc = Resolve( "~/.ferris/rdfdb" );
+//                 fh_context rdfdbc = Resolve( getDotFerrisPath() + "rdfdb" );
 //                 std::string storage_name = getStrSubCtx( rdfdbc, "ferris-storage-name", "" );
-//                 std::string db_name      = getStrSubCtx( rdfdbc, "ferris-db-name", "~/.ferris/rdfdb/myrdf" );
+//                 std::string db_name      = getStrSubCtx( rdfdbc, "ferris-db-name", getDotFerrisPath() + "rdfdb/myrdf" );
 //                 std::string db_options   = getStrSubCtx( rdfdbc, "ferris-db-options", "" );
 
 //                 if( !storage_name.empty() )
@@ -1346,8 +1346,8 @@ namespace Ferris
                     throw;
             }
 
-//            fh_context dbc = Shell::acquireContext( "~/.ferris/rdf-soprano-db/metadata" );
-            fh_context dbc = Shell::acquireContext( "~/.ferris/rdfdb/metadata" );
+//            fh_context dbc = Shell::acquireContext( getDotFerrisPath() + "rdf-soprano-db/metadata" );
+            fh_context dbc = Shell::acquireContext( getDotFerrisPath() + "rdfdb/metadata" );
             m = Model::FromMetadataContext( dbc );
             return m;
         }

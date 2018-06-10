@@ -1,0 +1,18 @@
+#   Copyright (C) 2016 Ben Martin
+
+verbose "Starting ferris simple test $SITETEST using .ferris at $DOTFERRIS"
+
+compare_with_ferrisls "$SDATA/alice13a.txt" \
+                      ".*<context  size-human-readable=\"149.9k\"  protection-ls=\"-rw-r-----\"  mtime-display=\"03 Feb 27 15:43\"  name=\"alice13a.txt\"  />.*"
+
+compare_with_fcat md5     "$SDATA/alice13a.txt" 135e06ad31b169065bccbf03ec7236f2
+compare_with_fcat sha1    "$SDATA/alice13a.txt" a6fb07a21a0f36d7d780bfc57f4bbb5c8147345a
+compare_with_fcat size    "$SDATA/alice13a.txt" 153477
+compare_with_fcat recommended-ea "$SDATA/alice13a.txt" size-human-readable,protection-ls,mtime-display,name
+compare_with_fcat content "$SDATA/datefile" "Fri Jun  3 09:33:47 AEST 2016"
+
+set mkdirdir "/tmp/ferris-mkdirdir"
+recreate_clean_tmp_subdir $mkdirdir
+run_fmkdir $mkdirdir/newdir "created directory file://$mkdirdir/newdir"
+run_fmkdir $mkdirdir/newdir "can not make new dir fully qualified name.*File exists.*"
+

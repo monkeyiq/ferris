@@ -47,7 +47,7 @@ namespace Ferris
     {
         using namespace ::STLdb4;
         static const string DB_FULLTEXT  = "full-text-index-config.db";
-        static const string FULLTEXTROOT = "~/.ferris/full-text-index";
+        static const string FULLTEXTROOT = getDotFerrisPath() + "full-text-index";
         static const char* CFG_IDX_DBNAME_K = "cfg-idx-dbname";
         
         class FERRISEXP_DLLLOCAL MetaFullTextIndexerInterfacePriv

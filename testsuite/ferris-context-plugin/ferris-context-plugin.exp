@@ -1,0 +1,251 @@
+################################################################################
+################################################################################
+################################################################################
+#
+# Testing the context modules.
+#
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+#
+# It is harder to test the web context plugins.
+#
+################################################################################
+
+proc run_context_createdir { ftype url newdir } {
+    
+    global SDATA
+    global verbose
+
+    set cmd "fmkdir -v $url/$newdir"
+    rt_expected [rt_version "createdir" ] "fmkdir: created directory" "$cmd";
+}
+
+
+proc run_context_createfile { ftype url newdir } {
+    
+    global SDATA
+    global verbose
+    global expect_out
+
+    set cmd "ftouch -v $url/file1A"
+    rt_expected [rt_version "createfile1A" ] "touched:" "$cmd";
+
+
+    set content "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n<file1AContents/>\n"
+
+
+    set expected "wrote to";
+    set testname [rt_version "writecontext" ];
+    spawn writecontext $url/file1A $content
+    expect {
+	-re "wrote to file" { pass "Wrote to file in $ftype context"; }
+	default { 
+	    fail "Failed $testname"; 
+	    rt_capture_out $testname $expected "writecontext $url/file1A" "$expect_out(buffer)" 0; 
+	    return; 
+	}
+    }
+
+    set cmd "readcontext $url/file1A"
+    rt_expected [rt_version "readcontext" ] "read from" "$cmd";
+
+}
+
+proc run_context_createea { ftype url eakey eavalue } {
+    
+    global SDATA
+    global verbose
+
+    send_user "cmd: createea $url $eakey $eavalue\n";
+    spawn createea $url $eakey $eavalue
+    expect {
+	-re "created ea" { pass "Created new ea in $ftype context"; }
+	-re "ERROR" { fail "Failed to create new ea in $ftype context"; return; }
+	default { fail "Failed to spawn createea (timeout)";            return; }
+    }
+
+    spawn readea $url $eakey
+    expect {
+	-re "read url" { pass "Read back ea value new ea in $ftype context"; }
+	-re "ERROR" { fail "Failed to read new ea in $ftype context";   return; }
+	default { fail "Failed to spawn readea (timeout)";              return; }
+    }
+}
+
+proc run_context_writeea { ftype url eakey eavalue } {
+    
+    global SDATA
+    global verbose
+
+    send_user "writeea $url $eakey $eavalue\n"
+    spawn writeea $url $eakey $eavalue
+    expect {
+	-re "wrote ea" { pass "wrote new ea in $ftype context"; }
+	-re "ERROR" { fail "Failed1 to write new ea in $ftype context"; return; }
+	-re "^e:" { fail "Failed2 to write new ea in $ftype context"; return; }
+	"NoSuchSubContext:" { fail "Failed3 to write new ea in $ftype context"; return; }
+	default { fail "FailedD to spawn writeea (timeout)";            return; }
+    }
+}
+
+proc run_context_rename { ftype url fn1 fn2 } {
+    
+    global SDATA
+    global verbose
+
+    spawn renamecontext $url $fn1 $fn2
+    expect {
+	-re "Renamed" { pass "Renamed file in $ftype context"; }
+	-re "ERROR" { fail "Failed to rename file in $ftype context";   return; }
+	default { fail "Failed to spawn renamecontext (timeout)";       return; }
+    }
+}
+
+proc run_context_remove { ftype url } {
+    
+    global SDATA
+    global verbose
+
+    spawn removecontext $url
+    expect {
+	-re "Removed c" { pass "Removed file in $ftype context"; }
+	-re "ERROR" { fail "Failed to remove file in $ftype context";   return; }
+	default { fail "Failed to spawn removecontext (timeout)";       return; }
+    }
+
+}
+
+proc run_db4_context {} {
+    
+    global SDATA
+    global verbose
+    
+    set ftype   "db4"
+    set BASEDIR "/tmp/junk"
+    set DB      "$BASEDIR/test.db"
+
+    if { $verbose > 1 } {
+	send_user "Testing context for type $ftype...\n"
+    }
+    
+    recreate_clean_tmp_subdir "$BASEDIR"
+    system cp -av   $SDATA/create_db4_btree $DB
+
+    run_context_createdir   $ftype $DB        newdir
+    run_context_createfile  $ftype $DB/newdir file1A
+    run_context_createea    $ftype $DB/newdir eakey eavalue
+    run_context_rename      $ftype $DB/newdir file1A file1B
+    run_context_remove      $ftype $DB/newdir/file1B
+}
+
+proc run_xml_context {} {
+    
+    global SDATA
+    global verbose
+    
+    set ftype   "xml"
+    set BASEDIR "/tmp/junkxml"
+    set DB      "$BASEDIR/test.xml"
+
+    if { $verbose > 1 } {
+	send_user "Testing context for type $ftype...\n"
+    }
+    
+    recreate_clean_tmp_subdir "$BASEDIR"
+    system cp -av   $SDATA/create_xml $DB
+
+    run_context_createdir   $ftype $DB/root         newdir
+    run_context_createfile  $ftype $DB/root/newdir  file1A
+    run_context_createea    $ftype $DB/root/newdir  eakey eavalue
+    run_context_rename      $ftype $DB/root/newdir  file1A file1B
+    run_context_remove      $ftype $DB/root/newdir/file1B
+}
+
+
+proc run_dbxml_context {} {
+    
+    global SDATA
+    global verbose
+    
+    set ftype   "dbxml"
+    set BASEDIR "/tmp/junkdbxml"
+    set DB      "$BASEDIR/test.dbxml"
+
+    if { $verbose > 1 } {
+	send_user "Testing context for type $ftype...\n"
+    }
+    
+    recreate_clean_tmp_subdir "$BASEDIR"
+    system cp -av   $SDATA/create_dbxml $DB
+
+#    run_context_createdir   $ftype $DB   newdir
+    run_context_createfile  $ftype $DB   file1A
+    run_context_createea    $ftype $DB/file1A  eakey eavalue
+    run_context_rename      $ftype $DB/        file1A file1B
+    run_context_remove      $ftype $DB/file1B
+}
+
+
+
+proc run_tdb_context {} {
+    
+    global SDATA
+    global verbose
+    
+    set ftype   "tdb"
+    set BASEDIR "/tmp/junktdb"
+    set DB      "$BASEDIR/test.tdb"
+
+    if { $verbose > 1 } {
+	send_user "Testing context for type $ftype...\n"
+    }
+    
+    recreate_clean_tmp_subdir "$BASEDIR"
+    system cp -av   $SDATA/create_tdb $DB
+
+    run_context_createdir   $ftype $DB        newdir
+    run_context_createfile  $ftype $DB/newdir file1A
+    run_context_createea    $ftype $DB/newdir eakey eavalue
+    run_context_rename      $ftype $DB/newdir file1A file1B
+    run_context_remove      $ftype $DB/newdir/file1B
+}
+
+proc run_gdbm_context {} {
+    
+    global SDATA
+    global verbose
+    
+    set ftype   "gdbm"
+    set BASEDIR "/tmp/junkgdbm"
+    set DB      "$BASEDIR/test.gdbm"
+
+    if { $verbose > 1 } {
+	send_user "Testing context for type $ftype...\n"
+    }
+    
+    recreate_clean_tmp_subdir "$BASEDIR"
+    # echo "store key value" | gdbmtool --newdb /tmp/gdbm.db 
+    system cp -av   $SDATA/create_gdbm $DB
+
+    run_context_createdir   $ftype $DB        newdir
+    run_context_createfile  $ftype $DB/newdir file1A
+    run_context_createea    $ftype $DB/newdir eakey eavalue
+    run_context_rename      $ftype $DB/newdir file1A file1B
+    run_context_remove      $ftype $DB/newdir/file1B
+}
+
+
+global SDATA
+global verbose
+
+if { $verbose > 1 } {
+    send_user "Testing context plugins...\n"
+}
+
+run_db4_context
+run_xml_context
+#    run_tdb_context
+run_gdbm_context
+
