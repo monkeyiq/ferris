@@ -75,7 +75,7 @@ namespace Ferris
     #define DumpFromGladeXMLFileName "/tmp/FromGlade.xml"
     #define DumpToFerrisXMLFileName  "/tmp/ToFerris.xml"
     
-    class FerrisCreate
+    class FERRISEXP_API FerrisCreate
     {
         std::string SchemaString;
         fh_stringstream createDocumentStream;

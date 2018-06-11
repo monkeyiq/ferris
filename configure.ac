@@ -3300,6 +3300,12 @@ AC_SUBST(SHAREDPASTEBIN_LA)
 
 
 
+FCREATESHARED_LA=" \$(top_builddir)/apps/fcreate/libfcreate.la "
+AC_SUBST(FCREATESHARED_LA)
+FCREATESHAREDGTK_LA=" \$(top_builddir)/apps/fcreate/libfcreategtk.la "
+AC_SUBST(FCREATESHAREDGTK_LA)
+
+
 
 
 LIBFERRIS_PLUGIN_LIBADD=${LIBFERRIS_LA}
@@ -5067,14 +5073,6 @@ apps/yuibrowser/Makefile
 apps/yuibrowser/images/Makefile
 apps/fcreate/Makefile
 appsui/Makefile
-appsui/gfcopy/Makefile
-appsui/gfrm/Makefile
-appsui/gfmv/Makefile
-appsui/gfdl/Makefile
-appsui/gfproperties/Makefile
-appsui/gfindex/Makefile
-appsui/volumemanager/Makefile
-appsui/gfcreate/Makefile
 tests/Makefile
 tests/contextiostream/Makefile
 tests/runner/Makefile
