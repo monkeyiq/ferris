@@ -31,7 +31,7 @@
 
 #include "libferrisfacebook_shared.hh"
 #include <Ferris/Configuration_private.hh>
-#include "plugins/context/webphotos/libferriswebphotos_shared.hh"
+#include "plugins/context/libferriswebphotos_shared.hh"
 
 #include <QNetworkReply>
 #include <QNetworkAccessManager>

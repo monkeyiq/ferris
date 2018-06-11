@@ -372,4 +372,4 @@ namespace Ferris
 
 };
 
-#include "libferrisplasma_moc.cpp"
+#include "libferrisplasma_moc_impl.cpp"

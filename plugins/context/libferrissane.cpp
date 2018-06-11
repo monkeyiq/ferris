@@ -685,4 +685,4 @@ namespace Ferris
 
 };
 
-#include "libferrissane_moc.cpp"
+#include "libferrissane_moc_impl.cpp"

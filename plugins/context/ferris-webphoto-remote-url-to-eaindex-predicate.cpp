@@ -37,7 +37,7 @@
 #include <Ferris/Ferris.hh>
 #include <Ferris/FerrisDOM.hh>
 #include <Ferris/FerrisBoost.hh>
-#include "plugins/context/webphotos/libferriswebphotos_shared.hh"
+#include "plugins/context/libferriswebphotos_shared.hh"
 
 
 #include <popt.h>

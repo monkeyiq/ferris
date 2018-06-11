@@ -56,6 +56,8 @@
 
 #include <Ferris/FerrisQt_private.hh>
 #include <Ferris/FerrisKDE.hh>
+
+#include <QObject>
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
 #include <QFtp>

@@ -3151,9 +3151,9 @@ SHAREDFERRISRESTCTX_LA=" \$(top_builddir)/plugins/context/ferrisrest/libferrisfe
 AC_SUBST(SHAREDFERRISRESTCTX_LA)
 
 
-KIOCTXMODDIR="${absolute_srcdir}/plugins/context/kio/"
+KIOCTXMODDIR="${absolute_srcdir}/plugins/context/"
 AC_SUBST(KIOCTXMODDIR)
-SHAREDKIOCTX_LA=" \$(top_builddir)/plugins/context/kio/libferriskio_shared.la "
+SHAREDKIOCTX_LA=" \$(top_builddir)/plugins/context/libferriskio_shared.la "
 AC_SUBST(SHAREDKIOCTX_LA)
 
 
@@ -3228,9 +3228,9 @@ FTXIDXLUCENEANALYZER_LA=" \$(top_builddir)/plugins/fulltextindexers/lucene/libft
 AC_SUBST(FTXIDXLUCENEANALYZER_LA)
 
 
-CTXGOOGLEDIR="${absolute_srcdir}/plugins/context/google/"
+CTXGOOGLEDIR="${absolute_srcdir}/plugins/context/"
 AC_SUBST(CTXGOOGLEDIR)
-CTXGOOGLE_LA=" \$(top_builddir)/plugins/context/google/libferrisgoogle_shared.la "
+CTXGOOGLE_LA=" \$(top_builddir)/plugins/context/libferrisgoogle_shared.la "
 AC_SUBST(CTXGOOGLE_LA)
 
 dnl CTXBOXCOMDIR="${absolute_srcdir}/plugins/context/boxcom/"
@@ -3239,20 +3239,20 @@ dnl CTXBOXCOM_LA=" \$(top_builddir)/plugins/context/boxcom/libferrisboxcom_share
 dnl AC_SUBST(CTXBOXCOM_LA)
 
 
-CTXFACEBOOKDIR="${absolute_srcdir}/plugins/context/facebook/"
+CTXFACEBOOKDIR="${absolute_srcdir}/plugins/context/"
 AC_SUBST(CTXFACEBOOKDIR)
-CTXFACEBOOK_LA=" \$(top_builddir)/plugins/context/facebook/libferrisfacebook_shared.la "
+CTXFACEBOOK_LA=" \$(top_builddir)/plugins/context/libferrisfacebook_shared.la "
 AC_SUBST(CTXFACEBOOK_LA)
 
 
-CTXVIMEODIR="${absolute_srcdir}/plugins/context/vimeo/"
+CTXVIMEODIR="${absolute_srcdir}/plugins/context/"
 AC_SUBST(CTXVIMEODIR)
-CTXVIMEO_LA=" \$(top_builddir)/plugins/context/vimeo/libferrisvimeo_shared.la "
+CTXVIMEO_LA=" \$(top_builddir)/plugins/context/libferrisvimeo_shared.la "
 AC_SUBST(CTXVIMEO_LA)
 
-CTXIDENTICADIR="${absolute_srcdir}/plugins/context/identica/"
+CTXIDENTICADIR="${absolute_srcdir}/plugins/context/"
 AC_SUBST(CTXIDENTICADIR)
-CTXIDENTICA_LA=" \$(top_builddir)/plugins/context/identica/libferrisidentica_shared.la "
+CTXIDENTICA_LA=" \$(top_builddir)/plugins/context/libferrisidentica_shared.la "
 AC_SUBST(CTXIDENTICA_LA)
 
 
@@ -3268,34 +3268,34 @@ CTXFERRISREST_LA=" \$(top_builddir)/plugins/context/ferrisrest/libferrisferrisre
 AC_SUBST(CTXFERRISREST_LA)
 
 
-CTXKIODIR="${absolute_srcdir}/plugins/context/kio/"
+CTXKIODIR="${absolute_srcdir}/plugins/context/"
 AC_SUBST(CTXKIODIR)
-CTXKIO_LA=" \$(top_builddir)/plugins/context/kio/libferriskio_shared.la "
+CTXKIO_LA=" \$(top_builddir)/plugins/context/libferriskio_shared.la "
 AC_SUBST(CTXKIO_LA)
 
 
-CTXGSTREAMERDIR="${absolute_srcdir}/plugins/context/gstreamer/"
+CTXGSTREAMERDIR="${absolute_srcdir}/plugins/context/"
 AC_SUBST(CTXGSTREAMERDIR)
-CTXGSTREAMER_LA=" \$(top_builddir)/plugins/context/gstreamer/libferrisgstreamer_shared.la "
+CTXGSTREAMER_LA=" \$(top_builddir)/plugins/context/libferrisgstreamer_shared.la "
 AC_SUBST(CTXGSTREAMER_LA)
 
 
-WEBPHOTOSDIR="${absolute_srcdir}/plugins/context/webphotos/"
+WEBPHOTOSDIR="${absolute_srcdir}/plugins/context/"
 AC_SUBST(WEBPHOTOSDIR)
-SHAREDWEBPHOTOS_LA=" \$(top_builddir)/plugins/context/webphotos/libferriswebphotos_shared.la "
+SHAREDWEBPHOTOS_LA=" \$(top_builddir)/plugins/context/libferriswebphotos_shared.la "
 AC_SUBST(SHAREDWEBPHOTOS_LA)
 
 
 
-WIKIDIR="${absolute_srcdir}/plugins/context/wiki/"
+WIKIDIR="${absolute_srcdir}/plugins/context/"
 AC_SUBST(WIKIDIR)
-SHAREDWIKI_LA=" \$(top_builddir)/plugins/context/wiki/libferriswikishared.la "
+SHAREDWIKI_LA=" \$(top_builddir)/plugins/context/libferriswikishared.la "
 AC_SUBST(SHAREDWIKI_LA)
 
 
-PASTEBINDIR="${absolute_srcdir}/plugins/context/pastebin/"
+PASTEBINDIR="${absolute_srcdir}/plugins/context/"
 AC_SUBST(PASTEBINDIR)
-SHAREDPASTEBIN_LA=" \$(top_builddir)/plugins/context/pastebin/libferrispastebinshared.la "
+SHAREDPASTEBIN_LA=" \$(top_builddir)/plugins/context/libferrispastebinshared.la "
 AC_SUBST(SHAREDPASTEBIN_LA)
 
 
@@ -5153,16 +5153,13 @@ factories/creation/Makefile
 plugins/Makefile
 plugins/context/Makefile
 plugins/context/libmpeg3/Makefile
-plugins/context/xml/Makefile
 plugins/context/dbxml/Makefile
-plugins/context/edb/Makefile
 plugins/context/dvdread/Makefile
 plugins/context/nativembox/Makefile
 plugins/context/sockets/Makefile
 plugins/context/sqlplus/Makefile
 plugins/context/ipc/Makefile
 plugins/context/eet/Makefile
-plugins/context/gdbm/Makefile
 plugins/context/tdb/Makefile
 plugins/context/external/Makefile
 plugins/context/external/mapping.cpp
@@ -5171,7 +5168,6 @@ plugins/context/external/extfs_modules/ssh
 plugins/context/ldap/Makefile
 plugins/context/soprano/Makefile
 plugins/context/dtl/Makefile
-plugins/context/gphoto2/Makefile
 plugins/context/bibtex/Makefile
 plugins/context/libferrisemacs.hh
 plugins/context/firefox/Makefile
@@ -5179,25 +5175,9 @@ plugins/context/firefox/firefox-extension/Makefile
 plugins/context/obby/Makefile
 plugins/context/xmms/Makefile
 plugins/context/amarok/Makefile
-plugins/context/dbus/Makefile
 plugins/context/hal/Makefile
-plugins/context/qtsql/Makefile
-plugins/context/google/Makefile
-plugins/context/facebook/Makefile
-plugins/context/vimeo/Makefile
-plugins/context/identica/Makefile
-plugins/context/gstreamer/Makefile
 plugins/context/upnp/Makefile
-plugins/context/webphotos/Makefile
-plugins/context/qtftp/Makefile
-plugins/context/qthttp/Makefile
-plugins/context/plasma/Makefile
-plugins/context/sane/Makefile
 plugins/context/printer/Makefile
-plugins/context/pulseaudio/Makefile
-plugins/context/zoneminder/Makefile
-plugins/context/ferrisrest/Makefile
-plugins/context/kio/Makefile
 plugins/eagenerators/Makefile
 plugins/eagenerators/jasper/Makefile
 plugins/eagenerators/id3/Makefile
