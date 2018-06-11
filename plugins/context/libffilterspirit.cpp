@@ -28,7 +28,7 @@
 ******************************************************************************/
 #include <config.h>
 
-#include "../SpiritContext.hh"
+#include "SpiritContext.hh"
 #include "FerrisContextPlugin.hh"
 
 using namespace std;
@@ -41,12 +41,12 @@ namespace Ferris
     {
         void adjustMoveOpsToFront(iter_t i, std::map<parser_id, std::string>& rule_names )
         {
-            if( i->children.size() >= 3 )
+            if( i->children.size() == 3 )
             {
                 iter_t  f = i->children.begin();
                 iter_t op = i->children.begin()+1;
                 DEBUG << "id:" << rule_names[op->value.id()] << endl;
-                if( rule_names[op->value.id()] == "cmp" )
+                if( rule_names[op->value.id()] == "comparison" )
                 {
                     DEBUG << "swapping!" << endl;
                     swap( f, op );
@@ -60,14 +60,19 @@ namespace Ferris
 
         bool adjustRaiseAndOrNot(iter_t iter, std::map<parser_id, std::string>& rule_names )
         {
-            return ends_with( rule_names[iter->value.id()], "cmp" );
+            return ends_with( rule_names[iter->value.id()], "-eamatch" );
         }
         
+        bool adjustRaiseCmp(iter_t iter, std::map<parser_id, std::string>& rule_names )
+        {
+            return( ends_with( rule_names[iter->value.id()], "comparison" ));
+        }
     
         void adjust(iter_t i, std::map<parser_id, std::string>& rule_names )
         {
             adjustMoveOpsToFront( i, rule_names );
             adjustRaiseGeneric  ( i, rule_names, adjustRaiseAndOrNot );
+            adjustRaiseGeneric  ( i, rule_names, adjustRaiseCmp );
 
             for( iter_t iter = i->children.begin(); iter != i->children.end(); ++iter )
             {
@@ -81,18 +86,42 @@ namespace Ferris
         {
             try
             {
-                DEBUG << "Brew()" << endl;
+                R ab_getEAmt = str_p("mtime");
+                R eakey = regex_p("[]\\[\\ a-z\\.A-Z0-9\\-\\_\\*\\$\\^\\\\\\/\\~\\:]+");
+
+                R EQREGEX = str_p("=~");
+                R EQLT    = str_p("<=");
+                R EQGT    = str_p(">=");
+                R EQ      = str_p("==");
+                R EQLTSC  = str_p("<?=");
+                R EQGTSC  = str_p(">?=");
+                R EQSC    = str_p("=?=");
+                R comparison = token_node_d[( EQREGEX | EQLT | EQGT | EQ | EQLTSC | EQGTSC )];
+                R eavalue = regex_p("[^)]*");
                 
-                R term  = regex_p("[^ ]+");
-                R cmp   = token_node_d[str_p("AND") | str_p("&") | str_p("OR") | str_p("NOT") | str_p("MINUS")];
-                R topLevel =  term >> *(no_node_d[str_p(" ")]>> cmp >> no_node_d[str_p(" ")] >> term);
+                R eamatch = ( eakey >> root_node_d[comparison] >> eavalue);
+                R eamatchbracketed =  inner_node_d[ch_p('(') >> eamatch >> ch_p(')')];
+                R noteamatch = str_p("!");
+                R oreamatch  = str_p("|");
+                R andeamatch = str_p("&");
+                R topLevel =  no_node_d[ch_p('(')]
+                    >> ( eamatch
+                         | ( noteamatch >>   topLevel  )
+                         | ( oreamatch  >> +(topLevel) )
+                         | ( root_node_d[andeamatch] >> +(topLevel) )
+                        )
+                    >> no_node_d[ch_p(')')];
 
                 std::map<parser_id, std::string> rule_names;
-                rule_names[topLevel.id()] = "topLevel";
-                rule_names[term.id()]     = "term";
-                rule_names[cmp.id()]      = "cmp";
+                rule_names[topLevel.id()]   = "topLevel";
+                rule_names[eamatch.id()]    = "eamatch";
+                rule_names[andeamatch.id()] = "and-eamatch";
+                rule_names[oreamatch.id()]  = "or-eamatch";
+                rule_names[noteamatch.id()] = "not-eamatch";
+                rule_names[eakey.id()]      = "key";
+                rule_names[eavalue.id()]    = "value";
+                rule_names[comparison.id()] = "comparison";
 
-                cerr << "brew()" << endl;
                 Context* ret = BrewSpirit( topLevel, rf, rule_names, adjust );
                 return ret;
             }

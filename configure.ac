@@ -2983,6 +2983,41 @@ AM_CONDITIONAL(HAVE_GTK2, test "$have_gtk2" = yes)
 have_gimp=no
 AM_CONDITIONAL(HAVE_GIMP, test "$have_gimp" = yes)
 
+###############################################################################
+###############################################################################
+###############################################################################
+# Test for libglade
+###############################################################################
+
+package=libglade-2.0
+version=2.0.1
+PKG_CHECK_MODULES(GLADE, $package >= $version,
+[
+  have_glade=yes;
+  AC_DEFINE([HAVE_GLADE], [], [Used by some of the graphical tools to generate the UI at run time])
+
+],
+[
+  have_glade=no
+  echo "latest version of $package not found, only building console clients. "
+])
+AM_CONDITIONAL(HAVE_GLADE, test x"$have_glade" = xyes)
+AC_SUBST(GLADE_CFLAGS)
+AC_SUBST(GLADE_LIBS)
+
+
+have_xalan_glade=no
+if test x${have_xalan} = xyes; then
+  if test x${have_glade} = xyes; then
+    have_xalan_glade=yes
+  fi
+fi
+AM_CONDITIONAL(HAVE_XALAN_GLADE, test x"$have_xalan_glade" = xyes)
+
+###############################################################################
+###############################################################################
+
+
 dnl Checks for header files.
 dnl AC_CHECK_HEADERS(fam.hh famstatic.h,,AC_MSG_ERROR([ERROR: fam++ must be installed.]); exit)
 
@@ -3094,10 +3129,10 @@ SHAREDDTL_LA=""
 fi
 AC_SUBST(SHAREDDTL_LA)
 
-PGCTXMODDIR="${absolute_srcdir}/plugins/context/postgresql/"
+PGCTXMODDIR="${absolute_srcdir}/plugins/context/"
 AC_SUBST(PGCTXMODDIR)
 if test x"$have_libpqxx" = xyes; then
-SHAREDPGCTX_LA=" \$(top_builddir)/plugins/context/postgresql/libferrispostgresqlshared.la "
+SHAREDPGCTX_LA=" \$(top_builddir)/plugins/context/libferrispostgresqlshared.la "
 else
 SHAREDPGCTX_LA=""
 fi
@@ -3152,14 +3187,16 @@ fi
 AC_SUBST(SHAREDLDAP_LA)
 
 
-COMMONDBDIR="${absolute_srcdir}/plugins/context/commondbapi/"
+
+
+COMMONDBDIR="${absolute_srcdir}/plugins/context/"
 AC_SUBST(COMMONDBDIR)
-COMMONDB_LA=" \$(top_builddir)/plugins/context/commondbapi/libcommondbapi.la "
+COMMONDB_LA=" \$(top_builddir)/plugins/context/libcommondbapi.la "
 AC_SUBST(COMMONDB_LA)
 
-COMMONSQLDBDIR="${absolute_srcdir}/plugins/context/commonsqldbapi/"
+COMMONSQLDBDIR="${absolute_srcdir}/plugins/context/"
 AC_SUBST(COMMONSQLDBDIR)
-COMMONSQLDBDIR_LA=" \$(top_builddir)/plugins/context/commonsqldbapi/libcommonsqldbapi.la "
+COMMONSQLDBDIR_LA=" \$(top_builddir)/plugins/context/libcommonsqldbapi.la "
 AC_SUBST(COMMONSQLDBDIR_LA)
 
 SOPRANOEAMODDIR="${absolute_srcdir}/plugins/eagenerators/soprano/"
@@ -5115,8 +5152,6 @@ factories/astext/Makefile
 factories/creation/Makefile
 plugins/Makefile
 plugins/context/Makefile
-plugins/context/commondbapi/Makefile
-plugins/context/commonsqldbapi/Makefile
 plugins/context/libmpeg3/Makefile
 plugins/context/xml/Makefile
 plugins/context/dbxml/Makefile
@@ -5126,13 +5161,9 @@ plugins/context/nativembox/Makefile
 plugins/context/sockets/Makefile
 plugins/context/sqlplus/Makefile
 plugins/context/ipc/Makefile
-plugins/context/db4/Makefile
 plugins/context/eet/Makefile
 plugins/context/gdbm/Makefile
 plugins/context/tdb/Makefile
-plugins/context/spirit/Makefile
-plugins/context/spirit/ffilter/Makefile
-plugins/context/spirit/fulltextboolean/Makefile
 plugins/context/external/Makefile
 plugins/context/external/mapping.cpp
 plugins/context/external/extfs_modules/Makefile
@@ -5140,24 +5171,17 @@ plugins/context/external/extfs_modules/ssh
 plugins/context/ldap/Makefile
 plugins/context/soprano/Makefile
 plugins/context/dtl/Makefile
-plugins/context/postgresql/Makefile
 plugins/context/gphoto2/Makefile
-plugins/context/evolution/Makefile
 plugins/context/bibtex/Makefile
-plugins/context/xwin/Makefile
-plugins/context/annodex/Makefile
-plugins/context/emacs/Makefile
-plugins/context/emacs/libferrisemacs.hh
+plugins/context/libferrisemacs.hh
 plugins/context/firefox/Makefile
 plugins/context/firefox/firefox-extension/Makefile
 plugins/context/obby/Makefile
-plugins/context/xsltfs/Makefile
 plugins/context/xmms/Makefile
 plugins/context/amarok/Makefile
 plugins/context/dbus/Makefile
 plugins/context/hal/Makefile
 plugins/context/qtsql/Makefile
-plugins/context/recordfile/Makefile
 plugins/context/google/Makefile
 plugins/context/facebook/Makefile
 plugins/context/vimeo/Makefile
@@ -5171,8 +5195,6 @@ plugins/context/plasma/Makefile
 plugins/context/sane/Makefile
 plugins/context/printer/Makefile
 plugins/context/pulseaudio/Makefile
-plugins/context/wiki/Makefile
-plugins/context/pastebin/Makefile
 plugins/context/zoneminder/Makefile
 plugins/context/ferrisrest/Makefile
 plugins/context/kio/Makefile
@@ -5210,7 +5232,6 @@ plugins/astext/djvu/Makefile
 plugins/astext/msdoc/Makefile
 plugins/astext/extern/Makefile
 plugins/creation/Makefile
-plugins/creation/db4/Makefile
 plugins/creation/dbxml/Makefile
 plugins/creation/devsource/Makefile
 plugins/creation/fulltextindex/Makefile
@@ -5538,5 +5559,5 @@ echo "
 optional modules that will be compiled: 
 $modlist
 
-	Copyright (C) 2001-2015 Ben Martin
+	Copyright (C) 2001-2018 Ben Martin
 "
