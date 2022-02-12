@@ -145,3 +145,2074 @@ To create a blank RDF database using redland
 mkdir -p ~/.ferris/rdfdb
 cd ~/.ferris/rdfdb
 rdfproc myrdf -c  add a b c
+
+--------------------------------------------------------------------------------
+
+
+In non technical terms libferris makes the file system and other
+hierarchical storage systems easier to use. For the geeks out there,
+libferris is a virtual file system (VFS) that runs in the user address
+space. The FAQ contains entries related to installation, configuration
+and the usage of libferris.
+
+As of July 2005 libferris can mount many interesting things ranging
+from a filesystem from your local Linux kernel through to LDAP,
+Evolution, PostgreSQL, dbXML, and RDF. To get an impression of the
+current capabilities of libferris mounting see the plugins/context
+directory of the lastest release. New things to mount are always being
+added :)
+
+Other than mounting things as a filesystem, the other core concept of
+libferris is extraction of interesting metadata from your libferris
+filesystems. This means that simple things like width and height of an
+image file become first class metadata citizens along with a file's
+size and modification time. The limits on what metadata is available
+extend far beyond image metadata to include XMP, EXIF, music ID tags,
+geospatial tags, rpm metadata, SELinux integration, partially ordered
+emblem categories and arbitrary personal RDF stores of metadata.
+Though some consider the last point of purely academic interest the
+end result is that you can add metadata to *all* libferris objects
+even those you only have read access too, for example, you can attach
+emblems to this website just as you would a normal file. The metadata
+interface gives all metadata from file size to digital signature
+status information equal standing. As such you can sort a directory by
+any metadata just as easily as you would ls -Sh to sort by file size.
+Sorting on multiple metadata values is also supported in libferris,
+you can easily sort your files by mimetype, then image width, then
+modification time with all three pieces of metadata contributing to
+the final directory ordering.
+
+http://witme.sourceforge.net/libferris.web/images/ego-kdelook-sort-by-height-then-name.png
+
+Late in 2004 extensive support for both fulltext and metadata indexing
+was added to libferris. This means you can supply queries against the
+contents or metadata of any libferris accessable object and have the
+results returned as a virtual filesystem. With the above mentioned
+metadata available for searching, finding your files can be done in
+many different ways instead of being forced to generate fixed
+directory trees using part of a file collections semantics as
+directory names. The metadata and virtual filesystem play together
+here allowing you to geospatially tag both your digital pictures, trip
+plans, and relevent websites and recall these objects in a single
+virtual directory no matter what their path or URL may be.
+
+http://www.linuxjournal.com/article/7771
+
+There is also a Samba VFS module which allows you to expose a
+libferris filesystem as a Samba share. Kfsmd uses the inotify kernel
+interface to allow libferris to watch changes made to your kernel
+filesystem by non libferris applications and update its indexes
+appropriately. Ferriscreate provides a command line and GTK+2
+application for creating "new files" with libferris. With this you can
+create a new db4 database, dbXML database or fulltext index just as
+easily as you can make a regular file.
+
+http://witme.sourceforge.net/libferris.web/images/Ego-July-03-create-ea-emblem.png
+
+The ego filemanager is a GTK+2 interface built on top of libferris. It
+provides GTK treeview, gevas/edje and gecko based interfaces and makes
+extensive use of libferris' clients to provide its functionality.
+
+http://witme.sourceforge.net/libferris.web/images/Ego-July-03-egomedallions.png
+http://witme.sourceforge.net/libferris.web/images/ego-medallions-kdelook-july05.png
+
+If you have a project you wish to use libferris with and want
+extensions made don't hesitate to contact one of the developers to
+arrange consulting.
+
+For the geeks out there, libferris is a virtual file system (VFS) that
+runs in the user address space. At the moment libferris is a shared
+object that each application can dynamically link to in order to see
+the file system through a nicer abstraction.
+
+New additions to the XML module allow for data to be converted from
+one format to another by the VFS for you. To copy data to an XML file:
+
+fcreate --create-type=xml --rdn=2.xml root-element=fred /tmp
+gfcp -av Makefile.am /tmp/2.xml/fred
+
+ 
+
+ To copy data to a db4 file
+
+fcreate --create-type=db4 --rdn=2.db /tmp
+gfcp -av Makefile.am /tmp/2.db
+
+Ferris presents a C++ interface that makes heavy use of the STL and
+IOStreams. Currently ferris has two main internal abstractions:
+Context and Attribute. A context is much like a traditional file or
+directory in a file system, the major differences being that a context
+can have both byte content (like a file) and subcontexts (like a
+directory). An attribute is a chunk of metadata about a context.
+Contexts can have many attributes. Some attributes may be large, for
+example a base 64 encoded version of the context's content (133%
+context size). On the other hand an attribute can be small, for
+example the file size is exposed as an attribute.
+
+Access to all contexts and attributes is performed by first requesting
+either an IStream or IOStream for that context or attribute. In this
+way the same context/attribute can be open many times at the same
+time, just like normal kernel based IO.
+
+Ferris uses Loki from "Modern C++ Design" by Alexandrescu. Most
+objects use automatic garbage collection based on the SmartPtr<>
+template class from Loki. Where possible objects in ferris use a
+FerrisRefCounted policy to provide COM like intrusive reference
+counting. This style is used for Context, Attribute and special
+wrappers of IOStreams that are provided. IOStreams are wrapped to
+provide a more flexible API than could be offered using references to
+IOStreams. There are also new stream classes provided, for example
+NullStream and LimitingStream. Templates are provided to make
+SmartPtr<>s to standard IOStreams act just like the underlying stream
+would, for example, one can have SmartPtr<> ss; ss >> stringObj; and
+does not have to dereference the SmartPtr<> to use standard IOStreams
+extractors or inserters.
+
+Ferris uses GModule from glib2 to dynamically load both context and
+attribute classes at run-time. This way resources are conserved until
+they are needed. The native file system context is statically linked
+to ferris at present. When loading either context's or attribute
+classes ferris uses a double dispatch factory method. Put simply this
+means that for each plugin there are two libraries, one that tells
+ferris if the main one really needs to be loaded or not. Using this
+scheme ferris can load all the meta factory classes at any time and
+use these very small meta factories to check if the main factory can
+create objects that are going to be useful. This scheme is of great
+use for attribute classes. Attribute classes take a context and can
+"generate" attributes from the context. An example of this sort of
+class would be a MD5 or Base64 attribute. Both can be generated from
+the base context. More interesting attributes are PCM audio and
+RGBA-32bpp image data. By using the double dispatch factory ferris can
+handle a great deal of attribute generators and load them on demand.
+
+Ferris currently can decode mp3, read id3 tags, decode many image
+formats and break some animation formats into frames. This makes
+ferris a solid starting point for multimedia applications.
+
+Ferris will automatically mount sub file systems for you. Examples of
+a sub file system include a Berkeley database or XML file. For example
+it is possible to read a context such as /tmp/myxml.xml/mynode. Using
+this automatic mounting the differences between storage formats
+effectively disappear. To a ferris enabled application loading data
+from a native disk file, a Berkeley database, and XML file, or mbox
+file appear to be the same. This allows the user of the application to
+choose the correct storage for the data at hand.
+
+It is planned to move to a microkernel architecture in Version 2.1 of
+ferris. I choose 2.1 so that ferris does not fall into version 2
+syndrome :)
+
+Features
+--------
+
+This section gives a very high level of what features the libferris
+semantic virtual filesystem has. The main library is libferris.so,
+graphical support is in libferrisui.so and XSLT support is in
+libferrisxslt.so.
+
+There are optional wrapper libraries allowing Perl, Python and OCaml
+to access libferris.
+
+The core of libferris is to provide a C++ abstraction over many tree
+like structures and present the main content of each object in the
+tree as an IOStream. This core abstraction also provides STL style
+iterators for a begin() to end() iteration of a directory. Arbitrary
+metadata for a file is accessable via getStrAttr() and setStrAttr().
+Some of the metadata is automatically extracted from files and
+presented through this same interface, some of the plugins to extract
+/ handle such attributes are listed below.
+
+Many other features like transparent compression of content, xml
+serialization, metadata indexing, full text indexing, automatic file
+classification through manchine learning agents are also provided to
+enhance the VFS.
+
+The following sections describe what things libferris can mount, what
+sort of metadata is supported and what clients currently exist.
+
+The following clients exist in the tarball, graphical versions use GTK+2:
+
+    ferriscp, a superset of coreutils 'cp' command. A graphical version of cp called gfcp which has progress displays and nice 'cp -i' interface.
+
+    ferrisls, a superset of coreutils 'ls' command.
+
+    ferrisrm, replacement for coreutils 'rm' command. A graphical version called gfrm.
+
+    ferrismv, replacement for coreutils 'mv' command. A graphical version called gfmv.
+
+    fcat, replacement for coreutils 'cat' command.
+
+    ferriscd, bash2 'cd' which handles XPath resolution
+
+    ftouch, a superset of coreutils 'touch' command.
+
+    fmkdir, replacement for coreutils 'mkdir command.
+
+    fclipcopy, fclipcut, fcliplink, fclippaste, fclipredo fclipundo: command line tools for performing file movements. (Cut a file and paste it someplace to "move" that file).
+
+    findexadd, feaindexadd: clients to add new items to fulltext and EA indexes.
+
+    findexquery, feaindexquery: clients to query to fulltext and EA indexes.
+
+    findexcompact, feaindexcompact: clients to compact indexes, performing costly reclaim operations. Such tools are needed to allow index evolution without loosing great deals of query performance.
+
+    fschema: interaction with attribute schemas
+
+    fmedallion: querying and setting emblem associations for files.
+
+    fcompress: setting up and removing transparent (un)compression for files.
+
+    ferris-import-desktop-file, ferris-import-desktop-hive.sh: adding new freedesktop.org ".desktop" files to the apps:// filesystem.
+
+    ferris-first-time-user: setting up "~/.ferris"
+
+    gfdl: download manager using the http and ftp filesystems (which use libcurl).
+
+    gfproperties: view all the lstat(2) information for a file in a GTK2 GUI. Also presents the emblem attachemnts for a file.
+
+    FerrisXalanTransform: like XalanTransform except some libferris functions are exported for the XSLT to use (see xsltfunctions/ for more detail).
+
+    ferris-capplet-auth, ferris-capplet-curl-ftp, ferris-capplet-general, ferris-capplet-index, ferris-capplet-locale, ferris-capplet-logging, ferris-capplet-version: tools for setting up libferris.
+
+The following attributes are supported:
+
+    native kernel XFS EA
+
+    data available from lstat(2)
+
+    cryto hashes like md5 and sha1
+
+    as-xml serialization
+
+    schema data
+
+    emblem attachment metadata
+
+    many file system synthetic EA
+
+    ID3 tags in mp3/ogg files
+
+    jpeg images
+
+    png images
+
+    images loadable via ImageMagick
+
+    mpeg2 video
+
+    dolby ac3 information
+
+    djvu images
+
+    images loadable via imlib2
+
+    jasper images
+
+    Take a look in Ferris.cpp and Native.cpp for tryAddStateLessAttribute() for many other attributes of interest.
+
+libferris can mount the following:
+
+    http
+
+    ftp
+
+    berkeley db4
+
+    sleepycats dbxml (libferris 1.1.11+)
+
+    video dvd
+
+    edb
+
+    eet
+
+    tdb
+
+    gdbm
+
+    ssh
+
+    rpm files
+
+    tar files
+
+    sysv IPC (shared memory)
+
+    LDAP
+
+    mbox
+
+    sockets
+
+    mysql
+
+    XML
+
+
+
+Accepted conference papers
+--------------------------
+
+    Spatial Indexing for Scalability in FCA
+
+Published in
+
+    The Fourth International Conference on Formal Concept Analysis (ICFCA 2006)
+    Dresden, Germany, 
+    February 13-17 in 2006
+
+    Abstract
+
+The paper provides evidence that spatial indexing structures offer
+faster resolution of Formal Concept Analysis queries than B-Tree/Hash
+methods. We show that many Formal Concept Analysis operations,
+computing the contingent and extent sizes as well as listing the
+matching objects, enjoy improved performance with the use of spatial
+indexing structures such as the RD-Tree. Speed improvements can vary
+up to eighty times faster depending on the data and query. The
+motivation for our study is the application of Formal Concept Analysis
+to Semantic File Systems. In such applications millions of formal
+objects must be dealt with. It has been found that spatial indexing
+also provides an effective indexing technique for more general purpose
+applications requiring scalability in Formal Concept Analysis systems.
+The coverage and benchmarking are presented with general applications
+in mind.
+
+--
+
+    Applying Formal Concept Analysis to Semantic File Systems Leveraging Wordnet
+
+    Published in
+
+    Proceedings of the 10th Australasian Document Computing Symposium,
+    Sydney, Australia,
+    December 12, 2005.
+
+    Abstract
+
+FCA can be used to obtain both a natural clustering of documents along
+with a partial ordering over those clusters. The application of FCA
+requires input to be in the form of a binary relation between two
+sets. This paper investigates how a semantic filesystem can be used to
+generate such binary relations. The manner in which the binary
+relation is generated impacts how useful the result of FCA will be for
+navigating one's filesystem.
+
+--
+
+    Formal Concept Analysis and Semantic File Systems
+
+    Published in
+
+    The Second International Conference on Formal Concept Analysis (ICFCA 04)
+    Sydney, Australia, 
+    February 23-26 in 2004
+
+    Abstract
+
+This document presents and contrasts current efforts at applying
+Formal Concept Analysis (FCA) to some semi structured document
+collections and file systems in general. Existing efforts are then
+contrasted with ongoing efforts using the libferris Virtual File
+System (VFS) as a base for FCA on file systems.
+
+--
+
+    File system wide file classification with agents
+
+    Published in
+
+    Proceedings of the 8th Australasian Document Computing Symposium,
+    Canberra, Australia,
+    December 15, 2003.
+
+    Abstract
+
+Many semi structured information systems such as file systems and
+email clients allow data to be tagged as belonging in many categories.
+Some such systems support notions similar to emblems, where files can
+be semantically tagged as fitting into a broad category by associating
+a file with an emblem. This paper presents a file system that makes
+use of Supervised machine learning for the creation of agents to offer
+fuzzy assertions and retractions of semantic tags on a per file basis.
+Such assertions are then subject to a belief resolution system to
+obtain an overall picture for a file's emblem attachments.
+
+---
+
+Informal documentation
+----------------------
+
+http://witme.sourceforge.net/libferris.web/kongress05-martin.pdf
+Linux Kongress 2005 paper
+
+An overview of the system as well as using it for indexing and search.
+
+http://witme.sourceforge.net/libferris.web/FerrisNotes/index.php
+FerrisNotes
+
+Gives a reasonable introduction to libferris and details some of the
+indexing in it, leads into using libferris to perform Formal Concept
+Analysis. Note that this document is not final and you should check
+back and contribute patches to it.
+ 
+http://witme.sourceforge.net/libferris.web/ferrisAsyncIO.paper2002/index.html
+Async IO and network fetching with libferris
+
+Details on how to perform async IO with libferris and explicit mention
+of using async io to fetch information from an HTTP site where header
+information is gleemed from libferris before the contents of the
+request are read or transfered over the network.
+
+http://witme.sourceforge.net/libferris.web/FerrisFileUtilsClients.paper2002/index.php
+Design of console and graphical fileutils clients for libferris
+
+This paper details the key interactions of the ferriscp, gfcp,
+ferrismv, gfmv, ferrisrm, and gfrm clients with the ferris and
+ferrisui shared libraries. These clients accept the same command line
+options as the fileutils cp, rm and mv programs. Where API changes in
+the core library are anticipated they are mentioned in this paper so
+that the paper will be relevant to the newer versions of ferris as
+well as the current codebase. The paper aims to allow both the
+maintainer (given time away from the code) and other interested
+parties enough information to either add to existing clients or start
+creating new ones.
+
+http://witme.sourceforge.net/libferris.web/FerrisXSLT2.paper2002/index.php
+CGI invocation of parameterized SQL using XSLT, XML, and Ferris
+
+An XSQL like solution for exposing a relational database through
+server side parameterized SQL queries invoked through XSQL like CGI
+roundtrips. Ferris is used as the underlying tool to mount SQL queries
+and expose the results as a Filesystem or DOM.
+
+http://witme.sourceforge.net/libferris.web/FerrisXSLT.paper2002/index.html
+XSLT, DOM, SQL and the web
+
+The selection of information from a relational database using both SQL
+and XSLT for delivery on the web. Focus is on the use of Ferris to
+bring the relational database into the world of XML by mounting either
+a table or query and presenting that data as parsed XML in the form of
+a Document Object Model (DOM). The DOM is then transformed into HTML
+using XSL.
+
+http://witme.sourceforge.net/libferris.web/ferriscreate.paper2001/index.html
+XML UI: from XSD to XML
+
+Exploration of creating XML documents from XSD schema files using a
+forms based interface is presented. An implementation using Gtk+
+1.3.11, libglade2 and ferriscreate is presented as a case study
+leading to future trends in XML user interface generation and style.
+
+
+----------------------
+
+Extended Attribute (EA) descriptions
+
+What do all of these attributes mean?
+
+General information
+
+The below tables do not take into account all EA for the system. They
+are designed as a guide to the libferris 1.1.40+ EA. Once an EA is in
+the system it rarely changes so these tables should be suitable for
+future versions of libferris.
+
+Some EA generated from libextractor, native kernel EA and RDF sources
+are impossible to fully enumerate here in a timely manner. Also when
+you mount a relational database or XML file/database attributes are
+created to export information of interest. For example a relational
+database when mounted shows its rows as files and its columns as EA on
+those files. One should keep this in mind and consider the tables as a
+reference to only some of the EAs in the system.
+
+Another section that is only briefly mentioned is the emblem EAs. This
+is because each user is expected to have their own emblem collection
+with their own partial ordering over their emblems. See the ADCS03
+paper in the papers section of the site for a starting guide to
+emblems and one of their considered uses. The EAs everyone should be
+aware of
+
+This table describes important EA.
+
+EA name	description
+as-rdf          All the EA for the file presented as an RDF/XML document
+as-xml          All the EA for the file presented as an XML document
+as-text         A plain text representation of the file. May loose formatting information.
+content         The file's contents.
+url             The file's URL. eg. file://tmp/foobar.tar
+path            Path for this file. eg. /tmp/foobar.tar
+name-extension	File's extension. eg. tar
+atime           Time of last access. In seconds since UNIX epoch (1/Jan/1970)
+atime-ctime     ctime(3) formated string showing the atime EA
+atime-display   atime EA shown in a user selectable presentation format
+atime-day-granularity   atime EA rounded down to nearest day
+atime-month-granularity atime EA rounded down to nearest month
+atime-year-granularity  atime EA rounded down to nearest year
+ctime                   Same collection of EA as for atime
+ferris-current-time     Same collection of EA as for atime
+mtime                   Same collection of EA as for atime
+attribute-count         Total number of EAs for this file
+ea-names                A list of the names of all EA for this file.
+recommended-ea          The names of EA which should be interesting to the user for this file.
+recommended-ea-short    A shortened version of recommended-ea
+recommended-ea-union    The union of recommended-ea for all files/dirs in a directory.
+treeicon                The URL of an image that is appropriate for this file.
+emblem:list             A complete listing of all emblems as a comma seperated list
+emblem:list-ui          A listing of all important emblems as a comma seperated list
+emblem:x-mtime          The last time data about the "x" emblem was changed. This also has the "-ctime", "-display" EA for accessing this time in a formatted manner.
+emblem:has-x            Is this file associated with emblem "x"
+emblem:has-fuzzy-x      Based on supervised machine learning should this file be associated with emblem "x"
+is-active-view          Will this directory update itself to reflect changes made by other apps
+is-animation-object     Is the MIME major type animation
+is-audio-object	        Is the MIME major type audio
+is-image-object         Is the MIME major type image
+is-source-object        Is this file source code
+is-dir                  Underlying kernel object is a directory
+is-file                 Underlying kernel object is a file
+language-human          What is the human language for this file. eg. english
+mimetype                MIME type of the file perhaps based on quick guessing
+mimetype-from-content   MIME type of the file definately based on inspecting file bytes.
+is-native               Using kernel based filesystem (a file:// URL)
+is-remote               Is this file remote to this machine
+size                    Size of the file
+size-human-readable     Size of the file in human readable format (similar to ls -lh)
+md2                     Checksums calculated from the file's byte content when the EA are read.
+mdc2                    Checksums calculated from the file's byte content when the EA are read.
+md5                     Checksums calculated from the file's byte content when the EA are read.
+sha1                    Checksums calculated from the file's byte content when the EA are read.
+
+Native file:// EAs
+
+This table describes various EA which are likely to be only found for
+file:// URLs. For file:// URLs there is also a "dontfollow-" prefixed
+version of some EA which present the values found from a lstat(2)
+call. By default the stat(2) call values are shown which means that
+the EA values for link files are for the link target not the link
+itself.
+
+EA name	description
+device                    st_dev from stat(2)
+device-type               st_rdev from stat(2)
+filesystem-filetype       string describing the type of this file.
+force-passive-view        Has the user elected not to monitor this directory for changes
+fs-available-block-count  f_bavail from statfs(2)
+fs-block-count            f_blocks from statfs(2)
+fs-block-size             f_bsize from statfs(2)
+fs-file-name-length-maximum f_namelen from statfs(2)
+fs-file-nodes-free        f_ffree from statfs(2)
+fs-file-nodes-total       f_files from statfs(2)
+fs-free-block-count       f_bfree from statfs(2)
+fs-id                     f_fsid from statfs(2)
+fs-name                   Name of filesystem this file is on. eg. ext2
+fs-type                   f_type from statfs(2)
+group-executable          File mode has g+x
+group-readable            File mode has g+r
+group-writable            File mode has g+w
+group-owner-name          Name of group owning file
+group-owner-number        Number of group owning file
+hard-link-count           st_nlink from stat(2)
+has-holes                 Does the file contain holes?
+has-subcontexts-guess     A quick guess if this object has children
+has-valid-signature       Is there a valid digital signature for this file
+inode                     INode for this file
+is-link                   Underlying kernel object is a link
+is-special                Underlying kernel object is a special object
+mode                      st_mode from stat(2)
+protection-ls             mode EA formatted for ls(1) display
+other-executable          File mode has o+x
+other-readable            File mode has o+r
+other-writable            File mode has o+w
+readable                  Can the user reading this EA read the file?
+writable                  Can the user reading this EA write to the file?
+realpath                  For links returns the realpath(3) string
+runable                   Can the user reading this EA run this file?
+deletable                 Can the user reading this EA delete this file? eg. A directory with +wx permissions set for other implicitly allows all users to delete any file in that directory.
+user-executable           File mode has u+x
+user-readable             File mode has u+r
+user-writable             File mode has u+w
+user-owner-name           Name of owner of this file
+user-owner-number         Number for owner of this file
+block-count               Number of disk blocks occupied by this file
+block-size                Size of the disk blocks used by this file
+
+	
+Image related EAs
+
+These will be likely available for many image formats depending on
+what support for images your build of libferris was created with. Note
+that some EAs such as the EXIF and XMP generated EAs are not described
+here but have similar names to the attributes of the underlying
+specification where spaces and underscores are replaced with "-".
+
+EA name	                  description
+aspect-ratio              Image data's width to height ratio
+depth                     Number of bits per pixel
+depth-per-color           Number of bits per colour
+gamma                     Gamma adjustment for this image
+has-alpha                 true if there is an alpha channel
+height                    Height of the image
+width                     Width of the image
+rgba-32bpp                Decoded image data in RGBA 32 bit per pixel format
+exif:has-thumbnail        Is there an EXIF thumbnal in this image
+exif:thumbnail-update     Echoing 1 into this will recreate the EXIF thumbnail
+exif:thumbnail-height     EXIF thumbnal height
+exif:thumbnail-width      EXIF thumbnal width
+exif:thumbnail-rgba-32bpp Decoded thumbnail image. Same format as rgba-32bpp
+exif:...                  All EXIF tag metadata is exported with logical EA names
+been-downloaded           Has this image been downloaded from the digital camera already
+deletable                 Can we delete this image from the digital camera.
+
+	
+Audio related EAs
+
+These will be available on some or all of your audio files providing
+interesting metadata about them.
+
+EA name	                 description
+a52-bit-rate             bit rate of an ac3/a52 audio stream. The a52-* information is also provided for mpeg2 files that have such audio embedded in them.
+a52-sample-rate	
+a52-has-base             Is there a base channel
+a52-frame-length 
+a52-channels             Number of audio channels
+a52-channels-front       Number of 'front' audio channels
+a52-channels-rear 
+title                    ID3: track title
+artist                   ID3: artist for track
+album                    ID3: Name of album containing track
+year                     ID3: Year the album/single containing this track was released
+track                    ID3: Number of this track from its album. eg. 7
+
+	
+Video related EAs
+
+These will be available on some or all of your video files providing
+interesting metadata about them.
+
+EA name	                 description
+pgmpipe                  A stream of YUV images containing the decoded images from the video file
+width                    Width of the video file
+height                   Height of the video file
+frame-count              number of video frames in file
+duration                 Duration of video in seconds
+aspect-ratio             Ratio of width to height of how video should be shown
+letterbox                Is video letterboxed
+
+	
+EA which relate to branch filesystems
+
+Branch filesystems present information about a file via a virtual
+filesystem. For example for a digitally signed file the people who
+have signed the file, when they signed it and if the signature is
+valid are all expressed via a branch filesystem.
+
+
+EA name	                 description
+associated-branches      List of all "branchfs-" EA for this file
+associated-branches-url	 URL for a filesystem showing all "branchfs-" EA for this file
+branchfs-attributes      URL which will show this file's EA as directory containing files
+branchfs-medallions      URL which will show this file's emblems as a directory containing files
+branchfs-parents         URL which will show All the parents of this file
+branchfs-signatures      URL which will show the people who have signed this file and when
+
+	
+RPM EA
+
+These EAs are available on RPM based Linux distributions. They provide
+information about each file that is taken from the rpm database on the
+machine. See rpm(8) for more information.
+
+EA name	                 description
+rpm-info-url	
+rpm-is-config	
+rpm-is-doc	
+rpm-is-ghost	
+rpm-is-license	
+rpm-is-pubkey	
+rpm-is-readme	
+rpm-package              RPM package which installed this file
+rpm-release              release of rpm-package that installed this file
+rpm-verify-device	
+rpm-verify-group	
+rpm-verify-md5           true if the file has not been changed since it was installed.
+rpm-verify-mode	
+rpm-verify-mtime	
+rpm-verify-owner	
+rpm-verify-size	
+rpm-version	
+Miscellaneous            EA which are very handy for specific use cases
+
+These have been added to the system over time usually to solve specific problems.
+
+EA name	                 description
+parent-name              Name of the parent dir. eg. for /tmp/foobar.tar, parent-name=tmp
+download-if-mtime-since  Before reading a document from HTTP/FTP a time can be written to this EA and an exception will be thrown if the remove document has not been modified since the written time. Also has the same collection of EA as for atime
+size-cdrom-count         Number of 700Mb CDROMs required for this file
+size-dvd-count           Number of 4.4Gb DVDs required for this file
+recursive-subcontext-*   The "recursive-" prefix EA return similar information for a whole tree. They can be slow to read as a full traversal of all children may be required.
+subcontext-*             The "subcontext-" EA return information about direct children.
+
+----------------------------
+
+Build order and dependencies
+
+If you are building libferris and ego from sources then this page
+describes which ordering you can expect to build things in. Arrows
+that are not filled in are optional dependencies that will be taken
+advantage of if present at configure time. Transitive dependencies are
+usually not shown explicitly, for example, ego might directly use
+stldb4 but since its a requirement of libferris which ego already
+requires because ferriscreate requires libferris then no link exists
+from ego to stldb4.
+
+There are also many packages that are optional and detected at
+configure time for libferris. For example if the tdb database library
+is detected when building libferris then a plugin will be created to
+allow libferris to mount tdb files. Similar things are true for id3lib
+which allows ID3 tags to be presented from audio files. Looking in the
+plugins directory of a libferris tarball should give a reasonable idea
+of what optional modules can be compiled in this fashion.
+
+You may find that many of the lower level dependancies are already met
+by your Linux distribution. One may expect fam, libsigc++, xerces-c,
+xalan-c, gnome-vfs2 or kde3, pccts, xmms, swig and imlib2 to already
+be present.
+
+Note that you have the choice to build against STLport or the STL and
+IOStreams from g++. The default is to build against STLport if it can
+be detected during a ./configure. If you have stlport installed but do
+not wish to build libferris against it use the --disable-stlport
+option to ./configure. This default behaviour applies to ferrisstreams
+and most tarballs available from this project's sf.net download page.
+
+Note that if you choose to build against stlport then some of the C++
+libraries which libferris uses must themselves be built against
+STLPort to avoid having the library which libferris is linking to
+expecting a different std namespace implementation. You will have to
+compile ferrisstreams, libpqxx and fampp2 against STLport for example.
+You will get build errors for some libferris clients if your xalan-c
+is not built against STLport, if you are not planning on using XSLT
+with libferris you can always ignore these clients.
+
+Another major choice you have to make when building is which version
+of libsigc++ you want to use. To preserve build compatibility, by
+default the 1.2 version is used. To use the newer version run
+configure with --with-sigcxx-2x=yes. Note that you should configure
+all packages to use the same major version of libsigc++.
+
+If you find any major omissions here please mail the mailing list with
+your updates.
+
+http://witme.sourceforge.net/libferris.web/images/ferris-deps.png
+
+----------------------------
+
+Screenshots
+
+http://witme.sourceforge.net/libferris.web/images/libferris-and-google-earth.avi
+GoogleEarth integration
+
+will feature in libferris 1.1.96+. The above animation shows the
+application of geoemblems to four image files with the ego
+filemanager. Watch the status bar when the second Zwinger image is
+tagged to see the command line driven minibuffer tagging mode. After
+"zw" is typed a tab completes the emblem name and return will apply
+that emblem to the current file. The feaindexadd command is then run
+to force a reindex of these files. A file is then opened with
+googleearth which zooms the map into the area of the geoemblem
+associated with that file. Clicking on the marker for that location
+will then show a menu of "desktop search" options. In this case I
+decide to search for image files within 15km of the marker. Notice how
+in the ego filelist which results the sacre cure image is listed. This
+is because it is marked with a geoemblem that is within 15km of Notre
+Dame in Paris.
+
+
+http://witme.sourceforge.net/libferris.web/images/mounting-firefox-dec-2005.png
+Mounting Firefox 
+
+is supported in libferris 1.1.73+. You can get at all the anchor tags,
+images and mount the DOM for each web page. Also you can send new web
+pages to Firefox by writing to firefox://localhost/username.
+
+http://witme.sourceforge.net/libferris.web/images/ego-kdelook-sort-by-height-then-name.png
+Sorting
+
+is supported for both ascending and descending on a single column or
+an arbitrary collection of columns. This is very handy when you want
+to group by an attribute such as mimetype and then on the file's name.
+Versioned sorting is similar to ls -v in that a series of files with a
+numeric component near the end of the filename will sort using mixed
+string and numeric sorting on the same column. See the ls -v man page
+for a description. Your sorting preferences can be saved away with a
+name for later recall, so setting up a sort based on 4 columns only
+has to be done once. The default sorting order can also be saved for
+each directory or for the root of a whole directory tree. Sorting /tmp
+and below on mtime by default can be very handy.
+ 
+http://witme.sourceforge.net/libferris.web/images/ego-medallions-kdelook-july05.png
+gevas view
+
+provides both static thumbnails for image directories and animated
+alpha blended icons for video files and pdf documents. A medallion
+sidepanel allows you to quickly attach emblems to your files.
+
+http://witme.sourceforge.net/libferris.web/images/ferris-agents-sep03.png
+Agents
+
+finally making their way into the filesystem in the upcoming libferris
+1.1.10 release. Shown in the top left of the shot is the agent capplet
+which allows you to create persistent agents and tell which emblems
+are to be assigned beliefs by these agents. Agents make their
+assertions using a given personality so that you can tell which agent
+made what assertion and allow a pool of agents to share a
+personality... Smith :). In the top right is the gfproperties with
+extended medallion view to show fuzzy assertion. The config emblem has
+been fully asserted by the user, the docs has been fully retracted by
+the user. Agents have expressed slight partial retraction for the exe
+emblem and very slight partial assertion for the favs emblem. The
+shell at the bottom is showing how to train agents and get them to
+classify based on their training. Its in debug mode to get the
+bogofilter command line options just right.
+
+http://witme.sourceforge.net/libferris.web/images/Ego-July-03-egomedallions.png
+Both views
+
+support medallions in ego 0.8.1+. A sidepanel page is available for
+editing the emblems attached to a file and the context menu for files
+in the list shows the etagere in a tree form to make finding an emblem
+simple when a user has many emblems. There is a current limit of 2^32
+emblems per ontology
+
+http://witme.sourceforge.net/libferris.web/images/Ego-July-03-medallions.png
+Emblems
+
+are orginized into medallions which can be attached to each context.
+Emblems themself are structured into a partial order and saved into an
+ontology called the etagere. Each ontology has a uuid and each
+medallion stores the ontology it is created for so one can import
+their friends medallions.
+
+http://witme.sourceforge.net/libferris.web/images/Ego-July-03-create-ea-emblem.png
+ferriscreate
+on emblems and attribute indexes
+
+http://witme.sourceforge.net/libferris.web/images/Ego-Jan-03-Compress-EA-Trimmed.png
+Compression and EA editing in action
+
+http://witme.sourceforge.net/libferris.web/images/Ego-tree-Aug-02.jpg
+Nice mix of both the icon and tree view, showing the
+context menu with its persistent file cut,copy,paste. Also I have selected the
+cut to option which lists places that I cut files of the same mime type to in the
+past.
+
+http://witme.sourceforge.net/libferris.web/images/Ego-icons-Aug-02.jpg
+The Icon view
+with the new thumbnail generator. 
+note that the bmindtrailer is a quicktime trailer and the icon in ego is a
+montage of some frames from the mov file
+
+http://witme.sourceforge.net/libferris.web/images/Ego-icons2-Aug-02.jpg
+Binding apps to files
+is just a right click away. 
+Also note how the bmindtrailer has moved on a little.
+
+http://witme.sourceforge.net/libferris.web/images/Ego-icons3-Aug-02.jpg
+Showing more info on files in a treelist
+Sort of got in my own way here, doh! the context menu hides the atime and mimetype columns.
+
+http://witme.sourceforge.net/libferris.web/images/Ego-HotActions.jpg
+Hotactions
+sidepanel can change depending on what directory
+is being viewed. Shown is a prototype for my multimedia sidepanel mode aswell as my
+image viewer mode
+
+http://witme.sourceforge.net/libferris.web/images/Ego-XMMS.jpg
+XMMS interface, drag and drop files here to enqueue them
+for current or next song.
+
+http://witme.sourceforge.net/libferris.web/images/Ego01-Aug-02.jpg
+Showing
+some of the EA than can be viewed in the list. 
+Also the popup menu can tell you what will happen for this file when you click it, 
+recent versions also allow you to reassign this action from the context menu
+
+http://witme.sourceforge.net/libferris.web/images/Ego02-Aug-02.jpg
+MIME and application
+information are just another filesystem.
+You can now import desktop files into ego directly.
+
+http://witme.sourceforge.net/libferris.web/images/Ego03-Aug-02.jpg
+Toolbars
+have context menus too, so menus aren't really needed
+
+http://witme.sourceforge.net/libferris.web/images/Ego04-Aug-07.jpg
+Scheme sidepanel!
+
+http://witme.sourceforge.net/libferris.web/images/Ego05-Aug-10.jpg
+Tree sidepanel
+now works 
+
+http://witme.sourceforge.net/libferris.web/images/Ferris-cc-02.png
+GNOME control center integration
+
+http://witme.sourceforge.net/libferris.web/images/gfcp.png
+GTK2 interface
+to a cp client
+
+http://witme.sourceforge.net/libferris.web/images/gfcp_confirm.png
+cp -i
+presented to the user for inspection
+
+http://witme.sourceforge.net/libferris.web/images/Ego-July-02.jpg
+Sorting choices
+shown in a somewhat aging shot
+
+
+----------------------------
+
+FAQ
+
+    Questions
+        1. Building
+            1.1. Why don't you submit your Redhat rpms into the Fedora project?
+            1.2. What do I do if the build fails?
+            1.3. Why are the latest packages for libferris out of date compared to to most recent tarball?
+            1.4. Are you likely to provide deb files sometime soon?
+            1.5. Why do you seem to have this big love with STLPort?
+            1.6. What is the minimum version of gcc required for ferris?
+            1.7. What version of gcc are the developers using?
+            1.8. I get build errors when attempting to make ferris stuff with gcc 3.3
+            1.9. I'm getting an internal compiler error with gcc 3.3 and fampp2?
+            1.10. Seems that the build fails to find 'cstddef' using the STLPort rpm files you provide?
+            1.11. I'm getting undefined reference to foo( _STL::basic_string < char, _STL::char_traits < char > ,_STL::allocator < char > > const& ); when linking?
+            1.12. I have installed the lucene package for my distribution but after looking at the config.log for libferris it is not properly detecting it.
+            1.13. There are problems compiling the Evolution mounting support.
+            1.14. Does libferris work on OSX? 
+        2. Extra Installation steps?
+            2.1. How do I mount emacs (libferris version 1.1.72+)?
+            2.2. How do I mount Firefox (libferris version 1.1.80+)?
+            2.3. How do I mount LDAP?
+            2.4 Extra steps for maemo? 
+        3. Migration from old ferris versions
+            3.1. How do I update my personal RDF store from 1.1.72 to 1.1.80 format?
+            3.2. Remembrance RDF has changed in 1.1.71 from 1.1.70, can I update my existing RDF store to the new format?
+            3.3. older than 1.1.15 to 1.1.16: myrdf:// is empty 
+        4. Indexing filesystems and querying them
+            4.1. I am seeing exceptions in the output of feaindexadd or findexadd which contain some files which have non ascii chars in their names.
+            4.2. Creating PostgreSQL EAIndexes is failing with something about language not found and mentioning createlang?
+            4.3. Creating PostgreSQL TSearch2 fulltext indexes is failing, is there anything I need to do to setup TSearch2?
+            4.4. What is this Formal Concept Analysis crazy thing you mention and how do I take advantage of it with libferris? 
+        5. Its crashing or giving incorrect behavior
+            5.1. When I read a directory with libferris it locks the CPU at 100% and doesn't seem to get anywhere after a very long time.
+            5.2. I'm getting SEGV when any client app closes!
+            5.3. The clients all seemed very nice but all of a sudden many clients started crashing before doing anything interesting. How to fix it?
+            5.4. I am having problems mounting PostgreSQL with libferris. 
+        6. Implementation choices
+            6.1. What is the point of this user address space virtual filesystem as apposed to traditional in kernel stuff?
+            6.2. So how can I get at libferris from legacy apps?
+            6.3. Why did you use C++ instead of C, Java or whatever?
+            6.4. Your using libX for your X plugin but I like to use libY to look at that kind of data. Any chance of changing?
+            6.5. How does ferris-out-of-proc-notification-deamon communicate?
+            6.6. What is sent to other libferris applications by ferris-out-of-proc-notification-deamon?
+            6.7. Are you supporting the freedesktop.org shared VFS standard?
+            6.8. Since libferris uses some Boost code, why does libferrisstreams exist instead of just using boost::iostreams?
+            6.9. Are there any wrappers for perl, python, php, mono, java, scheme? 
+        7. General questions
+            7.1. It seems to run very very slowly sometimes (or always).
+            7.2. How can I edit a file from a libferris virtual filesystem using my current text editor (libferris version 1.1.80+).
+            7.3. Can I bind the default view and edit action for a file based on arbitrary metadata (libferris version 1.1.81+).
+            7.4. Is there a top level filesystem that controls them all?
+            7.5. How can I find out what context plugins I have?
+            7.6. How can I get the agents to work?
+            7.7. What is the format for time strings?
+            7.8. Is there a FUSE (fuse.sf.net) module for mounting libferris through the kernel?
+            7.9. What is this xsltfs? 
+        8. Using libferris from bash
+            8.1. How can I present two filesystems and see the diffs as a filesystem?
+            8.2. How can I see and modify what emblems are attached to a file?
+            8.3. How do I interact with the file clipboard from the shell? 
+        9. A view from an RDF perspective
+            9.1. What is implicit tree smushing and how can I take advantage of it? (libferris version 1.1.80+).
+            9.2. Can I smush two files metadata together? (libferris version 1.1.80+).
+            9.3. Can I run a SPARQL query against myrdf store? (libferris version 1.1.80+).
+            9.4. Can I use another storage backend then the Berkeley db that is the default? (libferris version 1.1.81+). 
+        10. A view from an XML perspective
+            10.1. Can I just see the filesystem as a Document Object Model?
+            10.2. Can I mount a Document Object Model as a filesystem?
+            10.3. Can I mount an XML document as a filesystem?
+            10.4. Can I apply an XSLT to a filesystem?
+            10.5. Can I have one libferris application which has mounted an XML file instantly see changes made to the XML document by another libferris application? (libferris 1.1.82+)
+            10.6. Are any interesting bits of libferris available to my XSLT pages?
+            10.7. What about XPath version 1.0 or 2.0?
+            10.8. Can I use XPaths with ferriscd?
+            10.9. Can I use XPaths with other ferris tools?
+            10.10. Is there anything like XLink in libferris?
+            10.11. Why should I be interested in mounting my sleepycat dbxml files? 
+        11. The ego filemanager
+            11.1. Can I setup the order of the columns in the GTK Treeview to something else? (ego 0.12.2)
+            11.2. Can I change the label used for a particular EA in ego's column headers? (ego 0.12.2) 
+        12. Some light hearted questions
+            12.1. When is the animal book on this coming out?
+            12.2. I think libferris and ego are so great I want to make a donation. How can I do that?
+            12.3. Why are you writing libferris and ego? 
+
+Questions
+1. Building
+1.1. Why don't you submit your Redhat rpms into the Fedora project?
+^
+
+This will probably happen in the future. I started making the rpms for libferris' dependancies well before Fedora started. There are many rpms that I have for the dependancies for libferris and it will take a while to feed them into the mainline Fedora project. The other point to note is that time spent packaging is time not spent coding and I tend to prefer the latter.
+
+If anyone wants to feed Fedora then check the main mailing list to make sure nobody has expressed that they want to do it and then mail the list to express your interest. A good place to start for this would be the rpms that I make available on the sf.net download page for libferris.
+1.2. What do I do if the build fails?
+^
+
+Make sure you have read this FAQ build section completely. Make sure you have all the latest versions of each library that ferris needs. If its a compile error then send an email to the witme-ferris mailing list. Remember that if build errors are not reported I'll assume that it builds just as dandy fine for everyone as it does for me.
+1.3. Why are the latest packages for libferris out of date compared to to most recent tarball?
+^
+
+Most of the packages provided are the dependancies for libferris, these don't change that frequently but libferris is released rather more often. You should be able to rebuild rpm files from the libferris distribution tarballs when you have the dependancy pacakges installed.
+1.4. Are you likely to provide deb files sometime soon?
+^
+
+As I don't use debian I myself am unlikely to provide deb files. I am happy to allow a contributor to package debs, anyone interested might like to email me when they have some stuff together.
+1.5. Why do you seem to have this big love with STLPort?
+^
+
+Many of the IOStreams implementations that shipped with gcc in the past were not standard compliant. I like using the STLPort 4.5+ because it gives me a fixed codebase for STL and IOStreams to build upon.
+1.6. What is the minimum version of gcc required for ferris?
+^
+
+gcc 3.0 should work, but 3.1+ is recommended.
+1.7. What version of gcc are the developers using?
+^
+
+As at August 2005 gcc-4.0.1-4.fc4.
+
+As at March 2005 a prerelease of gcc 4.0, gcc-4.0.0-0.32.src.rpm.
+
+As at 17 Aug 2003 it was what came with redhat9. As of 18 Aug 2003 an upgrade to rawhide gcc-3.3.1-1 was done to fix build issues with gcc 3.3+.
+1.8. I get build errors when attempting to make ferris stuff with gcc 3.3
+^
+
+Some of the parts of the ferris suite contained code that wouldn't compile with gcc 3.3+. This was due to a bug in gcc < 3.3 not checking access restrictions on templates.
+
+You'll need atleast ferrisloki-2.0.0, fampp2-3.5.0, ferrisstreams-0.3.0, stldb4-0.3.2 and libferris-1.1.8 to build using gcc 3.3.
+
+If you get the following error, download newer tarballs and try again.
+
+
+
+g++ <snip>...</snip> -c Streams.cpp -MT Streams.lo -MD -MP -MF 
+.deps/Streams.TPlo -fPIC -DPIC -o .libs/Streams.lo
+
+In file included from Streams.cpp:31:
+../FerrisStreams/Streams.hh: In instantiation of 
+`Loki::SmartPtr<Ferris::ferris_streambuf<char, _STL::char_traits<char> >, 
+FerrisLoki::FerrisExRefCounted, Loki::DisallowConversion, 
+FerrisLoki::FerrisExSmartPointerChecker, FerrisLoki::FerrisExSmartPtrStorage>':
+../FerrisStreams/Streams.hh:962: instantiated from 
+`Ferris::Ferris_commonstream<char, _STL::char_traits<char> >'
+../FerrisStreams/Streams.hh:3115: instantiated from here
+/usr/local/include/FerrisLoki/Extensions.hh:254: error: `typedef class 
+ Ferris::ferris_streambuf<char, _STL::char_traits<char> 
+ >*FerrisLoki::FerrisExSmartPtrStorage<Ferris::ferris_streambuf<char, 
+ _STL::char_traits<char> > >::PointerType' is protected
+../FerrisStreams/Streams.hh:962: error: within this context
+/usr/local/include/FerrisLoki/Extensions.hh:253: error: `typedef class 
+ Ferris::ferris_streambuf<char, _STL::char_traits<char> 
+ >*FerrisLoki::FerrisExSmartPtrStorage<Ferris::ferris_streambuf<char, 
+ _STL::char_traits<char> > >::StoredType' is protected
+../FerrisStreams/Streams.hh:962: error: within this context
+
+ 
+
+1.9. I'm getting an internal compiler error with gcc 3.3 and fampp2?
+^
+
+Make sure you have fampp2-3.5.0 or later. Earlier versions created an object factory in a manner that gcc 3.3 didn't like.
+1.10. Seems that the build fails to find 'cstddef' using the STLPort rpm files you provide?
+^
+
+It is infortunate but there is a direct reference to the C++ header file path in the stlport headers.
+
+The file with the references is /PREFIX/include/stlport/config/stl_gcc.h. Both of the references are on consecutive lines starting at roughly line 253 and are shown below. Changing the 3.3.1 to the version of gcc you are using should work fine.
+
+
+
+# define _STLP_NATIVE_INCLUDE_PATH /usr/include/c++/3.3.1
+# define _STLP_NATIVE_OLD_STREAMS_INCLUDE_PATH /usr/include/c++/3.3.1/backward
+
+ 
+
+1.11. I'm getting undefined reference to foo( _STL::basic_string < char, _STL::char_traits < char > ,_STL::allocator < char > > const& ); when linking?
+^
+
+Basically if you get a link error with std:: stuff or _STL:: stuff in its API like the string example above it usually means that STLPort is being used by libferris and not the underlying library providing the API call.
+
+The easiest method to fix this for libferris is to rebuild the offending library using STLPort for its STL/IOStreams.
+
+To build a client library against an installed STLPort just exporting CXXFLAGS and LDFLAGS to contain stlport stuff should work. The below is what I am using, which you might need to adjust depending on your local install paths etc. I am also building for 64bit IO which you may or may not be doing.
+
+
+
+$ stlport-config --cflags
+-I/usr/include/stlport -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+$ stlport-config --libs
+-L/usr/lib/lib -lstlport_gcc -lpthread -lstdc++ -lm
+
+ 
+
+The plan is at some stage to move to using string::c_str() for API calls to C++ libraries to avoid this though that will likely be optional because it will involve a new string object creation on the called libraries side for each string passed. Likely there will be some black magic to get this marshalling to work by passing the native string if the client library was built against STLPort or passing c_str() if the client can not properly handle STLPort strings.
+1.12. I have installed the lucene package for my distribution but after looking at the config.log for libferris it is not properly detecting it.
+^
+
+For some strange reason many distributions of lucene do not include the gcjh headers in a devel package. To use lucene from libferris the headers need to exist somewhere. The below script will generate the headers from your lucene jar file.
+
+
+
+jar tvf /usr/share/java/lucene.jar | cut -c 36-1000 >|classes
+for if in `cat classes `; do mkdir -p `dirname $if`; done
+for if in `cat classes `; do 
+gcjh --classpath=/usr/share/java/lucene.jar \
+ `dirname $if`/`basename $if .class`; 
+done
+
+ 
+
+Note that some versions of gcjh will generate headers which have some "redeclarations" of static symbols. If you get a few errors like the below when compiling libferris lucene support then simply edit the headers and append a unique postfix to the static symbol name. The static symbols in question are not used by libferris directly so there is no problem building against the edited headers.
+
+
+
+/usr/local/include/org/apache/lucene/analysis/standard/StandardTokenizer.h:66: 
+error: declaration of 'JArray<jint>* 
+ org::apache::lucene::analysis::standard::StandardTokenizer::jj_la1_0'
+/usr/local/include/org/apache/lucene/analysis/standard/StandardTokenizer.h:42: 
+error: conflicts with previous declaration 
+'static void org::apache::lucene::analysis::standard::StandardTokenizer::jj_la1_0()'
+
+ 
+
+1.13. There are problems compiling the Evolution mounting support.
+^
+
+Unfortunately many projects have header files laced with C++ keywords. The Evolution headers include the use of keywords delete, new, template, class in a few places. As their use is restricted to function prototypes for the most part you can simply rename the function arguments in your headers to get libferris to compile.
+
+Sometimes patches to clean C++ use of other projects headers take time to filter into the other projects.
+1.14. Does libferris work on OSX?
+^
+
+There have been an increasing number of folks asking this question. The short answer is that I don't have the hardware or software to verify if libferris builds OK on OSX.
+2. Extra Installation steps?
+2.1. How do I mount emacs (libferris version 1.1.72+)?
+^
+
+To allow libferris enabled clients access to your (x)emacs sessions you have to be running gnuserv in your emacs session and have a little bit of lisp glue called which defines some functions used by libferris to perform its work.
+
+Add the below snippit of lisp to your ~/.emacs file.
+
+
+
+; load ferris lisp code
+(load "/usr/local/lib/ferris/emacs/libferris-emacs.el")
+
+; if not already there.
+(gnuserv-start)
+
+ 
+
+Note that the initial implementation is geared towards smallish buffers. For example getting a C++ iostream for an xemacs buffer will cause that entire buffer to be transfered from emacs. In the future the IOStream could acquire parts of the buffer on demand to allow applications to move around in very large emacs buffers from a C++ IOStream.
+
+The below is a little example of using xemacs mounting. Note that you can just as easily copy an emacs buffer into a varchar field in PostgreSQL as you can cat it.
+
+
+
+#
+# home == username == saru
+#
+$ ferrisls -0 emacs://localhost/saru
+ *Buffer List* Buffer Menu
+ *SGML LOG* Fundamental
+ *Warnings* Fundamental
+ *scratch* Lisp Interaction
+ TODO Fundamental /home/saru/TODO
+ faq.xml XML /www/libferris.web/src/...
+ libferrisemacs.cpp C++ /ferris/plugins/...
+$ date >/tmp/datefile
+$ gnuclient -q /tmp/datefile
+$ fcat emacs://localhost/saru/datefile
+Wed Dec 21 10:30:28 EST 2005
+$ date | ferris-redirect -T emacs://localhost/saru/datefile
+$ fcat emacs://localhost/saru/datefile
+Wed Dec 21 10:32:05 EST 2005
+
+ 
+
+2.2. How do I mount Firefox (libferris version 1.1.80+)?
+^
+
+To allow libferris enabled clients access to your Firefox sessions you have to install the firefox extension which comes with libferris. You'll find this in the plugins/context/firefox/firefox-extension directory with the name of libferrismount.xpi. This extension needs JSLib installed before it.
+
+Support extends to getting easy access to anchor tags, image tags, and the Document Object Model for each web page in each tab of Firefox. You can also redirect information to a new firefox tab by writing to a special URL as shown below.
+
+
+
+#
+# home == username == ben
+#
+$ alias fls=ferrisls
+$ fls -0 firefox://localhost/ben
+by-title
+by-url
+$ fls -0 firefox://localhost/ben/by-title
+Fedora Project, sponsored by Red Hat Fedora Project, sponsored by Red Hat
+... file:///usr/share/doc/HTML/index.html
+$ fls -0 'firefox://localhost/ben/by-title/Fedora Project, sponsored by Red Hat'
+dom
+images
+links
+$ fls --show-ea=name,width,height \
+ 'firefox://localhost/ben/by-title/Fedora Project, sponsored by Red Hat/images'
+Fedora_Desktop.png 800 600
+header-download.png 36 36
+header-faq.png 36 36
+header-fedora_logo.png 110 40
+header-projects.png 36 36
+important.png 34 34
+note.png 34 34
+tip.png 34 34
+warning.png 34 34
+$ ferriscp 'firefox://localhost/ben/by-title/Fedora..../images/warning.png' /tmp/tmpimg3
+$ fls -0 'firefox://localhost/ben/by-title/Fedora Project, sponsored by Red Hat/links'
+1. Welcome to Fedora Core 4 file:///usr/share/...
+1.1. New in Fedora Core 4 file:///usr/share/...
+...
+$ fls -0 'firefox://localhost/ben/by-title/Fedora Project, sponsored by Red Hat/dom/HTML/BODY'
+DIV
+DIV--1
+DIV--2
+DIV--3
+$ fcat 'firefox://localhost/ben/by-title/Fedor...at/dom/HTML/BODY/.../DIV/H1'
+Fedora Core 4 Release Notes
+$ echo hi there | ferris-redirect -T 'firefox://localhost/ben'
+# new tab showing virtual document is now shown in FF.
+
+ 
+
+2.3. How do I mount LDAP?
+^
+
+Assuming you have an LDAP server setup, for example something like openLDAP is setup and you know you can view entries from the command line. For info on setting up openLDAP see the Quick-Start Guide.
+
+The below example assumes you have a very simple setup as described in the Quick-Start guide mentioned above. Prior to libferris version 1.1.80 you should run ferris-capplet-auth and create a localhost server setting the LDAP basedn to your local basedn, for example something like "dc=my-domain,dc=com" or check the "lookup basedn from server" for localhost. As of libferris 1.1.80 and above, if there is no explicit basedn for the server the default is to "lookup basedn from server". This new default should work well for servers which allow anonymous bindings.
+
+
+
+$ fls ldap://
+localhost
+$ fls ldap://localhost
+Manager
+$ fls --xml ldap://localhost
+<ferrisls>
+<ferrisls url="ldap:///localhost" name="localhost" >
+ <context name="Manager" objectClass="organizationalRole" cn="Manager" />
+</ferrisls>
+</ferrisls>
+
+2.4. Extra steps for maemo?
+Active views don't work on some maemo versions which as of late 2010 includes the n900. You can turn these off using:
+
+echo -n ".*" | ferris-redirect -T ~/.ferris/general.db/cfg-force-passive-view
+
+
+ 
+
+3. Migration from old ferris versions
+3.1. How do I update my personal RDF store from 1.1.72 to 1.1.80 format?
+^
+
+Instead of attaching out of band EA directly to a URI in libferris 1.1.80 it is attached to a unique metadata bundle and files in the filesystem are associated with metadata bundles to find their EA and remembrance data.
+
+In the migration subdirectory is a client called convert-myrdf-1172-to-1173 which when run with no arguments will update the structure of your personal RDF store in ~/.ferris.
+3.2. Remembrance RDF has changed in 1.1.71 from 1.1.70, can I update my existing RDF store to the new format?
+^
+
+Some of the URL nodes in 1.1.70 were literal nodes instead of URI nodes. It's not legal RDF the way it was and its fairly mechanical to update this issue. The other major change is that command line arguments are now quoted for use in bash etc in stored command history. There is no easy mechanical update for this part.
+
+
+
+# put this into 1171.awk
+BEGIN {
+ FS=", [\\(\\[]"
+}
+{
+ subj=$1;
+ pred=substr( $2, 0, length($2)-1 );
+ obj =substr( $3, 0, length($3)-2 );
+ 
+ if( length( $pred ) && length( $obj ) )
+ {
+ print "rdfproc myrdf add \"" subj "\" \"" pred "\" \"_:" obj "\"";
+ }
+}
+
+ 
+
+
+
+$ cd ~/.ferris/rdfdb
+$ rdfproc myrdf find - ferris-file-view-history - \
+ | sed 's/Matched triple: {//g' \
+ | awk -f 1171.awk \
+ | bash
+
+ 
+
+Don't forget to check out remembrance:// and branchfs-remembrance added in 1.1.71. With these you can query for files recently viewed and see the view and edit history for each file respectively. Using ferris-file-action -v will perform a "view" action on a file which will cause an entry for viewing in both of the above query filesystems.
+3.3. older than 1.1.15 to 1.1.16: myrdf:// is empty
+^
+
+In ferris 1.1.16 the "myrdf://" URL resoves to "~/.ferris/rdfdb/myrdf" instead of just the directory. This means that a database name "myrdf" is being used to access the default RDF database. You should be able to rename the RDF/bdb files giving them a myrdf prefix and all is well.
+
+
+
+$ cd ~/.ferris/rdfdb
+$ mv -p2so.db myrdf-p2so.db
+... and so on for other db files
+
+ 
+
+If you are still getting errors listing myrdf:// then assert the following triples using the redland RDF command below. You should have this command as libferris requires the redland library to build. These commands may be supplemented in later libferris builds when RDFS is taken more into account.
+
+
+
+$ cd ~/.ferris/rdfdb
+$ rdfproc myrdf add 'http://witme.sf.net/libferris-core/0.1/myrdf-p2so.db' 
+ 'http://witme.sf.net/libferris-core/0.1/start' 'http://witme.sf.net/libferris-core/0.1/base'
+$ rdfproc myrdf add 'http://witme.sf.net/libferris-core/0.1/myrdf-po2s.db' 
+ 'http://witme.sf.net/libferris-core/0.1/start' 'http://witme.sf.net/libferris-core/0.1/base'
+$ rdfproc myrdf add 'http://witme.sf.net/libferris-core/0.1/myrdf-so2p.db' 
+ 'http://witme.sf.net/libferris-core/0.1/start' 'http://witme.sf.net/libferris-core/0.1/base'
+$ rdfproc myrdf add 'http://witme.sf.net/libferris-core/0.1/myrdf-sp2o.db' 
+ 'http://witme.sf.net/libferris-core/0.1/start' 'http://witme.sf.net/libferris-core/0.1/base'
+
+ 
+
+4. Indexing filesystems and querying them
+4.1. I am seeing exceptions in the output of feaindexadd or findexadd which contain some files which have non ascii chars in their names.
+^
+
+Unix makes no assumptions about what character encoding your filenames are in. However, most Linux installations use UTF8 for filename encoding. libferris assumes that your file and directory names are encoded in UTF8. This "just works" most of the time.
+
+You can try making a copy of the file and renaming it using a tool such as convmv. With convmv you can automatically convert whole directory trees to have the same name but use the UTF8 encoding.
+
+See also here for more information on unicode and Linux.
+4.2. Creating PostgreSQL EAIndexes is failing with something about language not found and mentioning createlang?
+^
+
+To make adding new files to the database and reindexing files fast libferris uses some PLSQL 4GL code with the database. The PostgreSQL indexing module creates a new database with tables and indexes and as part of setting up that database it adds some server side PLSQL functions. You will need to have enabled PLSQL as the default for new databases for libferris to be able to add its PLSQL to the new database.
+
+You can do this by issuing as root
+
+
+
+# createlang -d template1 plpgsql
+
+ 
+
+Future versions of libferris may install a template database with plsql enabled in it by default so that you don't have to enable plsql scripting as the defualt for new databases. Patches accepted :)
+4.3. Creating PostgreSQL TSearch2 fulltext indexes is failing, is there anything I need to do to setup TSearch2?
+^
+
+The TSearch2 fulltext module will create its database from a specific template database. The template database is assumed to be setup to allow for TSearch2 functionality.
+
+You can do this by issuing as root
+
+
+
+# psql template1
+template1=# create database ferrisftxtemplate;
+template1=# \q
+# psql ferrisftxtemplate </usr/share/pgsql/contrib/tsearch2.sql
+# psql ferrisftxtemplate;
+ferrisftxtemplate=# grant all on table pg_ts_cfg to public;
+ferrisftxtemplate=# grant all on table pg_ts_cfgmap to public;
+ferrisftxtemplate=# grant all on table pg_ts_dict to public;
+ferrisftxtemplate=# grant all on table pg_ts_parser to public;
+ferrisftxtemplate=# VACUUM FULL;
+ferrisftxtemplate=# update pg_database set datistemplate = true where datname='ferrisftxtemplate';
+
+ 
+
+It would be nice to be able to make the pg_ts_* tables owned by the user who creates a new database from the template. This functionality will be added to libferris when PostgreSQL supports ownership changes for tables in template databases.
+4.4. What is this Formal Concept Analysis crazy thing you mention and how do I take advantage of it with libferris?
+^
+
+Formal Concept Analysis (FCA) is a data driven method to derive a lattice exposing the natural clustering in the input data. Once you have built a very large index with libferris you can easily pose one off questions like "find me all files less than 3 disk blocks in size". Using FCA you can pose many such questions, perhaps adding a time dimension to the above query to see if there was a particular time that a bunch of small files was spewed onto your drives.
+
+I'll spare the details of FCA because there are already many books explaining it from maths and comp sci perspectives. To use FCA with libferris you first have to create an EA index. This step is explained in some detail in the Feb 2005 issue of the Linux Journal.
+
+You'll also need to download, compile and install apriori-4.24-pg.tar.bz2 from the witme.sf.net downloads page. The PostgreSQL enchancements in this package are being fed back into the mainline apriori distro by Christian Borgelt.
+
+Given the path to your EA index, say EAPATH, creating a virtual filesystem using FCA is really quite easy. The below command creates a new virtual filesystem called testB using the EAPATH to the existing EA index.
+
+
+
+$ ferris-create-fca-tree --index-path=EAPATH --treename=testB \
+small_size '(size<=100)' \
+... \
+gnome_nameof '(url=~.*gno.*)'
+
+ 
+
+In the above command you are creating a virtual filesystem tree and specifying which attributes you are most interested in. You can have as many attributes as your machine specification allows (start with 10 or so and play around). The attributes are in the form of SQL_NAME ffilter. Where SQL_NAME has to pass as a SQL column name and the ffilter is a standard ferris filter/search string that you would use in feaindexquery.
+
+Once the above command has completed you can start using your new FCA filesystem with anything that takes advantage of libferris, for example, ferrisls. The FCA filesystems are exposed using the PostgreSQL database name as part of their path. So the below assumes that pgfoodb is the backing database that the EA index at EAPATH is using. The minus -0 option is like -l but tells ferrisls to show the metadata that the filesystem itself thinks is interesting instead of the metadata like protection, mtime, owner, group etc.
+
+
+
+$ ferrisls -0 fca://localhost/pgfoodb/testB
+
+ 
+
+In the directory you'll find subdirectories and two special subdirs "-all" and "-self" which show you the files that match the query for the current directory. The difference is that "-all" shows you files which might match the queries for some subdirectories, whereas "-self" shows only the files that do not match any subdirectories.
+
+The ego file manager also supports using the FCA virtual filesystems. The "Ext" column shows the number of files which match any given directory. See the FCA sidepanel in action.
+5. Its crashing or giving incorrect behavior
+5.1. When I read a directory with libferris it locks the CPU at 100% and doesn't seem to get anywhere after a very long time.
+^
+
+If you have logging set to DEBUG for many things then this can make things take a very long time even though things are progressing. Use ferris-capplet-logging to set the logging to none for all by setting the all slider to none. Try the same thing again to see if you were just logging a lot of information and getting slow response.
+
+Some versions of gamin such as 0.1.7 are known to cause problems with libferris. If you are getting libferris clients eating 100% CPU when reading kernel (file://) or NFS directories then update to 0.1.8-3 from Fedora Development to resolve this issue.
+5.2. I'm getting SEGV when any client app closes!
+^
+
+Have you made sure that only one version of Berkeley db (aka sleepycat db, aka db-4.0, db-4.1) is linked?
+
+For the most part libferris itself tries to use libstldb4 which itself includes a version of db4.1 which has a unique name and will not conflict with other versions.
+
+As at 1.1.12 both the redland RDF library and sleepycat's dbxml use berkeley db. dbxml requires db-4.1 and redland can use anything from version 1 to 4.1 (though as this is being written the earlier version support may not be around much longer). There can be many versions of db in the same app as long as each version of db has been compiled with a different --use-uniquename which the current (Oct 2003) dbxml can not do. The easiest thing to do is to configure your redland to use the db-4.1 that your dbxml is using. This can be done by downloading the redland src.rpm file, rpm2cpio'ing it modifying the specfile and rpmbuilding redland again.
+
+
+mkdir -p /tmp/redland-dbx
+cd /tmp/redland-dbx
+rpm2cpio /whereever/redland-0.9.13-3.src.rpm |cpio -id
+# edit redland.spec to include this with your adjusted paths in its configure line
+--with-bdb=/usr/local/dbxml/db4 --with-bdb-lib=/usr/local/dbxml/db4/lib 
+--with-bdb-include=/usr/local/dbxml/db4/include --with-bdb-dbname=db-4.1
+# rebuild redland from modified specfile.
+ 
+
+See also redland building directions.
+5.3. The clients all seemed very nice but all of a sudden many clients started crashing before doing anything interesting. How to fix it?
+^
+
+I noticed that sometimes the db files which redland uses to store your personal RDF can become corrupted. This mainly happens when libferris is changing your personal RDF and you kill the client while it is doing this. Unfortunately once the db files are corrupt you'll just notice things that used to work fine start giving you segvs.
+
+Check in ~/.ferris/rdfdb using db_verify that your db files are still OK. See this FAQ for how to move to using another redland backend for your RDF store such as Sqlite.
+5.4. I am having problems mounting PostgreSQL with libferris.
+^
+
+There has been a report that the hierarchical extensions in PostgreSQL don't work with the database mounting in libferris. The below error message was reported with hierarchical extensions problems.
+
+
+
+read() e:ERROR: unexpected right parenthesis
+
+read() e:ERROR: unexpected right parenthesis
+
+read() e:ERROR: unexpected right parenthesis
+
+ls.cpp cought:NoSuchSubContext, 836: Resolver.cpp virtual 
+Ferris::fh_context Ferris::RootContextFactory::priv_resolveContext(
+Ferris::fh_context, const std::string&amp;, const std::string&amp;) 
+Should never happen! rdn://localhost/tmp/foo rest:tmp/foo
+ For path:/localhost
+
+6. Implementation choices
+6.1. What is the point of this user address space virtual filesystem as apposed to traditional in kernel stuff?
+^
+
+Firstly, its not strange for a filesystem to not live in the kernel. Many micro kernel based operating systems have their filesystem as a seperate compontent from the kernel.
+
+By making the filesystem run in the user address space libferris can use shared libraries to provide its filesystem interface. For example, there is little change of an XML parser getting into the mainline Linux kernel and if it did then it would surely be a limited XML parser. Having libferris not in the kernel gives access to XML parsers, ODBC drivers and many other libraries that are not candidates for kernel inclusion.
+6.2. So how can I get at libferris from legacy apps?
+^
+
+There are two main styles. Either using a LD_PRELOAD hack to override libc functions and switch between the original function and using libferris in the new trampoline function or by exposing libferris as an NFS or CODA server and having the kernel mount it.
+
+There are already a great deal of projects around that allow one to expose a user address space virtual filesystem to legacy applications should you require this. See this part of my links for starters.
+6.3. Why did you use C++ instead of C, Java or whatever?
+^
+
+ANSI C is a rather nasty choice because it lacks nice generic containers, clean stream abstractions, and even a basic string class. It seems that there are some who "ewww" at libferris because its coded in C++ but they can always just use gnome-vfs if language choice is their primary decision point.
+6.4. Your using libX for your X plugin but I like to use libY to look at that kind of data. Any chance of changing?
+^
+
+If you use a different library to access it then your best bet is to copy the existing plugin into a new dir and modify it to use your favourate library. Patches for conditional build will most likely be accepted.
+
+An example of this would be to make a libxml2 plugin for mounting XML data instead of using xerces-c.
+6.5. How does ferris-out-of-proc-notification-deamon communicate?
+^
+
+Using named pipes. A named pipe is created by the daemon and data that is read from that pipe is sent to all clients but the one that wrote the message.
+6.6. What is sent to other libferris applications by ferris-out-of-proc-notification-deamon?
+^
+
+Information about what emblems are attached to a file, changes made to the contents of various filesystems such as db4.
+
+Using this a GUI client can just watch a path within a db4 file and see the changes that a command line tool makes to the contents of that db4 file. This was originally added so that filesystems like apps:// can be links to db4 files in ~/.ferris but clients are not effected by this choice, ie. clients are independent of how apps:// is stored they just respond to "created" events and don't care how they are generated.
+6.7. Are you supporting the freedesktop.org shared VFS standard?
+^
+
+As of Sep 2003 there is a thread on the freedesktop xdg mailing list about having a standard interface for both gnome-vfs and KDE's kio. I will most probably include support in libferris for the freedesktop standard when (A) the design of the shard VFS is complete (B) I have the time.
+
+Note that such support will probably not unlock all the flavor of libferris simply because there are features in libferris that are not available in KDE/GNOME.
+6.8. Since libferris uses some Boost code, why does libferrisstreams exist instead of just using boost::iostreams?
+^
+
+The short answer is that ferrisstreams predates boost::iostreams. The 0.2.0 release of ferrisstreams was made in May 2003. The ferrisstreams code itself came into existance from the Streams.hh and Streams.cpp files in earlier libferris releases.
+
+Also now that boost::iostreams exists there are probably different design goals for it and ferrisstreams. That said, you can happily use both libraries together :) The below is a little snip of code showing just this sort of thing.
+
+
+
+namespace io = boost::iostreams;
+using namespace boost;
+
+...
+
+ io::filtering_istream in;
+
+ regex pattern( "foo(.*)bar" );
+ in.push(io::regex_filter(pattern, "ZZZ" ));
+
+ // push a libferris stream on as the data source.
+ fh_ifstream iss("my_file.txt");
+ in.push( iss );
+
+ copy( istreambuf_iterator<char>(in),
+	 istreambuf_iterator<char>(),
+	 ostreambuf_iterator<char>(cout));
+
+	 
+
+The code in ferrisstreams will probably remain seperate from boost::iostreams. Some functionality that boost::iostreams has will likely even be reimplemented in ferrisstreams, for example, recently a TeeOStream was added to ferrisstreams.
+6.9. Are there any wrappers for perl, python, php, mono, java, scheme?
+^
+
+As at 1.1.11 a reasonable SWIG interface file was created. At the time wrappers for both perl and python were integrated into the build environment. Pass --with-swig-perl to generate the perl bindings and for python use the following two --with-swig-python-version=python2.2 --with-swig-python-prefix=/usr for ./configure
+
+The main challenge left in the wrapper is to try to expose the glory of IOStreams to perl/python. The smart pointers and other STL type stuff is already handled.
+
+I might add in some more languages which should be reasonably easy to do now that the main SWIG interface file is created.
+7. General questions
+7.1. It seems to run very very slowly sometimes (or always).
+^
+
+Run the ferris-capplet-logging client and make sure you have your logging levels set to something reasonable. Grabbing the "all" slider and moving it to None will set everything to do no logging. Something like Notice or less for things should be a nice choice.
+7.2. How can I edit a file from a libferris virtual filesystem using my current text editor (libferris version 1.1.80+).
+^
+
+There are many ways, ferris-file-to-fifo is the simplest way to edit a file from a libferris filesystem in an editor which is capable of editing files from fifos (eg. vim). The more advanced answer is to use the Samba VFS module to export the interesting part of your filesystem to Samba and then use the kernel's ability to mount Samba to expose your libferris to standard applications.
+
+The below shows how to edit part of a tuple from a PostgreSQL database using vi. If someone knows the magic to make (x)emacs happily edit a fifo and write the update in place then drop me a line and I'll add info here. Any client that follows the read-it-all, do something, write-it-all back will work with ferris-file-to-fifo. Use ferris-redirect if you just want to write data to a file and fcat to get just the reading part.
+
+
+
+psql
+=# create database play;
+play=# \c play;
+play=# create table msgs ( id serial primary key, msg varchar(1024) );
+play=# insert into msgs values ( default, 'hello there' );
+play=# \q
+bash$ vi $( ferris-file-to-fifo --ea msg pg://localhost/play/msgs/1 );
+# modify the varchar data and ZZ to update database.
+
+	 
+
+7.3. Can I bind the default view and edit action for a file based on arbitrary metadata (libferris version 1.1.81+).
+^
+
+The usual system is to determine what action to take for view and edit operations for a file based on the Mimetype of that file. In libferris 1.1.81 this was extended to allow for the action to be determined by any metadata about the file. For example, you might wish to stretch video which is in 4:3 aspect ratio to fill your 16:10 monitor. The below gives an example of how to setup this sort of binding. As you can see from the example the selection of action is based on an arbitrary matching predicate for the file. Using ferrisls with the --show-ea option is quite handy for determining what your predicates should be.
+
+
+
+$ fmkdir -p mime://filtered-bindings
+$ fmkdir -p mime://filtered-bindings/box-video
+$ echo '(&(is-animation-object==1)(name-extension==avi)(aspect-ratio<=1.6))' \
+	| ferris-redirect -T mime://filtered-bindings/box-video/ffilter
+
+	 
+
+Once the above is run you will need to link the application which is run for view and edit in some manner. The simplest way to do this is to right click on a file which matches the above predicate in ego and use the "Edit Actions" menu to select the application you wish to associate with files matching the predicate.
+
+Another possibility is to use emblems to explicitly select the default applications for files. If you have a 1610 emblem which you attach to files you want to override to be shown in 16:10 with scaling then you can use a simple predicate such as (emblem:has-1610==1) as the ffilter in the above example and decide which files to scale by default by attaching this emblem to those files.
+7.4. Is there a top level filesystem that controls them all?
+^
+
+You can step into other filesystems from the root:// filesystem. The paths and URLs become a little strange when you do this because the filesystems you are stepping into expect to be top level schemes. For example the file:// URL handler expects something at path /var to be able to be lstat()ed which is not the case using its root:// path of root://file/var.
+
+This restriction means that root level URLs are not usable as round trip URLs. A root://file/whatever will always give the same file but if its read that files URL then you will likely get x-ferris://whatever insead of its root:// level URL.
+
+One of the main motivations for the root:// scheme is for query schemes to build on. For an example of this see the XPath point in this FAQ.
+7.5. How can I find out what context plugins I have?
+^
+
+The best way is with the context:// filesystem. You can see some of them listed in the root:// filesystem too. Be aware that contexts that only support being mounted over other contexts will not appear in root://. For example, db4 and xml plugins are only listed in context:// because they both require the presence of another filesystem to work properly (ie. the read bytes from a file and turn that into a filesystem for you).
+
+
+$ ferrisls context://
+ 
+
+7.6. How can I get the agents to work?
+^
+
+In the build there should be a capplet at cc/capplets/agents/ferris-capplet-agents which will let you setup your agents. As of 1.1.10 there are only binary classification agents, this means that the agent will be able to train on the attachment of one emblem to files and then offer a guess as to if a new file should have that emblem or not. Use the capplet to create an agent, give it a statedir someplace in your home directory and tell it what implemenation to use, I recommend svm_light. You tell the agent what emblem to train on and use for predictions in the capplet too.
+
+Training and predictions are doing using apps/ai/fagent. First you should train an agent using a bunch of files that you have manually tagged with an emblem (use fmedallion to tag files from the command line). Then for the agent you will have to train it with the following.
+
+
+$ fagent -t -a myagent list-of-files
+ 
+
+After the agent is trained you can have it express its optinion by running the following
+
+
+$ fagent -a myagent list-of-files
+ 
+
+myagent is the agent's name that you assigned in the capplet when creating new agents. Each agent must perform its own training and should have a unique statedir.
+7.7. What is the format for time strings?
+^
+
+As of libferris 1.1.31 the time string formats were updated and enhanced. A time string now consists of two major parts, an absolute time and a relative time. Both parts are optional though must occur in that order if they are both present. If the absolute time is not present then the current time is used as the absolute time, for example, "+ 1 month" will give you a time that is a month from whenever it is used.
+
+An aside for the advanced users: the code now uses a Recursive Decent Parser provided by the Spirit part of the Boost library. The Spirit parser is defined with a syntax that is close to BNF, the source is in Ferris/General.cpp which will give you a complete idea of the syntax.
+
+An absolute part is the definition of time based on a fixed point. Extensions are included so that the absolute time can be taken from a time EA in a file, for example, you can set the absolute time to be the modification time of a file.
+
+In the below examples, tests/timeparsing/timeparse takes as the first argument a time string that libferris can understand and prints out the time now (relv) and the resulting time from the provided time string (tt). The getea function can be used to read a time value from another file as the absolute time, there are mtime and atime functions which get the modification and access time for the supplied URL. For mtime and atime you don't have to use parenthesis but when they are omitted then you must quote the URL with either matching single or double quotes.
+
+
+$ cd ./tests/timeparsing/
+$ ls -l timeparse.cpp
+-rw-r----- 1 foo bar 3435 Sep 28 16:17 timeparse.cpp
+$ ./timeparse 'mtime "timeparse.cpp"'
+Input:mtime "timeparse.cpp" tt:1096352223
+Output:04 Sep 28 16:17
+
+$ ./timeparse '2004 feb 15'
+Input:2004 feb 15 tt:1076767200
+Output:04 Feb 15 00:00
+
+$ ./timeparse '2002/mar/30'
+Input:2002/mar/30 tt:1017410400
+Output:02 Mar 30 00:00
+
+$ ./timeparse '2002/3/30'
+Input:2002/3/30 tt:1017469405
+Output:02 Mar 30 16:23
+
+$ ./timeparse '5/30'
+Input:5/30 tt:1085898229
+Output:04 May 30 16:23
+
+$ ./timeparse 'getea(timeparse.cpp,atime)'
+Input:getea(timeparse.cpp,atime) tt:1098026697
+Output:04 Oct 18 01:24
+
+# only 0X dates are accepted as two digit.
+$ ./timeparse '05-12-25'
+Input:05-12-25 tt:1135491904
+Output:05 Dec 25 16:25
+
+
+ 
+
+Relative times allow you to move the absolute time by a positive or negative offset in a unit of time. Such offsets can be chained together, for example, "+1month -3 days" moves by a month and back 3 days. The plus and minus signs are optional in the past example. You can also use "ago" as a postfix operator, for example, "3 days ago" will do what you think.
+
+Yesterday, today, and weekdays are also valid inputs. Be aware the weekdays are for the current week, so if its Thursday then Friday will return tomorrow.
+
+There are last/next and begin/end last/next prefixes. For example, "begin last week" will return the time when last week started. Most strings have both the full version like "beginning of next" and the short version like "bnext".
+
+
+$ date
+Wed Oct 20 16:25:23 EST 2004
+
+$ ./timeparse 'bnext month'
+Input:bnext month tt:1099231200
+Output:04 Nov 1 00:00
+
+$ ./timeparse 'beginning of next month'
+Input:beginning of next month tt:1099231200
+Output:04 Nov 1 00:00
+
+$ ./timeparse 'blast month + 4 days'
+Input:blast month + 4 days tt:1094306400
+Output:04 Sep 5 00:00
+
+$ ./timeparse 'elast month 5 days'
+Input:elast month 5 days tt:1096984799
+Output:04 Oct 5 23:59
+
+$ ./timeparse '+13 days'
+Input:+13 days tt:1099376769
+Output:04 Nov 2 16:26
+ 
+$ ./timeparse '+13 days+2months'
+Input:+13 days+2months tt:1104647179
+Output:05 Jan 2 16:26
+
+$ ./timeparse 'enext month-2days'
+Input:enext month-2days tt:1101650399
+Output:04 Nov 28 23:59
+ 
+
+And a final example of the combination of absolute and relative time.
+
+
+$ date
+Wed Oct 20 16:25:23 EST 2004
+
+$ ./timeparse '2004-nov-13 + 2 days - 1 month'
+Input:2004-nov-13 + 2 days - 1 month tt:1097762400
+Output:04 Oct 15 00:00
+
+$ ./timeparse 'mtime "/var" - 1 month'
+Input:mtime "/var" - 1 month tt:1090317520
+Output:04 Jul 20 19:58
+ 
+
+7.8. Is there a FUSE (fuse.sf.net) module for mounting libferris through the kernel?
+^
+
+As of libferris 1.1.93 there is a ferrisfuse 0.0.1 module which allows you to export your libferris filesystem to fuse.
+
+The three major things that you should think of feeding to the ferrisfuse module are: the libferris URL to expose, the mountpoint to access this filesystem through the kernel with and a regex of what to force to be seen as a file.
+
+The regex is there because libferris doesn't force a distinction between a file and a directory unless it really needs to. Consider an XML file, if you fcat this file then it appears like a file with byte contents, if you ferrisls it then you will see a virtual filesystem which exposes the structure of the XML file. You can use the regex to force the ferrisfuse module to say this is a file even though libferris can potentially treat it like a directory as well.
+
+An example usage would be:
+
+
+
+ferrisfs --url file://tmp \
+ --force-to-file-regex=".*\.xml" \
+ ~/ferrisfuse/mountpoint
+
+If you wanted to expose an xsltfs:// manipulation which creates a virtual (and updatable) office document from a mounted PostgreSQL table you could do the following...
+
+
+
+# use the msgs table in the play database
+$ ferris-filesystem-to-xsltfs-sheets \
+ --plugin excel2003 \
+ 'postgresql://localhost/play/msgs' \
+ --fuse test1
+
+# this script and mountpoint dir were created by the above command
+$ cd ~/ferrisfuse
+$ ./mount-test1.sh
+$ cat test1/msgs.xml
+$ ...
+$ ooffice test1/msgs.xml
+# update the file in OpenOffice and 'save' it to update your database.
+
+7.9. What is this xsltfs?
+^
+
+With xsltfs you can transform an input virtual filesystem into an output virtual filesystem using XSLT. Note that editing in the output filesystem can also be reflected in the input filesystem.
+
+For a simple example of this consider that the input filesystem is a mounted PostgreSQL table. Using XSLT we can create a output filesystem which is an office spreadsheet document. If we then edit this document and save it then changes are reflected in the input filesystem. In effect we can edit our database table by updating a virtual office document. See the information in the fuse entry for how to set this up.
+
+You can use the xsltfs on other input sources than PostgreSQL as well. Consider for example editing RDF in OpenOffice through a kernel mounted xsltfs:// using libferris' ability to mount RDF.
+8. Using libferris from bash
+8.1. How can I present two filesystems and see the diffs as a filesystem?
+^
+
+Assume that you have two versions of the same filesystem under /tmp by the names of the before and after subdirectories. The following command will show you what files were added or removed and for the files that have changed the unidiff will be presented. Note that there should be no line break in the --show-columns parameter. ./ferrisls --show-headings -lh diff://file://tmp/before/file://tmp/after \ --show-columns="name,size-human-readable,is-same,was-created,\ was-deleted,is-same-bytes,unidiff,different-line-count"
+
+Note that the diff:// filesystem can work with any underlying filesystem. For example if you have a MySQL database and a remote replica of it (like a local working database and a version on the Internet) then you can get the diff:// of a table or the result of the same SQL query on both databases.
+
+Another interesting example is checking a remote ftp or http site against a local copy.
+8.2. How can I see and modify what emblems are attached to a file?
+^
+
+The command line tool apps/fmedallion/fmedallion. The --help page is rather informative for this. This tool should be installed by default. example: FIXME
+8.3. How do I interact with the file clipboard from the shell?
+^
+
+A collection of tools in apps/fileclip/ provide cut, copy, paste, undo and redo support. These should be installed by default. example: FIXME
+9. A view from an RDF perspective
+9.1. What is implicit tree smushing and how can I take advantage of it? (libferris version 1.1.80+).
+^
+
+At times the same data is available to users given different URLs. For example, this website exists both locally on my hard disk and on sourceforge.net. Another classic filesystem example is data that is available via NFS from many different mount points.
+
+Running the cc/capplets/rdf/ferris-capplet-rdf client you can setup bundles each of which has a set of regular expressions to match against file URLs. For example, I'll create a foo bundle and set the following regexes with the aim of implicitly unifying the metadata associated with the happy-project in my home directory with the backed up version on the network.
+
+
+
+file:///home/.*/happy-project
+file://Network/backedup/home/.*/happy-project
+
+	 
+
+With the above in place the following commands demonstrate that metadata is implicitly unified for the same file in both locations. There is a performance hit the first time metadata that requires unification is sought for a URL. This is implicit tree unification because it is done by libferris for you implicitly, smushing is based on regular expression sets which determine tree paths, and smushing actually links both files to the same base metadata node in your RDF store.
+
+
+
+$ cd ~/happy-project
+$ touch main.cpp 
+$ echo bar1 | ferris-redirect -T --ea foo1 main.cpp 
+$ cd /Network/backedup/home/`ud -un`/happy-project
+$ fcat -a foo1 main.cpp 
+bar1
+$ 
+
+	 
+
+9.2. Can I smush two files metadata together? (libferris version 1.1.80+).
+^
+
+The main client for this is ferris-rdf-smush-new-url. You have two main choices; copy existing metadata from one URL to another, or explicitly bind the two URL's to the same metadata base node. Doing the first will copy the metadata as it is now but preserve any existing metadata in the target URL. Binding the two URLs to the same metadata note means that any changes in the future made to the metadata of either URL will be made to the metadata for the other URL as well.
+
+Note that for ferris-rdf-smush-new-url a file does not have to exist at oldurl but one should at newurl. This is to allow metadata which was "left behind" from a file move that happened outside of libferris to be reconnected to the new file.
+
+
+
+$ # just copy metadata which doesn't exist in target
+$ # two files still have seperate metadata base nodes.
+$ ferris-rdf-smush-new-url oldurl newurl
+
+$ # The below command discards the metadata of newurl completely
+$ # the base metadata node of oldurl is then bound to newurl as well
+$ # thus future changes to either will be immediately reflected in the other
+$ ferris-rdf-smush-new-url --unify oldurl newurl
+
+	 
+
+9.3. Can I run a SPARQL query against myrdf store? (libferris version 1.1.80+).
+^
+
+Yes either put the query in a file and specify it is a file argument or pipe the query to stdin of ferris-myrdf-query.
+
+
+
+#
+# A simple SPARQL to find the value of the "foo1" EA for foobar cpp files.
+#
+$ cat /tmp/query
+PREFIX ferris: <http://witme.sf.net/libferris.web/rdf/ferris-attr/>
+
+SELECT ?uuid ?earl
+ WHERE {
+ ?earl ferris:uuid ?uuid . 
+ ?uuid ferris:out-of-band-ea ?bn . 
+ ?bn ferris:foo1 ?eavalue .
+ FILTER
+ regex( str(?earl), "^file:///foobar/.*\.cpp$")
+ } LIMIT 1
+
+$ cat /tmp/query | ferris-myrdf-query -
+
+	 
+
+9.4. Can I use another storage backend then the Berkeley db that is the default? (libferris version 1.1.81+).
+^
+
+Yes, this is setup through a small group of files in your .ferris/rdfdb directory. I've only tested this against the Sqlite backend though others should also work fine.
+
+
+
+#
+# How to switch to using sqlite for storage.
+#
+$ cd ~/.ferris/rdfdb/
+$ echo sqlite >ferris-storage-name
+$ echo ~/.ferris/rdfdb/myrdf >ferris-db-name
+
+	 
+
+There is also a file ferris-db-options which contains the options for the backend you are wanting to use. The last parameter to librdf_new_storage here, ie the line with host and user information should be put into your ferris-db-options if needed.
+10. A view from an XML perspective
+10.1. Can I just see the filesystem as a Document Object Model?
+^
+
+Yes you can. And whats more its a thin wrapper that is created on demand. This means that only the bits of the DOM that you look at are even created, and when created they still just reference the EA and byte content on disk. There is a somewhat natural mapping from Extended Attributes (EA) to attributes in XML and a files content to element content in XML.
+
+The current thin wrapper for DOM is likely to become faster in future libferris releases as it gets used in more and more XML stuff.
+10.2. Can I mount a Document Object Model as a filesystem?
+^
+
+Yes you can. This is currently done in a up front memory heavy mode as the DOM to fs mapping isn't used much by me.
+10.3. Can I mount an XML document as a filesystem?
+^
+
+Yes, you can also modify the XML file, add new attributes, elements, rename parts of the internal structure and have it saved back to disk.
+
+You'll also find that many of the command line tools will allow such modifications from scripts already.
+10.4. Can I apply an XSLT to a filesystem?
+^
+
+Yes you can. Just mount it as a DOM and apply the stylesheet with xalan-c.
+10.5. Can I have one libferris application which has mounted an XML file instantly see changes made to the XML document by another libferris application? (libferris 1.1.82+)
+^
+
+Yes. This feature is enabled by default for some plugins like db4. You have to explicitly turn it on for XML files as of libferris 1.1.82+. This is because journaling on XML files requires both metadata and the data itself to go through the journal. This can be slow depending on how large your data is in your XML file. For XML files which you are changing and don't really care about notifications journaling also brings extra overhead.
+
+To turn on full data and metadata journaling for an XML file simply set the libferris-journal-changes EA to 1 or true for the base XML context. For example, if I have an XML file foo.xml I just run the below command and any updates to a libferris filesystem for foo.xml should notify other libferris clients of these changes.
+
+
+$ echo 1 | ferris-redirect -T --ea=libferris-journal-changes foo.xml
+ 
+
+The default policy of only journaling when explicitly asked for can also be inverted. Note that this will mean ALL XML files will be journaled. This might be OK for you if you are not intending on writing large chunks of data to XML files with libferris. You can do this once for all libferris clients or selectively by setting an environment variable. The below shows examples of these two options.
+
+
+# all XML file changes are always journaled
+$ echo 1 | ferris-redirect -T ~/.ferris/general.db/always-journal-xml
+
+# lets set this shell only for all XML journaling
+$ export LIBFERRIS-ALWAYS-JOURNAL-XML=1
+$ ftouch ./example.xml/root/new1
+ 
+
+10.6. Are any interesting bits of libferris available to my XSLT pages?
+^
+
+Many interesting functions from libferris are exposed to XSL pages. Take a look into libferris-releasenum/xsltfunctions/ to see what is exposed, if you require any other libferris functions and you wrap them in a sensible way then patches are likely to be accepted into the mainline.
+
+The fnews RSS aggregator uses libferris functions from XSL pages so if your looking at doing that sort of thing you might wish to see how fnews does it currently.
+10.7. What about XPath version 1.0 or 2.0?
+^
+
+There is an xpath:// filesystem that allows selection of nodes via an XPath 1.0/2.0 expression depending on what version of libpathan you built your libferris with.
+
+The filesystem from xpath:// will start with each top level URL scheme and then you will decend into its tree. For example xpath:/file/var/tmp will be the same as /var/tmp in your filesystem using the file:// URL scheme. This allows one to use XPath expressions on http, mysql and ftp protocols aswell as file://.
+
+The keen eyed ferris user will note that the XPath query engine is attached to the root:// filesystem. Performing the following should give you a reasonable idea of how to proceed
+
+
+$ ferrisls -l --show-columns="name,path,url" root:// 
+file /file root:///file
+$ ferrisls -l --show-columns="name,path,url" 'xpath:/*' 
+file /file root:///file
+$ ferrisls -l --show-columns="name,path,url" 'xpath:/file/tmp/fakeroot/*' 
+test.tar.gz /tmp/fakeroot/test.tar.gz x-ferris:///tmp/fakeroot/test.tar.gz
+tmp /tmp/fakeroot/tmp x-ferris:///tmp/fakeroot/tmp
+tmp.tar.gz /tmp/fakeroot/tmp.tar.gz x-ferris:///tmp/fakeroot/tmp.tar.gz
+$ ferrisls -l --show-columns="name,path,url" 'xpath:/file/etc/*[@size<100]' 
+... pause ... results ...
+ 
+
+10.8. Can I use XPaths with ferriscd?
+^
+
+Yes. Whats more if your XPath expression selects more than one node then the first n-1 nodes are pushed onto the directory stack and then you are cd'ed into the last directory.
+
+Make sure that the ferriscd script is placed in /etc/profile.d and that it is sourced by bash.
+
+
+ cp libferris-release/apps/ferriscd/ferriscd /etc/profile.d/
+ . /etc/profile.d/ferriscd
+ 
+
+Then start using ferriscd instead of 'cd' to tell bash where to go. Currently you are limited to moving into directories that bash will like, which is limited to kernel readable locations like file://. I'll probably move bash itself over to the ferris side of the force sometime soon.
+
+
+ x] $ ferriscd 'xpath:/file/var/*'
+ yp] $ dirs
+/var/yp /var/tmp /var/spool /var/run ...
+ yp] $ popd
+tmp] $ pwd
+/var/tmp
+ 
+
+10.9. Can I use XPaths with other ferris tools?
+^
+
+ferriscd and ferrisls have native support for 'xpath:/' queries in libferris 1.1.6. A partial list of apps that will probably support xpath in the future are ferriscp, ferrismv, ferrisrm, fmkdir, ftouch, fcat, fclipcopy, fclipcut and fcompress.
+
+The problem is that the tool has to be aware that a parameter can expand into many parameters. In classic command line interfacing when a wildcard is presented in an invokation the shell expands the wildcard and passes this expanded version to the command line app as its argv. Since bash doesn't natively support xpath at current then command line apps that assumed a standard interaction model have a problem.
+
+The cleanest solution to this is to patch bash to support xpath expansion directly. This will most likely come to pass when I get the time to hack it.
+
+A stopgap solution is to use a script to invoke your tool and inline a call to ferrisls to resolve the xpath for you. All you need to do is to wrap where the URL is normally passed with something similar to funroll below. Note that it would be more general to use --show-columns="url" but by using the path we allow non ferris tools to access the xpath results.
+
+
+$ ferrisls -U --ferris-filter="" 'xpath:/*'
+dvd file ftp http ipc ldap mysql
+
+# resolve a xpath to a format suitable for inlineing in nonferris tools
+funroll() {
+ ferrisls -U --ferris-filter="" --record-seperator=" " \
+ --show-columns="path" $1 2>/dev/null
+}
+
+#
+# use fileutils 'ls' on the resolved xpath
+#
+$ ls -ld $(funroll 'xpath:/file/tmp/fakeroot/*[@size<300]')
+
+ 
+
+10.10. Is there anything like XLink in libferris?
+^
+
+You can use emblems and their partial ordering to obtain n-ary linking in libferris. This works by considering how one would have XLink like stuff in RDF and then thinking of emblem association as triples: File has-emblem emblemName. The linking only really works effectively when you add the files that are linked into the attribute index so that you can resolve links quickly.
+
+Hopefully a formal paper will be coming out sometime early next year explaining this in more detail.
+10.11. Why should I be interested in mounting my sleepycat dbxml files?
+^
+
+Once you mount them you can populate, modify and list them just like any other regular filesystem or XML source. Other than the admin gain, your applications can continue to use a nice STL iterator and IOStream interface while saving their data into an indexed XML store. Get 1.1.11 or later and you can mount dbxml today :)
+11. The ego filemanager
+11.1. Can I setup the order of the columns in the GTK Treeview to something else? (ego 0.12.2)
+^
+
+You set a partial order of column names and the current directory is run against this order to produce the final result. The partial order is specified in a db4 value. Columns are listed comma seperated in the order you wish them to appear in the final display, eg, name,foo,size means that name will be shown first and then size. If there is no foo column in your current directory then size will follow name and be just to the right of it in the display.
+
+The below example will make sure that the emblems and treeicon always proceed the name of a file in your display. Unmatched columns will appear to the right of any explicitly ordered columns.
+
+
+
+$ cd ~/.ego
+$ echo emblem:emblems-pixbuf,treeicon-pixbuf,is-unseen,name, \
+| ferris-redirect -T general.db/column-display-partial-order
+
+ 
+
+11.2. Can I change the label used for a particular EA in ego's column headers? (ego 0.12.2)
+^
+
+This is handled using a key=value config setting in your ~/.ego/general.db file. The format is much like that of CGI parameters where each key=value is seperated by and ampersand. Since the is-unseen EA is binary it is nice to have a shorter column name for it so that column can be nice and narrow. Also the more verbose EA of size-human-readable is nice to know the content of the EA but it is also nice to shorten that down for normal display in ego.
+
+
+
+$ cd ~/.ego
+$ echo 'is-unseen=F&size-human-readable=sizeh&mtime-display=mtime&protection-ls=prot' \
+| ferris-redirect -T general.db/column-rename-mapping
+
+ 
+
+12. Some light hearted questions
+12.1. When is the animal book on this coming out?
+^
+
+Um, ar, well... sometime after ORA commision me to work on it :)
+12.2. I think libferris and ego are so great I want to make a donation. How can I do that?
+^
+
+If its a small donation using the sf.net donation system is fine. I'm also happy to have companies directly sponsor additions to libferris if there is mutual interest.
+12.3. Why are you writing libferris and ego?
+^
+
+It won't write itself!
+
+Well... seriously, because I like the topic enough to spend the time.
+ 
+
