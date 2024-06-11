@@ -1,3 +1,8 @@
+Libferris is a virtual filesystem that runs outside of the kernel.
+Many programs such as ls, cp etc have custom versions such as ferrisls
+which operate directly on a libferris filesystem. You can also mount
+libferris through FUSE to allow normal Linux kernel access.
+
 Make sure you have run the following
 $ ferris-first-time-user  --setup-defaults
 to setup each user who is going to use libferris. 
