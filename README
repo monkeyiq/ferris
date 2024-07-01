@@ -3,6 +3,12 @@ Many programs such as ls, cp etc have custom versions such as ferrisls
 which operate directly on a libferris filesystem. You can also mount
 libferris through FUSE to allow normal Linux kernel access.
 
+Metadata on files is offered through an Extended Attribute interface.
+The metadata might be directly stored or it may be made available on
+demand. For example, the width of an image may be figured out by
+understanding the image format. That might be offered simply as the
+"width" attribute for supported images.
+
 Make sure you have run the following
 $ ferris-first-time-user  --setup-defaults
 to setup each user who is going to use libferris. 
