@@ -1,3 +1,6 @@
+libferris is an attempt to offer a filesystem like interface to
+everything.
+
 Libferris is a virtual filesystem that runs outside of the kernel.
 Many programs such as ls, cp etc have custom versions such as ferrisls
 which operate directly on a libferris filesystem. You can also mount
