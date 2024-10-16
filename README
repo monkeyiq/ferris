@@ -1,5 +1,8 @@
 libferris is an attempt to offer a filesystem like interface to
-everything.
+everything. Many familiar command line tools have been written
+to take advantage of the extended features offered by libferris.
+These include the extraction of metadata, the ability to look into
+files as directories automatically, custom top level URL schemes.
 
 Libferris is a virtual filesystem that runs outside of the kernel.
 Many programs such as ls, cp etc have custom versions such as ferrisls
