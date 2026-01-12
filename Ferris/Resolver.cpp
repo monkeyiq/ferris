@@ -1185,7 +1185,7 @@ namespace Ferris
             stringlist_t pluginlist;
             if ((d = opendir ( SystemPluginDir.c_str() )) == NULL)
             {
-                LG_PLUGIN_ER << "Can not open system plugin dir :" << SystemPluginDir << endl;
+                cerr << "Can not open system plugin dir :" << SystemPluginDir << endl;
                 return;
             }
             while ((e = readdir (d)) != NULL)
@@ -1194,7 +1194,6 @@ namespace Ferris
                 pluginlist.push_back(fn);
             }
             closedir (d);
-
 
             for( stringlist_t::iterator pi = pluginlist.begin();
                  pi != pluginlist.end(); ++pi )
