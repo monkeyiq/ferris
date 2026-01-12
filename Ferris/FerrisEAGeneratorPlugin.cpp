@@ -74,6 +74,7 @@ namespace Ferris
 //         {
 //             std::cerr << "matches" << std::endl;
 //         }
+        return true;
     }
 
     FERRISEXP_API void

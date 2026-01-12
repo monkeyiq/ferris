@@ -56,12 +56,14 @@ namespace Ferris
                                  const std::string& libname )
     {
         getFromMimeMap().insert( make_pair( mimetype, libname ) );
+        return true;
     }
     
     bool RegisterAsTextFromFerrisType( const std::string& mimetype,
                                        const std::string& libname )
     {
         getFromFerrisTypeMap().insert( make_pair( mimetype, libname ) );
+        return true;
     }
 
     bool RegisterAsTextFromMatcher(
@@ -69,6 +71,7 @@ namespace Ferris
         const std::string& libname )
     {
         getFromMatcherMap().push_back( make_pair( ma, libname ) );
+        return true;
     }
     
     

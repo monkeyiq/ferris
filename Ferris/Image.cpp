@@ -300,6 +300,7 @@ namespace Ferris
 
 
         getImageEAGeneratorsExtensionToShortName()[ ext ] = make_pair( shortname, writable );
+        return true;
     }
 
     bool
