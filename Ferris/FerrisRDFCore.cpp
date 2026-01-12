@@ -981,6 +981,11 @@ namespace Ferris
         fh_node
         Model::getObject( fh_node subj, fh_node pred )
         {
+            if( !m_model ) 
+            {
+                return 0;
+            }
+            
 //             cerr << "Model::getObject()..." << endl
 //                  << "  subj:" << subj->toString()
 //                  << "  pred:" << pred->toString()

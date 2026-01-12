@@ -83,4 +83,7 @@ appsui/gfcreate/gfcreate
 /exposures/kio/kio_ferris_moc.cpp
 /exposures/kio/mocimpls.cpp
 /gnulib/
-/lib/
+*moc.cpp
+*moc_impl.cpp
+*moc_generator.cpp
+

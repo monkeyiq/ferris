@@ -113,6 +113,11 @@ namespace Ferris
     static fh_node tryToGetRDFCacheNode( AttributeCollection* c )
     {
         fh_model m = getRDFCacheModel();
+        if( !m ) {
+            return 0;
+        }
+        
+        
         fh_node earlnode = getRDFCacheNodeURIPostfix( c );
         fh_node obj = m->getObject( earlnode, getRDFCacheMTimePred() );
         if( obj )
