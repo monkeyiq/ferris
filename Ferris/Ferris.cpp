@@ -11623,14 +11623,14 @@ Context::resolveFerrisXMLNamespace( const std::string& s )
         gboolean
         EventPending()
         {
-            return Fampp::Fampp::Instance().Pending();
+            return Fampp::FamppInstance().Pending();
         }
 
         void
         processEvent()
         {
-            if( Fampp::Fampp::Instance().Pending() )
-                Fampp::Fampp::Instance().NextEvent();
+            if( Fampp::FamppInstance().Pending() )
+                Fampp::FamppInstance().NextEvent();
         }
 
         static void ProcessFAMExceptions()

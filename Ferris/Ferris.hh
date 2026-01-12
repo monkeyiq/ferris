@@ -76,9 +76,11 @@
 #include <boost/multi_index/mem_fun.hpp>
 #endif
 
+#include <boost/function.hpp>
+
 namespace Ferris
 {
-    typedef Loki::Functor< bool, LOKI_TYPELIST_1( const fh_context& ) > fh_matcher;
+    typedef boost::function<bool(const fh_context&)> fh_matcher;    
     typedef std::list<fh_matcher> fh_matchers;
     namespace Factory
     {

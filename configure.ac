@@ -800,7 +800,14 @@ fi
 
 AM_FERRIS_PLASMA( 4.0.0 )
 
-AM_FERRIS_KSANE( 0.0.0 )
+#AM_FERRIS_KSANE( 0.0.0 )
+FERRIS_HAVE_SANE=no
+FERRIS_HAVE_KSANE=no
+SANE_CFLAGS=""
+SANE_LIBS=""
+KSANE_CFLAGS=""
+KSANE_LIBS=""
+AC_MSG_RESULT([compilation of SANE and ksane functions disabled])
 
 AM_FERRIS_QPRINTER( 0.0.0 )
 
@@ -2446,6 +2453,8 @@ have_ipc_context=yes;
 if test "x${on_osx}" = x1; then
    have_ipc_context=no;
 fi
+
+have_ipc_context=no;
 AC_SUBST(IPC_CONTEXT_CFLAGS)
 AC_SUBST(IPC_CONTEXT_LIBS)
 AM_CONDITIONAL(HAVE_IPC_CONTEXT, test "x$have_ipc_context" = "xyes")
@@ -3057,6 +3066,7 @@ yes
 [ XERCES_VERSION_DOTTED="3.1.0" ] )
 
 
+XERCES_VERSION_DOTTED="3.3.0"
 
 XERCES_INTERNAL_HEADERS_PATH="${absolute_srcdir}/ThirdParty/internal-xerces-c-headers/$XERCES_VERSION_DOTTED/"
 XERCES_INTERNAL_HEADERS_CFLAGS=" -I$XERCES_INTERNAL_HEADERS_PATH "
@@ -4395,7 +4405,7 @@ AC_SUBST(EMACS_GNUCLIENT_PATH)
 # Optional support for mounting firefox
 ###############################################################################
 
-have_firefox=yes
+have_firefox=no
 AM_CONDITIONAL(FERRIS_HAVE_FIREFOX_MOUNT_ABILITY, test x"$have_firefox" = xyes)
 FIREFOX_MOUNT_CFLAGS=
 FIREFOX_MOUNT_LIBS=
@@ -5507,5 +5517,5 @@ echo "
 optional modules that will be compiled: 
 $modlist
 
-	Copyright (C) 2001-2018 Ben Martin
+	Copyright (C) 2001-2026 Ben Martin
 "

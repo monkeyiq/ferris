@@ -35,3 +35,4 @@ namespace Ferris
 {
     static bool r1 = RegisterAsTextFromMime( "application/msword",   "libastextwv.so" );
 };
+

@@ -4,6 +4,15 @@ echo "This is the monkeyiq config invoker. please don't use it."
 export CXX="ccache g++"
 export CC="ccache gcc"
 
+export CXXFLAGS=" -Wold-style-definition $CXXFLAGS -O0 -g -pg  -fPIC "
+export CFLAGS=" -Wold-style-definition $CFLAGS -O0 -g -pg  -fPIC "
+export LDFLAGS=" -pg "
+
+#export CXXFLAGS="  $CXXFLAGS -fsanitize=address "
+#export CFLAGS=" $CFLAGS  -fsanitize=address "
+#ulimit -S -v unlimited
+#ulimit -a
+
 nice /ferris/configure                      \
 --x-libraries=/usr/X11R6/lib          \
 --enable-debug                        \

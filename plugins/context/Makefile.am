@@ -279,49 +279,49 @@ googletest_LDFLAGS = @QT_LIBS@ @QTNETWORK_LIBS@ @CTXGOOGLE_LA@
 ##############################
 ##############################
 
-MOC_DEP_SRCS=libferriswebphotos_shared_moc.cpp
+# MOC_DEP_SRCS=libferriswebphotos_shared_moc.cpp
 
-WEBPHOTOSINCLUDES = @GLIB_CFLAGS@ @QT_CFLAGS@ @QTNETWORK_CFLAGS@ @QTDBUS_CFLAGS@ @CFLAGS@
+# WEBPHOTOSINCLUDES = @GLIB_CFLAGS@ @QT_CFLAGS@ @QTNETWORK_CFLAGS@ @QTDBUS_CFLAGS@ @CFLAGS@
 
-plugin_LTLIBRARIES += libferriswebphotos.la libferriswebphotos_factory.la
-libferriswebphotos_factory_la_SOURCES = libferriswebphotos_factory.cpp
-libferriswebphotos_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
-libferriswebphotos_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
+# plugin_LTLIBRARIES += libferriswebphotos.la libferriswebphotos_factory.la
+# libferriswebphotos_factory_la_SOURCES = libferriswebphotos_factory.cpp
+# libferriswebphotos_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
+# libferriswebphotos_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
 
-libferriswebphotos_la_SOURCES         = libferriswebphotos.cpp libferriswebphotos_shared.hh
-libferriswebphotos_la_LDFLAGS = \
-	\$(top_builddir)/plugins/context/webphotos/libferriswebphotos_shared.la      \
-	@QT_LIBS@                                                                    \
-	@LIBFERRIS_PLUGIN_LT_LINE@
-libferriswebphotos_la_CXXFLAGS = $(WEBPHOTOSINCLUDES)
+# libferriswebphotos_la_SOURCES         = libferriswebphotos.cpp libferriswebphotos_shared.hh
+# libferriswebphotos_la_LDFLAGS = \
+# 	\$(top_builddir)/plugins/context/webphotos/libferriswebphotos_shared.la      \
+# 	@QT_LIBS@                                                                    \
+# 	@LIBFERRIS_PLUGIN_LT_LINE@
+# libferriswebphotos_la_CXXFLAGS = $(WEBPHOTOSINCLUDES)
 
-noinst_LTLIBRARIES += libferriswebphotos_shared.la
-nodist_libferriswebphotos_shared_la_SOURCES = libferriswebphotos_shared_moc.cpp
-libferriswebphotos_shared_la_SOURCES = \
-	libferriswebphotos_shared.cpp libferriswebphotos_shared.hh 
-libferriswebphotos_shared_la_CXXFLAGS = $(WEBPHOTOSINCLUDES)
+# noinst_LTLIBRARIES += libferriswebphotos_shared.la
+# nodist_libferriswebphotos_shared_la_SOURCES = libferriswebphotos_shared_moc.cpp
+# libferriswebphotos_shared_la_SOURCES = \
+# 	libferriswebphotos_shared.cpp libferriswebphotos_shared.hh 
+# libferriswebphotos_shared_la_CXXFLAGS = $(WEBPHOTOSINCLUDES)
 
 
-noinst_PROGRAMS += webphotostest
-webphotostest_SOURCES = webphotostest.cpp
-webphotostest_LDADD = -lpopt @LIBFERRIS_LA@ 
-webphotostest_LDFLAGS = @QT_LIBS@ @QTNETWORK_LIBS@ \
-	\$(top_builddir)/plugins/context/libferriswebphotos_shared.la
-webphotostest_CXXFLAGS = $(WEBPHOTOSINCLUDES)
+# noinst_PROGRAMS += webphotostest
+# webphotostest_SOURCES = webphotostest.cpp
+# webphotostest_LDADD = -lpopt @LIBFERRIS_LA@ 
+# webphotostest_LDFLAGS = @QT_LIBS@ @QTNETWORK_LIBS@ \
+# 	\$(top_builddir)/plugins/context/libferriswebphotos_shared.la
+# webphotostest_CXXFLAGS = $(WEBPHOTOSINCLUDES)
 
-bin_PROGRAMS = \
-	ferris-webphoto-upload \
-	ferris-webphoto-remote-url-to-eaindex-predicate
+# bin_PROGRAMS = \
+# 	ferris-webphoto-upload \
+# 	ferris-webphoto-remote-url-to-eaindex-predicate
 
-ferris_webphoto_upload_SOURCES = ferris-webphoto-upload.cpp
-ferris_webphoto_upload_LDADD = -lpopt @LIBFERRIS_LA@ @SHAREDWEBPHOTOS_LA@
-ferris_webphoto_upload_LDFLAGS = $(GLIB_LIBS) @SIGC_LIBS@ @QT_LIBS@ @QTNETWORK_LIBS@
-ferris_webphoto_upload_CXXFLAGS = $(WEBPHOTOSINCLUDES)
+# ferris_webphoto_upload_SOURCES = ferris-webphoto-upload.cpp
+# ferris_webphoto_upload_LDADD = -lpopt @LIBFERRIS_LA@ @SHAREDWEBPHOTOS_LA@
+# ferris_webphoto_upload_LDFLAGS = $(GLIB_LIBS) @SIGC_LIBS@ @QT_LIBS@ @QTNETWORK_LIBS@
+# ferris_webphoto_upload_CXXFLAGS = $(WEBPHOTOSINCLUDES)
 
-ferris_webphoto_remote_url_to_eaindex_predicate_SOURCES = ferris-webphoto-remote-url-to-eaindex-predicate.cpp
-ferris_webphoto_remote_url_to_eaindex_predicate_LDADD = -lpopt @LIBFERRIS_LA@ @SHAREDWEBPHOTOS_LA@
-ferris_webphoto_remote_url_to_eaindex_predicate_LDFLAGS = $(GLIB_LIBS) @SIGC_LIBS@ @QT_LIBS@ @QTNETWORK_LIBS@
-ferris_webphoto_remote_url_to_eaindex_predicate_CXXFLAGS = $(WEBPHOTOSINCLUDES)
+# ferris_webphoto_remote_url_to_eaindex_predicate_SOURCES = ferris-webphoto-remote-url-to-eaindex-predicate.cpp
+# ferris_webphoto_remote_url_to_eaindex_predicate_LDADD = -lpopt @LIBFERRIS_LA@ @SHAREDWEBPHOTOS_LA@
+# ferris_webphoto_remote_url_to_eaindex_predicate_LDFLAGS = $(GLIB_LIBS) @SIGC_LIBS@ @QT_LIBS@ @QTNETWORK_LIBS@
+# ferris_webphoto_remote_url_to_eaindex_predicate_CXXFLAGS = $(WEBPHOTOSINCLUDES)
 
 
 
@@ -329,31 +329,31 @@ ferris_webphoto_remote_url_to_eaindex_predicate_CXXFLAGS = $(WEBPHOTOSINCLUDES)
 ##############################
 ##############################
 
-MOC_DEP_SRCS=libferrisfacebook_shared_moc.cpp
+# MOC_DEP_SRCS=libferrisfacebook_shared_moc.cpp
 
-FACEBOOKINCLUDES = @QT_CFLAGS@ @QTNETWORK_CFLAGS@ @QTDBUS_CFLAGS@ @CFLAGS@
+# FACEBOOKINCLUDES = @QT_CFLAGS@ @QTNETWORK_CFLAGS@ @QTDBUS_CFLAGS@ @CFLAGS@
 
-plugin_LTLIBRARIES += libferrisfacebook.la libferrisfacebook_factory.la
-libferrisfacebook_factory_la_SOURCES  = libferrisfacebook_factory.cpp
-libferrisfacebook_factory_la_LIBADD   = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
-libferrisfacebook_factory_la_LDFLAGS  = @LIBFERRIS_PLUGIN_LT_LINE@
-libferrisfacebook_factory_la_CXXFLAGS = $(FACEBOOKINCLUDES)
+# plugin_LTLIBRARIES += libferrisfacebook.la libferrisfacebook_factory.la
+# libferrisfacebook_factory_la_SOURCES  = libferrisfacebook_factory.cpp
+# libferrisfacebook_factory_la_LIBADD   = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
+# libferrisfacebook_factory_la_LDFLAGS  = @LIBFERRIS_PLUGIN_LT_LINE@
+# libferrisfacebook_factory_la_CXXFLAGS = $(FACEBOOKINCLUDES)
 
-libferrisfacebook_la_SOURCES  = libferrisfacebook.cpp libferrisfacebook_shared.hh
-libferrisfacebook_la_LDFLAGS  = @CTXFACEBOOK_LA@ @SHAREDWEBPHOTOS_LA@ @QT_LIBS@ @LIBFERRIS_PLUGIN_LT_LINE@
-libferrisfacebook_la_CXXFLAGS = $(FACEBOOKINCLUDES)
+# libferrisfacebook_la_SOURCES  = libferrisfacebook.cpp libferrisfacebook_shared.hh
+# libferrisfacebook_la_LDFLAGS  = @CTXFACEBOOK_LA@ @SHAREDWEBPHOTOS_LA@ @QT_LIBS@ @LIBFERRIS_PLUGIN_LT_LINE@
+# libferrisfacebook_la_CXXFLAGS = $(FACEBOOKINCLUDES)
 
-noinst_LTLIBRARIES += libferrisfacebook_shared.la
-nodist_libferrisfacebook_shared_la_SOURCES = libferrisfacebook_shared_moc.cpp
-libferrisfacebook_shared_la_SOURCES = \
-	libferrisfacebook_shared.cpp libferrisfacebook_shared.hh
-libferrisfacebook_shared_la_CXXFLAGS = $(FACEBOOKINCLUDES)
+# noinst_LTLIBRARIES += libferrisfacebook_shared.la
+# nodist_libferrisfacebook_shared_la_SOURCES = libferrisfacebook_shared_moc.cpp
+# libferrisfacebook_shared_la_SOURCES = \
+# 	libferrisfacebook_shared.cpp libferrisfacebook_shared.hh
+# libferrisfacebook_shared_la_CXXFLAGS = $(FACEBOOKINCLUDES)
 
-noinst_PROGRAMS += facebooktest
-facebooktest_SOURCES = facebooktest.cpp libferrisfacebook_shared.hh
-facebooktest_LDADD = -lpopt @LIBFERRIS_LA@ 
-facebooktest_LDFLAGS = @QT_LIBS@ @QTNETWORK_LIBS@ @CTXFACEBOOK_LA@ @SHAREDWEBPHOTOS_LA@
-facebooktest_CXXFLAGS = $(FACEBOOKINCLUDES)
+# noinst_PROGRAMS += facebooktest
+# facebooktest_SOURCES = facebooktest.cpp libferrisfacebook_shared.hh
+# facebooktest_LDADD = -lpopt @LIBFERRIS_LA@ 
+# facebooktest_LDFLAGS = @QT_LIBS@ @QTNETWORK_LIBS@ @CTXFACEBOOK_LA@ @SHAREDWEBPHOTOS_LA@
+# facebooktest_CXXFLAGS = $(FACEBOOKINCLUDES)
 
 
 ##############################
@@ -492,21 +492,21 @@ libferrisqthttp_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
 ##############################
 ##############################
 
-MOC_DEP_SRCS+=libferrissane_moc_impl.cpp
+# MOC_DEP_SRCS+=libferrissane_moc_impl.cpp
 
-sane_moc_generator.cpp: libferrissane_moc_impl.cpp
-	touch sane_moc_generator.cpp
+# sane_moc_generator.cpp: libferrissane_moc_impl.cpp
+# 	touch sane_moc_generator.cpp
 
 
-plugin_LTLIBRARIES += libferrissane.la libferrissane_factory.la
+# plugin_LTLIBRARIES += libferrissane.la libferrissane_factory.la
 
-libferrissane_factory_la_SOURCES = libferrissane_factory.cpp
-libferrissane_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
-libferrissane_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
+# libferrissane_factory_la_SOURCES = libferrissane_factory.cpp
+# libferrissane_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
+# libferrissane_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
 
-libferrissane_la_SOURCES = sane_moc_generator.cpp libferrissane.cpp 
-libferrissane_la_LDFLAGS = @KSANE_LIBS@ @LIBFERRIS_PLUGIN_LT_LINE@
-libferrissane_la_CXXFLAGS = @KSANE_CFLAGS@ @CFLAGS@
+# libferrissane_la_SOURCES = sane_moc_generator.cpp libferrissane.cpp 
+# libferrissane_la_LDFLAGS = @KSANE_LIBS@ @LIBFERRIS_PLUGIN_LT_LINE@
+# libferrissane_la_CXXFLAGS = @KSANE_CFLAGS@ @CFLAGS@
 
 
 ##############################
@@ -541,27 +541,27 @@ libferriskio_shared_la_CXXFLAGS = $(KIOCXXFLAGS)
 ##############################
 ##############################
 
-MOC_DEP_SRCS+=libferrisidentica_shared_moc.cpp
+# MOC_DEP_SRCS+=libferrisidentica_shared_moc.cpp
 
-IDENTICACXXFLAGS = @QT_CFLAGS@ @QTNETWORK_CFLAGS@ @QTDBUS_CFLAGS@ \
-	@QJSON_CFLAGS@ @QOAUTH_CFLAGS@ @CFLAGS@
+# IDENTICACXXFLAGS = @QT_CFLAGS@ @QTNETWORK_CFLAGS@ @QTDBUS_CFLAGS@ \
+# 	@QJSON_CFLAGS@ @QOAUTH_CFLAGS@ @CFLAGS@
 
-plugin_LTLIBRARIES += libferrisidentica.la libferrisidentica_factory.la
+# plugin_LTLIBRARIES += libferrisidentica.la libferrisidentica_factory.la
 
-libferrisidentica_factory_la_SOURCES = libferrisidentica_factory.cpp
-libferrisidentica_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
-libferrisidentica_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
+# libferrisidentica_factory_la_SOURCES = libferrisidentica_factory.cpp
+# libferrisidentica_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
+# libferrisidentica_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
 
-libferrisidentica_la_SOURCES = libferrisidentica.cpp libferrisidentica_shared.hh
-libferrisidentica_la_LDFLAGS = @CTXIDENTICA_LA@ @QT_LIBS@ @LIBFERRIS_PLUGIN_LT_LINE@ @QOAUTH_LIBS@ @QJSON_LIBS@
-libferrisidentica_la_CXXFLAGS = $(IDENTICACXXFLAGS)
+# libferrisidentica_la_SOURCES = libferrisidentica.cpp libferrisidentica_shared.hh
+# libferrisidentica_la_LDFLAGS = @CTXIDENTICA_LA@ @QT_LIBS@ @LIBFERRIS_PLUGIN_LT_LINE@ @QOAUTH_LIBS@ @QJSON_LIBS@
+# libferrisidentica_la_CXXFLAGS = $(IDENTICACXXFLAGS)
 
 
-noinst_LTLIBRARIES += libferrisidentica_shared.la
-nodist_libferrisidentica_shared_la_SOURCES = libferrisidentica_shared_moc.cpp
-libferrisidentica_shared_la_SOURCES = \
-	libferrisidentica_shared.cpp libferrisidentica_shared.hh
-libferrisidentica_shared_la_CXXFLAGS = $(IDENTICACXXFLAGS)
+# noinst_LTLIBRARIES += libferrisidentica_shared.la
+# nodist_libferrisidentica_shared_la_SOURCES = libferrisidentica_shared_moc.cpp
+# libferrisidentica_shared_la_SOURCES = \
+# 	libferrisidentica_shared.cpp libferrisidentica_shared.hh
+# libferrisidentica_shared_la_CXXFLAGS = $(IDENTICACXXFLAGS)
 
 
 # noinst_PROGRAMS += identicatest
@@ -576,77 +576,77 @@ libferrisidentica_shared_la_CXXFLAGS = $(IDENTICACXXFLAGS)
 ##############################
 
 
-MOC_DEP_SRCS+=libferriszoneminder_shared_moc.cpp
+# MOC_DEP_SRCS+=libferriszoneminder_shared_moc.cpp
 
 
-ZMCXXFLAGS = @QT_CFLAGS@ @QTNETWORK_CFLAGS@ @QTDBUS_CFLAGS@ @QJSON_CFLAGS@ @QOAUTH_CFLAGS@ @CFLAGS@
+# ZMCXXFLAGS = @QT_CFLAGS@ @QTNETWORK_CFLAGS@ @QTDBUS_CFLAGS@ @QJSON_CFLAGS@ @QOAUTH_CFLAGS@ @CFLAGS@
 
-plugin_LTLIBRARIES += libferriszoneminder.la libferriszoneminder_factory.la
+# plugin_LTLIBRARIES += libferriszoneminder.la libferriszoneminder_factory.la
 
-libferriszoneminder_factory_la_SOURCES = libferriszoneminder_factory.cpp
-libferriszoneminder_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
-libferriszoneminder_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
-
-
-libferriszoneminder_la_SOURCES = libferriszoneminder.cpp libferriszoneminder_shared.hh
-libferriszoneminder_la_CXXFLAGS = $(ZMCXXFLAGS)
-libferriszoneminder_la_LDFLAGS = @CTXZONEMINDER_LA@ @QT_LIBS@ @LIBFERRIS_PLUGIN_LT_LINE@ @QOAUTH_LIBS@ @QJSON_LIBS@
+# libferriszoneminder_factory_la_SOURCES = libferriszoneminder_factory.cpp
+# libferriszoneminder_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
+# libferriszoneminder_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
 
 
-noinst_LTLIBRARIES += libferriszoneminder_shared.la
-nodist_libferriszoneminder_shared_la_SOURCES = libferriszoneminder_shared_moc.cpp
-libferriszoneminder_shared_la_SOURCES = \
-	libferriszoneminder_shared.cpp libferriszoneminder_shared.hh
-libferriszoneminder_shared_la_CXXFLAGS = $(ZMCXXFLAGS)
+# libferriszoneminder_la_SOURCES = libferriszoneminder.cpp libferriszoneminder_shared.hh
+# libferriszoneminder_la_CXXFLAGS = $(ZMCXXFLAGS)
+# libferriszoneminder_la_LDFLAGS = @CTXZONEMINDER_LA@ @QT_LIBS@ @LIBFERRIS_PLUGIN_LT_LINE@ @QOAUTH_LIBS@ @QJSON_LIBS@
 
 
-##############################
-##############################
-##############################
-
-MOC_DEP_SRCS+=libferrisferrisrest_shared_moc.cpp
-
-RESTCXXFLAGS = @QT_CFLAGS@ @QTNETWORK_CFLAGS@ @QTDBUS_CFLAGS@ @QJSON_CFLAGS@ @CFLAGS@
-
-plugin_LTLIBRARIES += libferrisferrisrest.la libferrisferrisrest_factory.la
-noinst_LTLIBRARIES += libferrisferrisrest_shared.la
-
-libferrisferrisrest_factory_la_SOURCES = libferrisferrisrest_factory.cpp
-libferrisferrisrest_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
-libferrisferrisrest_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
-
-libferrisferrisrest_la_SOURCES = libferrisferrisrest.cpp libferrisferrisrest_shared.hh
-libferrisferrisrest_la_LDFLAGS = @CTXFERRISREST_LA@ @QT_LIBS@ @LIBFERRIS_PLUGIN_LT_LINE@ @QJSON_LIBS@
-libferrisferrisrest_la_CXXFLAGS = $(RESTCXXFLAGS)
-
-nodist_libferrisferrisrest_shared_la_SOURCES = libferrisferrisrest_shared_moc.cpp
-libferrisferrisrest_shared_la_SOURCES = \
-	libferrisferrisrest_shared.cpp libferrisferrisrest_shared.hh
-libferrisferrisrest_shared_la_CXXFLAGS = $(RESTCXXFLAGS)
+# noinst_LTLIBRARIES += libferriszoneminder_shared.la
+# nodist_libferriszoneminder_shared_la_SOURCES = libferriszoneminder_shared_moc.cpp
+# libferriszoneminder_shared_la_SOURCES = \
+# 	libferriszoneminder_shared.cpp libferriszoneminder_shared.hh
+# libferriszoneminder_shared_la_CXXFLAGS = $(ZMCXXFLAGS)
 
 
 ##############################
 ##############################
 ##############################
 
-MOC_DEP_SRCS+=libferrisplasma_moc_impl.cpp
+# MOC_DEP_SRCS+=libferrisferrisrest_shared_moc.cpp
 
-libferrisplasma_moc_generator.cpp: libferrisplasma_moc_impl.cpp
-	touch libferrisplasma_moc_generator.cpp
+# RESTCXXFLAGS = @QT_CFLAGS@ @QTNETWORK_CFLAGS@ @QTDBUS_CFLAGS@ @QJSON_CFLAGS@ @CFLAGS@
 
-PLAMSACXXFLAGS = @PLASMA_CFLAGS@ @CFLAGS@
+# plugin_LTLIBRARIES += libferrisferrisrest.la libferrisferrisrest_factory.la
+# noinst_LTLIBRARIES += libferrisferrisrest_shared.la
 
-if FERRIS_HAVE_PLASMA
-plugin_LTLIBRARIES += libferrisplasma.la libferrisplasma_factory.la
-endif
+# libferrisferrisrest_factory_la_SOURCES = libferrisferrisrest_factory.cpp
+# libferrisferrisrest_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
+# libferrisferrisrest_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
 
-libferrisplasma_factory_la_SOURCES = libferrisplasma_factory.cpp
-libferrisplasma_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
-libferrisplasma_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
+# libferrisferrisrest_la_SOURCES = libferrisferrisrest.cpp libferrisferrisrest_shared.hh
+# libferrisferrisrest_la_LDFLAGS = @CTXFERRISREST_LA@ @QT_LIBS@ @LIBFERRIS_PLUGIN_LT_LINE@ @QJSON_LIBS@
+# libferrisferrisrest_la_CXXFLAGS = $(RESTCXXFLAGS)
 
-libferrisplasma_la_SOURCES = libferrisplasma.cpp  libferrisplasma_moc_generator.cpp
-libferrisplasma_la_LDFLAGS = @PLASMA_LIBS@ @LIBFERRIS_PLUGIN_LT_LINE@
-libferrisplasma_la_CXXFLAGS = $(PLAMSACXXFLAGS)
+# nodist_libferrisferrisrest_shared_la_SOURCES = libferrisferrisrest_shared_moc.cpp
+# libferrisferrisrest_shared_la_SOURCES = \
+# 	libferrisferrisrest_shared.cpp libferrisferrisrest_shared.hh
+# libferrisferrisrest_shared_la_CXXFLAGS = $(RESTCXXFLAGS)
+
+
+##############################
+##############################
+##############################
+
+# MOC_DEP_SRCS+=libferrisplasma_moc_impl.cpp
+
+# libferrisplasma_moc_generator.cpp: libferrisplasma_moc_impl.cpp
+# 	touch libferrisplasma_moc_generator.cpp
+
+# PLAMSACXXFLAGS = @PLASMA_CFLAGS@ @CFLAGS@
+
+# if FERRIS_HAVE_PLASMA
+# plugin_LTLIBRARIES += libferrisplasma.la libferrisplasma_factory.la
+# endif
+
+# libferrisplasma_factory_la_SOURCES = libferrisplasma_factory.cpp
+# libferrisplasma_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
+# libferrisplasma_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
+
+# libferrisplasma_la_SOURCES = libferrisplasma.cpp  libferrisplasma_moc_generator.cpp
+# libferrisplasma_la_LDFLAGS = @PLASMA_LIBS@ @LIBFERRIS_PLUGIN_LT_LINE@
+# libferrisplasma_la_CXXFLAGS = $(PLAMSACXXFLAGS)
 
 
 
@@ -671,23 +671,23 @@ libferrispulseaudio_la_CXXFLAGS = @PULSEAUDIO_CFLAGS@ @CFLAGS@
 ##############################
 ##############################
 
-if HAVE_QTSQL
-plugin_LTLIBRARIES += libferrisqtsql.la libferrisqtsql_factory.la
-noinst_LTLIBRARIES += libferrisqtsqlshared.la
-endif
+# if HAVE_QTSQL
+# plugin_LTLIBRARIES += libferrisqtsql.la libferrisqtsql_factory.la
+# noinst_LTLIBRARIES += libferrisqtsqlshared.la
+# endif
 
-libferrisqtsql_factory_la_SOURCES = libferrisqtsql_factory.cpp
-libferrisqtsql_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
-libferrisqtsql_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
-libferrisqtsql_la_SOURCES   = libferrisqtsql.cpp
-libferrisqtsql_la_CXXFLAGS  = @QTSQL_CFLAGS@ -I@COMMONSQLDBDIR@ @CFLAGS@
-libferrisqtsql_la_LDFLAGS = \
-	\$(top_builddir)/plugins/context/qtsql/libferrisqtsqlshared.la            \
-	@QTSQL_LIBS@ \
-	@LIBFERRIS_PLUGIN_LT_LINE@
+# libferrisqtsql_factory_la_SOURCES = libferrisqtsql_factory.cpp
+# libferrisqtsql_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
+# libferrisqtsql_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
+# libferrisqtsql_la_SOURCES   = libferrisqtsql.cpp
+# libferrisqtsql_la_CXXFLAGS  = @QTSQL_CFLAGS@ -I@COMMONSQLDBDIR@ @CFLAGS@
+# libferrisqtsql_la_LDFLAGS = \
+# 	\$(top_builddir)/plugins/context/qtsql/libferrisqtsqlshared.la            \
+# 	@QTSQL_LIBS@ \
+# 	@LIBFERRIS_PLUGIN_LT_LINE@
 
-libferrisqtsqlshared_la_SOURCES = libferrisqtsqlshared.cpp libferrisqtsqlshared.hh
-libferrisqtsqlshared_la_CXXFLAGS  = @QTSQL_CFLAGS@ -I@COMMONSQLDBDIR@ @CFLAGS@
+# libferrisqtsqlshared_la_SOURCES = libferrisqtsqlshared.cpp libferrisqtsqlshared.hh
+# libferrisqtsqlshared_la_CXXFLAGS  = @QTSQL_CFLAGS@ -I@COMMONSQLDBDIR@ @CFLAGS@
 
 
 

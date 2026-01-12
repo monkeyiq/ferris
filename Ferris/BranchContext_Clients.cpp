@@ -1229,11 +1229,12 @@ namespace Ferris
         return new FerrisAllBranchesContext( ctx, theDelegate, rdn );
     }
     
+
     static bool FerrisAllBranchesContext_Dropper =
     FerrisBranchRootContext_Register( "branches",
                                       BranchInternalContextCreatorFunctor_t(
                                           FerrisAllBranchesContext_Creator ) );
-    
+
     
     
 

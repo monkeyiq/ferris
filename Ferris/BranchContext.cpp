@@ -168,7 +168,10 @@ namespace Ferris
         static FerrisBranchRootContext_RootContextDropper ___FerrisBranchRootContext_static_init;
         ___FerrisBranchRootContext_static_init.m_functors[ url_scheme ] = m_BranchInternalContextCreatorFunctor;
         RootContextFactory::Register( url_scheme, &___FerrisBranchRootContext_static_init );
+        return true;
     }
+
+
     
     
     /********************************************************************************/

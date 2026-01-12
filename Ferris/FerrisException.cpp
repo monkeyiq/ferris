@@ -35,6 +35,7 @@
 
 #ifdef FERRIS_HAVE_ATTR
 #include <attr/xattr.h>
+#include <attr/attributes.h>
 #endif
 
 using namespace std;

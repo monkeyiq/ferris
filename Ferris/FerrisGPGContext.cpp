@@ -37,6 +37,8 @@
 #include <Ferris.hh>
 #include <Ferris/Context_private.hh> // VirtualSoftlinkContext
 
+#include <BranchContext_private.hh>
+
 using namespace std;
 
 namespace Ferris
@@ -1008,6 +1010,8 @@ namespace Ferris
     {
         return new FerrisGPGSignaturesInternalContext( ctx, theDelegate, rdn );
     }
+
+    
     
     static bool FerrisGPGSignaturesInternalContext_Dropper =
     FerrisBranchRootContext_Register( "branchfs-gpg-signatures",
