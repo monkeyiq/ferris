@@ -163,6 +163,7 @@ namespace Ferris
                    << " when object is not an active member of of the collection";
                 Throw_CursorException( tostr(ss), GetImpl(newc) );
             }
+            return cursor;
         }
     };
 };

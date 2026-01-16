@@ -91,7 +91,7 @@ namespace Ferris
          * @param int is the current attribute number being added for this context
          * @param int is the total number of attributes that will be added for this context
          */
-        typedef sigc::signal3< void, fh_context, int, int >
+        typedef sigc::signal< void ( fh_context, int, int ) >
         AddToEAIndexProgress_Sig_t;
         FERRISEXP_API AddToEAIndexProgress_Sig_t& getNullAddToEAIndexProgress_Sig();
 

@@ -49,8 +49,7 @@ namespace Ferris
 
 extern "C"
 {
-    FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-        throw( RootContextCreationFailed );
+    FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
 };
     
 
@@ -82,7 +81,7 @@ class FERRISEXP_CTXPLUGIN MBoxContext
         public Context
 {
     // library entry point
-    friend fh_context Brew( RootContextFactory* rf ) throw( RootContextCreationFailed );
+    friend fh_context Brew( RootContextFactory* rf );
 
     Context* priv_CreateContext( Context* parent, string rdn );
 
@@ -143,11 +142,7 @@ class FERRISEXP_CTXPLUGIN MessageContext : public leafContext
     
 protected:
 
-    virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               std::exception);
-
+    virtual fh_istream  priv_getIStream( ferris_ios::openmode m );
     void setupRDN( MBoxContext* parent, string rdn );
 
     
@@ -507,9 +502,6 @@ MessageContext::parseFromLine( const string& FromLine )
     
 fh_istream
 MessageContext::priv_getIStream( ferris_ios::openmode m )
-    throw (FerrisParentNotSetError,
-           CanNotGetStream,
-           exception)
 {
     LG_MBOX_I << "getting stream..." << endl;
 
@@ -793,7 +785,6 @@ MBoxContext::Instance(
 extern "C"
 {
     fh_context Brew( RootContextFactory* rf )
-        throw( RootContextCreationFailed )
     {
         const string& rdn = rf->getInfo( "Root" );
         

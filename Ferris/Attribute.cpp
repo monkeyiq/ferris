@@ -347,7 +347,7 @@ namespace Ferris
      * @return The parent attribute
      */
     Attribute::Parent_t
-    Attribute::getParent() throw (FerrisParentNotSetError)
+    Attribute::getParent()
     {
         if( !isParentBound() )
         {
@@ -422,7 +422,7 @@ namespace Ferris
      * @returns The fully resolved path for this attribute.
      */
     std::string
-    Attribute::getDirPath() throw (FerrisParentNotSetError)
+    Attribute::getDirPath()
     {
         try
         {
@@ -574,9 +574,6 @@ namespace Ferris
      */
     fh_istream
     Attribute::getIStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               exception)
     {
         if( !checkOpenModeSupported(m))
             Throw_CanNotGetStream("openmode not supported", this);
@@ -668,9 +665,6 @@ namespace Ferris
      */
     fh_istream
     Attribute::getLocalIStream( std::string& new_dn, ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               exception)
     {
         fh_istream ret = getIStream(m);
         
@@ -703,10 +697,6 @@ namespace Ferris
      */
     fh_iostream
     Attribute::getIOStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               AttributeNotWritable,
-               exception)
     {
 //        LG_ATTR_D << "Attribute::getIOStream() m:" << int(m) << endl;
 
@@ -779,9 +769,6 @@ namespace Ferris
      */
     fh_istream
     Attribute::priv_getIStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               exception)
     {
         f_istringstream iss("");
         return iss;
@@ -805,10 +792,6 @@ namespace Ferris
      */
     fh_iostream
     Attribute::priv_getIOStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               AttributeNotWritable,
-               CanNotGetStream,
-               exception)
     {
         ferris_ios::openmode writeBits = ios::trunc | ios::app | ios::out;
             
@@ -1127,10 +1110,6 @@ namespace Ferris
     EA_Atom::getIOStream( Context* c, 
                           const std::string& rdn,
                           ferris_ios::openmode m  )
-        throw (FerrisParentNotSetError,
-               AttributeNotWritable,
-               CanNotGetStream,
-               exception)
     {
         fh_stringstream ss;
         ss << "Can not get stream for path:" << c->getDirPath()
@@ -1179,9 +1158,6 @@ namespace Ferris
     EA_Atom_ReadOnly::getIStream( Context* c,
                                   const std::string& rdn,
                                   ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               exception)
     {
         return GetIStream_Func( c, rdn, this );
     }
@@ -1199,9 +1175,6 @@ namespace Ferris
     EA_Atom_ReadOnly_PassedInStream::getIStream( Context* c,
                                                  const std::string& rdn,
                                                  ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               std::exception)
     {
         fh_stringstream ss;
         getIStream( c, rdn, m, ss );
@@ -1214,9 +1187,6 @@ namespace Ferris
                                                  const std::string& rdn,
                                                  ferris_ios::openmode m,
                                                  fh_stringstream& ss )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               exception)
     {
         return GetIStream_Func( c, rdn, this, ss );
     }
@@ -1243,10 +1213,6 @@ namespace Ferris
     EA_Atom_ReadWrite_Base< ParentClass >::getIOStream( Context* c,
                                                         const std::string& rdn,
                                                         ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               AttributeNotWritable,
-               CanNotGetStream,
-               exception)
         {
             LG_ATTR_D << "EA_Atom_ReadWrite::getIOStream() m:" << int(m) << endl;
             
@@ -1325,10 +1291,6 @@ namespace Ferris
     EA_Atom_ReadWrite::getIOStream( Context* c,
                                     const std::string& rdn,
                                     ferris_ios::openmode m  )
-        throw (FerrisParentNotSetError,
-               AttributeNotWritable,
-               CanNotGetStream,
-               std::exception)
     {
         return RWBase_t::getIOStream( c, rdn, m );
     }
@@ -1420,9 +1382,6 @@ namespace Ferris
     EA_Atom_ReadWrite_OpenModeCached::getIStream( Context* c,
                                    const std::string& rdn,
                                    ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               std::exception)
     {
         theMode = m;
         return _Base::getIStream( c, rdn, m );
@@ -1431,10 +1390,6 @@ namespace Ferris
     fh_iostream EA_Atom_ReadWrite_OpenModeCached::getIOStream( Context* c,
                                                                const std::string& rdn,
                                                                ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               AttributeNotWritable,
-               CanNotGetStream,
-               std::exception)
     {
         theMode = m;
         return _Base::getIOStream( c, rdn, m );
@@ -1449,10 +1404,6 @@ namespace Ferris
     EA_Atom_ReadWrite_Contents::getIOStream( Context* c,
                                              const std::string& rdn,
                                              ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               AttributeNotWritable,
-               CanNotGetStream,
-               std::exception)
     {
         theMode = m;
         fh_iostream ss = GetIOStream_Func( c, rdn, this );
@@ -1481,9 +1432,6 @@ namespace Ferris
     EA_Atom_Static::getIStream( Context* c,
                                       const std::string& rdn,
                                       ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   exception)
     {
         fh_stringstream ss;
         ss << theValue;
@@ -1512,9 +1460,6 @@ namespace Ferris
     EA_Atom_RDFCacheAttribute::getIStream( Context* c,
                                            const std::string& rdn,
                                            ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               std::exception)
     {
         LG_RDFATTRCACHE_D << "getIStream() c:" << c->getURL()
                           << " m_shouldUpdateRDFStore:" << m_shouldUpdateRDFStore
@@ -1562,10 +1507,6 @@ namespace Ferris
     EA_Atom_RDFCacheAttribute::getIOStream( Context* c,
                                             const std::string& rdn,
                                             ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               AttributeNotWritable,
-               CanNotGetStream,
-               std::exception)
     {
         return m_atom->getIOStream( c, rdn, m );
     }
@@ -1652,7 +1593,7 @@ namespace Ferris
     }
     
     std::string
-    AttributeProxy::getDirPath() throw (FerrisParentNotSetError)
+    AttributeProxy::getDirPath()
     {
         std::string ret = theContext->getDirPath();
         ret += theAttributeName;
@@ -1661,9 +1602,6 @@ namespace Ferris
     
     fh_istream
     AttributeProxy::getIStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               exception)
     {
 
         fh_istream ss = getAttr()->getIStream( GetImpl(theContext), theAttributeName, m );
@@ -1673,9 +1611,6 @@ namespace Ferris
     
         
     fh_istream AttributeProxy::getLocalIStream( std::string& new_dn, ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               exception)
     {
         fh_istream ret = getAttr()->getIStream( GetImpl(theContext), theAttributeName, m );
         ContextStreamMemoryManager::StreamIsOpeningHandler( getParent(), this, ret );
@@ -1695,10 +1630,6 @@ namespace Ferris
     }
     
     fh_iostream AttributeProxy::getIOStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               AttributeNotWritable,
-               CanNotGetStream,
-               exception)
     {
 //        cerr << "AttributeProxy::getIOStream() m:" << int(m) << endl;
         
@@ -1840,7 +1771,6 @@ namespace Ferris
     
     void
     AttributeCollection::callEnsureAttributesAreCreatedMarshalEToNSA( const std::string& eaname )
-        throw( NoSuchAttribute )
     {
         try
         {
@@ -1866,7 +1796,6 @@ namespace Ferris
      */
     fh_attribute
     AttributeCollection::getAttribute( const std::string& _rdn )
-        throw( NoSuchAttribute )
     {
         std::string rdn = _rdn;
 
@@ -2056,7 +1985,6 @@ namespace Ferris
     
     EA_Atom*
     AttributeCollection::getAttributePtr( const std::string& raw_rdn )
-        throw( NoSuchAttribute )
     {
         string rdn = expandEAName( raw_rdn, false );
 
@@ -2214,7 +2142,6 @@ namespace Ferris
      */
     bool
     AttributeCollection::isAttributeBound( const std::string& rdn_raw, bool createIfNotThere )
-        throw( NoSuchAttribute )
     {
         string rdn = expandEAName( rdn_raw, false );
         LG_ATTR_D << "AttributeCollection::isAttributeBound(enter) rdn:" << rdn << endl;
@@ -2244,7 +2171,6 @@ namespace Ferris
 
     bool
     AttributeCollection::isStatelessAttributeBound( const std::string& rdn )
-        throw( NoSuchAttribute )
     {
         SLAttributes_t* sl = getStateLessAttrs();
         SLAttributes_t::iterator iter = sl->find( rdn );
@@ -2374,7 +2300,6 @@ namespace Ferris
                                        bool addToREA,
                                        XSDBasic_t sct,
                                        bool isStateLess )
-        throw( AttributeAlreadyInUse )
     {
         if( !atx )
         {
@@ -2860,7 +2785,6 @@ namespace Ferris
         
     
         fh_istream MakePipeEA( const fh_runner& Runner )
-            throw( CanNotGetStream )
         {
             try
             {

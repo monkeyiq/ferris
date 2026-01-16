@@ -65,7 +65,7 @@ namespace Ferris
             }
         
     public:
-        typedef sigc::signal1< void, CacheHandlable* > OnlyInCacheSignal_t;
+        typedef sigc::signal< void ( CacheHandlable* ) > OnlyInCacheSignal_t;
         OnlyInCacheSignal_t OnlyInCacheSignal;
         OnlyInCacheSignal_t& getOnlyInCacheSignal()
             {

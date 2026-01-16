@@ -1039,6 +1039,7 @@ namespace Ferris
     FerrisCopy::setFSyncAfterEachFile( bool v )
     {
         perform_fsyncAfterEachFile = v;
+        return true;
     }
     
     bool
@@ -1046,6 +1047,7 @@ namespace Ferris
     {
         perform_preallocation |= v;
         preallocate_with_fallocate = v;
+        return true;
     }
 
     bool
@@ -1053,6 +1055,7 @@ namespace Ferris
     {
         perform_preallocation |= v;
         preallocate_with_ftruncate = v;
+        return true;
     }
     
     
@@ -1910,6 +1913,7 @@ namespace Ferris
             }
 
             /* FIXME: what to do here! */
+            return 0;
         }
 
     void
@@ -2198,6 +2202,7 @@ namespace Ferris
                 return Factory::MakeHoleyOStream(
                     ss, toint(getEA( src, "block-size", "4096" )));
             }
+            return ss;
         }
 
     string

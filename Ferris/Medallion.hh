@@ -51,7 +51,8 @@ namespace Ferris
 {
     struct FERRISEXP_API fh_emblem_less
     {
-        bool operator()( fh_emblem k1, fh_emblem k2 );
+        bool operator()( fh_emblem k1, fh_emblem k2 ) const;
+        
     };
     
     typedef std::list< fh_emblem > emblems_t;
@@ -350,7 +351,7 @@ namespace Ferris
          * emblem is the emblem that is changing, the first string is the old icon
          * name and the second string is the new iconname
          */
-        typedef sigc::signal3< void, fh_emblem, std::string, std::string > IconName_Changed_Sig_t;
+        typedef sigc::signal< void ( fh_emblem, std::string, std::string ) > IconName_Changed_Sig_t;
         IconName_Changed_Sig_t& getIconName_Changed_Sig();
         IconName_Changed_Sig_t& getMenuSizedIconName_Changed_Sig();
 
@@ -358,28 +359,28 @@ namespace Ferris
          * When a new parent has been added this is fired.
          * the first parameter is the emblem itself, the second is the new parent
          */
-        typedef sigc::signal2< void, fh_emblem, fh_emblem > AddedParent_Sig_t;
+        typedef sigc::signal< void ( fh_emblem, fh_emblem ) > AddedParent_Sig_t;
         AddedParent_Sig_t& getAddedParent_Sig();
 
         /**
          * When a new child has been added this is fired.
          * the first parameter is the emblem itself, the second is the new child
          */
-        typedef sigc::signal2< void, fh_emblem, fh_emblem > AddedChild_Sig_t;
+        typedef sigc::signal< void ( fh_emblem, fh_emblem ) > AddedChild_Sig_t;
         AddedChild_Sig_t& getAddedChild_Sig();
 
         /**
          * When a parent has been removed this is fired.
          * the first parameter is the emblem itself, the second is the old parent
          */
-        typedef sigc::signal2< void, fh_emblem, fh_emblem > RemovedParent_Sig_t;
+        typedef sigc::signal< void ( fh_emblem, fh_emblem ) > RemovedParent_Sig_t;
         RemovedParent_Sig_t& getRemovedParent_Sig();
 
         /**
          * When a child has been removed this is fired.
          * the first parameter is the emblem itself, the second is the old child
          */
-        typedef sigc::signal2< void, fh_emblem, fh_emblem > RemovedChild_Sig_t;
+        typedef sigc::signal< void ( fh_emblem, fh_emblem ) > RemovedChild_Sig_t;
         RemovedChild_Sig_t& getRemovedChild_Sig();
         
         /**
@@ -638,21 +639,21 @@ namespace Ferris
          * When a new emblem has been created this is fired.
          * the first parameter is the etagere, the second is the new child
          */
-        typedef sigc::signal2< void, fh_etagere, fh_emblem > EmblemCreated_Sig_t;
+        typedef sigc::signal< void ( fh_etagere, fh_emblem ) > EmblemCreated_Sig_t;
         EmblemCreated_Sig_t& getEmblemCreated_Sig();
 
         /**
          * When a new child has been added this is fired.
          * the first parameter is the etagere, the second is the new child
          */
-        typedef sigc::signal2< void, fh_etagere, fh_emblem > AddedChild_Sig_t;
+        typedef sigc::signal< void ( fh_etagere, fh_emblem ) > AddedChild_Sig_t;
         AddedChild_Sig_t& getAddedChild_Sig();
         
         /**
          * When a child has been removed this is fired.
          * the first parameter is the etagere, the second is the old child
          */
-        typedef sigc::signal2< void, fh_etagere, fh_emblem > RemovedChild_Sig_t;
+        typedef sigc::signal< void ( fh_etagere, fh_emblem ) > RemovedChild_Sig_t;
         RemovedChild_Sig_t& getRemovedChild_Sig();
 
         /**

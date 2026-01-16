@@ -86,7 +86,7 @@ using namespace Ferris;
 
 const string PROGRAM_NAME = "ls";
 
-void usage(poptContext optCon, int exitcode, char *error, char *addl)
+void usage(poptContext optCon, int exitcode, const char *error, const char *addl)
 {
     
     poptPrintUsage(optCon, stderr, 0);

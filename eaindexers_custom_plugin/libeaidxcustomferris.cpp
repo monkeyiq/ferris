@@ -1641,6 +1641,7 @@ namespace Ferris
             case INV_CIS:    return "cis";
             case INV_STRING: return "string";
             }
+            return "string";
         }
 
         EAIndexManagerDB4::invertedSort_t
@@ -1832,6 +1833,7 @@ namespace Ferris
 //                            << " found size:" << ul_docs.size()
 //                            << endl;
 //             }
+            return docnums;
         }
         
         docNumSet_t& EAIndexManagerDB4::ExecuteLtEq( fh_context q,
@@ -1852,6 +1854,7 @@ namespace Ferris
                 fh_urllist ul  = *li;
                 addDocs( docnums, ul );
             }
+            return docnums;
         }
         
         docNumSet_t& EAIndexManagerDB4::ExecuteGtEq( fh_context q,
@@ -1870,6 +1873,7 @@ namespace Ferris
                 fh_urllist ul  = *li;
                 addDocs( docnums, ul );
             }
+            return docnums;
         }
         
         
@@ -2639,7 +2643,8 @@ namespace Ferris
                 s = tolowerstr()( s );
                 ret.insert( s );
             }
-            
+
+            return ret;
         }
         
         

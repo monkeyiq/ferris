@@ -57,8 +57,7 @@
 extern "C"
 {
     FERRISEXP_DLLLOCAL Ferris::fh_context
-    Brew( Ferris::RootContextFactory* rf )
-        throw( Ferris::RootContextCreationFailed );
+    Brew( Ferris::RootContextFactory* rf );
 }
 
 

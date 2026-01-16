@@ -110,8 +110,9 @@ int main( int argc, const char** argv )
 //         }
     }
 
-    obj->getPoptCollector()->ArgProcessingDone( optCon );
-
+    
+//    obj->getPoptCollector()->ArgProcessingDone( optCon );
+    
     if (argc < 3)
     {
         poptPrintHelp(optCon, stderr, 0);
@@ -152,7 +153,9 @@ int main( int argc, const char** argv )
         /************************************************************/
         /************************************************************/
 
-
+        cerr << "aaaaaaa" << endl;
+        
+/*
         typedef Loki::SmartPtr< SyncDelayer, 
             Loki::RefLinked, 
             Loki::DisallowConversion, 
@@ -164,11 +167,12 @@ int main( int argc, const char** argv )
         {
             syncd = new SyncDelayer();
         }
+*/
         
         for( srcs_t::iterator iter = srcs.begin(); iter != srcs.end(); ++iter )
         {
             string SrcName = *iter;
-//            cerr << "src:" << SrcName << endl;
+            cerr << "src:" << SrcName << endl;
 
             obj->setSrcURL( SrcName );
             obj->copy();

@@ -372,9 +372,6 @@ namespace Ferris
  */
     fh_istream
     ChainedViewContext::getIStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               exception)
     {
         return Delegate->getIStream( m );
     }
@@ -386,9 +383,6 @@ namespace Ferris
  */
     fh_istream
     ChainedViewContext::getLocalIStream( string& new_dn, ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               exception)
     {
         return Delegate->getLocalIStream( new_dn, m );
     }
@@ -400,10 +394,6 @@ namespace Ferris
  */
     fh_iostream
     ChainedViewContext::getIOStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               AttributeNotWritable,
-               CanNotGetStream,
-               exception)
     {
         return Delegate->getIOStream( m );
     }
@@ -417,7 +407,7 @@ namespace Ferris
  * @see Context::getParent()
  */
     Attribute::Parent_t
-    ChainedViewContext::getParent() throw (FerrisParentNotSetError)
+    ChainedViewContext::getParent()
     {
         return _Base::isParentBound() ? _Base::getParent() : Delegate->getParent();
     }
@@ -450,7 +440,7 @@ namespace Ferris
     }
 
     string
-    ChainedViewContext::getDirPath() throw (FerrisParentNotSetError)
+    ChainedViewContext::getDirPath()
     {
         return Delegate->getDirPath();
     }
@@ -518,7 +508,7 @@ namespace Ferris
      * @see Context::getAttribute()
      */
     fh_attribute
-    ChainedViewContext::getAttribute( const string& rdn ) throw( NoSuchAttribute )
+    ChainedViewContext::getAttribute( const string& rdn )
     {
         stringset_t& sl = getAugmentedForceLocalAttributeNames();
         if( !sl.empty() )
@@ -579,7 +569,7 @@ namespace Ferris
     bool
     ChainedViewContext::isAttributeBound( const std::string& rdn,
                                           bool createIfNotThere
-        ) throw( NoSuchAttribute )
+        )
     {
         stringset_t& sl = getAugmentedForceLocalAttributeNames();
         if( !sl.empty() )
@@ -634,9 +624,6 @@ namespace Ferris
 
     fh_attribute
     ChainedViewContext::createAttribute( const string& rdn )
-        throw( FerrisCreateAttributeFailed,
-               FerrisCreateAttributeNotSupported,
-               AttributeAlreadyInUse )
     {
         return Delegate->createAttribute( rdn );
     }
@@ -644,8 +631,6 @@ namespace Ferris
 
     fh_attribute
     ChainedViewContext::acquireAttribute( const string& rdn )
-        throw( FerrisCreateAttributeFailed,
-               FerrisCreateAttributeNotSupported )
     {
         return Delegate->acquireAttribute( rdn );
     }
@@ -659,7 +644,6 @@ namespace Ferris
  */
     fh_context
     ChainedViewContext::createSubContext( const string& rdn, fh_context md ) 
-        throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported )
     {
         LG_CTX_D << "ChainedViewContext::createSubContext() rdn:" << rdn << endl;
         return Delegate->createSubContext( rdn, md );
@@ -667,7 +651,6 @@ namespace Ferris
 
     fh_context
     ChainedViewContext::createSubContext( const std::string& rdn, fh_mdcontext md )
-        throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported )
     {
         LG_CTX_D << "ChainedViewContext::createSubContext() rdn:" << rdn << endl;
 //        fh_context c = GetImpl( md );
@@ -685,7 +668,6 @@ namespace Ferris
  */
     fh_context
     ChainedViewContext::getRelativeContext( const string& xdn, RootContextFactory* f )
-        throw( NoSuchSubContext )
     {
         return Delegate->getRelativeContext(xdn,f);
     }
@@ -697,7 +679,7 @@ namespace Ferris
 // }
     
 // fh_context
-// ChainedViewContext::getSubContext( const string& rdn ) throw( NoSuchSubContext )
+// ChainedViewContext::getSubContext( const string& rdn )
 // {
 //     return Delegate->getSubContext(rdn);
 // }
@@ -722,7 +704,7 @@ namespace Ferris
  * Always 0
  */
     long
-    ChainedViewContext::guessSize() throw()
+    ChainedViewContext::guessSize()
     {
         return 0;
     }

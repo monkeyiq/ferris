@@ -43,7 +43,8 @@
 #include <string.h>
 
 #include <attr/xattr.h>
-//#include <attr/attributes.h>
+#include <attr/attributes.h>
+#include <sys/xattr.h>
 
 #include "config.h" // XFS_SUPER define
 // #include <xfs/xfs_fs.h>
@@ -95,11 +96,7 @@ public:
     fh_attribute CreateAttr(
         const fh_context& a,
         const string& rdn,
-        fh_context md = 0 )
-        throw(
-            FerrisCreateAttributeFailed,
-            FerrisCreateAttributeNotSupported
-            );
+        fh_context md = 0 );
 
     virtual bool isDynamic()
         {
@@ -454,12 +451,11 @@ public:
                 ss << schema->getURL();
                 return ss;
             }
-            else
-            {
-                fh_stringstream ss;
-                ss << "reading attribute:" << rdn;
-                ThrowFromErrno( eno, tostr(ss), 0 );
-            }
+
+            fh_stringstream ss;
+            ss << "reading attribute:" << rdn;
+            ThrowFromErrno( eno, tostr(ss), 0 );
+            return ss;
         }
     virtual void setStream( Context* c, const std::string& rdn, EA_Atom* atom, fh_istream ss )
         {
@@ -796,10 +792,6 @@ EAGenerator_XFSNative::CreateAttr(
     const fh_context& a,
     const string& urdn,
     fh_context md )
-    throw(
-        FerrisCreateAttributeFailed,
-        FerrisCreateAttributeNotSupported
-        )
 {
     try
     {

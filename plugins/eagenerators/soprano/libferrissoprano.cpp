@@ -68,11 +68,7 @@ namespace Ferris
         fh_attribute CreateAttr(
             const fh_context& a,
             const string& rdn,
-            fh_context md = 0 )
-            throw(
-                FerrisCreateAttributeFailed,
-                FerrisCreateAttributeNotSupported
-                );
+            fh_context md = 0 );
 
         virtual bool tryBrew( const fh_context& ctx, const std::string& eaname );
     
@@ -392,10 +388,6 @@ fh_attribute
 EAGenerator_Soprano::CreateAttr( const fh_context& a,
                                  const string& urdn,
                                  fh_context md )
-    throw(
-        FerrisCreateAttributeFailed,
-        FerrisCreateAttributeNotSupported
-        )
 {
     try
     {

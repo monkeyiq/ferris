@@ -157,36 +157,26 @@ namespace Ferris
         ///////////////////////////////////////////////////////////////////////////////
     public:
     
-        virtual fh_istream getIStream( ferris_ios::openmode m = std::ios::in )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception);
+        virtual fh_istream getIStream( ferris_ios::openmode m = std::ios::in );
     
-        virtual fh_istream getLocalIStream( std::string& new_dn, ferris_ios::openmode m = std::ios::in )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception);
+        virtual fh_istream getLocalIStream( std::string& new_dn, ferris_ios::openmode m = std::ios::in );
     
-        virtual fh_iostream getIOStream( ferris_ios::openmode m = std::ios::in|std::ios::out )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception);
+        virtual fh_iostream getIOStream( ferris_ios::openmode m = std::ios::in|std::ios::out );
 
-        virtual Parent_t getParent() throw (FerrisParentNotSetError);
+        virtual Parent_t getParent();
         virtual bool isParentBound();
         virtual const std::string& getDirName() const;
-        virtual std::string getDirPath() throw (FerrisParentNotSetError);
+        virtual std::string getDirPath();
         virtual std::string getURL();
 
         virtual stringset_t& getForceLocalAttributeNames();
         
-        virtual fh_attribute getAttribute( const std::string& rdn ) throw( NoSuchAttribute );
+        virtual fh_attribute getAttribute( const std::string& rdn );
         virtual AttributeNames_t& getAttributeNames( AttributeNames_t& ret );
         virtual int  getAttributeCount();
         virtual bool isAttributeBound( const std::string& rdn,
                                        bool createIfNotThere = true
-            ) throw( NoSuchAttribute );
+            );
         
         virtual ref_count_t AddRef();
         virtual ref_count_t Release();
@@ -199,33 +189,22 @@ namespace Ferris
         ///////////////////////////////////////////////////////////////////////////////
     public:
 
-        virtual fh_attribute createAttribute( const std::string& rdn )
-            throw( FerrisCreateAttributeFailed,
-                   FerrisCreateAttributeNotSupported,
-                   AttributeAlreadyInUse );
+        virtual fh_attribute createAttribute( const std::string& rdn );
 
-        virtual fh_attribute acquireAttribute( const std::string& rdn )
-            throw( FerrisCreateAttributeFailed,
-                   FerrisCreateAttributeNotSupported );
+        virtual fh_attribute acquireAttribute( const std::string& rdn );
 
-        virtual fh_context
-        createSubContext( const std::string& rdn, fh_context md = 0 )
-            throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported );
-
-        virtual fh_context
-        createSubContext( const std::string& rdn, fh_mdcontext md )
-            throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported );
+        virtual fh_context createSubContext( const std::string& rdn, fh_context md = 0 );
+        
+        virtual fh_context createSubContext( const std::string& rdn, fh_mdcontext md );
     
-        virtual fh_context
-        getRelativeContext( const std::string& xdn, RootContextFactory* f = 0 )
-            throw( NoSuchSubContext );
+        virtual fh_context getRelativeContext( const std::string& xdn, RootContextFactory* f = 0 );
         
 //     virtual SubContextNames_t getSubContextNames();
-//     virtual fh_context getSubContext( const std::string& rdn ) throw( NoSuchSubContext );
+//     virtual fh_context getSubContext( const std::string& rdn );
 //     bool isSubContextBound( const std::string& rdn );
     
         virtual void read( bool force = 0 );
-        virtual long guessSize() throw();
+        virtual long guessSize();
 
         virtual void dumpOutItems();
         

@@ -63,7 +63,7 @@ namespace bmi = boost::multi_index;
 #include <boost/interprocess/containers/string.hpp>
 #include <boost/dynamic_bitset/config.hpp>
 
-#include <boost/detail/dynamic_bitset.hpp>
+#include <boost/dynamic_bitset.hpp>
 #include "mmap_dynamic_bitset.hpp"
 //#include <boost/dynamic_bitset.hpp>
 
@@ -1145,7 +1145,7 @@ namespace Ferris
                                 {
                                     bool skip = false;
                                     static int LIBFERRIS_DISABLE_DIGRAPH_FASTSKIP
-                                        = g_getenv ("LIBFERRIS_DISABLE_DIGRAPH_FASTSKIP") > 0;
+                                        = g_getenv ("LIBFERRIS_DISABLE_DIGRAPH_FASTSKIP") != 0;
 
                                     if( !LIBFERRIS_DISABLE_DIGRAPH_FASTSKIP )
                                     {

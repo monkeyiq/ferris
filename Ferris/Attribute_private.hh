@@ -38,8 +38,7 @@ namespace Ferris
 
     namespace Factory
     {
-        FERRISEXP_DLLLOCAL fh_istream MakePipeEA( const fh_runner& Runner )
-            throw( CanNotGetStream );
+        FERRISEXP_DLLLOCAL fh_istream MakePipeEA( const fh_runner& Runner );
     };
 
 

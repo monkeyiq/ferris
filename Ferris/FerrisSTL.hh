@@ -167,7 +167,7 @@ namespace Ferris
 
         
     template <class ItemType, class SetType>
-    struct itemInSet : public std::binary_function< ItemType, SetType, bool> 
+    struct itemInSet
     {
         bool operator()(const ItemType& x, const SetType& se) const
             {

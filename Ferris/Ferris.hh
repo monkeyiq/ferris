@@ -419,7 +419,7 @@ namespace Ferris
      * @param rdn The rdn of the subcontext to get
      * @return The context with rdn == getDirName()
      */
-        virtual fh_context getSubContext( const std::string& rdn ) throw( NoSuchSubContext ) = 0;
+        virtual fh_context getSubContext( const std::string& rdn ) = 0;
 
         /**
          * Deprecated, use getSubContextCount() instead.
@@ -490,7 +490,7 @@ namespace Ferris
          * @see Medallion::removeEmblem()
          *
          */
-        typedef sigc::signal1< void, fh_context > NamingEvent_MedallionUpdated_Sig_t;
+        typedef sigc::signal< void ( fh_context ) > NamingEvent_MedallionUpdated_Sig_t;
     
         /**
          * Context changed signal type. This signal consists of a special changed
@@ -510,9 +510,9 @@ namespace Ferris
          * @see NamingEvent_Changed
          *
          */
-        typedef sigc::signal3< void,
-                         NamingEvent_Changed*,
-                         std::string, std::string> NamingEvent_Changed_Sig_t;
+        typedef sigc::signal< void (
+            NamingEvent_Changed*,
+            std::string, std::string ) > NamingEvent_Changed_Sig_t;
     
 
         /**
@@ -534,9 +534,9 @@ namespace Ferris
          * @see NamingEvent_Deleted
          *
          */
-        typedef sigc::signal3< void,
+        typedef sigc::signal< void (
                          NamingEvent_Deleted*,
-                         std::string, std::string> NamingEvent_Deleted_Sig_t;
+                         std::string, std::string ) > NamingEvent_Deleted_Sig_t;
 
         /**
          * Context has started being executed signal type.
@@ -552,9 +552,9 @@ namespace Ferris
          * @see NamingEvent_Start_Reading_Context
          * @see NamingEvent_Stop_Reading_Context
          */
-        typedef sigc::signal3< void,
+        typedef sigc::signal< void (
                          NamingEvent_Start_Execute*,
-                         std::string, std::string> NamingEvent_Start_Execute_Sig_t;
+                         std::string, std::string ) > NamingEvent_Start_Execute_Sig_t;
 
         /**
          * Context has stopped being executed signal type.
@@ -570,9 +570,9 @@ namespace Ferris
          * @see NamingEvent_Start_Reading_Context
          * @see NamingEvent_Stop_Reading_Context
          */
-        typedef sigc::signal3< void,
+        typedef sigc::signal< void (
                          NamingEvent_Stop_Execute*,
-                         std::string, std::string> NamingEvent_Stop_Execute_Sig_t;
+                         std::string, std::string ) > NamingEvent_Stop_Execute_Sig_t;
     
         /**
          * Context has been created signal type.
@@ -591,10 +591,10 @@ namespace Ferris
          * @see NamingEvent
          * @see NamingEvent_Created
          */
-        typedef sigc::signal4< void,
+        typedef sigc::signal< void (
                                NamingEvent_Created*,
                                const fh_context&,
-                               std::string, std::string> NamingEvent_Created_Sig_t;
+                               std::string, std::string ) > NamingEvent_Created_Sig_t;
 
         /**
          * Context has been discovered to exist already signal type.
@@ -611,10 +611,10 @@ namespace Ferris
          * @see NamingEvent
          * @see NamingEvent_Exists
          */
-        typedef sigc::signal4< void,
+        typedef sigc::signal< void (
                                NamingEvent_Exists*,
                                const fh_context&,
-                               std::string, std::string> NamingEvent_Exists_Sig_t;
+                               std::string, std::string ) > NamingEvent_Exists_Sig_t;
 
         /**
          * Context has been moved signal type.
@@ -629,9 +629,9 @@ namespace Ferris
          * @see NamingEvent
          * @see NamingEvent_Moved
          */
-        typedef sigc::signal3< void,
+        typedef sigc::signal< void (
                          NamingEvent_Moved*,
-                         std::string, std::string> NamingEvent_Moved_Sig_t;
+                         std::string, std::string ) > NamingEvent_Moved_Sig_t;
 
         /**
          * Context has started to be read() signal type.
@@ -650,9 +650,9 @@ namespace Ferris
          * @see NamingEvent_Start_Reading_Context
          * @see NamingEvent_Stop_Reading_Context
          */
-        typedef sigc::signal1< void,
-                         NamingEvent_Start_Reading_Context*
-                         > NamingEvent_Start_Reading_Context_Sig_t;
+        typedef sigc::signal< void (
+            NamingEvent_Start_Reading_Context* )
+        > NamingEvent_Start_Reading_Context_Sig_t;
 
 
         /**
@@ -669,9 +669,9 @@ namespace Ferris
          * @see NamingEvent_Start_Reading_Context
          * @see NamingEvent_Stop_Reading_Context
          */
-        typedef sigc::signal1< void,
-                         NamingEvent_Stop_Reading_Context*
-                         > NamingEvent_Stop_Reading_Context_Sig_t;
+        typedef sigc::signal< void (
+            NamingEvent_Stop_Reading_Context* )
+        > NamingEvent_Stop_Reading_Context_Sig_t;
 
         /**
          * For contexts that represent network data this event is fired
@@ -697,9 +697,9 @@ namespace Ferris
          * @param stringset_t collection of the names of header that were obtained.
          *        use getStrAttr( c, set[k] ) to get the values of these keys
          */
-        typedef sigc::signal2< void,
+        typedef sigc::signal< void (
                                fh_context, 
-                               const stringset_t& > ContextEvent_Headers_Received_Sig_t;
+                               const stringset_t& ) > ContextEvent_Headers_Received_Sig_t;
 
         /**
          * get access to the NamingEvent_MedallionUpdated_Sig_t signal
@@ -1751,7 +1751,7 @@ namespace Ferris
         
     public:
 
-        virtual Ferris::Attribute::Parent_t getParent() throw (FerrisParentNotSetError);
+        virtual Ferris::Attribute::Parent_t getParent();
         virtual bool isParentBound();
         
         virtual std::string getRecommendedEA();
@@ -2177,8 +2177,7 @@ namespace Ferris
                                    EA_Atom* atx,
                                    bool addToREA,
                                    XSDBasic_t sct = XSD_UNKNOWN,
-                                   bool isStateLess = false )
-            throw( AttributeAlreadyInUse );
+                                   bool isStateLess = false );
 
         /**
          * If for all of our subcontexts each attribute with the same name
@@ -2313,8 +2312,7 @@ namespace Ferris
         sigc::connection AttributeCountRaisedFromOne_Connection;
 
     protected:
-        virtual fh_context priv_getSubContext( const std::string& rdn )
-            throw( NoSuchSubContext );
+        virtual fh_context priv_getSubContext( const std::string& rdn );
     private:
 
         /*
@@ -2409,14 +2407,9 @@ namespace Ferris
         virtual ~Context();
 
                                                    
-        virtual fh_attribute createAttribute( const std::string& rdn )
-            throw( FerrisCreateAttributeFailed,
-                   FerrisCreateAttributeNotSupported,
-                   AttributeAlreadyInUse );
+        virtual fh_attribute createAttribute( const std::string& rdn );
 
-        virtual fh_attribute acquireAttribute( const std::string& rdn )
-            throw( FerrisCreateAttributeFailed,
-                   FerrisCreateAttributeNotSupported );
+        virtual fh_attribute acquireAttribute( const std::string& rdn );
 
         
 
@@ -2424,20 +2417,17 @@ namespace Ferris
 
         virtual fh_context
         createSubContext( const std::string& rdn,
-                          fh_context md = 0 )
-            throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported );
+                          fh_context md = 0 );
 
         virtual fh_context
-        createSubContext( const std::string& rdn, fh_mdcontext md )
-            throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported );
+            createSubContext( const std::string& rdn, fh_mdcontext md );
     
     
-        virtual fh_context getRelativeContext( const std::string& xdn, RootContextFactory* f = 0 )
-            throw( NoSuchSubContext );
+        virtual fh_context getRelativeContext( const std::string& xdn, RootContextFactory* f = 0 );
 
     
         virtual ContextCollection::SubContextNames_t& getSubContextNames();
-        virtual fh_context getSubContext( const std::string& rdn ) throw( NoSuchSubContext );
+        virtual fh_context getSubContext( const std::string& rdn );
 
         bool priv_isSubContextBound( const std::string& rdn, Items_t::iterator& iter );
         bool priv_isSubContextBound( const std::string& rdn );
@@ -2446,7 +2436,7 @@ namespace Ferris
 
     
         virtual void read( bool force = 0 );
-        long guessSize() throw();
+        long guessSize();
 
 
         bool        hasSubContexts();
@@ -2471,8 +2461,8 @@ namespace Ferris
 
         virtual bool isAttributeBound( const std::string& rdn,
                                        bool createIfNotThere = true
-            ) throw( NoSuchAttribute );
-        virtual fh_attribute     getAttribute( const std::string& rdn ) throw( NoSuchAttribute );
+            );
+        virtual fh_attribute     getAttribute( const std::string& rdn );
         virtual AttributeNames_t& getAttributeNames( AttributeNames_t& ret );
         virtual int              getAttributeCount();
         fh_emblem getAttributeRootEmblem();
@@ -2621,9 +2611,7 @@ namespace Ferris
 
         void addToCreateHistory( const std::string& fileType );
         
-        virtual fh_context
-        priv_createSubContext( const std::string& rdn, fh_context md )
-            throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported );
+        virtual fh_context priv_createSubContext( const std::string& rdn, fh_context md );
 
         gboolean getUpdateMetaData_First_Time();
     protected:
@@ -2655,23 +2643,19 @@ namespace Ferris
             const std::string& rdn,
             bool created = false,
             bool checkIfExistsAlready = true
-            )
-            throw( NoSuchSubContext, FerrisNotSupportedInThisContext );
+            );
     private:
-        fh_context priv_discoveredSubContext( const std::string& rdn, bool created = false )
-            throw( NoSuchSubContext, FerrisNotSupportedInThisContext );
+        fh_context priv_discoveredSubContext( const std::string& rdn, bool created = false );
         
 
-        virtual long priv_guessSize() throw();
+        virtual long priv_guessSize();
 
 
         /*************************************************************
          * Helpers for context subclasses to add/remove items
          *************************************************************/
     protected:
-        virtual fh_context Insert( Context* ctx, bool created = false, bool emit = true )
-            throw( SubContextAlreadyInUse );
-    
+        virtual fh_context Insert( Context* ctx, bool created = false, bool emit = true );
         // Silent failure if not in collection
         virtual void Remove( Context*   ctx, bool emitdeleted = true ); 
         void         Remove( fh_context ctx, bool emitdeleted = true ); 
@@ -2759,8 +2743,7 @@ namespace Ferris
         /*************************************************************
          * Stuff that Context adds too.
          *************************************************************/
-//         virtual void setAttribute(fh_attribute atx)
-//             throw( AttributeAlreadyInUse );
+//         virtual void setAttribute(fh_attribute atx);
 
         /*************************************************************
          * Stuff for resolving relative paths
@@ -2776,8 +2759,7 @@ namespace Ferris
             const std::string& xdn,
             const std::string& full_xdn,
             RootContextFactory* f
-            )
-            throw( NoSuchSubContext );
+            );
 
 //         friend fh_context CreateDirWithParents( fh_context c,
 //                                                 const std::string& n,
@@ -2920,7 +2902,8 @@ namespace Ferris
          * A function that can create an image object from a context
          * object
          */
-        typedef Loki::Functor< fh_image, LOKI_TYPELIST_1( const fh_context& ) > f_imageEAGenerator;
+//        typedef Loki::Functor< fh_image, LOKI_TYPELIST_1( const fh_context& ) > f_imageEAGenerator;
+        typedef boost::function< fh_image( const fh_context& ) > f_imageEAGenerator;
     protected:
 
         /**

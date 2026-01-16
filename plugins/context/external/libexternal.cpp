@@ -51,8 +51,7 @@ namespace Ferris
 {
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
     
     
@@ -71,7 +70,7 @@ namespace Ferris
         typedef externalContext _Self;
         typedef StateLessEAHolding_Recommending_ParentPointingTree_Context< externalContext > _Base;
     
-        friend fh_context Brew( RootContextFactory* rf ) throw( RootContextCreationFailed );
+        friend fh_context Brew( RootContextFactory* rf );
         string ScriptName;
         bool m_isDir;
         streamsize m_size;
@@ -120,10 +119,7 @@ namespace Ferris
         fh_runner getRunner( string Command, bool SplitArchiveName );
 
     
-        virtual fh_istream real_getIOStream()
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   exception);
+        virtual fh_istream real_getIOStream();
 
     
         virtual void priv_read();
@@ -168,16 +164,9 @@ namespace Ferris
 
         virtual void read( bool force = 0 );
     
-        virtual fh_istream getIStream( ferris_ios::openmode m = ios::in )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   exception);
+        virtual fh_istream getIStream( ferris_ios::openmode m = ios::in );
     
-        virtual fh_iostream getIOStream( ferris_ios::openmode m = ios::in|ios::out )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   exception);
+        virtual fh_iostream getIOStream( ferris_ios::openmode m = ios::in|ios::out );
 
         void setScriptName( const string& v );
     
@@ -303,9 +292,6 @@ externalContext::getRunner( string Command, bool SplitArchiveName )
 
 fh_istream
 externalContext::real_getIOStream()
-    throw (FerrisParentNotSetError,
-           AttributeNotWritable,
-           exception)
 {
     fh_iostream ss;
 
@@ -396,9 +382,6 @@ externalContext::real_getIOStream()
 
 fh_istream
 externalContext::getIStream( ferris_ios::openmode m )
-    throw (FerrisParentNotSetError,
-           CanNotGetStream,
-           exception)
 {
     return real_getIOStream();
 }
@@ -547,10 +530,6 @@ externalContext::writeStream( fh_istream& ss, std::streamsize tellp )
 
 fh_iostream
 externalContext::getIOStream( ferris_ios::openmode m )
-    throw (FerrisParentNotSetError,
-           AttributeNotWritable,
-           CanNotGetStream,
-           exception)
 {
     fh_istream filepipe = real_getIOStream();
     fh_stringstream ss;
@@ -937,7 +916,6 @@ externalContext::priv_read()
 extern "C"
 {
     fh_context Brew( RootContextFactory* rf )
-        throw( RootContextCreationFailed )
     {
         try
         {

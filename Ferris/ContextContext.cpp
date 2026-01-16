@@ -72,7 +72,6 @@ public:
         }
 
     fh_context Brew( RootContextFactory* rf )
-        throw( RootContextCreationFailed )
         {
             static ContextContext raw_obj;
             

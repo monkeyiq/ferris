@@ -40,8 +40,7 @@ namespace Ferris
  
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
 
     /******************************************************************************/
@@ -126,7 +125,7 @@ namespace Ferris
         /******************************************************************************/
         /******************************************************************************/
     
-        friend fh_context Brew( RootContextFactory* rf ) throw( RootContextCreationFailed );
+        friend fh_context Brew( RootContextFactory* rf );
         db4Context* priv_CreateContext( Context* parent, string rdn )
             {
                 db4Context* ret = new db4Context();
@@ -195,8 +194,7 @@ namespace Ferris
         
         
 //         virtual bool priv_supportsShortCutLoading()  { return true; }
-//         virtual fh_context priv_getSubContext( const std::string& rdn )
-//             throw( NoSuchSubContext );
+//         virtual fh_context priv_getSubContext( const std::string& rdn );
         
         virtual void priv_read();
 
@@ -362,7 +360,6 @@ db4Context::getDB()
 //     //
 //     fh_context
 //     db4Context::priv_getSubContext( const string& rdn )
-//         throw( NoSuchSubContext )
 //     {
 //         try
 //         {
@@ -528,7 +525,6 @@ db4Context::priv_read()
 extern "C"
 {
     fh_context Brew( RootContextFactory* rf )
-        throw( RootContextCreationFailed )
     {
         static db4Context c;
         fh_context ret = c.CreateContext( 0, rf->getInfo( "Root" ));

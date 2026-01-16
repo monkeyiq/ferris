@@ -947,9 +947,16 @@ namespace Ferris
                 sl.push_back( iter->first );
             }
 
-            typedef Loki::SingletonHolder<PopTableCollector<LogStateBase>,
-            Loki::CreateUsingNew, Loki::NoDestroy > LoggPopt;
-            return LoggPopt::Instance().getTable( Desc, sl );
+//            typedef Loki::SingletonHolder<PopTableCollector<LogStateBase>,
+//            Loki::CreateUsingNew, Loki::NoDestroy > LoggPopt;
+//            return LoggPopt::Instance().getTable( Desc, sl );
+
+            static  PopTableCollector<LogStateBase>* obj = 0;
+            if( !obj ) 
+            {
+                obj = new PopTableCollector<LogStateBase>();
+            }
+            return obj->getTable( Desc, sl );
         }
     
 

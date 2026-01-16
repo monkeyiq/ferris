@@ -146,8 +146,8 @@ AC_ARG_ENABLE(debug,
 [],[])
 if test x$enable_debug = xyes; then
 	echo "setting debug mode to on..."
-	FERRIS_CF=" -O0 -g -pipe -fno-inline -fno-default-inline "; #-Wall "; 
-	FERRIS_CF=" -O0 -g -pipe -fno-inline ";
+	FERRIS_CF=" -O0 -g -pg -pipe -fno-inline -fno-default-inline "; #-Wall "; 
+	FERRIS_CF=" -O0 -g -pg -pipe -fno-inline ";
 	smartptr_assert="if( !val ) { ::Ferris::BackTrace(); assert(val); }";
 else
 	echo "setting debug mode to off..."
@@ -905,7 +905,7 @@ AC_DEFINE_UNQUOTED(MIMETYPE_DIRECTORY, "$MIMETYPE_DIRECTORY", [] )
 
 AM_FERRIS_LOKI( 2.2.0 )
 AM_FERRIS_STREAMS( 0.4.0 )
-AM_FERRIS_SIGC2( 2.0.0 )
+AM_FERRIS_SIGC3( 3.0.0 )
 
 ###############################################################################
 ###############################################################################
@@ -1011,6 +1011,7 @@ TSEARCH2_CFLAGS=""
 TSEARCH2_LIBS=""
 
 build_tsearch2=no
+
 AC_ARG_ENABLE(postgresql-tsearch2-indexing,
   [AS_HELP_STRING([--enable-postgresql-tsearch2-indexing], [Build support for fulltext indexes with PostgreSQL/TSearch2 (default=yes, if pqxx is found)])],
 [],
@@ -1028,6 +1029,9 @@ if test x$enable_postgresql_tsearch2_indexing = xyes; then
 else
 	echo "postgresql-tsearch2-indexing is off by default..."
 fi
+# this is using the old pqxx/tablewriter interface and needs an update as
+# at Jan 2026. FIXMEAAA
+build_tsearch2=no
 AM_CONDITIONAL(BUILD_PGTSEARCH_FTXIDX, test x$build_tsearch2 = xyes)
 AC_SUBST(TSEARCH2_CFLAGS)
 AC_SUBST(TSEARCH2_LIBS)
@@ -3149,15 +3153,15 @@ fi
 AC_SUBST(SHAREDPGCTX_LA)
 
 
-ZMCTXMODDIR="${absolute_srcdir}/plugins/context/zoneminder/"
+ZMCTXMODDIR="${absolute_srcdir}/plugins/context/"
 AC_SUBST(ZMCTXMODDIR)
-SHAREDZMCTX_LA=" \$(top_builddir)/plugins/context/zoneminder/libferriszoneminder_shared.la "
+SHAREDZMCTX_LA=" \$(top_builddir)/plugins/context/libferriszoneminder_shared.la "
 AC_SUBST(SHAREDZMCTX_LA)
 
 
-FERRISRESTCTXMODDIR="${absolute_srcdir}/plugins/context/ferrisrest/"
+FERRISRESTCTXMODDIR="${absolute_srcdir}/plugins/context/"
 AC_SUBST(FERRISRESTCTXMODDIR)
-SHAREDFERRISRESTCTX_LA=" \$(top_builddir)/plugins/context/ferrisrest/libferrisferrisrest_shared.la "
+SHAREDFERRISRESTCTX_LA=" \$(top_builddir)/plugins/context/libferrisferrisrest_shared.la "
 AC_SUBST(SHAREDFERRISRESTCTX_LA)
 
 
@@ -3187,10 +3191,10 @@ dnl fi
 dnl AC_SUBST(SHAREDXML_LA)
 
 
-LDAPMODDIR="${absolute_srcdir}/plugins/context/ldap/"
+LDAPMODDIR="${absolute_srcdir}/plugins/context/"
 AC_SUBST(LDAPMODDIR)
 if test "$have_ldap" = yes; then
-SHAREDLDAP_LA=" \$(top_builddir)/plugins/context/ldap/libferrisldapshared.la "
+SHAREDLDAP_LA=" \$(top_builddir)/plugins/context/libferrisldapshared.la "
 else
 SHAREDLDAP_LA=""
 fi
@@ -3243,9 +3247,9 @@ AC_SUBST(CTXGOOGLEDIR)
 CTXGOOGLE_LA=" \$(top_builddir)/plugins/context/libferrisgoogle_shared.la "
 AC_SUBST(CTXGOOGLE_LA)
 
-dnl CTXBOXCOMDIR="${absolute_srcdir}/plugins/context/boxcom/"
+dnl CTXBOXCOMDIR="${absolute_srcdir}/plugins/context/"
 dnl AC_SUBST(CTXBOXCOMDIR)
-dnl CTXBOXCOM_LA=" \$(top_builddir)/plugins/context/boxcom/libferrisboxcom_shared.la "
+dnl CTXBOXCOM_LA=" \$(top_builddir)/plugins/context/libferrisboxcom_shared.la "
 dnl AC_SUBST(CTXBOXCOM_LA)
 
 
@@ -3266,15 +3270,15 @@ CTXIDENTICA_LA=" \$(top_builddir)/plugins/context/libferrisidentica_shared.la "
 AC_SUBST(CTXIDENTICA_LA)
 
 
-CTXZONEMINDERDIR="${absolute_srcdir}/plugins/context/zoneminder/"
+CTXZONEMINDERDIR="${absolute_srcdir}/plugins/context/"
 AC_SUBST(CTXZONEMINDERDIR)
-CTXZONEMINDER_LA=" \$(top_builddir)/plugins/context/zoneminder/libferriszoneminder_shared.la "
+CTXZONEMINDER_LA=" \$(top_builddir)/plugins/context/libferriszoneminder_shared.la "
 AC_SUBST(CTXZONEMINDER_LA)
 
 
-CTXFERRISRESTDIR="${absolute_srcdir}/plugins/context/ferrisrest/"
+CTXFERRISRESTDIR="${absolute_srcdir}/plugins/context/"
 AC_SUBST(CTXFERRISRESTDIR)
-CTXFERRISREST_LA=" \$(top_builddir)/plugins/context/ferrisrest/libferrisferrisrest_shared.la "
+CTXFERRISREST_LA=" \$(top_builddir)/plugins/context/libferrisferrisrest_shared.la "
 AC_SUBST(CTXFERRISREST_LA)
 
 
@@ -4046,10 +4050,10 @@ AC_SUBST(QTSQL_CFLAGS)
 AC_SUBST(QTSQL_LIBS)
 
 
-QTSQLCTXMODDIR="${absolute_srcdir}/plugins/context/qtsql/"
+QTSQLCTXMODDIR="${absolute_srcdir}/plugins/context/"
 AC_SUBST(QTSQLCTXMODDIR)
 if test x"$have_qtsql" = xyes; then
-SHAREDQTSQLCTX_LA=" \$(top_builddir)/plugins/context/qtsql/libferrisqtsqlshared.la "
+SHAREDQTSQLCTX_LA=" \$(top_builddir)/plugins/context/libferrisqtsqlshared.la "
 else
 SHAREDQTSQLCTX_LA=""
 fi
@@ -4456,10 +4460,10 @@ AC_SUBST(OBBY_MOUNT_CFLAGS)
 AC_SUBST(OBBY_MOUNT_LIBS)
 AM_CONDITIONAL(FERRIS_HAVE_OBBY_MOUNT_ABILITY, test x"$have_obby" = xyes)
 
-OBBYMODDIR="${absolute_srcdir}/plugins/context/obby/"
+OBBYMODDIR="${absolute_srcdir}/plugins/context/"
 AC_SUBST(OBBYMODDIR)
 if test "$have_obby" = yes; then
-SHAREDOBBY_LA=" \$(top_builddir)/plugins/context/obby/libferrisobbyshared.la "
+SHAREDOBBY_LA=" \$(top_builddir)/plugins/context/libferrisobbyshared.la "
 else
 SHAREDOBBY_LA=""
 fi
@@ -4783,6 +4787,14 @@ FERRIS_CREATION_PLUGIN_DIR="$LIBDIR/ferris/plugins/creation"
 AC_SUBST(FERRIS_CREATION_PLUGIN_DIR)
 AC_DEFINE_UNQUOTED(FERRIS_CREATION_PLUGIN_DIR, std::string("$FERRIS_CREATION_PLUGIN_DIR"), [] )
 
+
+if test x${on_osx} = xyes; then
+	AC_DEFINE( FERRIS_ON_OSX, 1, [On OSX platform] )
+fi
+
+# -fPIC -Wold-style-definition
+export CXXFLAGS="  $CXXFLAGS   -std=c++23 "
+export CFLAGS=" -Wold-style-definition $CFLAGS "
 
 
 dnl SMALLOBJCXXFLAGS="-DMAX_SMALL_OBJECT_SIZE=64 -DDEFAULT_CHUNK_SIZE=4096"

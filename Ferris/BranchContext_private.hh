@@ -120,16 +120,16 @@ namespace Ferris
         virtual ~FerrisBranchInternalContext();
 
         virtual const std::string& getDirName() const;
-        virtual std::string getDirPath() throw (FerrisParentNotSetError);
+        virtual std::string getDirPath();
         virtual std::string getURL();
 
         stringset_t& getForceLocalAttributeNames();
-//         virtual fh_attribute getAttribute( const std::string& rdn ) throw( NoSuchAttribute );
+//         virtual fh_attribute getAttribute( const std::string& rdn );
 //         virtual AttributeNames_t& getAttributeNames( AttributeNames_t& ret );
 //         virtual int  getAttributeCount();
 //         virtual bool isAttributeBound( const std::string& rdn,
 //                                        bool createIfNotThere = true
-//             ) throw( NoSuchAttribute );
+//             );
         
         virtual void OnDeleted( NamingEvent_Deleted* ev, std::string olddn, std::string newdn );
         virtual void OnExists ( NamingEvent_Exists* ev,
@@ -140,13 +140,12 @@ namespace Ferris
                                 std::string olddn, std::string newdn );
         
         virtual void read( bool force = 0 );
-        virtual long guessSize() throw();
+        virtual long guessSize();
         
 
         void createStateLessAttributes( bool force = false );
         _Self* priv_CreateContext( Context* parent, std::string rdn );
-        virtual fh_context priv_getSubContext( const std::string& rdn )
-            throw( NoSuchSubContext );
+        virtual fh_context priv_getSubContext( const std::string& rdn );
 
         BranchInternalContextCreatorFunctor_t& getCreator();
     };

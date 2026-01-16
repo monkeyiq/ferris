@@ -791,6 +791,7 @@ string makeFerrisPluginPath( const std::string& dir, const std::string& libname 
             xsd,
             requiresNativeKernelDrive,
             simpleTypes );
+        return r;
     }
     
     
@@ -913,7 +914,6 @@ string makeFerrisPluginPath( const std::string& dir, const std::string& libname 
  */
     long
     Context::guessSize()
-        throw()
     {
         return getOverMountContext()->priv_guessSize();
     }
@@ -927,7 +927,7 @@ string makeFerrisPluginPath( const std::string& dir, const std::string& libname 
  * @return 0 always
  */
     long
-    Context::priv_guessSize() throw()
+    Context::priv_guessSize()
     {
         return 0; 
     }
@@ -1623,7 +1623,6 @@ string makeFerrisPluginPath( const std::string& dir, const std::string& libname 
  */
     fh_context
     Context::priv_createSubContext( const string& rdn, fh_context md )
-        throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported )
     {
         LG_CTX_D << "Context::priv_createSubContext(1)" << endl;
         ensureEAIndexPluginFactoriesAreLoaded();
@@ -1973,6 +1972,12 @@ string makeFerrisPluginPath( const std::string& dir, const std::string& libname 
         if( !fileType.empty() )
         {
             fh_context parent  = Factory::getCreateHistory();
+            if( !parent ) 
+            {
+                // FIXMEAAA
+                return;
+            }
+            
             fh_context cursor  = Factory::getCursor( parent );
             string currentLast = getStrAttr( cursor, "content", "" );
             if( currentLast != fileType )
@@ -2007,7 +2012,6 @@ string makeFerrisPluginPath( const std::string& dir, const std::string& libname 
  */
     fh_context
     Context::createSubContext( const string& rdn, fh_context md )
-        throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported )
     {
         try
         {
@@ -2087,7 +2091,6 @@ string makeFerrisPluginPath( const std::string& dir, const std::string& libname 
 
     fh_context
     Context::createSubContext( const std::string& rdn, fh_mdcontext md )
-        throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported )
     {
         fh_context c;
         Upcast( c, md );
@@ -2114,9 +2117,6 @@ string makeFerrisPluginPath( const std::string& dir, const std::string& libname 
  */
     fh_attribute
     Context::createAttribute( const string& rdn )
-        throw( FerrisCreateAttributeFailed,
-               FerrisCreateAttributeNotSupported,
-               AttributeAlreadyInUse )
     {
         if( isAttributeBound( rdn ) )
         {
@@ -2174,8 +2174,6 @@ string makeFerrisPluginPath( const std::string& dir, const std::string& libname 
  */
     fh_attribute
     Context::acquireAttribute( const string& rdn )
-        throw( FerrisCreateAttributeFailed,
-               FerrisCreateAttributeNotSupported )
     {
         if( isBound(OverMountContext_Delegate) )
         {
@@ -2203,7 +2201,6 @@ string makeFerrisPluginPath( const std::string& dir, const std::string& libname 
  */
     fh_context
     Context::getSubContext( const string& rdn )
-        throw( NoSuchSubContext )
     {
         if( rdn == "." )
         {
@@ -2853,7 +2850,6 @@ string makeFerrisPluginPath( const std::string& dir, const std::string& libname 
  */
     fh_context
     Context::Insert( Context* ctx, bool created, bool emit )
-        throw( SubContextAlreadyInUse )
     {
         try
         {
@@ -3734,7 +3730,6 @@ static bool isSorter( Context* c )
  */
     fh_context
     Context::priv_readSubContext( const string& rdn, bool created, bool checkIfExistsAlready )
-        throw( NoSuchSubContext, FerrisNotSupportedInThisContext )
     {
         try
         {
@@ -3834,7 +3829,6 @@ static bool isSorter( Context* c )
  */
     fh_context
     Context::priv_discoveredSubContext( const string& rdn, bool created )
-        throw( NoSuchSubContext, FerrisNotSupportedInThisContext )
     {
         fh_context ret = 0;
         Items_t::iterator subc_iter;
@@ -3858,7 +3852,6 @@ static bool isSorter( Context* c )
  */
     void
     Context::UnPageSubContextsIfNeeded()
-//    throw( NoSuchSubContext, FerrisNotSupportedInThisContext )
     {
 //    cerr << " Context::UnPageSubContextsIfNeeded() " << endl;
     
@@ -3996,7 +3989,6 @@ Context::getBranchFileSystem()
  */
     fh_context
     Context::priv_getSubContext( const string& rdn )
-        throw( NoSuchSubContext )
     {
         try
         {
@@ -4103,7 +4095,6 @@ Context::getBranchFileSystem()
         const string& full_xdn,
         RootContextFactory* f
         )
-        throw( NoSuchSubContext )
     {
         pair<string,string> p = splitPathAtStart(xdn);
 
@@ -4165,7 +4156,6 @@ Context::getRelativeContext(
     const string& xdn,
     RootContextFactory* f
     )
-    throw( NoSuchSubContext )
 {
     try
     {
@@ -4943,7 +4933,7 @@ Context::getContextEvent_Headers_Received_Sig()
     
 
 Attribute::Parent_t
-Context::getParent() throw (FerrisParentNotSetError)
+Context::getParent()
 {
 //     cerr << "Context::getParent() this:" << toVoid(this)
 //          << " cc:" << toVoid(CoveredContext)
@@ -5284,7 +5274,8 @@ Context::readOverMount()
 //                Main::processAllPending_VFSFD_Events(); // FAILS
 //                Main::processAllPendingEvents(); // OK
 
-                g_main_iteration( false );
+//                g_main_iteration( false );
+                g_main_context_iteration ( NULL, true );
                 Main::processAllPending_VFSFD_Events();
             }
             LG_CTX_N << "Context::read(" << force << ") url:" << getURL()
@@ -9680,7 +9671,6 @@ bool Context::setAttribute( const std::string& rdn,
                             bool addToREA,
                             XSDBasic_t sct,
                             bool isStateLess )
-    throw( AttributeAlreadyInUse )
 {
     bool r = _Base::setAttribute( rdn, atx, addToREA, sct, isStateLess );
 
@@ -10505,7 +10495,6 @@ Context::getStatelessEAGenFactorys()
 
     bool
     Context::isAttributeBound( const std::string& rdn, bool createIfNotThere )
-        throw( NoSuchAttribute )
     {
         try
         {
@@ -10542,7 +10531,7 @@ Context::getStatelessEAGenFactorys()
 
 
     fh_attribute
-    Context::getAttribute( const string& rdn ) throw( NoSuchAttribute )
+    Context::getAttribute( const string& rdn )
     {
         LG_CTX_D << "Context::getAttribute() :" << rdn << endl;
 //        cerr << "Context::getAttribute() :" << rdn << " AttributesHaveBeenCreated:" << AttributesHaveBeenCreated << endl;
@@ -11693,9 +11682,10 @@ Context::resolveFerrisXMLNamespace( const std::string& s )
 
         void processAllPendingEvents()
         {
-            while( g_main_pending() )
+            while( g_main_context_pending(NULL) )
             {
-                g_main_iteration( false );
+//                g_main_iteration( false );
+                g_main_context_iteration ( NULL, true );
                 processAllPending_VFSFD_Events();
             }
         }
@@ -11704,7 +11694,9 @@ Context::resolveFerrisXMLNamespace( const std::string& s )
         {
             while( true )
             {
-                g_main_iteration( true );
+//                g_main_iteration( true );
+                g_main_context_iteration ( NULL, true );
+                
                 processAllPending_VFSFD_Events();
 //                ProcessFAMExceptions();
             }
@@ -11804,6 +11796,12 @@ std::string setStrAttr( fh_context c,
                         bool throw_for_errors,
                         bool dontDelegateToOvermountContext ) 
     {
+        if( !c ) 
+        {
+            // FIXMEAAA            
+            return v;
+        }
+        
         string rdn = c->expandEAName( rdn_ref, false );
 //        cerr << "setStrAttr() rdn:" << rdn << endl;
         
@@ -12146,6 +12144,8 @@ std::string
     {
         if( !c )
         {
+            // FIXMEAAA
+            return def;
             cerr << "getStrAttr() called without a context" << endl;
             BackTrace();
             if( throw_for_errors )
@@ -12420,9 +12420,6 @@ fh_context ExecuteQueryAgainstMyRDF( const std::string& sparql )
 
 //     fh_istream
 //     ExecAttribute::priv_getIStream( ferris_ios::openmode m )
-//         throw (FerrisParentNotSetError,
-//                CanNotGetStream,
-//                exception)
 //     {
 //         if( !RunnerStaticlyBound )
 //         {

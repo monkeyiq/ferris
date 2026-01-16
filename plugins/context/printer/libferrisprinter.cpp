@@ -55,8 +55,7 @@ namespace Ferris
     
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
 
     std::string getPrintFilePath()
@@ -197,9 +196,6 @@ namespace Ferris
 
         fh_stringstream
         real_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   exception)
             {
                 fh_stringstream ss;
                 DEBUG << "returning an empty stream" << endl;
@@ -248,10 +244,6 @@ namespace Ferris
 
         fh_iostream
         priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ret = real_getIOStream( m );
                 ret->getCloseSig().connect( sigc::bind( sigc::mem_fun(*this, &_Self::OnStreamClosed ), m )); 
@@ -485,7 +477,6 @@ namespace Ferris
     extern "C"
     {
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
         {
             try
             {

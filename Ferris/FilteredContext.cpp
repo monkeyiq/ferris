@@ -273,6 +273,7 @@ namespace Ferris
                 {
                     fi->second( c );
                 }
+                return false;
             }
     };
 
@@ -2229,7 +2230,7 @@ FerrisException_CodeState( __FILE__ ,  __LINE__ , __PRETTY_FUNCTION__ ), \
     }
     
     fh_attribute
-    FilteredContext::getAttribute( const string& rdn ) throw( NoSuchAttribute )
+    FilteredContext::getAttribute( const string& rdn )
     {
         if( find( getLocalAttributeNames().begin(), getLocalAttributeNames().end(), rdn )
             != getLocalAttributeNames().end() )
@@ -2259,8 +2260,7 @@ FerrisException_CodeState( __FILE__ ,  __LINE__ , __PRETTY_FUNCTION__ ), \
 
     bool
     FilteredContext::isAttributeBound( const std::string& rdn,
-                                       bool createIfNotThere
-        ) throw( NoSuchAttribute )
+                                       bool createIfNotThere )
     {
         if( find( getLocalAttributeNames().begin(), getLocalAttributeNames().end(), rdn )
             != getLocalAttributeNames().end() )

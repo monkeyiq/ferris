@@ -225,8 +225,7 @@ namespace Ferris
          * multiple times, call this to signal that the request is complete.
          */
         virtual void writingComplete() = 0;
-        typedef sigc::signal1< void,
-                               fh_StreamToQIODevice > WritingComplete_Sig_t;
+        typedef sigc::signal< void ( fh_StreamToQIODevice ) > WritingComplete_Sig_t;
         WritingComplete_Sig_t& getWritingCompleteSig()
             {
                 return WritingComplete_Sig;

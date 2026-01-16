@@ -91,9 +91,7 @@ namespace Ferris
         FerrisGPGAllKeysDirectoryContext( Context* parent, const std::string& rdn );
         virtual ~FerrisGPGAllKeysDirectoryContext();
 
-        virtual fh_context
-        createSubContext( const std::string& rdn, fh_context md = 0 )
-            throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported );
+        virtual fh_context createSubContext( const std::string& rdn, fh_context md = 0 );
 
         void createStateLessAttributes( bool force = false );
         _Self* priv_CreateContext( Context* parent, std::string rdn );
@@ -128,10 +126,8 @@ namespace Ferris
         FerrisGPGUserIDToKeyContext( Context* parent, const std::string& rdn, fh_gpgallkeysContext allkc );
         virtual ~FerrisGPGUserIDToKeyContext();
 
-        virtual fh_context
-        createSubContext( const std::string& rdn, fh_context md = 0 )
-            throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported );
-
+        virtual fh_context createSubContext( const std::string& rdn, fh_context md = 0 );
+            
         void createStateLessAttributes( bool force = false );
         _Self* priv_CreateContext( Context* parent, std::string rdn );
 

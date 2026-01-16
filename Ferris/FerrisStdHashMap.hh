@@ -42,10 +42,13 @@
 #else
 
 #include <string>
-#include <ext/hash_map>
-#include <ext/hash_set>
+//#include <ext/hash_map>
+//#include <ext/hash_set>
+#include <unordered_map>
+#include <unordered_set>
 
 #ifndef PLATFORM_OSX
+/*
     namespace __gnu_cxx
     {
         template<>
@@ -57,13 +60,16 @@
                 { return __stl_hash_string(__s.c_str()); }
         };
     };
+*/
 #endif
 namespace std
 {
 //    using __gnu_cxx::hash;
 };
-#define FERRIS_STD_HASH_MAP __gnu_cxx::hash_map
-#define FERRIS_STD_HASH_SET __gnu_cxx::hash_set
+//#define FERRIS_STD_HASH_MAPXX __gnu_cxx::hash_map
+//#define FERRIS_STD_HASH_SETXX __gnu_cxx::hash_set
+#define FERRIS_STD_HASH_MAP std::unordered_map
+#define FERRIS_STD_HASH_SET std::unordered_set
 
 
 

@@ -56,9 +56,7 @@ namespace Ferris
         FullTextQueryRootContext();
         virtual ~FullTextQueryRootContext();
 
-        virtual fh_context
-        createSubContext( const std::string& rdn, fh_context md = 0 )
-            throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported );
+        virtual fh_context createSubContext( const std::string& rdn, fh_context md = 0 );
 
         void createStateLessAttributes( bool force = false );
     };
@@ -79,17 +77,13 @@ namespace Ferris
     protected:
 
         virtual void priv_read();
-        virtual fh_context priv_getSubContext( const std::string& rdn )
-            throw( NoSuchSubContext );
-
+        virtual fh_context priv_getSubContext( const std::string& rdn );
     public:
 
         FullTextQueryRunnerContext( Context* parent, const std::string& rdn );
         virtual ~FullTextQueryRunnerContext();
 
-        virtual fh_context
-        createSubContext( const std::string& rdn, fh_context md = 0 )
-            throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported );
+        virtual fh_context createSubContext( const std::string& rdn, fh_context md = 0 );
 
         void createStateLessAttributes( bool force = false );
 

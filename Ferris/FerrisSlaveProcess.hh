@@ -44,10 +44,10 @@ namespace Ferris
     public:
         virtual fh_runner getRunner() = 0;
         
-        typedef sigc::signal4< void, ChildStreamServer*, fh_runner, int, int > ChildCompleteSig_t;
+        typedef sigc::signal< void ( ChildStreamServer*, fh_runner, int, int ) > ChildCompleteSig_t;
         virtual ChildCompleteSig_t& getChildCompleteSig() = 0;
 
-        typedef sigc::signal1< void, fh_xstreamcol > MessageArrivedSig_t;
+        typedef sigc::signal< void ( fh_xstreamcol ) > MessageArrivedSig_t;
         virtual MessageArrivedSig_t& getMessageArrivedSig() = 0;
     };
 
@@ -115,11 +115,11 @@ namespace Ferris
     class BackgroundEAReaderSignals
     {
     public:
-        typedef sigc::signal4< void,
+        typedef sigc::signal< void (
                                BackgroundEAReader*, // this
                                const std::string&,  // rdn,
                                const std::string&,  // value,
-                               bool >               // if( true ) value is error for not reading rdn
+                               bool ) >               // if( true ) value is error for not reading rdn
         ObtainedEASig_t;
         ObtainedEASig_t& getObtainedEASig()
             {

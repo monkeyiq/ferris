@@ -64,8 +64,7 @@ namespace Ferris
 {
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
 
     bool ShouldPerformUpdates()
@@ -499,10 +498,6 @@ namespace Ferris
 
         
         fh_stringstream priv_getRealStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
             {
                 LG_XSLTFS_D << __PRETTY_FUNCTION__ << " this:" << getURL() << endl;
 
@@ -516,25 +511,15 @@ namespace Ferris
             }
         
         virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 LG_XSLTFS_D << __PRETTY_FUNCTION__ << " this:" << getURL() << endl;
 
                 return priv_getRealStream( m );
             }
-        virtual fh_iostream priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception);
-
+        virtual fh_iostream priv_getIOStream( ferris_ios::openmode m );
+        
     public:
         virtual fh_istream getIStream( ferris_ios::openmode m = std::ios::in )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 LG_XSLTFS_D << __PRETTY_FUNCTION__ << " this:" << getURL() << endl;
 
@@ -546,10 +531,6 @@ namespace Ferris
             
     
         virtual fh_iostream getIOStream( ferris_ios::openmode m = std::ios::in|std::ios::out )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
             {
                 LG_XSLTFS_D << __PRETTY_FUNCTION__ << " this:" << getURL() << endl;
 
@@ -626,7 +607,7 @@ namespace Ferris
             }
 
         string
-        getDirPath() throw (FerrisParentNotSetError)
+        getDirPath()
             {
                 return Context::getDirPath();
             }
@@ -975,9 +956,6 @@ namespace Ferris
             }
 
         virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 ensureDocFS();
                 LG_XSLTFS_D << __PRETTY_FUNCTION__ << " this:" << getURL() << endl
@@ -995,10 +973,6 @@ namespace Ferris
                 return m_docfs->getIStream( m );
             }
         virtual fh_iostream priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
             {
                 ensureDocFS();
                 LG_XSLTFS_D << __PRETTY_FUNCTION__ << " this:" << getURL() << endl
@@ -1164,7 +1138,7 @@ namespace Ferris
             }
 
         string
-        getDirPath() throw (FerrisParentNotSetError)
+        getDirPath()
             {
                 return Context::getDirPath();
             }
@@ -1399,7 +1373,6 @@ namespace Ferris
         
         fh_context
         priv_getSubContext( const string& rdn_const )
-            throw( NoSuchSubContext )
             {
                 string rdn = rdn_const;
                 string delegate_rdn = rdn;
@@ -1651,7 +1624,7 @@ namespace Ferris
             }
         
 
-        friend fh_context Brew( RootContextFactory* rf ) throw( RootContextCreationFailed );
+        friend fh_context Brew( RootContextFactory* rf );
         xsltfsRootContext* priv_CreateContext( Context* parent, string rdn )
             {
                 xsltfsRootContext* ret = new xsltfsRootContext();
@@ -1742,10 +1715,6 @@ namespace Ferris
 
     fh_iostream
     XSLTFS_DOMWrapper::priv_getIOStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               AttributeNotWritable,
-               CanNotGetStream,
-               std::exception)
     {
         LG_XSLTFS_D << __PRETTY_FUNCTION__ << " this:" << getURL() << endl
                     << " delegate:" << Delegate->getURL()
@@ -1823,7 +1792,6 @@ namespace Ferris
     extern "C"
     {
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
         {
             try
             {

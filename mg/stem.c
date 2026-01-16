@@ -18,7 +18,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * $Id: stem.c,v 1.1 2005/07/04 08:47:40 ben Exp $
- *
+ * 
  **************************************************************************/
 
 static char *RCSID = "$Id: stem.c,v 1.1 2005/07/04 08:47:40 ben Exp $";
@@ -623,11 +623,11 @@ recode_stem (char *stem_end)
 	  h = stem_end - rule->old_offset;
 	  if (strcmp (h, rule->old_end) == 0)
 	    {
-	      if (!rule->cond || (*rule->cond) (*(h - 1)))
-		{
-		  (void) strcpy (h, rule->new_end);
-		  break;
-		}
+//	      if (!rule->cond || (*rule->cond) (*(h - 1)))
+//		{
+//		  (void) strcpy (h, rule->new_end);
+//		  break;
+//		}
 	    }
 	  if (rule->end_group)
 	    break;
@@ -1159,13 +1159,13 @@ remove_ending (char *word, int w_len)
 		  else
 		    {
 		      s_len = suffix_start - word;
-		      if (!p_list->cond ||
-			  (*p_list->cond) (s_len, suffix_start - 1))
-			{
-			  *suffix_start = EOS;
-			  stem_end = suffix_start - 1;
-			  not_done = 0;
-			}
+//		      if (!p_list->cond ||
+//			  (*p_list->cond) (s_len, suffix_start - 1))
+//			{
+//			  *suffix_start = EOS;
+//			  stem_end = suffix_start - 1;
+//			  not_done = 0;
+//			}
 		      break;
 		    }
 		}

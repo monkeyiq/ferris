@@ -144,7 +144,6 @@ namespace Ferris
             }
 
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
             {
                 string scheme = rf->getContextClass();
 //                cerr << "FerrisBranchRootContext_RootContextDropper() scheme:" << scheme << endl;
@@ -222,7 +221,6 @@ namespace Ferris
     //
     fh_context
     FerrisBranchInternalContext::priv_getSubContext( const string& rdn )
-        throw( NoSuchSubContext )
     {
         try
         {
@@ -332,7 +330,7 @@ namespace Ferris
     }
 
     std::string
-    FerrisBranchInternalContext::getDirPath() throw (FerrisParentNotSetError)
+    FerrisBranchInternalContext::getDirPath()
     {
 //         cerr << "FerrisBranchInternalContext::getDirPath() "
 //              << " dele-ret:" << _Base::getDirPath() << endl
@@ -374,7 +372,7 @@ namespace Ferris
 //     }
 
 //     fh_attribute
-//     FerrisBranchInternalContext::getAttribute( const string& rdn ) throw( NoSuchAttribute )
+//     FerrisBranchInternalContext::getAttribute( const string& rdn )
 //     {
 //         stringlist_t& sl = getForceLocalAttributeNames();
 //         if( sl.end() != find( sl.begin(), sl.end(), rdn ) )
@@ -399,7 +397,7 @@ namespace Ferris
 //     bool
 //     FerrisBranchInternalContext::isAttributeBound( const std::string& rdn,
 //                                               bool createIfNotThere
-//         ) throw( NoSuchAttribute )
+//         )
 //     {
 //         stringlist_t& sl = getForceLocalAttributeNames();
 //         if( sl.end() != find( sl.begin(), sl.end(), rdn ) )
@@ -435,7 +433,7 @@ namespace Ferris
     }
 
     long
-    FerrisBranchInternalContext::guessSize() throw()
+    FerrisBranchInternalContext::guessSize()
     {
         return Delegate->guessSize();
     }

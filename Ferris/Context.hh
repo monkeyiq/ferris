@@ -86,28 +86,17 @@ namespace Ferris
         std::string priv_getRecommendedEA();
         virtual ferris_ios::openmode getSupportedOpenModes();
 
-        virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception);
+        virtual fh_istream  priv_getIStream( ferris_ios::openmode m );
         void
         priv_OnStreamClosed( fh_istream& ss, std::streamsize tellp, ferris_ios::openmode m );
-        fh_iostream
-        priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception);
+        fh_iostream priv_getIOStream( ferris_ios::openmode m );
 
         
 
         //////////
         
         virtual fh_stringstream
-        real_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   std::exception) = 0;
+            real_getIOStream( ferris_ios::openmode m ) = 0;
         virtual void OnStreamClosed( const std::string& s ) = 0;
         
         leafContextWithSimpleContent( Context* parent = 0, std::string rdn = "" );
@@ -746,11 +735,7 @@ class FERRISEXP_API CreateMetaDataContext :
 
         std::string Body;
 
-        virtual fh_istream getIStream( ferris_ios::openmode m = std::ios::in )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception);
-        
+        virtual fh_istream getIStream( ferris_ios::openmode m = std::ios::in );
     public:
 
         CreateMetaDataContext();
@@ -787,22 +772,19 @@ class FERRISEXP_API DelegatingCreateMetaDataContext :
 
         void buildCoveringTree();
 
-        virtual fh_istream getIStream( ferris_ios::openmode m = std::ios::in )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception);
+        virtual fh_istream getIStream( ferris_ios::openmode m = std::ios::in );
         
     public:
 
         DelegatingCreateMetaDataContext( const fh_context& _shadow );
         virtual ~DelegatingCreateMetaDataContext();
 
-        virtual fh_attribute getAttribute( const std::string& rdn ) throw( NoSuchAttribute );
+        virtual fh_attribute getAttribute( const std::string& rdn );
         virtual AttributeNames_t& getAttributeNames( AttributeNames_t& ret );
         virtual int  getAttributeCount();
         virtual bool isAttributeBound( const std::string& rdn,
                                        bool createIfNotThere = true
-            ) throw( NoSuchAttribute );
+            );
     
     private:
         virtual bool supportsReClaim();
@@ -948,7 +930,7 @@ namespace Ferris
         
         
 
-        virtual fh_context getSubContext( const std::string& rdn ) throw( NoSuchSubContext )
+        virtual fh_context getSubContext( const std::string& rdn )
             {
                 if( _Base::priv_isSubContextBound( rdn ))
                 {
@@ -1079,7 +1061,6 @@ namespace Ferris
                                    bool addToREA,
                                    XSDBasic_t sct = XSD_UNKNOWN,
                                    bool isStateLess = false )
-            throw( AttributeAlreadyInUse )
             {
                 bool rc = _Base::setAttribute( rdn, atx, addToREA, sct, isStateLess );
                 if( rc && addToREA )
@@ -1359,9 +1340,9 @@ namespace Ferris
 
         virtual bool isAttributeBound( const std::string& rdn,
                                        bool createIfNotThere = true
-            ) throw( NoSuchAttribute );
+            );
         fh_attribute
-        getAttribute( const std::string& _rdn ) throw( NoSuchAttribute );
+        getAttribute( const std::string& _rdn );
         
         
     public:
@@ -1373,8 +1354,7 @@ namespace Ferris
         
         virtual fh_context
         createSubContext( const std::string& rdn,
-                          fh_context md = 0 )
-            throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported );
+                          fh_context md = 0 );
 
         fh_context insert( fh_context c );
         void clear();
@@ -1389,7 +1369,7 @@ namespace Ferris
                                         bool getAllLines,
                                         bool throwEx );
         virtual const std::string& getDirName() const;
-        virtual std::string getDirPath()  throw (Ferris::FerrisParentNotSetError);
+        virtual std::string getDirPath();
 
         void setForwardEAIndexInterface( EAIndex::fh_fwdeaidx fidx );
         EAIndex::fh_fwdeaidx getForwardEAIndexInterface();

@@ -57,8 +57,7 @@ namespace Ferris
 {
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
     
     ///////////////////////////////////////////////////////////////////////////////
@@ -236,7 +235,7 @@ namespace Ferris
                 unsetAttribute( eaname );
             }
 
-        friend fh_context Brew( RootContextFactory* rf ) throw( RootContextCreationFailed );
+        friend fh_context Brew( RootContextFactory* rf );
         Context* priv_CreateContext( Context* parent, string rdn );
 
         typedef Loki::SmartPtr< XercesDOMParser,
@@ -307,7 +306,7 @@ namespace Ferris
          * Read in the XML file, create a DOM for it and hand that DOM
          * to WrapDOMTree()
          */
-        void readXML( RootContextFactory* rf ) throw( RootContextCreationFailed );
+        void readXML( RootContextFactory* rf );
 
     protected:
 
@@ -592,7 +591,6 @@ XMLContext::createStateLessAttributes( bool force )
 
 void
 XMLContext::readXML( RootContextFactory* rf )
-    throw( RootContextCreationFailed )
 {
     fh_domdoc doc = 0;
     XMLFormatter::UnRepFlags gUnRepFlags = XMLFormatter::UnRep_CharRef;
@@ -832,7 +830,6 @@ static void StaticInit()
     extern "C"
 {
     fh_context Brew( RootContextFactory* rf )
-        throw( RootContextCreationFailed )
     {
         StaticInit();
         static XMLContext raw_obj(0,"/");

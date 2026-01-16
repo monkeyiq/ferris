@@ -122,15 +122,8 @@ namespace Ferris
         {
         }
 
-        virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   exception);
-        virtual fh_iostream priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception);
+        virtual fh_istream  priv_getIStream( ferris_ios::openmode m );
+        virtual fh_iostream priv_getIOStream( ferris_ios::openmode m );
 
         virtual void priv_FillCreateSubContextSchemaParts( CreateSubContextSchemaPart_t& m );
         virtual fh_context SubCreate_file( fh_context c, fh_context md );
@@ -430,9 +423,6 @@ namespace Ferris
     
     fh_istream
     qtFtpContext::priv_getIStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               exception)
     {
         QFtp& qf = getQFTP();
         string ftpPath = getFTPPath();
@@ -452,10 +442,6 @@ namespace Ferris
     
     fh_iostream
     qtFtpContext::priv_getIOStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               AttributeNotWritable,
-               CanNotGetStream,
-               std::exception)
     {
         return _Base::priv_getIOStream( m );
         // FIXME:
@@ -534,7 +520,6 @@ namespace Ferris
     extern "C"
     {
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
         {
             try
             {

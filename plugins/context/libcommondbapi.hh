@@ -127,9 +127,6 @@ namespace Ferris
             }
 
         virtual fh_stringstream real_getIOStream()
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   std::exception)
             {
                 fh_stringstream ss;
 
@@ -267,18 +264,11 @@ namespace Ferris
             }
 
         virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 return real_getIOStream();
             }
             
         virtual fh_iostream priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ret = real_getIOStream();
                 ret->getCloseSig().connect( sigc::bind( sigc::mem_fun( *this, &CommonDBContext::OnStreamClosed ), m )); 
@@ -526,7 +516,6 @@ namespace Ferris
         FERRIS_CTX_SMARTPTR( ChildContextType, fh_childc );
         
         virtual fh_context priv_getSubContext( const std::string& rdn )
-            throw( NoSuchSubContext )
             {
                 if( !this->supportsShortCutLoading() )
                     return _Base::priv_getSubContext( rdn );

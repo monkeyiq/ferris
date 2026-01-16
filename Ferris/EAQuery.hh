@@ -130,7 +130,9 @@ namespace Ferris
             friend class EAIndexManagerDB4;
             virtual docNumSet_t&
             ExecuteQuery( fh_context q, docNumSet_t& docnums, fh_db4idx idx, int limit = 0 )
-                {}
+                {
+                    return docnums;
+                }
 
             virtual std::string resolveDocumentIDAttemptFromCache( docid_t docid, std::map< docid_t, std::string >& cache );
             

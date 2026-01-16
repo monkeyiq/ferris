@@ -167,9 +167,6 @@ namespace Ferris
 
         fh_istream
         leafContextWithSimpleContent::priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ret;
                 if( !( m & std::ios::trunc ) )
@@ -202,10 +199,6 @@ namespace Ferris
 
         fh_iostream
         leafContextWithSimpleContent::priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ret;
                 if( !( m & std::ios::trunc ) )
@@ -257,9 +250,6 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
     
     fh_istream
     StaticContentLeafContext::getIStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               std::exception)
     {
         fh_stringstream ret;
         ret << m_content;
@@ -383,9 +373,6 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
 
     fh_istream
     CreateMetaDataContext::getIStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               exception)
     {
         fh_stringstream ss;
         ss << Body;
@@ -466,9 +453,6 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
 
     fh_istream
     DelegatingCreateMetaDataContext::getIStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               exception)
     {
         if( Body.length() )
         {
@@ -482,7 +466,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
     }
     
     fh_attribute
-    DelegatingCreateMetaDataContext::getAttribute( const std::string& rdn ) throw( NoSuchAttribute )
+    DelegatingCreateMetaDataContext::getAttribute( const std::string& rdn )
     {
         if( _Base::isAttributeBound( rdn ) )
         {
@@ -501,7 +485,6 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
     DelegatingCreateMetaDataContext::isAttributeBound(
         const std::string& rdn,
         bool createIfNotThere )
-        throw( NoSuchAttribute )
     {
         if( isBound( shadow ) )
         {
@@ -762,7 +745,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
 
         virtual bool isAttributeBound( const std::string& rdn,
                                        bool createIfNotThere = true
-            ) throw( NoSuchAttribute )
+            )
             {
                 return Delegate->isAttributeBound( rdn, createIfNotThere );
             }
@@ -805,7 +788,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
         
         
         fh_attribute
-        getAttribute( const std::string& _rdn ) throw( NoSuchAttribute )
+        getAttribute( const std::string& _rdn )
             {
                 std::string rdn = _rdn;
                 
@@ -920,7 +903,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
                 emitExistsEventForEachItem();
             }
         
-        virtual long guessSize() throw()
+        virtual long guessSize()
             {
                 return Delegate->guessSize();
             }
@@ -951,6 +934,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
         virtual Context* priv_CreateContext( Context* parent, std::string rdn )
             {
                 LG_CTX_ER << "priv_CreateContext() should never happen" << endl;
+                return 0;
             }
     };
 
@@ -1298,6 +1282,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
     SortedContext::priv_CreateContext( Context* parent, string rdn )
     {
         LG_CTX_ER << "priv_CreateContext() should never happen" << endl;
+        return 0;
     }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1369,7 +1354,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
 
 
     long
-    SortedContext::guessSize() throw()
+    SortedContext::guessSize()
     {
         return Delegate->guessSize();
     }
@@ -1472,7 +1457,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
 
 
     std::string
-    VirtualSoftlinkContext::getDirPath() throw (FerrisParentNotSetError)
+    VirtualSoftlinkContext::getDirPath()
     {
         return _DontDelegateBase::getDirPath();
     }
@@ -1513,6 +1498,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
     VirtualSoftlinkContext::priv_CreateContext( Context* parent, string rdn )
     {
         LG_CTX_ER << "priv_CreateContext() should never happen" << endl;
+        return 0;
     }
     
     void
@@ -1593,7 +1579,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
     
     
 //     fh_attribute
-//     VirtualSoftlinkContext::getAttribute( const string& rdn ) throw( NoSuchAttribute )
+//     VirtualSoftlinkContext::getAttribute( const string& rdn )
 //     {
 //         stringlist_t& sl = getForceLocalAttributeNames();
 //         if( sl.end() != find( sl.begin(), sl.end(), rdn ) )
@@ -1618,7 +1604,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
 //     bool
 //     VirtualSoftlinkContext::isAttributeBound( const std::string& rdn,
 //                                               bool createIfNotThere
-//         ) throw( NoSuchAttribute )
+//         )
 //     {
 //         stringlist_t& sl = getForceLocalAttributeNames();
 //         if( sl.end() != find( sl.begin(), sl.end(), rdn ) )
@@ -1792,7 +1778,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
 
         virtual bool
         isAttributeBound( const std::string& rdn,
-                          bool createIfNotThere = true ) throw( NoSuchAttribute )
+                          bool createIfNotThere = true )
             {
                 if( isIndexAttribute( rdn ) )
                     return true;
@@ -1814,7 +1800,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
             }
         
         virtual fh_attribute
-        getAttribute( const std::string& rdn ) throw( NoSuchAttribute )
+        getAttribute( const std::string& rdn )
             {
                 if( isIndexAttribute( rdn ) )
                 {
@@ -1900,7 +1886,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
             }
 
         Parent_t
-        getParent() throw (FerrisParentNotSetError)
+        getParent()
             {
                 return Context::getParent();
             }
@@ -1951,13 +1937,13 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
                 return tostr(ss);
             }
         
-        virtual std::string getDirPath()  throw (Ferris::FerrisParentNotSetError)
+        virtual std::string getDirPath()
             {
                 return Context::getDirPath();
             }
         
         Parent_t
-        getParent() throw (FerrisParentNotSetError)
+        getParent()
             {
                 return Context::getParent();
             }
@@ -2013,9 +1999,8 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
 
         virtual fh_context
         createSubContext( const std::string& rdn,
-                          fh_context md = 0 )
-            throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported );
-
+                          fh_context md = 0 );
+        
         std::string getURL()
             {
 //                 cerr << "selectionfactoryctx::getURL() have-parent:" << isParentBound()
@@ -2129,7 +2114,6 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
 
     fh_context
     SelectionContext::createSubContext( const std::string& rdn, fh_context md )
-        throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported )
     {
         fh_context ret;
 
@@ -2233,7 +2217,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
 
     bool
     SelectionContext::isAttributeBound( const std::string& rdn,
-                                        bool createIfNotThere ) throw( NoSuchAttribute )
+                                        bool createIfNotThere )
     {
         if( rdn == "name" || rdn == "path" || rdn == "url" || rdn == "name-only" )
             return _BaseNoDelegate::isAttributeBound( rdn, createIfNotThere );
@@ -2241,7 +2225,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
     }
     
     fh_attribute
-    SelectionContext::getAttribute( const std::string& rdn ) throw( NoSuchAttribute )
+    SelectionContext::getAttribute( const std::string& rdn )
     {
 //        cerr << "SelectionContext::ga() rdn:" << rdn << endl;
         if( rdn == "name" || rdn == "path" || rdn == "url" || rdn == "name-only" )
@@ -2269,7 +2253,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
                 return m_reportedRDN;
             }
         
-    std::string SelectionContext::getDirPath() throw (FerrisParentNotSetError)
+    std::string SelectionContext::getDirPath()
             {
 //                 cerr << "SelectionContext::getDirPath(top)" << endl;
 //                 if( isParentBound() )
@@ -2390,7 +2374,6 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
 
     fh_context
     SelectionFactoryContext::createSubContext( const std::string& rdn, fh_context md )
-        throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported )
     {
 //         cerr << "SelectionFactoryContext::createSubContext()"
 //              << " newFileNumber:" << newFileNumber << endl;
@@ -2434,7 +2417,6 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
             }
 
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
             {
                 return new SelectionFactoryContext();
             }
@@ -2505,7 +2487,6 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
         // Short cut loading each dir unless absolutely needed.
         //
         fh_context priv_getSubContext( const string& rdn )
-            throw( NoSuchSubContext )
         {
             try
             {
@@ -2591,7 +2572,6 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
             }
 
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
             {
                 return new EAIndexDocIDContext();
             }
@@ -3919,7 +3899,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
     }
     
     fh_attribute
-    DiffContext::getAttribute( const string& rdn ) throw( NoSuchAttribute )
+    DiffContext::getAttribute( const string& rdn )
     {
         fh_attribute ret = 0;
 
@@ -3968,7 +3948,6 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
 
     bool
     DiffContext::isAttributeBound( const std::string& rdn, bool createIfNotThere )
-        throw( NoSuchAttribute )
     {
         bool ret = Delegate->isAttributeBound( rdn, createIfNotThere );
         if( !ret )
@@ -4158,12 +4137,12 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
                                                 bool throwEx = false );
     public:
         
-        virtual fh_attribute getAttribute( const std::string& rdn ) throw( NoSuchAttribute );
+        virtual fh_attribute getAttribute( const std::string& rdn );
         virtual AttributeNames_t& getAttributeNames( AttributeNames_t& ret );
         virtual int  getAttributeCount();
         virtual bool isAttributeBound( const std::string& rdn,
                                        bool createIfNotThere = true
-            ) throw( NoSuchAttribute );
+            );
     };
 
     FERRISEXP_DLLLOCAL bool isInheritingContext( Context* c )
@@ -4278,6 +4257,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
     InheritingEAContext::priv_CreateContext( Context* parent, string rdn )
     {
         LG_CTX_ER << "priv_CreateContext() should never happen" << endl;
+        return 0;
     }
     
     /********************************************************************************/
@@ -4309,7 +4289,7 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
     }
     
     fh_attribute
-    InheritingEAContext::getAttribute( const string& rdn ) throw( NoSuchAttribute )
+    InheritingEAContext::getAttribute( const string& rdn )
     {
 //        cerr << "InheritingEAContext::getAttribute() rdn:" << rdn << endl;
         
@@ -4367,7 +4347,6 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
 
     bool
     InheritingEAContext::isAttributeBound( const std::string& rdn, bool createIfNotThere )
-        throw( NoSuchAttribute )
     {
 //         cerr << "InheritingEAContext::isAttributeBound() rdn:" << rdn << endl;
         
@@ -4444,28 +4423,17 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
             }
 
         virtual fh_iostream real_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ss;
                 return ss;
             }
         
         virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 return real_getIOStream( m );
             }
         
         virtual fh_iostream priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
             {
                 return real_getIOStream( m );
             }
@@ -4473,12 +4441,12 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
         
         virtual fh_context
         createSubContext( const std::string& rdn,
-                          fh_context md = 0 )
-            throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported );
-
+                          fh_context md = 0 );
+        
         virtual fh_context SubCreate_ea( fh_context c, fh_context md )
             {
                 LG_PG_W << "XXXXXXX SubCreate_ea() " << endl;
+                return 0;
             }
         
         
@@ -4569,7 +4537,6 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
     
     fh_context
     DelayedCommitContext::createSubContext( const std::string& _rdn, fh_context md )
-        throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported )
     {
         LG_PG_D << "DelayedCommitContext::createSubContext(TOP) _rdn:" << _rdn << endl;
         fh_context mdf = md->getSubContext("ea");
@@ -4603,8 +4570,8 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
         virtual ~DelayedCommitParentContext();
 
 //         virtual fh_context
-//         createSubContext( const std::string& rdn, fh_context md = 0 )
-//             throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported );
+//         createSubContext( const std::string& rdn, fh_context md = 0 );
+//             
 
         virtual bool isDir()
             {
@@ -4616,9 +4583,8 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
 
         virtual fh_context
         createSubContext( const std::string& rdn,
-                          fh_context md = 0 )
-            throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported );
-            
+                          fh_context md = 0 );
+        
         virtual bool supportsRemove()
             {
                 return true;
@@ -4652,7 +4618,6 @@ StaticContentLeafContext::StaticContentLeafContext( Context* parent,
     
     fh_context
     DelayedCommitParentContext::createSubContext( const std::string& _rdn, fh_context md )
-        throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported )
     {
         if( md->isSubContextBound("ea"))
             return this;

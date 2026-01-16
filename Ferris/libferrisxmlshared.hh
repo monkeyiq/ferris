@@ -212,19 +212,9 @@ namespace Ferris
             }
 
         void OnStreamClosed( fh_istream& ss, std::streamsize tellp, ferris_ios::openmode m );
-        virtual fh_stringstream real_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   std::exception);
-        virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception);
-        virtual fh_iostream priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception);
+        virtual fh_stringstream real_getIOStream( ferris_ios::openmode m );
+        virtual fh_istream  priv_getIStream( ferris_ios::openmode m );
+        virtual fh_iostream priv_getIOStream( ferris_ios::openmode m );
 
         virtual bool supportsRemove()
             {
@@ -345,8 +335,7 @@ namespace Ferris
         void WrapDOMTree( DOMNode* node,
                           fh_xmlbc parent,
                           std::string new_node_name,
-                          RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+                          RootContextFactory* rf );
 
         /**
          * call priv_syncTree() on the base context

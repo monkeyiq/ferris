@@ -57,8 +57,7 @@ namespace Ferris
     
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
 
     static DOMElement* getQPP( fh_domdoc doc )
@@ -749,7 +748,7 @@ namespace Ferris
         
       protected:
 
-        fh_context priv_getSubContext( const string& rdn ) throw( NoSuchSubContext )
+        fh_context priv_getSubContext( const string& rdn )
         {
             try
             {
@@ -939,10 +938,6 @@ namespace Ferris
 
         fh_istream
             priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
             {
                 DEBUG << "priv_getIStream()" << endl;
                 fh_stringstream ss;
@@ -957,10 +952,6 @@ namespace Ferris
         
         fh_iostream
             priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
             {
                 DEBUG << "priv_getIOStream()" << endl;
 
@@ -1250,7 +1241,6 @@ namespace Ferris
     extern "C"
     {
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
         {
             try
             {

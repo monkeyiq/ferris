@@ -111,12 +111,12 @@ namespace Ferris
                                                 bool throwEx = false );
     public:
         
-        virtual fh_attribute getAttribute( const std::string& rdn ) throw( NoSuchAttribute );
+        virtual fh_attribute getAttribute( const std::string& rdn );
         virtual AttributeNames_t& getAttributeNames( AttributeNames_t& ret );
         virtual int  getAttributeCount();
         virtual bool isAttributeBound( const std::string& rdn,
                                        bool createIfNotThere = true
-            ) throw( NoSuchAttribute );
+            );
         
         
     };

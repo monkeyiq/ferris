@@ -1882,7 +1882,8 @@ namespace Ferris
     PWDScope::PWDScope( const std::string& d )
     {
         char buf[ PATH_MAX + 1 ];
-        getwd( buf );
+//        getwd( buf );
+        getcwd( buf, PATH_MAX );
         m_olddir = buf;
         chdir( d.c_str() );
     }

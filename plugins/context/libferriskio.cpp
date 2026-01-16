@@ -48,8 +48,7 @@ namespace Ferris
 {
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
 
     
@@ -138,10 +137,6 @@ namespace Ferris
     
     fh_istream
     KioBaseContext::priv_getIStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               AttributeNotWritable,
-               CanNotGetStream,
-               std::exception)
             {
                 DEBUG << "priv_getIStream()" << endl;
                 fh_stringstream ss;
@@ -235,7 +230,6 @@ namespace Ferris
     
     fh_context
     KioRootContext::priv_getSubContext( const string& rdn )
-        throw( NoSuchSubContext )
     {
         DEBUG << "priv_getSubContext() rdn:" << rdn << endl;
 //        if( rdn == "file:" )
@@ -260,7 +254,6 @@ namespace Ferris
     extern "C"
     {
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
         {
             try
             {

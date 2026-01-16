@@ -63,8 +63,7 @@ namespace Ferris
 {
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
 
     /********************************************************************************/
@@ -337,9 +336,6 @@ namespace Ferris
         
         
         virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   exception)
             {
 
                 fh_runner r = new Runner();
@@ -359,10 +355,6 @@ namespace Ferris
             }
         
         virtual fh_iostream priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
             {
                 if( !m_createdFromFerris )
                 {
@@ -512,7 +504,6 @@ namespace Ferris
         //
         fh_context
         priv_getSubContext( const string& rdn )
-            throw( NoSuchSubContext )
             {
                 try
                 {
@@ -636,7 +627,7 @@ namespace Ferris
             }
         
 
-        friend fh_context Brew( RootContextFactory* rf ) throw( RootContextCreationFailed );
+        friend fh_context Brew( RootContextFactory* rf );
         emacsRootContext* priv_CreateContext( Context* parent, string rdn )
             {
                 emacsRootContext* ret = new emacsRootContext();
@@ -657,7 +648,6 @@ namespace Ferris
     extern "C"
     {
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
         {
             try
             {

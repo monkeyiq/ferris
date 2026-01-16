@@ -669,6 +669,51 @@ AC_SUBST(SIGC_LIBS)
 ])
 
 
+dnl AM_FERRIS_SIGC([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND ]]])
+dnl
+dnl The default ACTION-IF-NOT-FOUND is to AC_MSG_ERROR() with a description of where
+dnl to locate sigc++ for installation. 
+dnl ie. default is to REQUIRE sigc++ MINIMUM-VERSION or stop running.
+dnl
+dnl SIGC_CFLAGS and SIGC_LIBS are set and AC_SUBST()ed when library is found.
+dnl
+AC_DEFUN(AM_FERRIS_SIGC3,
+[dnl 
+dnl Get the cflags and libraries from pkg-config, stlport-config or attempt to
+dnl detect the STLPort on the users system.
+dnl
+have_package=no
+sigc_required_version=$1
+
+package=sigc++-3.0
+
+version=$sigc_required_version
+PKG_CHECK_MODULES(SIGC, $package >= $version,
+[
+	AC_DEFINE( HAVE_SIGC, 1, [Is sigc++ installed] )
+
+	# success
+	ifelse([$2], , :, [$2])
+],
+[
+	ifelse([$3], , 
+	[
+  		echo ""
+		echo "latest version of $package required. ($version or better) "
+		echo ""
+		echo "this should be on the freshrpms.net website"
+		AC_MSG_ERROR([Fatal Error: no correct $package found.])	
+	], 
+	[$3])     
+	])
+
+dnl This is not really good. But it seems that gcc wants it to work with sigc++ 3.x on Fedora.
+SIGC_CFLAGS="$SIGC_CFLAGS"
+AC_SUBST(SIGC_CFLAGS)
+AC_SUBST(SIGC_LIBS)
+])
+
+
 dnl AM_FERRIS_LOKI([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND ]]])
 dnl
 dnl The default ACTION-IF-NOT-FOUND is to AC_MSG_ERROR() with a description of where

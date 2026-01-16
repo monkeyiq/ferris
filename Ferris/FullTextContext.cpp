@@ -89,7 +89,6 @@ namespace Ferris
     
     fh_context
     FullTextQueryRootContext::createSubContext( const std::string& rdn, fh_context md )
-        throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported )
     {
         fh_stringstream ss;
         ss << "fulltextquery:// directory can not have new items created in this way" << endl;
@@ -120,7 +119,6 @@ namespace Ferris
             }
 
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
             {
                 static fh_context c = 0;
                 if( !isBound(c) )
@@ -163,7 +161,6 @@ namespace Ferris
     //
     fh_context
     FullTextQueryRunnerContext::priv_getSubContext( const string& rdn )
-        throw( NoSuchSubContext )
     {
         try
         {
@@ -223,7 +220,6 @@ namespace Ferris
     
     fh_context
     FullTextQueryRunnerContext::createSubContext( const std::string& rdn, fh_context md  )
-        throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported )
     {
         string name = rdn;
         if( name.empty() )

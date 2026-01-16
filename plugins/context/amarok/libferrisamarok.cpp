@@ -77,8 +77,7 @@ namespace Ferris
 {
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
 
     player* getPlayer()
@@ -141,9 +140,6 @@ namespace Ferris
         typedef amarokControlVolumeContext _Self;
 
         virtual fh_stringstream real_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ret;
                 ret << getPlayer()->VolumeGet();
@@ -179,9 +175,6 @@ namespace Ferris
         typedef amarokControlPlayContext _Self;
 
         virtual fh_stringstream real_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ret;
                 ret << isPlaying( getPlayer() );
@@ -215,9 +208,6 @@ namespace Ferris
         typedef amarokControlPauseContext _Self;
 
         virtual fh_stringstream real_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ss;
                 ss << !isPlaying(getPlayer());
@@ -250,9 +240,6 @@ namespace Ferris
         typedef amarokControlPlayPauseContext _Self;
 
         virtual fh_stringstream real_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ret;
                 ret << isPlaying(getPlayer());
@@ -340,9 +327,6 @@ namespace Ferris
         typedef amarokCurrentURLContext _Self;
 
         virtual fh_stringstream real_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ss;
                 ss << getMetadata( "location" );
@@ -372,9 +356,6 @@ namespace Ferris
         typedef amarokCurrentTitleContext _Self;
 
         virtual fh_stringstream real_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ss;
                 ss << getMetadata( "title" );
@@ -404,9 +385,6 @@ namespace Ferris
         typedef amarokCurrentTimeContext _Self;
 
         virtual fh_stringstream real_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ss;
 //                ss << (int)getPlayer().call("trackCurrentTimeMs()");
@@ -436,9 +414,6 @@ namespace Ferris
         typedef amarokCurrentTimeTotalContext _Self;
 
         virtual fh_stringstream real_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ss;
 //                ss << (((int)getPlayer().call("trackTotalTime()"))*1000);
@@ -468,9 +443,6 @@ namespace Ferris
         typedef amarokCurrentPercentContext _Self;
 
         virtual fh_stringstream real_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 // double ct = (int)getPlayer().call("trackCurrentTimeMs()");
                 // double tt = ((int)getPlayer().call("trackTotalTime()"))*1000;
@@ -586,9 +558,6 @@ namespace Ferris
             }
         
         virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
 //                cerr << "EARL:" << this->m["url"] << endl;
                 fh_context c = Resolve( this->m["url"] );
@@ -835,7 +804,7 @@ namespace Ferris
             }
         
 
-        friend fh_context Brew( RootContextFactory* rf ) throw( RootContextCreationFailed );
+        friend fh_context Brew( RootContextFactory* rf );
         amarokRootContext* priv_CreateContext( Context* parent, string rdn )
             {
                 amarokRootContext* ret = new amarokRootContext();
@@ -863,7 +832,6 @@ namespace Ferris
     extern "C"
     {
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
         {
             try
             {

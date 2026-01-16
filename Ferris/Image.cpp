@@ -295,7 +295,11 @@ namespace Ferris
         get_RegisterImageEAGeneratorModule_extensions()[ implname ].push_back( ext );
     
         string k = tolowerstr()( ext );
-        f_imageEAGenerator func( gmodloaderiter->second, &imageEAGeneratorGModule::resolve );
+//        f_imageEAGenerator func( gmodloaderiter->second, &imageEAGeneratorGModule::resolve );
+        f_imageEAGenerator func(
+            std::bind(
+                std::mem_fn(&imageEAGeneratorGModule::resolve), gmodloaderiter->second,
+                std::placeholders::_1));
         getImageEAGenerators()[ k ] = make_pair( func, writable );
 
 
@@ -322,6 +326,7 @@ namespace Ferris
         {
             getImageEAGenerators()[ *si ] = make_pair( f, writable );
         }
+        return true;
     }
 
     class FERRISEXP_API Image_OutOfProcess : public Image

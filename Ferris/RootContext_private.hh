@@ -65,16 +65,16 @@ namespace Ferris
         
         virtual void read( bool force = 0 );
         virtual const std::string& getDirName() const;
-        virtual std::string getDirPath() throw (FerrisParentNotSetError);
+        virtual std::string getDirPath();
         virtual std::string getURL();
         virtual std::string getURLScheme();
 
-        virtual fh_attribute getAttribute( const std::string& rdn ) throw( NoSuchAttribute );
+        virtual fh_attribute getAttribute( const std::string& rdn );
         virtual AttributeNames_t& getAttributeNames( AttributeNames_t& ret );
         virtual int  getAttributeCount();
         virtual bool isAttributeBound( const std::string& rdn,
                                        bool createIfNotThere = true
-            ) throw( NoSuchAttribute );
+            );
         
 //        virtual void OnExists ( NamingEvent_Exists* ev,  std::string olddn, std::string newdn );
     };

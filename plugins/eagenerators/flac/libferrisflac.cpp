@@ -214,10 +214,6 @@ namespace Ferris
             const fh_context& a,
             const string& rdn,
             fh_context md = 0 )
-            throw(
-                FerrisCreateAttributeFailed,
-                FerrisCreateAttributeNotSupported
-                )
             {
                 LG_FLAC_D << "CreateAttr() rdn:" << rdn << endl;
                 

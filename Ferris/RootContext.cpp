@@ -277,7 +277,7 @@ namespace Ferris
     }
 
     string
-    RootContext::getDirPath() throw (FerrisParentNotSetError)
+    RootContext::getDirPath()
     {
         return _NonChainedBase::getDirPath();
     }
@@ -336,7 +336,7 @@ namespace Ferris
     }
 
     fh_attribute
-    RootContext::getAttribute( const std::string& rdn ) throw( NoSuchAttribute )
+    RootContext::getAttribute( const std::string& rdn )
     {
         if( isAttributeLocal( rdn ) )
             return _NonChainedBase::getAttribute( rdn );
@@ -347,7 +347,6 @@ namespace Ferris
     RootContext::isAttributeBound(
         const std::string& rdn,
         bool createIfNotThere )
-        throw( NoSuchAttribute )
     {
         if( isAttributeLocal( rdn ) )
             return _NonChainedBase::isAttributeBound( rdn, createIfNotThere );
@@ -385,7 +384,6 @@ namespace Ferris
             }
 
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
             {
                 static fh_context rr = 0;
                 if( !rr )

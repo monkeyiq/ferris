@@ -51,8 +51,7 @@ namespace Ferris
 {
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
 
     /********************************************************************************/
@@ -119,7 +118,7 @@ namespace Ferris
                 return "name";
             }
 
-        friend fh_context Brew( RootContextFactory* rf ) throw( RootContextCreationFailed );
+        friend fh_context Brew( RootContextFactory* rf );
         xwinRootContext* priv_CreateContext( Context* parent, string rdn )
             {
                 xwinRootContext* ret = new xwinRootContext();
@@ -140,7 +139,6 @@ namespace Ferris
     extern "C"
     {
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
         {
             try
             {

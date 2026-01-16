@@ -798,22 +798,22 @@ class FERRISEXP_API Ferrisls
 
     public:
 
-        typedef sigc::signal2< void, Ferrisls&, fh_context > DiskReadStarted_Sig_t;
+        typedef sigc::signal< void ( Ferrisls&, fh_context ) > DiskReadStarted_Sig_t;
         DiskReadStarted_Sig_t& getDiskReadStarted_Sig();
 
-        typedef sigc::signal2< void, Ferrisls&, fh_context > DiskReadDone_Sig_t;
+        typedef sigc::signal< void ( Ferrisls&, fh_context ) > DiskReadDone_Sig_t;
         DiskReadDone_Sig_t& getDiskReadDone_Sig();
 
-        typedef sigc::signal3< void, Ferrisls&, fh_context, long > DiskReadProgress_Sig_t;
+        typedef sigc::signal< void ( Ferrisls&, fh_context, long ) > DiskReadProgress_Sig_t;
         DiskReadProgress_Sig_t& getDiskReadProgress_Sig();
 
-        typedef sigc::signal1< void, Ferrisls& > FilterStarted_Sig_t;
+        typedef sigc::signal< void ( Ferrisls& ) > FilterStarted_Sig_t;
         FilterStarted_Sig_t& getFilterStarted_Sig();
 
-        typedef sigc::signal1< void, Ferrisls& > SortStarted_Sig_t;
+        typedef sigc::signal< void ( Ferrisls& ) > SortStarted_Sig_t;
         SortStarted_Sig_t& getSortStarted_Sig();
 
-        typedef sigc::signal2< void, Ferrisls&, fh_context > ContextPropergationStarted_Sig_t;
+        typedef sigc::signal< void ( Ferrisls&, fh_context ) > ContextPropergationStarted_Sig_t;
         ContextPropergationStarted_Sig_t& getContextPropergationStarted_Sig();
         
         Ferrisls();
@@ -849,9 +849,9 @@ class FERRISEXP_API Ferrisls
         void usePreorderTraversal( bool v );
         bool usePreorderTraversal();
 
-        typedef sigc::signal2< void, Ferrisls&, fh_context > EnteringContext_Sig_t;
+        typedef sigc::signal< void ( Ferrisls&, fh_context ) > EnteringContext_Sig_t;
         EnteringContext_Sig_t& getEnteringContext_Sig();
-        typedef sigc::signal2< void, Ferrisls&, fh_context > LeavingContext_Sig_t;
+        typedef sigc::signal< void ( Ferrisls&, fh_context ) > LeavingContext_Sig_t;
         LeavingContext_Sig_t& getLeavingContext_Sig();
         
     private:

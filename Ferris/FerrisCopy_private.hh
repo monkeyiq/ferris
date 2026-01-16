@@ -181,6 +181,7 @@ class FERRISEXP_DLLLOCAL FerrisCopy_TTY
                 }
                 }
             }
+            return true;
         }
     
     

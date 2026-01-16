@@ -87,3 +87,19 @@ appsui/gfcreate/gfcreate
 *moc_impl.cpp
 *moc_generator.cpp
 
+/appsui/gfindexadd
+/appsui/gfcreate
+/appsui/gfdl
+/appsui/gfmv
+/appsui/gfproperties
+/appsui/gfrm
+/plugins/context/amarok/player_interface.cpp
+/plugins/context/amarok/player_interface.h
+/plugins/context/amarok/tracklist_interface.cpp
+/plugins/context/amarok/tracklist_interface.h
+/plugins/context/klipper_interface.cpp
+/plugins/context/klipper_interface.h
+/plugins/context/klipper_interface_public.hh
+/plugins/context/printer/mocimpls.cpp
+/snippet/
+/plugins/context/facebooktest

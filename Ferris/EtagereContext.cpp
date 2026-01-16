@@ -280,7 +280,6 @@ namespace Ferris
             }
 
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
             {
                 static fh_context c = 0;
                 if( !isBound(c) )
@@ -304,7 +303,6 @@ namespace Ferris
             }
 
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
             {
                 static fh_context c = 0;
                 if( !isBound(c) )

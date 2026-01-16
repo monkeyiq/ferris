@@ -277,7 +277,7 @@ namespace Ferris
         virtual fh_istream io_cb( fh_istream iss );
 
         
-        typedef sigc::signal1< void, fh_xstreamcol > MessageArrivedSig_t;
+        typedef sigc::signal< void ( fh_xstreamcol ) > MessageArrivedSig_t;
         MessageArrivedSig_t& getMessageArrivedSig();
         
         const std::string& getXMLString();

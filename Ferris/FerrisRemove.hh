@@ -117,24 +117,24 @@ namespace Ferris
         
     public:
 
-        typedef sigc::signal3< void,
+        typedef sigc::signal< void (
                                FerrisRm&,       // thisobj,
                                fh_context,      // target,
-                               std::string      // target Description,
+                               std::string)      // target Description,
                                > RemoveVerboseSignal_t;
         RemoveVerboseSignal_t& getRemoveVerboseSignal();
 
-        typedef sigc::signal3< void,
+        typedef sigc::signal< void (
                                FerrisRm&,        // thisobj,
                                std::string,      // target Description,
-                               std::string       // reason
+                               std::string )       // reason
                                > SkippingSignal_t;
         SkippingSignal_t& getSkippingSignal();
 
-        typedef sigc::signal3< bool,
+        typedef sigc::signal< bool (
                                FerrisRm&,       // thisobj,
                                fh_context,      // target,
-                               std::string      // target Description,
+                               std::string )      // target Description,
                                > AskRemoveSignal_t;
         AskRemoveSignal_t& getAskRemoveSignal();
 

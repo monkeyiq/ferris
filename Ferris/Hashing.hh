@@ -39,13 +39,13 @@
 namespace Ferris
 {
     template < class T >
-    struct f_equal_to : public std::binary_function< T, T, bool> 
+    struct f_equal_to
     {
         inline bool operator()(const T __x, const T __y) const
             { return __x == __y; }
     };
     template <>
-    struct f_equal_to< fh_context > : public std::binary_function< fh_context, fh_context, bool> 
+    struct f_equal_to< fh_context >
     {
         inline bool operator()(const fh_context __x, const fh_context __y) const
             { return GetImpl(__x) == GetImpl(__y); }
@@ -56,7 +56,7 @@ namespace Ferris
      * This may collide somewhat on a 64bit machine.
      */
     template< class T > 
-    struct f_hash : public std::unary_function< T, size_t >
+    struct f_hash
     {
         inline size_t operator()( const T s ) const
             {
@@ -64,7 +64,7 @@ namespace Ferris
             }
     };
     template<> 
-    struct f_hash<fh_context> : public std::unary_function< fh_context, size_t >
+    struct f_hash<fh_context> 
     {
         inline size_t operator()( const fh_context s ) const
             {

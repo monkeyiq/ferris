@@ -79,9 +79,6 @@ namespace Ferris
     protected:
 
         virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ss;
                 ss << Util::makeUUID();
@@ -146,9 +143,6 @@ namespace Ferris
     protected:
 
         virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ss;
                 ++m_state;
@@ -269,7 +263,6 @@ namespace Ferris
             }
 
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
             {
                 static fh_context c = 0;
                 if( !isBound(c) )

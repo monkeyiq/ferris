@@ -73,7 +73,7 @@ namespace Ferris
                                 std::string olddn, std::string newdn );
         
         virtual void read( bool force = 0 );
-        virtual long guessSize() throw();
+        virtual long guessSize();
 
         void sort();
         void setLazySorting( bool v );
@@ -143,7 +143,7 @@ namespace Ferris
          * Either the link target's dirName() or what is set with setLocalName()
          */
         virtual const std::string& getDirName() const;
-        virtual std::string getDirPath() throw (FerrisParentNotSetError);
+        virtual std::string getDirPath();
         virtual std::string getURL();
         
         virtual void read( bool force = 0 );
@@ -153,12 +153,12 @@ namespace Ferris
         fh_istream getTrueStream( Context* c, const std::string& rdn, EA_Atom* atom );
 
         virtual stringset_t& getForceLocalAttributeNames();
-//        virtual fh_attribute getAttribute( const std::string& rdn ) throw( NoSuchAttribute );
+//        virtual fh_attribute getAttribute( const std::string& rdn );
 //        virtual AttributeNames_t& getAttributeNames( AttributeNames_t& ret );
 //        virtual int  getAttributeCount();
 //         virtual bool isAttributeBound( const std::string& rdn,
 //                                        bool createIfNotThere = true
-//             ) throw( NoSuchAttribute );
+//             );
     };
     FERRIS_CTX_SMARTPTR( VirtualSoftlinkContext, fh_VirtualSoftlinkContext );
     
@@ -507,6 +507,7 @@ namespace Ferris
         priv_CreateContext( Context* parent, std::string rdn )
             {
                 LG_CTX_ER << "priv_CreateContext() should never happen" << std::endl;
+                return 0;
             }
         virtual void setup();
     };
@@ -557,6 +558,7 @@ namespace Ferris
         priv_CreateContext( Context* parent, std::string rdn )
             {
                 LG_CTX_ER << "priv_CreateContext() should never happen" << std::endl;
+                return 0;
             }
         virtual void setup();
     };
@@ -609,7 +611,6 @@ namespace Ferris
 //             }
         
 //         fh_attribute getAttribute( Context* c, const std::string& rdn )
-//             throw( NoSuchAttribute )
 //             {
 //                 return c->Context::getAttribute( rdn );
 //             }
@@ -671,7 +672,7 @@ namespace Ferris
         
 //     public:
         
-//         virtual fh_attribute getAttribute( const std::string& rdn ) throw( NoSuchAttribute )
+//         virtual fh_attribute getAttribute( const std::string& rdn )
 //             {
 //             }
         
@@ -685,7 +686,7 @@ namespace Ferris
         
 //         virtual bool isAttributeBound( const std::string& rdn,
 //                                        bool createIfNotThere = true
-//             ) throw( NoSuchAttribute )
+//             )
 //             {
 //             }
         
@@ -808,12 +809,12 @@ namespace Ferris
                                                 bool throwEx = false );
     public:
         
-        virtual fh_attribute getAttribute( const std::string& rdn ) throw( NoSuchAttribute );
+        virtual fh_attribute getAttribute( const std::string& rdn );
         virtual AttributeNames_t& getAttributeNames( AttributeNames_t& ret );
         virtual int  getAttributeCount();
         virtual bool isAttributeBound( const std::string& rdn,
                                        bool createIfNotThere = true
-            ) throw( NoSuchAttribute );
+            );
         
     };
 
@@ -833,10 +834,7 @@ class FERRISEXP_API StaticContentLeafContext
 
 protected:
 
-    virtual fh_istream getIStream( ferris_ios::openmode m = std::ios::in )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               std::exception);
+    virtual fh_istream getIStream( ferris_ios::openmode m = std::ios::in );
     virtual void createStateLessAttributes( bool force = false );
     
 public:

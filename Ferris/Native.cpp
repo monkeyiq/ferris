@@ -27,6 +27,7 @@
 *******************************************************************************
 ******************************************************************************/
 
+#include "config.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -619,7 +620,6 @@ namespace Ferris
     //
     fh_context
     NativeContext::priv_getSubContext( const string& rdn )
-        throw( NoSuchSubContext )
     {
         try
         {
@@ -722,7 +722,6 @@ namespace Ferris
     
     fh_context
     NativeContext::native_readSubContext( const string& rdn, bool created, bool checkIfExistsAlready )
-        throw( NoSuchSubContext, FerrisNotSupportedInThisContext )
     {
         LG_NATIVE_D << "native_readSubContext() rdn:" << rdn
                     << " created:" << created
@@ -801,7 +800,6 @@ namespace Ferris
             }
 
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
             {
                 LG_NATIVE_D << "RootContextDropper::Brew() top" << endl;
                 static NativeContext* nc = 0;
@@ -1592,9 +1590,6 @@ NativeContext::getNonKernelLinkTarget()
     
 fh_istream
 NativeContext::priv_getIStream( ferris_ios::openmode m )
-    throw (FerrisParentNotSetError,
-           CanNotGetStream,
-           exception)
 {
     LG_NATIVE_D << "+++ NativeContext::priv_getIStream URL:" << getURL() << endl;
 
@@ -1636,10 +1631,6 @@ NativeContext::priv_getIStream( ferris_ios::openmode m )
 
 fh_iostream
 NativeContext::priv_getIOStream( ferris_ios::openmode m )
-    throw (FerrisParentNotSetError,
-           AttributeNotWritable,
-           CanNotGetStream,
-           exception)
 {
     if( fh_context lc = getNonKernelLinkTarget() )
     {
@@ -4573,7 +4564,7 @@ NativeContext::priv_createAttributes()
 
 
 long
-NativeContext::priv_guessSize() throw()
+NativeContext::priv_guessSize()
 {
     long ret = 0;
 

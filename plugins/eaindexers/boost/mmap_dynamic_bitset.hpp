@@ -39,12 +39,11 @@
 #endif
 
 #include "boost/dynamic_bitset_fwd.hpp"
-#include "boost/detail/dynamic_bitset.hpp"
+#include "boost/dynamic_bitset.hpp"
 #include "boost/detail/iterator.hpp" // used to implement append(Iter, Iter)
 #include "boost/static_assert.hpp"
 #include <boost/limits.hpp>
-#include "boost/pending/lowest_bit.hpp" // used by find_first/next
-
+#include <boost/dynamic_bitset/detail/lowest_bit.hpp>
 
 namespace boost {
 

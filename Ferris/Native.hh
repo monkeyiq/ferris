@@ -119,12 +119,10 @@ namespace Ferris
 
         
         virtual Context* priv_CreateContext( Context* parent, std::string rdn );
-        virtual fh_context priv_getSubContext( const std::string& rdn )
-            throw( NoSuchSubContext );
+        virtual fh_context priv_getSubContext( const std::string& rdn );
 
         fh_context
-        native_readSubContext( const std::string& rdn, bool created = false, bool checkIfExistsAlready = true )
-            throw( NoSuchSubContext, FerrisNotSupportedInThisContext );
+        native_readSubContext( const std::string& rdn, bool created = false, bool checkIfExistsAlready = true );
         
         
         
@@ -226,16 +224,9 @@ namespace Ferris
         virtual ferris_ios::openmode getSupportedOpenModes();
 
 
-        virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception);
-        virtual fh_iostream priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception);
-
+        virtual fh_istream  priv_getIStream( ferris_ios::openmode m );
+        virtual fh_iostream priv_getIOStream( ferris_ios::openmode m );
+        
         virtual fh_context SubCreate_file( fh_context c, fh_context md );
 
 //        friend fh_context SL_SubCreate_dir ( fh_context c, fh_context md );
@@ -292,7 +283,7 @@ namespace Ferris
         virtual ~NativeContext();
 
         virtual bool isDir();
-        virtual long priv_guessSize() throw();
+        virtual long priv_guessSize();
 
         static const std::string CreateObjectType_k;
         static const std::string CreateObjectType_v_Dir;

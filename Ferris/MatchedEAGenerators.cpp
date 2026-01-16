@@ -123,10 +123,6 @@ MatchedEAGeneratorFactory::CreateAttr(
     const fh_context& a,
     const string& rdn,
     fh_context md )
-    throw(
-        FerrisCreateAttributeFailed,
-        FerrisCreateAttributeNotSupported
-        )
 {
     ostringstream ss;
     ss << "MatchedEAGeneratorFactory::CreateAttr() operation not supported rdn:" << rdn;
@@ -327,10 +323,6 @@ GModuleMatchedEAGeneratorFactory::CreateAttr(
     const fh_context& a,
     const string& rdn,
     fh_context md )
-    throw(
-        FerrisCreateAttributeFailed,
-        FerrisCreateAttributeNotSupported
-        )
 {
     ensureGModuleIsLoaded();
     return RealFactory->CreateAttr( a, rdn, md );

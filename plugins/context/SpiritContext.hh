@@ -201,7 +201,6 @@ namespace Ferris
         
 
         virtual fh_context Insert( Context* ctx, bool created = false, bool emit = true )
-            throw( SubContextAlreadyInUse )
             {
                 DEBUG << "Insert() Path:" << getDirPath()
                       << " ctx path:" << ctx->getDirPath()

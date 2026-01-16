@@ -210,7 +210,6 @@ namespace Ferris
             }
 
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
             {
                 try
                 {
@@ -314,7 +313,6 @@ namespace Ferris
  */
     void
     RootContextFactory::setContextClass( string cl )
-        throw( NoSuchContextClass )
     {
         ContextClass = cl;
         if( getDroppers().end() == getDroppers().find( ContextClass ) )
@@ -366,7 +364,6 @@ namespace Ferris
  */
     fh_context
     RootContextFactory::getRootContext()
-        throw( RootContextCreationFailed )    
     {
         string ContextClassName = ContextClass;
         string FilesystemArgs = "";

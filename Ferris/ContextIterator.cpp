@@ -114,6 +114,7 @@ namespace Ferris
                 {
                     wanted_rdn =  *oldrdniter;
                 }
+                return wanted_rdn;
             }
     };
     FERRIS_SMARTPTR( ContextIteratorData_OldRdnSet, fh_ContextIteratorData_OldRdnSet );

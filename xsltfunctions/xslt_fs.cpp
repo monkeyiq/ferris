@@ -81,6 +81,7 @@ namespace FerrisXSLT
                 }
                 catch( exception& e )
                 {
+                    cerr << "FIXMEAAA 2026" << endl;
                     executionContext.error( domstr(e.what()), context);
                 }
             }

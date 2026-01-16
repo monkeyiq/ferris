@@ -355,7 +355,7 @@ namespace Ferris
         /*** singals ***************/
         /***************************/
 
-        typedef sigc::signal1< void, std::string > MedallionUpdated_Sig_t;
+        typedef sigc::signal< void ( std::string ) > MedallionUpdated_Sig_t;
         MedallionUpdated_Sig_t& getMedallionUpdated_Sig();
 
         

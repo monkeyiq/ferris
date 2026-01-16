@@ -48,25 +48,25 @@
 #include <FerrisUI/GtkFerris.hh>
 
 #ifdef HAVE_WEBPHOTOS_API
-#include "plugins/context/webphotos/libferriswebphotos_shared.hh"
+#include "plugins/context/libferriswebphotos_shared.hh"
 #endif
 #ifdef HAVE_FACEBOOK_API
-#include "plugins/context/facebook/libferrisfacebook_shared.hh"
+#include "plugins/context/libferrisfacebook_shared.hh"
 using Ferris::Facebook::fh_facebook;
 #endif
 
 #ifdef HAVE_VIMEO_API
-#include "plugins/context/vimeo/libferrisvimeo_shared.hh"
+#include "plugins/context/libferrisvimeo_shared.hh"
 using Ferris::Vimeo::fh_vimeo;
 #endif
 
 #ifdef HAVE_IDENTICA_API
-#include "plugins/context/identica/libferrisidentica_shared.hh"
+#include "plugins/context/libferrisidentica_shared.hh"
 using Ferris::Identica::fh_identica;
 #endif
 
 #ifdef HAVE_GOOGLE_API
-#include "plugins/context/google/libferrisgoogle_shared.hh"
+#include "plugins/context/libferrisgoogle_shared.hh"
 // namespace Ferris
 // {
 //     FERRISEXP_EXPORT userpass_t getGoogleUserPass( const std::string& server = "" );
@@ -76,10 +76,10 @@ using Ferris::Identica::fh_identica;
 #endif
 
 #ifdef HAVE_BOXCOM_API
-#include "plugins/context/boxcom/libferrisboxcom_shared.hh"
+#include "plugins/context/libferrisboxcom_shared.hh"
 #endif
 
-#include "plugins/context/wiki/libferriswikishared.hh"
+#include "plugins/context/libferriswikishared.hh"
 
 
 #include <FerrisUI/GtkFerris.hh>
@@ -92,7 +92,9 @@ using namespace FerrisUI;
 #include <iostream>
 #include <iomanip>
 
+#ifdef HAVE_LDAP
 #include <libferrisldapshared.hh>
+#endif
 
 #ifdef HAVE_SQLPLUS
 #include <mysql++.h>

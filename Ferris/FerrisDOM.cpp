@@ -1112,7 +1112,7 @@ namespace Ferris
                         fh_stringstream ss;
                         ss << "Error during Xerces-c Initialization.\n"
                            << "  Exception message:"
-                           << toCatch.getMessage() << endl;
+                           << (char*)toCatch.getMessage() << endl;
                         Throw_RootContextCreationFailed( tostr(ss), 0 );
                     }
                 }
@@ -1508,6 +1508,7 @@ static short myCompareDocumentPosition(const DOMNode* x1, const DOMNode* other)
             const XMLCh* kx = arg->getNodeName();
             string k        = tostr(kx);
             m_nodes[ k ]    = arg;
+            return arg;
         }
             
         DOMNode*
@@ -1542,6 +1543,7 @@ static short myCompareDocumentPosition(const DOMNode* x1, const DOMNode* other)
         {
             string k = tostr(xname);
             m_nodes.erase( m_nodes.find( k ));
+            return 0;
         }
             
         DOMNode*
@@ -1827,19 +1829,23 @@ static short myCompareDocumentPosition(const DOMNode* x1, const DOMNode* other)
                                           DOMNode *refChild)
                 {
                     throw_xml( DOMException::NO_MODIFICATION_ALLOWED_ERR );
+                    return 0;
                 }
             virtual DOMNode* replaceChild(DOMNode *newChild,
                                           DOMNode *oldChild)
                 {
                     throw_xml( DOMException::NO_MODIFICATION_ALLOWED_ERR );
+                    return 0;
                 }
             virtual DOMNode* removeChild(DOMNode *oldChild) 
                 {
                     throw_xml( DOMException::NO_MODIFICATION_ALLOWED_ERR );
+                    return 0;
                 }
             virtual DOMNode* appendChild(DOMNode *newChild)
                 {
                     throw_xml( DOMException::NO_MODIFICATION_ALLOWED_ERR );
+                    return 0;
                 }
             virtual bool hasChildNodes() const
                 {
@@ -2098,6 +2104,7 @@ static short myCompareDocumentPosition(const DOMNode* x1, const DOMNode* other)
             LG_DOM_W << __PRETTY_FUNCTION__ << " not implemented!" << endl;
             LG_DOM_D << "element::setAttributeNode() c:" << m_context->getURL() << endl;
             throw_xml( DOMException::NO_MODIFICATION_ALLOWED_ERR );
+            return 0;
         }
         DOMAttr*
         Ferris_DOMElement::removeAttributeNode(DOMAttr *oldAttr) 
@@ -2105,6 +2112,7 @@ static short myCompareDocumentPosition(const DOMNode* x1, const DOMNode* other)
             LG_DOM_W << __PRETTY_FUNCTION__ << " not implemented!" << endl;
             LG_DOM_D << "element::removeAttributeNode() c:" << m_context->getURL() << endl;
             throw_xml( DOMException::NO_MODIFICATION_ALLOWED_ERR );
+            return 0;
         }
         void
         Ferris_DOMElement::removeAttribute(const XMLCh *name)
@@ -2363,6 +2371,7 @@ static short myCompareDocumentPosition(const DOMNode* x1, const DOMNode* other)
             LG_DOM_W << __PRETTY_FUNCTION__ << " not implemented!" << endl;
             LG_DOM_D << "element::insertBefore() c:" << m_context->getURL() << endl;
             throw_xml( DOMException::NO_MODIFICATION_ALLOWED_ERR );
+            return 0;
         }
         DOMNode*
         Ferris_DOMElement::replaceChild(DOMNode *newChild,
@@ -2371,6 +2380,7 @@ static short myCompareDocumentPosition(const DOMNode* x1, const DOMNode* other)
             LG_DOM_W << __PRETTY_FUNCTION__ << " not implemented!" << endl;
             LG_DOM_D << "element::replaceChild() c:" << m_context->getURL() << endl;
             throw_xml( DOMException::NO_MODIFICATION_ALLOWED_ERR );
+            return 0;
         }
         DOMNode*
         Ferris_DOMElement::removeChild(DOMNode *oldChild) 
@@ -2378,6 +2388,7 @@ static short myCompareDocumentPosition(const DOMNode* x1, const DOMNode* other)
             LG_DOM_W << __PRETTY_FUNCTION__ << " not implemented!" << endl;
             LG_DOM_D << "element::removeChild() c:" << m_context->getURL() << endl;
             throw_xml( DOMException::NO_MODIFICATION_ALLOWED_ERR );
+            return 0;
         }
         DOMNode*
         Ferris_DOMElement::appendChild(DOMNode *newChild)
@@ -2385,6 +2396,7 @@ static short myCompareDocumentPosition(const DOMNode* x1, const DOMNode* other)
             LG_DOM_W << __PRETTY_FUNCTION__ << " not implemented!" << endl;
             LG_DOM_D << "element::appendChild() c:" << m_context->getURL() << endl;
             throw_xml( DOMException::NO_MODIFICATION_ALLOWED_ERR );
+            return 0;
         }
         bool
         Ferris_DOMElement::hasChildNodes() const

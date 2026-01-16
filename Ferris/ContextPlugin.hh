@@ -38,13 +38,12 @@ namespace Ferris
 {
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
 };
 
 #define DYNAMICLINKED_ROOTCTX_CLASSCHUNK( KLASS )                       \
-    friend fh_context Brew( RootContextFactory* rf ) throw( RootContextCreationFailed ); \
+    friend fh_context Brew( RootContextFactory* rf ); \
     KLASS* priv_CreateContext( Context* parent, string rdn )            \
     {                                                                   \
         KLASS* ret = new KLASS();                                       \
@@ -57,7 +56,6 @@ namespace Ferris
     extern "C"                                                          \
     {                                                                   \
         fh_context Brew( RootContextFactory* rf )                       \
-            throw( RootContextCreationFailed )                          \
         {                                                               \
             try                                                         \
             {                                                           \

@@ -129,11 +129,11 @@ namespace Ferris
 
         fh_mv_collector getPoptCollector();
 
-        typedef sigc::signal4< void,
+        typedef sigc::signal< void (
                                FerrisMv&,            // thisobj,
                                std::string,          // srcDescription,
                                std::string,          // dstDescription,
-                               std::string           // reason
+                               std::string)           // reason
                                > SkippingContextSignal_t;
     
         SkippingContextSignal_t& getSkippingContextSignal();

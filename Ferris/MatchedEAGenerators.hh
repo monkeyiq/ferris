@@ -63,11 +63,7 @@ public:
     virtual fh_attribute CreateAttr(
         const fh_context& a,
         const std::string& rdn,
-        fh_context md = 0 )
-        throw(
-            FerrisCreateAttributeFailed,
-            FerrisCreateAttributeNotSupported
-            ) = 0;
+        fh_context md = 0 ) = 0;
 
     virtual bool supportsCreateForContext( fh_context c );
 };
@@ -145,11 +141,7 @@ public:
     virtual fh_attribute CreateAttr(
         const fh_context& a,
         const std::string& rdn,
-        fh_context md = 0 )
-        throw(
-            FerrisCreateAttributeFailed,
-            FerrisCreateAttributeNotSupported
-            );
+        fh_context md = 0 );
 
 
     /**
@@ -241,11 +233,7 @@ public:
     virtual fh_attribute CreateAttr(
         const fh_context& a,
         const std::string& rdn,
-        fh_context md = 0 )
-        throw(
-            FerrisCreateAttributeFailed,
-            FerrisCreateAttributeNotSupported
-            );
+        fh_context md = 0 );
     virtual bool supportsCreateForContext( fh_context c );
     virtual void augmentRecommendedEA( const fh_context& a, fh_stringstream& ss );
 

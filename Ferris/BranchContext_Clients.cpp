@@ -43,8 +43,10 @@
 // #endif
 
 #define BOOST_SPIRIT_RULE_SCANNERTYPE_LIMIT 3
-#include <boost/spirit.hpp>
-using namespace boost::spirit;
+//#include <boost/spirit.hpp>
+//using namespace boost::spirit;
+#include <boost/spirit/include/classic.hpp>
+using namespace boost::spirit::classic;
 
 // #ifdef GCC_HASCLASSVISIBILITY
 // #pragma GCC visibility pop
@@ -137,15 +139,8 @@ namespace Ferris
         typedef leafContext                _Base;
         
     protected:
-        virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception);
-        virtual fh_iostream priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception);
+        virtual fh_istream  priv_getIStream( ferris_ios::openmode m );
+        virtual fh_iostream priv_getIOStream( ferris_ios::openmode m );
         virtual ferris_ios::openmode getSupportedOpenModes();
         
     public:
@@ -223,9 +218,6 @@ namespace Ferris
 
     fh_istream
     BranchAttributeAsContentsContext::priv_getIStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               std::exception)
     {
         fh_context c = getParent();
         BranchAttributesInternalContext* baic = dynamic_cast<BranchAttributesInternalContext*>( GetImpl(c));
@@ -238,10 +230,6 @@ namespace Ferris
 
     fh_iostream
     BranchAttributeAsContentsContext::priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
     {
         fh_context c = getParent();
         BranchAttributesInternalContext* baic = dynamic_cast<BranchAttributesInternalContext*>( GetImpl(c));
@@ -771,9 +759,6 @@ namespace Ferris
 
 
         virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_ifstream basess( getDirPath().c_str(), ferris_ios::maskOffFerrisOptions(m) );
                 fh_istream ret = Factory::MakeLimitingIStream( basess, offbeg, offend );

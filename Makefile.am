@@ -12,7 +12,8 @@ CUSTOMALLOCDIR = customalloc
 endif
 
 if HAVE_XALAN
-XSLTFUNCTIONSDIR = xsltfunctions
+# FIXMEAAA 2026 this needs updating for the error API
+#XSLTFUNCTIONSDIR = xsltfunctions
 endif
 
 if HAVE_GCJ

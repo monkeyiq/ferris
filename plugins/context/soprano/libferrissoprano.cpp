@@ -43,8 +43,7 @@ namespace Ferris
     
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
 
 
@@ -70,7 +69,7 @@ namespace Ferris
     {
         typedef RedlandRootContext    _Self;
         typedef FakeInternalContext   _Base;
-        friend fh_context Brew( RootContextFactory* rf ) throw( RootContextCreationFailed );
+        friend fh_context Brew( RootContextFactory* rf );
 
         fh_model m_model;
         fh_node  m_baseSubject;
@@ -198,9 +197,6 @@ namespace Ferris
 //        virtual void priv_createAttributes();
 
         virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
 //                 LG_RDF_D << "+++ rdf::priv_getIStream URL:" << getURL() << endl;
 //                 BackTrace();
@@ -208,10 +204,6 @@ namespace Ferris
             }
         
         virtual fh_iostream priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
             {
                 return getCoveredContext()->priv_getIOStream( m );
             }
@@ -510,9 +502,6 @@ namespace Ferris
         virtual void priv_remove( fh_context c_ctx );
 
         virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ss;
                 string form = "/ntriples";
@@ -1741,7 +1730,6 @@ namespace Ferris
     extern "C"
     {
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
         {
 
             static RedlandRootContext raw_obj(0,"/");

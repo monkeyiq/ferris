@@ -23,6 +23,9 @@
  *
  */
 
+#include <math.h>
+
+
 /* This is taken largely from GtkCellRenderer[Text|Pixbuf|Toggle] by 
  * Jonathon Blandford <jrb@redhat.com> for RedHat, Inc.
  */

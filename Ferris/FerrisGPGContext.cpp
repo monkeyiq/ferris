@@ -141,7 +141,6 @@ namespace Ferris
             }
 
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
             {
                 static fh_context c = 0;
                 if( !isBound(c) )
@@ -187,7 +186,6 @@ namespace Ferris
 
     fh_context
     FerrisGPGAllKeysDirectoryContext::createSubContext( const std::string& rdn, fh_context md )
-        throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported )
     {
         fh_stringstream ss;
         ss << "gpg://keys need to implement key creation method! FIXME" << endl;
@@ -296,7 +294,6 @@ namespace Ferris
 
     fh_context
     FerrisGPGUserIDToKeyContext::createSubContext( const std::string& rdn, fh_context md )
-        throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported )
     {
         fh_stringstream ss;
         ss << "gpg://keys need to implement key creation method! FIXME" << endl;
@@ -1067,7 +1064,7 @@ namespace Ferris
         :
         _Base( parent, rdn ),
 //        summary( 0 ),
-        fpr( 0 ),
+        fpr( "" ),
         status( 0 ),
         timestamp( 0 ),
         exp_timestamp( 0 ),

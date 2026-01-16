@@ -123,8 +123,9 @@ int main( int argc, char** argv )
             cerr << "have xmlContext:" << xmlContext->getURL() << endl;
             fh_domdoc theDOM = Factory::makeDOM( xmlContext );
             cerr << "have the DOM" << endl;
-            
-            XercesDOMSupport theDOMSupport;
+
+            XercesParserLiaison theLiaison;
+            XercesDOMSupport theDOMSupport(theLiaison);
             XercesParserLiaison theParserLiaison(theDOMSupport);
             cerr << "about to make ParsedSource..." << endl;
 

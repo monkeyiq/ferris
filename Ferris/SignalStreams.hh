@@ -128,10 +128,18 @@ struct giStreamPosRAII : public gStreamPosRAII< fh_istream >
  */
 template <class _TpP,
           class _CharT = char, class _Traits = std::char_traits<_CharT> >
-class osid_iterator: public std::iterator<std::output_iterator_tag, void, void, void, void> {
+class osid_iterator
+//: public std::iterator<std::output_iterator_tag, void, void, void, void>
+{
   typedef osid_iterator<_TpP, _CharT, _Traits> _Self;
     bool m_virgin;
 public:
+//    using iterator_category = std::output_iterator_tag;
+    using value_type = void;
+    using difference_type = void;
+    using pointer = void*;
+//    using reference = void&;
+    
     typedef _CharT                         char_type;
     typedef _Traits                        traits_type;
     typedef std::basic_ostream<_CharT, _Traits> ostream_type;
@@ -222,7 +230,7 @@ private:
             COMPRESS_BZIP2 = 1<<2
         };
 
-        typedef sigc::signal4< void, fh_context, fh_context, int, int >
+        typedef sigc::signal< void ( fh_context, fh_context, int, int ) >
         ConvertToCompressedChunkContextProgress_Sig_t;
         FERRISEXP_API ConvertToCompressedChunkContextProgress_Sig_t&
         getNullConvertToCompressedChunkContextProgress_Sig();

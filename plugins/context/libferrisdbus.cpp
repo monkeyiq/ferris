@@ -53,8 +53,7 @@ namespace Ferris
 {
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
 
     
@@ -132,10 +131,7 @@ namespace Ferris
         
     public:
 
-        virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception);
+        virtual fh_istream  priv_getIStream( ferris_ios::openmode m );
         
 
         std::string
@@ -336,7 +332,6 @@ namespace Ferris
         //
         fh_context
         priv_getSubContext( const string& rdn )
-            throw( NoSuchSubContext )
             {
 //                cerr << "priv_getSubContext() rdn:" << rdn << endl;
                 
@@ -888,7 +883,7 @@ namespace Ferris
             }
         
 
-        friend fh_context Brew( RootContextFactory* rf ) throw( RootContextCreationFailed );
+        friend fh_context Brew( RootContextFactory* rf );
         dbusRootContext* priv_CreateContext( Context* parent, string rdn )
             {
                 dbusRootContext* ret = new dbusRootContext();
@@ -944,9 +939,6 @@ namespace Ferris
 
     fh_istream
     dbusCalledObjectContext::priv_getIStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               std::exception)
     {
         fh_stringstream ret;
         LG_DBUS_D << "priv_getIStream() url:" << getURL() << endl;
@@ -1075,7 +1067,6 @@ namespace Ferris
     extern "C"
     {
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
         {
             try
             {

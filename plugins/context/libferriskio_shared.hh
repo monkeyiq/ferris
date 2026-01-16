@@ -71,11 +71,7 @@ namespace Ferris
         KioBaseContext( Context* parent, const std::string& rdn );
         void setup( const KIO::UDSEntry& e );
         fh_istream
-            priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception);
+            priv_getIStream( ferris_ios::openmode m );
         
         void createStateLessAttributes( bool force = false );
         static fh_istream SL_getSizeIStream( KioBaseContext* c, const std::string& rdn, EA_Atom* atom );
@@ -104,9 +100,7 @@ namespace Ferris
 
       protected:
 
-        fh_context priv_getSubContext( const std::string& rdn )
-            throw( NoSuchSubContext );
-        
+        fh_context priv_getSubContext( const std::string& rdn );
     };
     
     

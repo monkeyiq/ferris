@@ -48,8 +48,7 @@ namespace Ferris
 {
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
 
     /******************************************************************************/
@@ -267,7 +266,7 @@ namespace Ferris
                 return "name,author,title,booktitle,year";
             }
 
-        friend fh_context Brew( RootContextFactory* rf ) throw( RootContextCreationFailed );
+        friend fh_context Brew( RootContextFactory* rf );
         bibtexRootContext* priv_CreateContext( Context* parent, string rdn )
             {
                 bibtexRootContext* ret = new bibtexRootContext();
@@ -301,7 +300,6 @@ namespace Ferris
         };
         
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
         {
             try
             {

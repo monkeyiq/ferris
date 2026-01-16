@@ -72,8 +72,7 @@ namespace Ferris
 
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
     
     class qtHTTPContext;
@@ -119,7 +118,6 @@ namespace Ferris
         {
         }
         virtual fh_context priv_getSubContext( const std::string& rdn )
-            throw( NoSuchSubContext )
         {
             DEBUG << "priv_getSubContext(A) rdn:" << rdn << endl;
             
@@ -128,16 +126,9 @@ namespace Ferris
             return child;
         }
             
-        virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   exception);
+        virtual fh_istream  priv_getIStream( ferris_ios::openmode m );
         void priv_getIOStream_IOStreamClosed( fh_istream& ss, std::streamsize tellp );
-        virtual fh_iostream priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception);
+        virtual fh_iostream priv_getIOStream( ferris_ios::openmode m );
 
         static fh_istream SL_getMTimeRawStream( qtHTTPContext* c, const std::string& rdn, EA_Atom* atom )
         {
@@ -300,9 +291,6 @@ namespace Ferris
     
     fh_istream
     qtHTTPContext::priv_getIStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               exception)
     {
         DEBUG << "getting I stream...url:" << getURL() << endl;
 
@@ -319,10 +307,6 @@ namespace Ferris
     
     fh_iostream
     qtHTTPContext::priv_getIOStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               AttributeNotWritable,
-               CanNotGetStream,
-               std::exception)
     {
         QNetworkAccessManager* qm = getQManager();
         QNetworkRequest request = createRequest();
@@ -403,7 +387,6 @@ namespace Ferris
     extern "C"
     {
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
         {
             try
             {

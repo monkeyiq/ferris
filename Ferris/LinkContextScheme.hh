@@ -51,7 +51,6 @@ namespace Ferris
             }
 
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
             {
 //                 cerr << "LinkContextSchemeVFS_RootContextDropper<1> name:" << name
 //                      << " url:" << earl << endl;

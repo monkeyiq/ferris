@@ -98,9 +98,6 @@ namespace Ferris
         
 
         virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   exception)
             {
                 fh_stringstream ret;
 
@@ -113,10 +110,6 @@ namespace Ferris
             }
 
         virtual fh_iostream priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ret;
                 int i = toint( getDirName() );

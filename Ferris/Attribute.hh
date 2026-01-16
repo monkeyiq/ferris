@@ -74,15 +74,8 @@ namespace Ferris
         void setAttributeContext( Parent_t parent );
 
 
-        virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception);
-        virtual fh_iostream priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception);
+        virtual fh_istream  priv_getIStream( ferris_ios::openmode m );
+        virtual fh_iostream priv_getIOStream( ferris_ios::openmode m );
         
         virtual std::pair<std::string,std::string> splitPathAtStart( const std::string& s );
         virtual std::pair<std::string,std::string> splitPathAtEnd( const std::string& s );
@@ -109,26 +102,16 @@ namespace Ferris
         Attribute( Parent_t parent = 0 );
         virtual ~Attribute();
 
-        virtual fh_istream getIStream( ferris_ios::openmode m = std::ios::in )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception);
+        virtual fh_istream getIStream( ferris_ios::openmode m = std::ios::in );
         
-        virtual fh_istream getLocalIStream( std::string& new_dn, ferris_ios::openmode m = std::ios::in )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception);
+        virtual fh_istream getLocalIStream( std::string& new_dn, ferris_ios::openmode m = std::ios::in );
 
-        virtual fh_iostream getIOStream( ferris_ios::openmode m = std::ios::in|std::ios::out )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception);
+        virtual fh_iostream getIOStream( ferris_ios::openmode m = std::ios::in|std::ios::out );
 
         virtual bool checkOpenModeSupported( ferris_ios::openmode userm );
         virtual ferris_ios::openmode getSupportedOpenModes();
         
-        virtual Parent_t getParent() throw (FerrisParentNotSetError);
+        virtual Parent_t getParent();
         virtual bool isParentBound();
 
         /**
@@ -138,7 +121,7 @@ namespace Ferris
          * @return The rdn.
          */
         virtual const std::string& getDirName() const;
-        virtual std::string getDirPath() throw (FerrisParentNotSetError);
+        virtual std::string getDirPath();
 
         virtual fh_iostream copyTo( fh_iostream oss );
         virtual fh_ostream  copyTo( fh_ostream oss );
@@ -165,18 +148,11 @@ namespace Ferris
 
         virtual fh_istream getIStream( Context* c,
                                        const std::string& rdn,
-                                       ferris_ios::openmode m = std::ios::in )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception) = 0;
+                                       ferris_ios::openmode m = std::ios::in ) = 0;
         
         virtual fh_iostream getIOStream( Context* c,
                                          const std::string& rdn,
-                                         ferris_ios::openmode m = std::ios::in|std::ios::out )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception);
+                                         ferris_ios::openmode m = std::ios::in|std::ios::out );
 
         virtual bool checkOpenModeSupported( ferris_ios::openmode userm );
         virtual ferris_ios::openmode getSupportedOpenModes();
@@ -228,10 +204,7 @@ namespace Ferris
 
         virtual fh_istream getIStream( Context* c,
                                        const std::string& rdn,
-                                       ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception);
+                                       ferris_ios::openmode m );
 
     protected:
 
@@ -272,17 +245,11 @@ namespace Ferris
 
         virtual fh_istream getIStream( Context* c,
                                        const std::string& rdn,
-                                       ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception);
+                                       ferris_ios::openmode m );
         virtual fh_stringstream& getIStream( Context* c,
                                              const std::string& rdn,
                                              ferris_ios::openmode m,
-                                             fh_stringstream& ss )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception);
+                                             fh_stringstream& ss );
 
         virtual bool havePassedInSteamRead();
         
@@ -335,11 +302,7 @@ namespace Ferris
         
         virtual fh_iostream getIOStream( Context* c,
                                          const std::string& rdn,
-                                         ferris_ios::openmode m  = std::ios::in|std::ios::out )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception);
+                                         ferris_ios::openmode m  = std::ios::in|std::ios::out );
         
 
         virtual void On_IOStreamClosed( fh_istream& ss_param,
@@ -396,8 +359,7 @@ namespace Ferris
         // breaks ambiguous selection issues for subclasses
         virtual fh_iostream getIOStream( Context* c,
                                          const std::string& rdn,
-                                         ferris_ios::openmode m  = std::ios::in|std::ios::out )
-            throw ( FerrisParentNotSetError, AttributeNotWritable, CanNotGetStream, std::exception );
+                                         ferris_ios::openmode m  = std::ios::in|std::ios::out );
 
         
     protected:
@@ -503,18 +465,11 @@ namespace Ferris
         
         virtual fh_istream getIStream( Context* c,
                                        const std::string& rdn,
-                                       ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception);
+                                       ferris_ios::openmode m );
 
         virtual fh_iostream getIOStream( Context* c,
                                          const std::string& rdn,
-                                         ferris_ios::openmode m  = std::ios::in|std::ios::out )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception);
+                                         ferris_ios::openmode m  = std::ios::in|std::ios::out );
     };
     
 
@@ -540,11 +495,7 @@ namespace Ferris
         
         virtual fh_iostream getIOStream( Context* c,
                                          const std::string& rdn,
-                                         ferris_ios::openmode m  = std::ios::in|std::ios::out )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception);
+                                         ferris_ios::openmode m  = std::ios::in|std::ios::out );
 
         void nullclosed( Context*, const std::string&, EA_Atom*, fh_istream )
             {
@@ -572,10 +523,7 @@ namespace Ferris
 
         virtual fh_istream getIStream( Context* c,
                                        const std::string& rdn,
-                                       ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception);
+                                       ferris_ios::openmode m );
     };
 
 
@@ -597,18 +545,11 @@ namespace Ferris
 
         virtual fh_istream getIStream( Context* c,
                                        const std::string& rdn,
-                                       ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception);
+                                       ferris_ios::openmode m );
 
         virtual fh_iostream getIOStream( Context* c,
                                          const std::string& rdn,
-                                         ferris_ios::openmode m = std::ios::in|std::ios::out )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception);
+                                         ferris_ios::openmode m = std::ios::in|std::ios::out );
 
         virtual ferris_ios::openmode getSupportedOpenModes();
         
@@ -650,25 +591,15 @@ namespace Ferris
         virtual ref_count_t AddRef();
         virtual ref_count_t Release();
 
-        virtual fh_istream getIStream( ferris_ios::openmode m = std::ios::in )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception);
+        virtual fh_istream getIStream( ferris_ios::openmode m = std::ios::in );
         
         
-        virtual fh_istream getLocalIStream( std::string& new_dn, ferris_ios::openmode m = std::ios::in )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception);
+        virtual fh_istream getLocalIStream( std::string& new_dn, ferris_ios::openmode m = std::ios::in );
 
-        virtual fh_iostream getIOStream( ferris_ios::openmode m = std::ios::in|std::ios::out )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception);
+        virtual fh_iostream getIOStream( ferris_ios::openmode m = std::ios::in|std::ios::out );
 
         virtual const std::string& getDirName() const;
-        virtual std::string getDirPath() throw (FerrisParentNotSetError);
+        virtual std::string getDirPath();
 
         virtual bool checkOpenModeSupported( ferris_ios::openmode userm );
         virtual ferris_ios::openmode getSupportedOpenModes();
@@ -709,7 +640,7 @@ namespace Ferris
 //        typedef std::set< std::string > AttributeNames_t; 
         
 
-        virtual fh_attribute getAttribute( const std::string& rdn ) throw( NoSuchAttribute );
+        virtual fh_attribute getAttribute( const std::string& rdn );
     protected:
         AttributeNames_t& mergeAttributeNames( AttributeNames_t& ret,
                                                const AttributeNames_t& t1,
@@ -722,7 +653,7 @@ namespace Ferris
         virtual int  getAttributeCount();
         virtual bool isAttributeBound( const std::string& rdn,
                                        bool createIfNotThere = true
-            ) throw( NoSuchAttribute );
+            );
 
         void dumpAttributeNames();
         
@@ -916,8 +847,7 @@ namespace Ferris
                                    EA_Atom* atx,
                                    bool addToREA,
                                    XSDBasic_t sct = XSD_UNKNOWN,
-                                   bool isStateLess = false )
-            throw( AttributeAlreadyInUse );
+                                   bool isStateLess = false );
         
     protected:
 
@@ -944,15 +874,14 @@ namespace Ferris
         /************************************************************/
         
         EA_Atom* getAttributeIfExists( const std::string& rdn );
-        void callEnsureAttributesAreCreatedMarshalEToNSA( const std::string& eaname = "" )
-            throw( NoSuchAttribute );
+        void callEnsureAttributesAreCreatedMarshalEToNSA( const std::string& eaname = "" );
 
         
         /**
          * Returns Attribute* if its there, ensures its created if it can be
          * or throws
          */
-        EA_Atom* getAttributePtr( const std::string& rdn ) throw( NoSuchAttribute );
+        EA_Atom* getAttributePtr( const std::string& rdn );
         
         void clearAttributes();
 
@@ -988,7 +917,7 @@ namespace Ferris
          * Test if there is an attribute called 's' which is stateless.
          * @see isAttributeBound
          */
-        bool isStatelessAttributeBound( const std::string& s ) throw( NoSuchAttribute );
+        bool isStatelessAttributeBound( const std::string& s );
 
         /**
          * Remove knowledge of a given attribute for this context.

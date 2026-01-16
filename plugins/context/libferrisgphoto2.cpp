@@ -58,8 +58,7 @@ namespace Ferris
 
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
 
     /******************************************************************************/
@@ -430,7 +429,7 @@ namespace Ferris
         /******************************************************************************/
         /******************************************************************************/
 
-        friend fh_context Brew( RootContextFactory* rf ) throw( RootContextCreationFailed );
+        friend fh_context Brew( RootContextFactory* rf );
         gphotoContext* priv_CreateContext( Context* parent, string rdn )
             {
                 gphotoContext* ret = new gphotoContext();
@@ -527,9 +526,6 @@ namespace Ferris
             }
 
         virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 return getCamera()->getIStream( gp_path(), gp_filename() );
             }
@@ -968,7 +964,6 @@ namespace Ferris
     extern "C"
     {
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
         {
             static gphotoContext c;
             fh_context ret = c.CreateContext( 0, rf->getInfo( "Root" ));

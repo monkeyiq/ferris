@@ -56,10 +56,8 @@ namespace Ferris
         EAQueryRootContext();
         virtual ~EAQueryRootContext();
 
-        virtual fh_context
-        createSubContext( const std::string& rdn, fh_context md = 0 )
-            throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported );
-
+        virtual fh_context createSubContext( const std::string& rdn, fh_context md = 0 );
+        
         void createStateLessAttributes( bool force = false );
     };
 
@@ -81,8 +79,7 @@ namespace Ferris
     protected:
 
         virtual void priv_read();
-        virtual fh_context priv_getSubContext( const std::string& rdn )
-            throw( NoSuchSubContext );
+        virtual fh_context priv_getSubContext( const std::string& rdn );
 
     public:
 
@@ -90,8 +87,7 @@ namespace Ferris
         virtual ~EAQueryRunnerContext();
 
         virtual fh_context
-        createSubContext( const std::string& rdn, fh_context md = 0 )
-            throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported );
+        createSubContext( const std::string& rdn, fh_context md = 0 );
 
         void createStateLessAttributes( bool force = false );
 

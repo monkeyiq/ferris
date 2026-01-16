@@ -114,7 +114,6 @@ namespace Ferris
                                  fh_xmlbc parent,
                                  string new_node_name,
                                  RootContextFactory* rf )
-        throw( RootContextCreationFailed )
     {
         LG_XML_D << "WrapDOMTree path   : " << getDirPath() << endl;
         LG_XML_D << "WrapDOMTree newname: " << new_node_name << endl;
@@ -439,9 +438,6 @@ namespace Ferris
     
     fh_stringstream
     XMLBaseContext::real_getIOStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               AttributeNotWritable,
-               exception)
     {
         fh_stringstream ss;
 
@@ -540,9 +536,6 @@ namespace Ferris
 
     fh_istream
     XMLBaseContext::priv_getIStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               CanNotGetStream,
-               std::exception)
     {
         LG_XSLTFS_D << "XMLBaseContext::priv_getIStream() this:" << toVoid(this)
                     << " url:" << getURL() << endl;
@@ -673,10 +666,6 @@ namespace Ferris
 
     fh_iostream
     XMLBaseContext::priv_getIOStream( ferris_ios::openmode m )
-        throw (FerrisParentNotSetError,
-               AttributeNotWritable,
-               CanNotGetStream,
-               std::exception)
     {
         LG_XML_D << "XMLBaseContext::priv_getIOStream()" << endl;
 //        BackTrace();

@@ -45,8 +45,7 @@ namespace Ferris
     
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
 
     
@@ -850,9 +849,6 @@ PASinkInfo::priv_setVolume( pa_volume_t v )
 
         fh_stringstream
         real_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   exception)
             {
                 fh_stringstream ss;
                 ss << m_info->getVolume( m_channel );
@@ -861,10 +857,6 @@ PASinkInfo::priv_setVolume( pa_volume_t v )
 
         fh_istream
         priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ret = real_getIOStream( m );
                 return ret;
@@ -873,10 +865,6 @@ PASinkInfo::priv_setVolume( pa_volume_t v )
         
         fh_iostream
         priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ret = real_getIOStream( m );
                 ret->getCloseSig().connect(
@@ -952,9 +940,6 @@ PASinkInfo::priv_setVolume( pa_volume_t v )
 
         fh_stringstream
         real_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   exception)
             {
                 fh_stringstream ss;
                 ss << m_info->isMuted();
@@ -963,10 +948,6 @@ PASinkInfo::priv_setVolume( pa_volume_t v )
 
         fh_istream
         priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ret = real_getIOStream( m );
                 return ret;
@@ -975,10 +956,6 @@ PASinkInfo::priv_setVolume( pa_volume_t v )
         
         fh_iostream
         priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ret = real_getIOStream( m );
                 ret->getCloseSig().connect(
@@ -1341,7 +1318,6 @@ PASinkInfo::priv_setVolume( pa_volume_t v )
     extern "C"
     {
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
         {
             try
             {

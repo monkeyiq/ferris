@@ -82,7 +82,6 @@ namespace Ferris
     
         
         FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
         {
             try
             {

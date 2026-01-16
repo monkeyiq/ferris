@@ -42,8 +42,7 @@ namespace Ferris
 {
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
 
     /*******************************************************************************/
@@ -90,9 +89,6 @@ namespace Ferris
             }
         
         virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ss;
                 return ss;
@@ -212,9 +208,6 @@ namespace Ferris
     protected:
 
         virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 return getCoveredContext()->priv_getIStream( m );
             }
@@ -382,7 +375,7 @@ namespace Ferris
                 return GetImpl(c);
             }
         
-        friend fh_context Brew( RootContextFactory* rf ) throw( RootContextCreationFailed );
+        friend fh_context Brew( RootContextFactory* rf );
         _Self* priv_CreateContext( Context* parent, string rdn )
             {
                 _Self* ret = new _Self();
@@ -507,7 +500,6 @@ namespace Ferris
     extern "C"
     {
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
         {
             try
             {

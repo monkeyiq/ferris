@@ -201,10 +201,6 @@ namespace Ferris
         
         fh_iostream
             priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_WebServicesUpload u = getWebServicesUpload();
                 
@@ -246,9 +242,6 @@ namespace Ferris
         
         fh_istream
         priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ret;
                 return ret;

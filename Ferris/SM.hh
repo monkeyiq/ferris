@@ -44,7 +44,7 @@ namespace Ferris
      * IOStream inserters and extractors to do the dirty work.
      */
     template <class X, class Y = int >
-    struct xtoy : public std::unary_function<X,Y>
+    struct xtoy
     {
         /**
          * Convert object __x of type X into an object of type Y.
@@ -64,7 +64,7 @@ namespace Ferris
     /**
      * Unary function to convert strings to lower case
      */
-    struct FERRISEXP_API tolowerstr : public std::unary_function< std::string , std::string >
+    struct FERRISEXP_API tolowerstr
     {
         /**
          */
@@ -94,7 +94,7 @@ namespace Ferris
             }
     };
 
-    struct FERRISEXP_API toupperstr : public std::unary_function< std::string , std::string >
+    struct FERRISEXP_API toupperstr
     {
         inline std::string operator()(const std::string& x) const
             {
@@ -113,9 +113,6 @@ namespace Ferris
 
     template <class _Operation1, class _Operation2, class _Operation3>
     class tuple_binary_compose
-        : public std::binary_function<typename _Operation2::argument_type,
-                                      typename _Operation3::argument_type,
-                                      typename _Operation1::result_type>
     {
     protected:
 

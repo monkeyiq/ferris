@@ -50,8 +50,7 @@ namespace Ferris
 {
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
 
     string tostr( datum d )
@@ -203,7 +202,7 @@ namespace Ferris
     /******************************************************************************/
     /******************************************************************************/
     
-    friend fh_context Brew( RootContextFactory* rf ) throw( RootContextCreationFailed );
+    friend fh_context Brew( RootContextFactory* rf );
     gdbmContext* priv_CreateContext( Context* parent, string rdn )
         {
             gdbmContext* ret = new gdbmContext();
@@ -435,7 +434,6 @@ gdbmContext::priv_read()
 extern "C"
 {
     fh_context Brew( RootContextFactory* rf )
-        throw( RootContextCreationFailed )
     {
         static gdbmContext c;
         fh_context ret = c.CreateContext( 0, rf->getInfo( "Root" ));

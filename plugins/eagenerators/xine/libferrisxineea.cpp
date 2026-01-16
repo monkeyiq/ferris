@@ -157,11 +157,8 @@ namespace Ferris
         fh_attribute CreateAttr(
             const fh_context& a,
             const string& rdn,
-            fh_context md = 0 )
-            throw(
-                FerrisCreateAttributeFailed,
-                FerrisCreateAttributeNotSupported
-                );
+            fh_context md = 0 );
+        
         
         virtual bool isDynamic()
             {
@@ -297,10 +294,6 @@ namespace Ferris
     EAGenerator_XineMetadata::CreateAttr( const fh_context& a,
                                  const string& rdn,
                                  fh_context md )
-        throw(
-            FerrisCreateAttributeFailed,
-            FerrisCreateAttributeNotSupported
-            )
     {
         fh_stringstream ss;
         ss << "Creating EA is not supported for xine metadata ferris plugin."

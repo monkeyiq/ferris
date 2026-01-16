@@ -67,7 +67,7 @@ namespace Ferris
          * @param std::streamsize is the current byte offset into the context being added
          * @param std::streamsize is the total size of the context being added
          */
-        typedef sigc::signal3< void, fh_context, std::streamsize, std::streamsize >
+        typedef sigc::signal< void ( fh_context, std::streamsize, std::streamsize ) >
         AddToFullTextIndexProgress_Sig_t;
         AddToFullTextIndexProgress_Sig_t& getNullAddToFullTextIndexProgress_Sig();
 

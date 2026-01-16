@@ -63,7 +63,7 @@ namespace Ferris
         
         void addChild( fh_runner r );
 
-        typedef sigc::signal4< void, ChildStreamServer*, fh_runner, int, int > ChildCompleteSig_t;
+        typedef sigc::signal< void ( ChildStreamServer*, fh_runner, int, int ) > ChildCompleteSig_t;
         ChildCompleteSig_t& getChildCompleteSig();
         
         typedef Loki::Functor< void,
@@ -100,7 +100,7 @@ namespace Ferris
 //         ChildWatcher();
 //         void attach( fh_childserv serv );
 
-//         typedef sigc::signal5< void, ChildWatcher*, fh_runner, int, int,  bool > ChildCompleteSig_t;
+//         typedef sigc::signal< void ( ChildWatcher*, fh_runner, int, int,  bool ) > ChildCompleteSig_t;
 //         ChildCompleteSig_t& getChildCompleteSig();
 
 //     private:

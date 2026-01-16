@@ -470,15 +470,9 @@ namespace Ferris
         
 //        virtual void DeterminePrimaryKey() = 0;
         
-        virtual fh_iostream  getRealStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)        = 0;
+        virtual fh_iostream  getRealStream( ferris_ios::openmode m ) = 0;
         
         virtual fh_istream  priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 LG_SQLDB_D << "getting I stream..." << endl;
                 return getRealStream( m );
@@ -866,9 +860,6 @@ namespace Ferris
             }
         
         fh_istream priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ss;
                 ss << "<context ";

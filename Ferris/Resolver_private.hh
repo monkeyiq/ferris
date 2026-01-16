@@ -62,8 +62,7 @@ namespace Ferris
     class FERRISEXP_DLLLOCAL RootContextDropper
     {
     public:
-        virtual fh_context Brew(RootContextFactory* rf)
-            throw( RootContextCreationFailed ) = 0;
+    virtual fh_context Brew(RootContextFactory* rf) = 0;
 
         /**
          * This returns a predicate that if a context matches against then
@@ -268,12 +267,12 @@ namespace Ferris
                             const std::string& path,
                             ResolveStyle s = RESOLVE_EXACT );
     
-        void setContextClass( std::string cl ) throw( NoSuchContextClass );
+        void setContextClass( std::string cl );
         std::string getContextClass();
 
         void AddInfo( std::string key, std::string val );
 
-        fh_context getRootContext() throw( RootContextCreationFailed );
+        fh_context getRootContext();
         fh_context resolveContext_relative_file_path( ResolveStyle s = RESOLVE_EXACT );
         fh_context resolveContext( ResolveStyle s = RESOLVE_EXACT );
 
@@ -312,7 +311,6 @@ namespace Ferris
             }                                                           \
                                                                         \
         fh_context Brew( RootContextFactory* rf )                       \
-            throw( RootContextCreationFailed )                          \
             {                                                           \
                 static fh_context c = 0;                                \
                 if( !isBound(c) )                                       \

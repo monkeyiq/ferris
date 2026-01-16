@@ -82,7 +82,6 @@ namespace Ferris
         
         virtual fh_context
         createSubContext( const std::string& rdn, fh_context md = 0 )
-            throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported )
             {
                 fh_stringstream ss;
                 ss << "remembrance:// directory can not have new items created in this way" << endl;
@@ -173,7 +172,6 @@ namespace Ferris
 
         virtual fh_context
         createSubContext( const std::string& rdn, fh_context md = 0 )
-            throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported )
             {
                 fh_stringstream ss;
                 ss << "remembrance:// directory can not have new items created in this way" << endl;
@@ -250,7 +248,6 @@ namespace Ferris
 
         virtual fh_context
         createSubContext( const std::string& rdn, fh_context md = 0 )
-            throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported )
             {
                 fh_stringstream ss;
                 ss << "remembrance:// directory can not have new items created in this way" << endl;
@@ -503,7 +500,6 @@ namespace Ferris
             }
 
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
             {
                 static fh_context c = 0;
                 if( !isBound(c) )

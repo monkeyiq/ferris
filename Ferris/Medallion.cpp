@@ -233,9 +233,9 @@ namespace Ferris
         return el.end() != find( el.begin(), el.end(), em );
     }
     
-    bool fh_emblem_less::operator()( fh_emblem k1, fh_emblem k2 )
+    bool fh_emblem_less::operator()( fh_emblem k1, fh_emblem k2 ) const
     {
-        return k1->getID() < k2->getID();
+         return k1->getID() < k2->getID();
     }
     
     /********************************************************************************/
@@ -1744,7 +1744,8 @@ namespace Ferris
         m_cemblemsByName_t::const_iterator iter = eq.first;
         for( ; iter != eq.second; ++iter )
         {
-            ret.insert( iter->second );
+            fh_emblem e = iter->second;
+            ret.insert( e );
         }
 
         return ret;
@@ -3151,7 +3152,8 @@ string emblemListToEAQuery( emblemset_t& el, char combineOpcode )
                     }
                     else
                     {
-                        result.insert( *ai );
+                        fh_emblem e = *ai;
+                        result.insert( e );
                     }
                 }
             }
