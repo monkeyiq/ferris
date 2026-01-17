@@ -89,10 +89,10 @@ namespace FerrisUI
          *
          * Args are this, old label value, new label value (==getLabel() during handler)
          */
-        typedef sigc::signal3< bool,
+        typedef sigc::signal< bool (
                                FerrisOptionMenu*,
                                std::string,
-                               std::string > LabelChangeSig_t;
+                               std::string ) > LabelChangeSig_t;
         LabelChangeSig_t& getLabelChangeSig()
             {
                 return LabelChangeSig;

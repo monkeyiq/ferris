@@ -103,3 +103,12 @@ appsui/gfcreate/gfcreate
 /plugins/context/printer/mocimpls.cpp
 /snippet/
 /plugins/context/facebooktest
+/plugins/context/ferris-webphoto-remote-url-to-eaindex-predicate
+/plugins/context/ferris-webphoto-upload
+/plugins/context/gdbmaker
+/plugins/context/googletest
+/plugins/context/libffilterspirittest
+/plugins/context/libfulltextbooleanspirittest
+/plugins/context/stub.c
+/plugins/context/vimeotest
+/plugins/context/webphotostest

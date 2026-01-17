@@ -200,17 +200,17 @@ namespace FerrisUI
         virtual void StartMonitoringSubContext( fh_context c ) = 0;
         virtual void StopMonitoringSubContext(  fh_context c ) = 0;
 
-        typedef sigc::signal1< void, fh_context > StartReadingDiskSig_t;
-        typedef sigc::signal1< void, fh_context > StopReadingDiskSig_t;
-        typedef sigc::signal3< void, fh_context, long, long > DiskReadProgressSig_t;
-        typedef sigc::signal1< void, fh_context > StartReadingSig_t;
-        typedef sigc::signal1< void, fh_context > StopReadingSig_t;
-        typedef sigc::signal3< void, fh_context, long, long > AddingContextSig_t;
-        typedef sigc::signal1< void, fh_context > RemovingContextSig_t;
-        typedef sigc::signal1< void, fh_context > FilterStartedSig_t;
-        typedef sigc::signal1< void, fh_context > SortStartedSig_t;
+        typedef sigc::signal< void ( fh_context) > StartReadingDiskSig_t;
+                                     typedef sigc::signal< void ( fh_context) > StopReadingDiskSig_t;
+        typedef sigc::signal< void ( fh_context, long, long) > DiskReadProgressSig_t;
+        typedef sigc::signal< void ( fh_context) > StartReadingSig_t;
+        typedef sigc::signal< void ( fh_context) > StopReadingSig_t;
+        typedef sigc::signal< void ( fh_context, long, long) > AddingContextSig_t;
+        typedef sigc::signal< void ( fh_context) > RemovingContextSig_t;
+        typedef sigc::signal< void ( fh_context) > FilterStartedSig_t;
+        typedef sigc::signal< void ( fh_context) > SortStartedSig_t;
 
-        typedef sigc::signal1< void, FerrisTreeModel* > ClearedSig_t;
+        typedef sigc::signal< void ( FerrisTreeModel*) > ClearedSig_t;
 
         StartReadingDiskSig_t& getStartReadingDiskSig() { return StartReadingDiskSig; }
         StopReadingDiskSig_t&  getStopReadingDiskSig()  { return StopReadingDiskSig; }

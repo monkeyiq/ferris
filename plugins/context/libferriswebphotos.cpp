@@ -45,8 +45,7 @@ namespace Ferris
 
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
     
 
@@ -96,7 +95,6 @@ namespace Ferris
         
         virtual fh_context
         createSubContext( const std::string& rdn, fh_context md = 0 )
-            throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported )
             {
                 fh_stringstream ss;
                 ss << "webphotos:// directory can not have new items created in this way" << endl;
@@ -153,7 +151,6 @@ namespace Ferris
 
         virtual fh_context
         createSubContext( const std::string& rdn, fh_context md = 0 )
-            throw( FerrisCreateSubContextFailed, FerrisCreateSubContextNotSupported )
             {
                 fh_stringstream ss;
                 ss << "webphotos:// directory can not have new items created in this way" << endl;
@@ -294,9 +291,6 @@ namespace Ferris
 
         fh_stringstream
         real_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   exception)
             {
                 fh_stringstream ss;
                 LG_WEBPHOTO_D << "returning an empty stream" << endl;
@@ -496,10 +490,6 @@ namespace Ferris
 
         // fh_iostream
         // priv_getIOStream( ferris_ios::openmode m )
-        //     throw (FerrisParentNotSetError,
-        //            AttributeNotWritable,
-        //            CanNotGetStream,
-        //            std::exception)
         //     {
         //         fh_stringstream ret = real_getIOStream( m );
         //         ret->getCloseSig().connect( bind( sigc::mem_fun(*this, &_Self::OnStreamClosed ), m )); 
@@ -507,9 +497,6 @@ namespace Ferris
         //     }
         fh_istream
         priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ret = real_getIOStream( m );
                 return ret;
@@ -549,10 +536,6 @@ namespace Ferris
 
         fh_iostream
             priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
             {
                 cerr << "getIOStream A" << endl;
                 fh_webPhotos wf = getWebPhotos();
@@ -714,9 +697,6 @@ namespace Ferris
 
         fh_stringstream
         real_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   exception)
             {
                 fh_stringstream ss;
                 ss << m_comment->getContent();
@@ -725,19 +705,12 @@ namespace Ferris
         
         fh_istream
         priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ret = real_getIOStream( m );
                 return ret;
             }
         fh_iostream
             priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
         {
             fh_stringstream ret = real_getIOStream( m );
             ret->getCloseSig().connect( sigc::bind( sigc::mem_fun(*this, &_Self::OnStreamClosed ), m )); 
@@ -1048,9 +1021,6 @@ namespace Ferris
         
         fh_istream
         priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 LG_WEBPHOTO_D << "getting remote image as large as possible..." << endl;
 
@@ -1362,7 +1332,6 @@ namespace Ferris
 
         fh_context
             priv_getSubContext( const string& rdn )
-            throw( NoSuchSubContext )
         {
             try
             {
@@ -1690,9 +1659,6 @@ namespace Ferris
 
         fh_istream
         priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ret;
                 ret << m_contact->getVCard();
@@ -1950,7 +1916,6 @@ namespace Ferris
     extern "C"
     {
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
         {
             try
             {

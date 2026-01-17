@@ -13,6 +13,8 @@ CLEANFILES=
 %_moc_impl.cpp: %.cpp
 	$(MOC) $(DEFINES) $(INCPATH) $< -o $@
 
+stub.c: $(noinst_LTLIBRARIES)
+	touch stub.c
 
 
 noinst_LTLIBRARIES = libcommondbapi.la libcommonsqldbapi.la
@@ -20,6 +22,7 @@ libcommondbapi_la_SOURCES = libcommondbapi.cpp libcommondbapi.hh
 libcommonsqldbapi_la_SOURCES = libcommonsqldbapi.cpp libcommonsqldbapi.hh
 
 plugindir = $(libdir)/ferris/plugins/context
+
 
 ##############################
 ##############################
@@ -270,7 +273,7 @@ libferrisgoogle_shared_la_CXXFLAGS = $(GOOGLEINCLUDES)
 
 noinst_PROGRAMS += googletest
 googletest_SOURCES = googletest.cpp
-googletest_LDADD = -lpopt @LIBFERRIS_LA@ 
+googletest_LDADD = -lpopt @LIBFERRIS_LA@  libferrisgoogle_shared.la
 googletest_LDFLAGS = @QT_LIBS@ @QTNETWORK_LIBS@ @CTXGOOGLE_LA@
 
 
@@ -288,10 +291,10 @@ libferriswebphotos_factory_la_SOURCES = libferriswebphotos_factory.cpp
 libferriswebphotos_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
 libferriswebphotos_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
 
-libferriswebphotos_la_SOURCES         = libferriswebphotos.cpp libferriswebphotos_shared.hh
+libferriswebphotos_la_SOURCES         = libferriswebphotos.cpp libferriswebphotos_shared.hh stub.c
 libferriswebphotos_la_LDFLAGS = \
-	\$(top_builddir)/plugins/context/webphotos/libferriswebphotos_shared.la      \
-	@QT_LIBS@                                                                    \
+	\$(top_builddir)/plugins/context/libferriswebphotos_shared.la      \
+	@QT_LIBS@                                                          \
 	@LIBFERRIS_PLUGIN_LT_LINE@
 libferriswebphotos_la_CXXFLAGS = $(WEBPHOTOSINCLUDES)
 
@@ -312,7 +315,7 @@ webphotostest_CXXFLAGS = $(WEBPHOTOSINCLUDES)
 bin_PROGRAMS = ferris-webphoto-upload ferris-webphoto-remote-url-to-eaindex-predicate
 
 ferris_webphoto_upload_SOURCES = ferris-webphoto-upload.cpp
-ferris_webphoto_upload_LDADD = -lpopt @LIBFERRIS_LA@ @SHAREDWEBPHOTOS_LA@
+ferris_webphoto_upload_LDADD = -lpopt @LIBFERRIS_LA@ libferriswebphotos_shared.la
 ferris_webphoto_upload_LDFLAGS = $(GLIB_LIBS) @SIGC_LIBS@ @QT_LIBS@ @QTNETWORK_LIBS@
 ferris_webphoto_upload_CXXFLAGS = $(WEBPHOTOSINCLUDES)
 
@@ -385,7 +388,7 @@ libferrisvimeo_shared_la_CXXFLAGS = $(VIMEOINCLUDES)
 
 noinst_PROGRAMS += vimeotest
 vimeotest_SOURCES = vimeotest.cpp libferrisvimeo_shared.hh
-vimeotest_LDADD = -lpopt @LIBFERRIS_LA@ 
+vimeotest_LDADD = -lpopt @LIBFERRIS_LA@ libferrisvimeo_shared.la
 vimeotest_LDFLAGS = @QT_LIBS@ @QTNETWORK_LIBS@ @CTXVIMEO_LA@ @QOAUTH_LIBS@ @QJSON_LIBS@
 vimeotest_CXXFLAGS = $(VIMEOINCLUDES)
 

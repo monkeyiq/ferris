@@ -81,9 +81,9 @@ namespace Ferris
         GtkWidget* getLabel();
         GtkWidget* getButton();
 
-        typedef sigc::signal2< fh_runner,
-                               fh_SubprocessButtonAndLabel,
-                               fh_runner > UpdateRunnerSig_t;
+        typedef sigc::signal< fh_runner (
+            fh_SubprocessButtonAndLabel,
+            fh_runner ) > UpdateRunnerSig_t;
         UpdateRunnerSig_t& getUpdateRunnerSig();
         
          
