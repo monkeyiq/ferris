@@ -577,53 +577,51 @@ libferriskio_shared_la_CXXFLAGS = $(KIOCXXFLAGS)
 ##############################
 
 
-# MOC_DEP_SRCS+=libferriszoneminder_shared_moc.cpp
+MOC_DEP_SRCS+=libferriszoneminder_shared_moc.cpp
 
 
-# ZMCXXFLAGS = @QT_CFLAGS@ @QTNETWORK_CFLAGS@ @QTDBUS_CFLAGS@ @QJSON_CFLAGS@ @QOAUTH_CFLAGS@ @CFLAGS@
+ZMCXXFLAGS = @QT_CFLAGS@ @QTNETWORK_CFLAGS@ @QTDBUS_CFLAGS@ @QJSON_CFLAGS@ @QOAUTH_CFLAGS@ @CFLAGS@
 
-# plugin_LTLIBRARIES += libferriszoneminder.la libferriszoneminder_factory.la
+plugin_LTLIBRARIES += libferriszoneminder.la libferriszoneminder_factory.la
 
-# libferriszoneminder_factory_la_SOURCES = libferriszoneminder_factory.cpp
-# libferriszoneminder_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
-# libferriszoneminder_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
-
-
-# libferriszoneminder_la_SOURCES = libferriszoneminder.cpp libferriszoneminder_shared.hh
-# libferriszoneminder_la_CXXFLAGS = $(ZMCXXFLAGS)
-# libferriszoneminder_la_LDFLAGS = @CTXZONEMINDER_LA@ @QT_LIBS@ @LIBFERRIS_PLUGIN_LT_LINE@ @QOAUTH_LIBS@ @QJSON_LIBS@
+libferriszoneminder_factory_la_SOURCES = libferriszoneminder_factory.cpp
+libferriszoneminder_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
+libferriszoneminder_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
 
 
-# noinst_LTLIBRARIES += libferriszoneminder_shared.la
-# nodist_libferriszoneminder_shared_la_SOURCES = libferriszoneminder_shared_moc.cpp
-# libferriszoneminder_shared_la_SOURCES = \
-# 	libferriszoneminder_shared.cpp libferriszoneminder_shared.hh
-# libferriszoneminder_shared_la_CXXFLAGS = $(ZMCXXFLAGS)
+libferriszoneminder_la_SOURCES = libferriszoneminder.cpp libferriszoneminder_shared.hh
+libferriszoneminder_la_CXXFLAGS = $(ZMCXXFLAGS)
+libferriszoneminder_la_LDFLAGS = @CTXZONEMINDER_LA@ @QT_LIBS@ @LIBFERRIS_PLUGIN_LT_LINE@ @QOAUTH_LIBS@ @QJSON_LIBS@
+
+
+noinst_LTLIBRARIES += libferriszoneminder_shared.la
+nodist_libferriszoneminder_shared_la_SOURCES = libferriszoneminder_shared_moc.cpp
+libferriszoneminder_shared_la_SOURCES = libferriszoneminder_shared.cpp libferriszoneminder_shared.hh
+libferriszoneminder_shared_la_CXXFLAGS = $(ZMCXXFLAGS)
 
 
 ##############################
 ##############################
 ##############################
 
-# MOC_DEP_SRCS+=libferrisferrisrest_shared_moc.cpp
+MOC_DEP_SRCS+=libferrisferrisrest_shared_moc.cpp
 
-# RESTCXXFLAGS = @QT_CFLAGS@ @QTNETWORK_CFLAGS@ @QTDBUS_CFLAGS@ @QJSON_CFLAGS@ @CFLAGS@
+RESTCXXFLAGS = @QT_CFLAGS@ @QTNETWORK_CFLAGS@ @QTDBUS_CFLAGS@ @QJSON_CFLAGS@ @CFLAGS@
 
-# plugin_LTLIBRARIES += libferrisferrisrest.la libferrisferrisrest_factory.la
-# noinst_LTLIBRARIES += libferrisferrisrest_shared.la
+plugin_LTLIBRARIES += libferrisferrisrest.la libferrisferrisrest_factory.la
+noinst_LTLIBRARIES += libferrisferrisrest_shared.la
 
-# libferrisferrisrest_factory_la_SOURCES = libferrisferrisrest_factory.cpp
-# libferrisferrisrest_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
-# libferrisferrisrest_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
+libferrisferrisrest_factory_la_SOURCES = libferrisferrisrest_factory.cpp
+libferrisferrisrest_factory_la_LIBADD  = @LIBFERRIS_PLUGIN_FACTORY_LIBADD@
+libferrisferrisrest_factory_la_LDFLAGS = @LIBFERRIS_PLUGIN_LT_LINE@
 
-# libferrisferrisrest_la_SOURCES = libferrisferrisrest.cpp libferrisferrisrest_shared.hh
-# libferrisferrisrest_la_LDFLAGS = @CTXFERRISREST_LA@ @QT_LIBS@ @LIBFERRIS_PLUGIN_LT_LINE@ @QJSON_LIBS@
-# libferrisferrisrest_la_CXXFLAGS = $(RESTCXXFLAGS)
+libferrisferrisrest_la_SOURCES = libferrisferrisrest.cpp libferrisferrisrest_shared.hh
+libferrisferrisrest_la_LDFLAGS = @CTXFERRISREST_LA@ @QT_LIBS@ @LIBFERRIS_PLUGIN_LT_LINE@ @QJSON_LIBS@
+libferrisferrisrest_la_CXXFLAGS = $(RESTCXXFLAGS)
 
-# nodist_libferrisferrisrest_shared_la_SOURCES = libferrisferrisrest_shared_moc.cpp
-# libferrisferrisrest_shared_la_SOURCES = \
-# 	libferrisferrisrest_shared.cpp libferrisferrisrest_shared.hh
-# libferrisferrisrest_shared_la_CXXFLAGS = $(RESTCXXFLAGS)
+nodist_libferrisferrisrest_shared_la_SOURCES = libferrisferrisrest_shared_moc.cpp
+libferrisferrisrest_shared_la_SOURCES = libferrisferrisrest_shared.cpp libferrisferrisrest_shared.hh
+libferrisferrisrest_shared_la_CXXFLAGS = $(RESTCXXFLAGS)
 
 
 ##############################

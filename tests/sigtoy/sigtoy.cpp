@@ -47,7 +47,7 @@ public:
         {
         }
 
-    typedef sigc::signal1< void, string > GruntSig;
+    typedef sigc::signal< void ( string ) > GruntSig;
     GruntSig sig;
     GruntSig& getSig() { return sig; }
     
@@ -59,7 +59,7 @@ class Mux : public sigc::trackable
 {
 public:
 
-    typedef sigc::signal1< void, string > MuxSig;
+    typedef sigc::signal< void( string ) > MuxSig;
     MuxSig sig;
     MuxSig& getSig() { return sig; }
 

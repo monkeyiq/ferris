@@ -342,6 +342,7 @@ public:
                     cerr << "Warning:" << e.what() << endl;
                 }
             }
+            return 0;
         }
     
     int update( int argc, sqlite3_value **argv, sqlite_int64 *pRowid)

@@ -49,8 +49,7 @@ namespace Ferris
 {
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
 
     using namespace Zoneminder;
@@ -109,9 +108,6 @@ namespace Ferris
 
         fh_istream
         priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 stringmap_t args;
                 args["skin"]   = "xml";
@@ -264,9 +260,6 @@ namespace Ferris
             }
         fh_istream
         priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 stringmap_t args;
                 args["skin"] = "xml";
@@ -477,7 +470,6 @@ namespace Ferris
     extern "C"
     {
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
         {
             try
             {

@@ -49,8 +49,7 @@ namespace Ferris
 {
     extern "C"
     {
-        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed );
+        FERRISEXP_EXPORT fh_context Brew( RootContextFactory* rf );
     };
 
     using namespace Ferrisrest;
@@ -78,7 +77,7 @@ namespace Ferris
         //
         // Short cut loading each dir unless absolutely needed.
         //
-        fh_context priv_getSubContext( const string& rdn ) throw( NoSuchSubContext );
+        fh_context priv_getSubContext( const string& rdn );
         
       public:
         FerrisrestContextBase( Context* parent, const std::string& rdn )
@@ -176,9 +175,6 @@ namespace Ferris
 
         fh_istream
         priv_getIStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ret;
                 stringmap_t args;
@@ -192,10 +188,6 @@ namespace Ferris
             }
 
         virtual fh_iostream priv_getIOStream( ferris_ios::openmode m )
-            throw (FerrisParentNotSetError,
-                   AttributeNotWritable,
-                   CanNotGetStream,
-                   std::exception)
             {
                 fh_stringstream ss;
                 ss->getCloseSig().connect( sigc::bind( sigc::mem_fun(*this, &_Self::priv_OnStreamClosed ), m ));
@@ -409,7 +401,6 @@ namespace Ferris
     template < class ParentCtx >
     fh_context
     FerrisrestContextBase< ParentCtx >::priv_getSubContext( const string& rdn )
-        throw( NoSuchSubContext )
     {
         try
         {
@@ -512,7 +503,6 @@ namespace Ferris
     extern "C"
     {
         fh_context Brew( RootContextFactory* rf )
-            throw( RootContextCreationFailed )
         {
             try
             {

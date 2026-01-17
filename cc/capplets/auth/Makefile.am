@@ -38,9 +38,7 @@ ferris_capplet_auth_LDADD   = -lpopt @LIBFERRIS_LA@ @LIBFERRISUI_LA@ \
 	@SHAREDLDAP_LA@                             \
 	@SHAREDWEBPHOTOS_LA@                        \
 	@CTXGOOGLE_LA@                              \
-	@CTXFACEBOOK_LA@                            \
 	@CTXVIMEO_LA@                               \
-	@CTXIDENTICA_LA@                            \
 	@SHAREDOBBY_LA@                             \
         @SHAREDWIKI_LA@                             
 

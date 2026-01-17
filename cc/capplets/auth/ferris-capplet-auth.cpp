@@ -128,6 +128,9 @@ using namespace dtl;
 #include <libferrisobbyshared.hh>
 #endif
 
+#undef HAVE_FACEBOOK_API
+#undef HAVE_IDENTICA_API
+
 using namespace std;
 
 namespace Ferris
