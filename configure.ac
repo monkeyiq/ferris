@@ -1031,7 +1031,7 @@ else
 fi
 # this is using the old pqxx/tablewriter interface and needs an update as
 # at Jan 2026. FIXMEAAA
-build_tsearch2=no
+#build_tsearch2=no
 AM_CONDITIONAL(BUILD_PGTSEARCH_FTXIDX, test x$build_tsearch2 = xyes)
 AC_SUBST(TSEARCH2_CFLAGS)
 AC_SUBST(TSEARCH2_LIBS)
@@ -1177,11 +1177,11 @@ AC_SUBST(IMLIB_CFLAGS)
 ###############################################################################
 
 AC_LANG_CPLUSPLUS
-have_db4=yes
+have_db4=no
 DB4_CFLAGS=""
 DB4_LIBS=""
 AM_CONDITIONAL(HAVE_DB4, test x"$have_db4" = xyes)
-AC_DEFINE(FERRIS_HAVE_DB4,1, [] )
+#AC_DEFINE(FERRIS_HAVE_DB4,1, [] )
 dnl PFX="$LIBCREATION_PLUGIN_FACTORY_PREFIX"
 dnl LIBCREATION_PLUGIN_FACTORIES_LA="$LIBCREATION_PLUGIN_FACTORIES_LA $PFX/db4/libcreationdb4_factory.la "
 AC_SUBST(DB4_CFLAGS)
@@ -5217,6 +5217,7 @@ plugins/creation/mpeg2/Makefile
 plugins/creation/ogg/Makefile
 plugins/creation/shellscript/Makefile
 plugins/creation/tdb/Makefile
+plugins/creation/db4/Makefile
 plugins/creation/wav/Makefile
 plugins/creation/soprano/Makefile
 plugins/eaindexers/Makefile

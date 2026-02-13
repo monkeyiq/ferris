@@ -28,14 +28,9 @@
 *******************************************************************************
 ******************************************************************************/
 
-#include <pqxx/connection>
-#include <pqxx/tablewriter>
-#include <pqxx/transaction>
-#include <pqxx/nontransaction>
-#include <pqxx/tablereader>
-#include <pqxx/tablewriter>
+#include "config.h"
+#include <pqxx/pqxx>
 
-using namespace PGSTD;
 using namespace pqxx;
 
 #include <Ferris/FullTextIndexerMetaInterface.hh>

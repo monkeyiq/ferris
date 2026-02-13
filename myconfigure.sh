@@ -18,16 +18,16 @@ nice /ferris/configure                      \
 --enable-debug                        \
 --enable-djvu                         \
 --with-pdftotext                      \
---enable-stlport-nocustomio           \
 --enable-postgresql-tsearch2-indexing \
 --disable-stlport                     \
---enable-fca                          \
---with-sigcxx-2x=yes                  \
 --disable-fastinstall                 \
 --disable-strigi                      \
 --enable-quickerlinking               \
 --with-swig-perl 
 
+#--enable-fca                          \
+#--enable-stlport-nocustomio           \
+#--with-sigcxx-2x=yes                  \
 # --enable-hiddensymbols                
 # --disable-kde-extractor               \
 

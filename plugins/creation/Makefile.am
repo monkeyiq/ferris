@@ -5,7 +5,7 @@ if HAVE_TDB
 TDB = tdb
 endif
 
-if HAVE_DB4
+if HAVE_STLDB4
 DB4 = db4
 endif
 
