@@ -51,16 +51,16 @@ There is an 'ls' client for the VFS.
 
 Requirements:
 
-	gcc 3.1+
-	ferrisloki              see the witme sourceforge site
-	libferrisstreams        see the witme sourceforge site
-	stldb4                  see the witme sourceforge site
-	fam++2                  see the fampp sourceforge site
+	gcc (15.x tested in dev)
+	ferrisloki              see github
+	libferrisstreams        see github
+	stldb4                  see github
+	fam++2                  see github
 	openssl			
 	glib/gtk2
 	Qt                      4.5+
 	Soprano                 (Installed with KDE4 by default)
-	libsigc++		1.2+
+	libsigc++		3.x
 	xerces-c                3.x
 	xalan-c                 1.10+ (optional but recommended)
 	a MIME engine           either gnome, KDE, or libfile.
