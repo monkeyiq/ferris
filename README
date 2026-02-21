@@ -69,8 +69,8 @@ Optional but very highly recommended (only needed at build time):
 	pccts			1.33mr22
 
 Optional but very highly recommended:
-	gimp 			1.2.1
-	Imlib2			1.0.2
+	gimp 			3
+	Imlib2			1.12
 	libjpeg			6b
 	libpng 			1.0.9
 	ImageMagick-c++ 	5.2.7
