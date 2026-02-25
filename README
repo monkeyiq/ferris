@@ -73,7 +73,7 @@ Optional but very highly recommended:
 	Imlib2			1.12
 	libjpeg			6b
 	libpng 			1.6.x
-	ImageMagick-c++ 	5.2.7
+	ImageMagick-c++ 	7.1.x
 	libattr (xfs)           1.1.3 (http://oss.sgi.com/projects/xfs/)
 	xqilla
 	
