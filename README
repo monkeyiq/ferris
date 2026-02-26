@@ -82,6 +82,7 @@ Optional recommended:
 	 and see if something looks like it is interesting.
 
 There is optional support for building against STLPort
+ (that might be being phased out as of 2026 as it is not needed as much now)
 
 Note that many of the icons in media/icons are by jimmac
 http://jimmac.musichall.cz/
