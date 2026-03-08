@@ -61,7 +61,7 @@ Requirements:
 	Qt                      4.5+
 	Soprano                 (Installed with KDE4 by default)
 	libsigc++		3.x
-	xerces-c                3.x
+	xerces-c                3.3.0
 	xalan-c                 1.10+ (optional but recommended)
 	a MIME engine           either gnome, KDE, or libfile.
 
